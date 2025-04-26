@@ -13,6 +13,12 @@ import bcrypt from "bcrypt";
 
 // 設定連到食譜的路由
 import recipesRouter from "./routes/recipes.js";
+// 設定連到商城的路由
+import prouductRouter from "./routes/prouduct.js";
+// 設定連到使用者的路由 (目前還未使用到，所以先關掉)
+// import usersRouter from "./routes/users.js";
+// 設定連到評價的路由
+import reviewRouter from "./routes/prouduct-review.js";
 
 const MySQLStore = mysql_session(session);
 const sessionStore = new MySQLStore({}, db);
@@ -56,6 +62,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());  // <-- 處理 JSON 請求 body
 
 app.use('/recipes', recipesRouter);
+app.use('/prouduct', prouductRouter);
+// 目前還沒使用到use這個路由，所以先關掉
+// app.use('/users', usersRouter);
+// 連到評價的
+app.use('/prouduct-review', reviewRouter);
 
 // 路由定義, 兩個條件: 1. 拜訪的 HTTP 方法, 2. 路徑
 app.get("/", (req, res) => {
