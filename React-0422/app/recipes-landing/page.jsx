@@ -1,9 +1,9 @@
-"use client";
+'use client'
 
-import React from "react";
-import styles from "../styles/RecipeLanding.module.css";
-import Link from "next/link";
-import { FaSearch } from "react-icons/fa";
+import React from 'react'
+import styles from '../styles/RecipeLanding.module.css'
+import Link from 'next/link'
+import { FaSearch } from 'react-icons/fa'
 
 export default function RecipesLandingPage() {
   return (
@@ -642,5 +642,5 @@ export default function RecipesLandingPage() {
         </div>
       </div>
     </div>
-  );
+  )
 }
