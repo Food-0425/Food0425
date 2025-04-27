@@ -3,26 +3,25 @@
 import React from 'react'
 import Link from 'next/link'
 import styles from '../../styles/RecipeDetail.module.css'
+import { useParams } from 'next/navigation'
 import useSWR from 'swr'
-import { useRouter } from 'next/navigation'
 
-export default function RecipeDetailPage({ params }) {
-  // In a real application, you would fetch the recipe data based on params.id
-  // For now, we'll use static data to match the design
-  // 這邊有修正過，簡單來說就是不能直接取用params。要用React.use
+export default function RecipeDetailPage({ props }) {
+  //   這邊很重要，在Next要獲取動態參數的話需要用以下這兩行
+  const params = useParams() // 使用 useParams 獲取路由參數
+  const id = params.id // 獲取動態路由參數
   const fetcher = (url) => fetch(url).then((res) => res.json())
-  const { recipeId } = React.use(params)
-  const router = useRouter()
-  const { id } = router.query
-  console.log(id)
 
-  // 使用 useSWR 來抓取資料，並且設置快取的 fetcher
-  const { data, isLoading, error } = useSWR(
-    id ? `/api/posts/${id}` : null,
+  // 使用 useSWR 來抓取資料，確保有 id 時才發送請求
+  const { data, error } = useSWR(
+    id ? `http://localhost:3001/recipes/api/${id}` : null,
     fetcher
   )
 
-  const recipes = data?.rows || []
+  // 判斷是否正在加載資料
+  const isLoading = !data && !error
+
+  const recipes = data?.data || []
 
   return (
     <div className={styles.container}>
@@ -85,7 +84,7 @@ export default function RecipeDetailPage({ params }) {
             alt="Decoration"
           />
         </div>
-
+        {/* 步驟區 */}
         <div className={styles.stepsSection}>
           <div className={styles.stepCard}>
             <div className={styles.stepCardInner}>
