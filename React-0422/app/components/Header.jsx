@@ -9,11 +9,13 @@ const Header = () => {
     <div className={styles.navbar}>
       <div className={styles.navInner}>
         <div className={styles.navLeftGroup}>
+          <a href="/">
           <img
             src="https://cdn.builder.io/api/v1/image/assets/TEMP/147ffededb40ea0e14bf97b005d572350cf667e7?placeholderIfAbsent=true"
             className={styles.logo}
             alt="Logo"
           />
+          </a>
           <div className={styles.navBtnGroup}>
             <Link href="/recipes-landing">
               <div className={styles.navBtn}>美味食譜</div>
