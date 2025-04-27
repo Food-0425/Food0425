@@ -14,7 +14,7 @@
   width: 100%;
   padding-top: 120px;
   font-family:
-    "Noto Sans TC",
+    'Noto Sans TC',
     -apple-system,
     Roboto,
     Helvetica,
@@ -122,7 +122,7 @@
   flex-direction: column;
   overflow: hidden;
   font-family:
-    "Noto Sans TC",
+    'Noto Sans TC',
     -apple-system,
     Roboto,
     Helvetica,
@@ -171,41 +171,23 @@
 }
 
 .categoryIcon {
-  leading-trim: both;
-  text-edge: cap;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
   aspect-ratio: 1/1;
-  border-radius: 500px;
+  border-radius: 50%; /* 修改為 50% 使其成為完美的圓圈 */
   background-color: #df6c2d;
-  align-self: stretch;
-  margin: auto 0;
-  padding: 107px 51px 20px;
-  overflow: hidden;
   width: 142px;
   height: 142px;
-}
-
-.categoryIconSpecial {
-  leading-trim: both;
-  text-edge: cap;
-  aspect-ratio: 1/1;
-  border-radius: 500px;
-  background-color: #ff5a00;
-  align-self: stretch;
-  margin: auto 0;
-  padding: 107px 51px 20px;
+  padding: 20px; /* 減少 padding 使文字和圖標有足夠的空間 */
   overflow: hidden;
-  width: 142px;
-  height: 142px;
+  font-size: 24px;
 }
 
-.categoryImage {
-  aspect-ratio: 1/1;
-  object-fit: contain;
-  object-position: center;
-  width: 142px;
-  align-self: stretch;
-  margin: auto 0;
-  flex-shrink: 0;
+.categoryIconImg {
+  font-size: 4rem;
+  margin-bottom: 5px;
 }
 
 .recipeSection {
@@ -242,7 +224,7 @@
   min-width: 240px;
   padding: 0 33px 100px 34px;
   font-family:
-    "Noto Sans TC",
+    'Noto Sans TC',
     -apple-system,
     Roboto,
     Helvetica,
@@ -354,7 +336,7 @@
   width: 100%;
   flex-direction: column;
   font-family:
-    "Noto Sans TC",
+    'Noto Sans TC',
     -apple-system,
     Roboto,
     Helvetica,
@@ -397,7 +379,7 @@
   flex-direction: column;
   overflow: hidden;
   font-family:
-    "Noto Sans TC",
+    'Noto Sans TC',
     -apple-system,
     Roboto,
     Helvetica,
@@ -489,7 +471,7 @@
   flex-direction: column;
   align-items: stretch;
   font-family:
-    "Noto Sans TC",
+    'Noto Sans TC',
     -apple-system,
     Roboto,
     Helvetica,
@@ -553,7 +535,7 @@
   background-color: #df6c2d;
   overflow: hidden;
   font-family:
-    "Noto Sans TC",
+    'Noto Sans TC',
     -apple-system,
     Roboto,
     Helvetica,
@@ -619,7 +601,7 @@
   gap: 40px 150px;
   overflow: hidden;
   font-family:
-    "Noto Sans TC",
+    'Noto Sans TC',
     -apple-system,
     Roboto,
     Helvetica,
@@ -671,7 +653,7 @@
   align-items: stretch;
   gap: 40px;
   font-family:
-    "Noto Sans TC",
+    'Noto Sans TC',
     -apple-system,
     Roboto,
     Helvetica,

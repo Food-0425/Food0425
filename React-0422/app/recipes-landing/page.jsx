@@ -4,6 +4,10 @@ import React from 'react'
 import styles from '../styles/RecipeLanding.module.css'
 import Link from 'next/link'
 import { FaSearch } from 'react-icons/fa'
+import { FaCakeCandles, FaFishFins, FaEarthAmericas } from 'react-icons/fa6'
+import { BiSolidBowlRice } from 'react-icons/bi'
+import { LuDessert, LuSalad } from 'react-icons/lu'
+import { TbMeat } from 'react-icons/tb'
 
 export default function RecipesLandingPage() {
   return (
@@ -40,21 +44,35 @@ export default function RecipesLandingPage() {
             alt="Left arrow"
           />
           <div className={styles.categoriesWrapper}>
-            <div className={styles.categoryIcon}>燒烤</div>
-            <div className={styles.categoryIcon}>蔬食</div>
-            <div className={styles.categoryIconSpecial}>甜點</div>
-            <img
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/a0a970600a250a6ddc5de925308057cf7220dacd?placeholderIfAbsent=true"
-              className={styles.categoryImage}
-              alt="Category"
-            />
-            <img
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/d0897aee0f42e4f5c1878ed32b56f83e1d72dafc?placeholderIfAbsent=true"
-              className={styles.categoryImage}
-              alt="Category"
-            />
-            <div className={styles.categoryIcon}>生鮮</div>
-            <div className={styles.categoryIcon}>糕點</div>
+            <div className={styles.categoryIcon}>
+              <TbMeat className={styles.categoryIconImg} />
+              肉食
+            </div>
+
+            <div className={styles.categoryIcon}>
+              <LuSalad className={styles.categoryIconImg} />
+              蔬食
+            </div>
+            <div className={styles.categoryIcon}>
+              <LuDessert className={styles.categoryIconImg} />
+              甜點
+            </div>
+            <div className={styles.categoryIcon}>
+              <BiSolidBowlRice className={styles.categoryIconImg} />
+              飯食
+            </div>
+            <div className={styles.categoryIcon}>
+              <FaEarthAmericas className={styles.categoryIconImg} />
+              異國
+            </div>
+            <div className={styles.categoryIcon}>
+              <FaFishFins className={styles.categoryIconImg} />
+              生鮮
+            </div>
+            <div className={styles.categoryIcon}>
+              <FaCakeCandles className={styles.categoryIconImg} />
+              糕點
+            </div>
           </div>
           <img
             src="https://cdn.builder.io/api/v1/image/assets/TEMP/48cafdb4ef4bb734d63a486bf58abbe94c28b5d3?placeholderIfAbsent=true"
