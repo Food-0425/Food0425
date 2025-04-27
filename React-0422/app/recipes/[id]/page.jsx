@@ -3,12 +3,26 @@
 import React from 'react'
 import Link from 'next/link'
 import styles from '../../styles/RecipeDetail.module.css'
+import useSWR from 'swr'
+import { useRouter } from 'next/navigation'
 
 export default function RecipeDetailPage({ params }) {
   // In a real application, you would fetch the recipe data based on params.id
   // For now, we'll use static data to match the design
   // 這邊有修正過，簡單來說就是不能直接取用params。要用React.use
+  const fetcher = (url) => fetch(url).then((res) => res.json())
   const { recipeId } = React.use(params)
+  const router = useRouter()
+  const { id } = router.query
+  console.log(id)
+
+  // 使用 useSWR 來抓取資料，並且設置快取的 fetcher
+  const { data, isLoading, error } = useSWR(
+    id ? `/api/posts/${id}` : null,
+    fetcher
+  )
+
+  const recipes = data?.rows || []
 
   return (
     <div className={styles.container}>

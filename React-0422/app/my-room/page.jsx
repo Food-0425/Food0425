@@ -1,9 +1,11 @@
 'use client'
+// 這個頁面是拿來做測試用的
 
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import styles from './../styles/RecipeList.module.css'
 import RecipeCard from '../components/RecipeCard'
+import { useRouter } from 'next/navigation'
 import useSWR from 'swr'
 
 // 顯示一頁幾筆
@@ -21,10 +23,33 @@ export default function MyTestRoomPage(props) {
   // )
 
   // 連到後端(商品評價)
-  const { data, isLoading, error } = useSWR(
-    `http://localhost:3001/prouduct-review/api?page=${currentPage}&limit=${RECIPES_PER_PAGE}`,
-    fetcher
-  )
+  // const { data, isLoading, error } = useSWR(
+  //   `http://localhost:3001/prouduct-review/api?page=${currentPage}&limit=${RECIPES_PER_PAGE}`,
+  //   fetcher
+  // )
+
+  // 測試取得單筆網頁內容
+  const router = useRouter()
+
+  // 檢查路由是否已經準備好
+  if (!router.isReady) {
+    return <div>Loading...</div> // 在路由還沒準備好時顯示 Loading
+  }
+
+  // 確保在路由準備好後再獲取 id
+  const { id } = router.query
+
+  // 使用 useSWR 來抓取資料
+  const { data, error } = useSWR(id ? `/api/posts/${id}` : null, fetcher)
+
+  // 判斷是否正在加載資料
+  const isLoading = !post && !error
+
+  // 如果正在加載資料
+  if (isLoading) return <div>Loading...</div>
+
+  // 如果發生錯誤
+  if (error) return <div>Failed to load post</div>
 
   useEffect(() => {
     if (data?.totalPages) {

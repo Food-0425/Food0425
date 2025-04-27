@@ -53,17 +53,46 @@ router.get('/api', async (req, res) => {
   
 
 // 取得單一食譜
-router.get('/api/:id',async(req,res)=>{
-    try{
-        const [rows] = await db.query('SELECT * FROM recipes WHERE id=?', [req.params.id]);
-        if(!rows.length){
-            return res.status(404).json({ success: false, error:"找不到食譜" });
-        }
-        res.json({ success: true, data:rows[0] });
-    }catch(error){
-        res.status(500).json({ success: false, error:error.message });
+// router.get('/api/:id',async(req,res)=>{
+//     try{
+//         const [rows] = await db.query('SELECT * FROM recipes WHERE id=?', [req.params.id]);
+//         if(!rows.length){
+//             return res.status(404).json({ success: false, error:"找不到食譜" });
+//         }
+//         res.json({ success: true, data:rows[0] });
+//     }catch(error){
+//         res.status(500).json({ success: false, error:error.message });
+//     }
+// });
+
+router.get('/api/:id', async (req, res) => {
+    try {
+      const recipeId = req.params.id;
+  
+      // 查主食譜資料
+      const [recipeRows] = await db.query('SELECT * FROM recipes WHERE id = ?', [recipeId]);
+      if (!recipeRows.length) {
+        return res.status(404).json({ success: false, error: "找不到食譜" });
+      }
+  
+      const recipe = recipeRows[0];
+  
+      // 查這個食譜對應的所有步驟
+      const [stepRows] = await db.query(
+        'SELECT step_id, step_order, description FROM steps WHERE recipe_id = ? ORDER BY step_order ASC',
+        [recipeId]
+      );
+  
+      // 加進 recipe 裡面
+      recipe.steps = stepRows;
+  
+      res.json({ success: true, data: recipe });
+  
+    } catch (error) {
+      res.status(500).json({ success: false, error: error.message });
     }
-});
+  });
+
 
 // 新增食譜
 router.post('/api',async(req,res)=>{
