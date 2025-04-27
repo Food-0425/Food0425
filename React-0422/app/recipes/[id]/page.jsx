@@ -1,13 +1,14 @@
-"use client";
+'use client'
 
-import React from "react";
-import Link from "next/link";
-import styles from "../../styles/RecipeDetail.module.css";
+import React from 'react'
+import Link from 'next/link'
+import styles from '../../styles/RecipeDetail.module.css'
 
 export default function RecipeDetailPage({ params }) {
   // In a real application, you would fetch the recipe data based on params.id
   // For now, we'll use static data to match the design
-  const recipeId = params.id;
+  // 這邊有修正過，簡單來說就是不能直接取用params。要用React.use
+  const { recipeId } = React.use(params)
 
   return (
     <div className={styles.container}>
@@ -397,5 +398,5 @@ export default function RecipeDetailPage({ params }) {
         </div>
       </nav>
     </div>
-  );
+  )
 }
