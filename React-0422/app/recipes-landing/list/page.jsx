@@ -313,54 +313,6 @@ export default function RecipeListPage() {
         {/* Featured Recipes */}
         <FeaturedRecipes />
 
-        {/* Footer */}
-        <footer className={styles.footer}>
-          <div className={styles.footerContainer}>
-            <div className={styles.footerLeft}>
-              <div className={styles.footerThankYou}>
-                謝謝您來逛逛我們的網站！有您的瀏覽，我們超開心 🎉
-              </div>
-              <div className={styles.footerFeedback}>
-                <div className={styles.feedbackText}>
-                  如果您願意也歡迎留下回饋，讓我們變得更棒、更貼近您的期待！
-                </div>
-                <div className={styles.feedbackInput}>
-                  <span>請留下您寶貴的意見，讓我們變得更好唷~</span>
-                  <img
-                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/daa18dd540c7951fd24669f6a4242f04619d0741?placeholderIfAbsent=true"
-                    className={styles.sendIcon}
-                    alt="Send"
-                  />
-                </div>
-              </div>
-            </div>
-            <div className={styles.footerRight}>
-              <Link href="/faq">
-                <div className={styles.faqButton}>常見問題</div>
-              </Link>
-              <div className={styles.socialIcons}>
-                <img
-                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/87880e006fdc4fff25e1e873258ee8a1cba73a66?placeholderIfAbsent=true"
-                  className={styles.socialIcon}
-                  alt="Social media"
-                />
-                <img
-                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/7de86b100997fabfbef4d0568abb5096258773a8?placeholderIfAbsent=true"
-                  className={styles.socialIcon}
-                  alt="Social media"
-                />
-                <div className={styles.socialIconPlaceholder}>
-                  <div className={styles.socialIconCircle} />
-                </div>
-                <img
-                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/675704454945697e25884bd259ca1e891b453127?placeholderIfAbsent=true"
-                  className={styles.socialIcon}
-                  alt="Social media"
-                />
-              </div>
-            </div>
-          </div>
-        </footer>
       </div>
     </div>
   )
