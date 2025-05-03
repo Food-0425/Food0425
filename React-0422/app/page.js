@@ -309,7 +309,7 @@ export default function HomePage() {
           <Image
             src="/images/shop-carousel2.jpg"
             alt="Shop items"
-            width={960}
+            width={1280}
             height={400}
             className={styles.shopCarouselImage}
           />
