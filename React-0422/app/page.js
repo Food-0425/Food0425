@@ -1,95 +1,411 @@
-import Image from 'next/image'
-import styles from '@/styles/page.module.css'
+'use client'
 
-export default function Home() {
+import React from 'react'
+import styles from './styles/HomePage.module.css'
+import Link from 'next/link'
+import Image from 'next/image'
+import { SlMagnifier } from 'react-icons/sl'
+import {
+  IoMdArrowDropleftCircle,
+  IoMdArrowDroprightCircle,
+} from 'react-icons/io'
+import {
+  MdOutlineArrowBackIosNew,
+  MdOutlineArrowForwardIos,
+} from 'react-icons/md'
+
+export default function HomePage() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
+    <div className={styles.homePage}>
+      <div className={styles.heroSection}>
         <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
+          src="/images/hero-bg2.jpg"
+          alt="Hero background"
+          fill
+          className={styles.heroBgImage}
           priority
         />
-        <ol>
-          <li>
-            Get started by editing <code>app/page.js</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
+        <div className={styles.heroContent}>
+          <h1 className={styles.heroTitle}>移動盛宴 美味旅程</h1>
+          <h2 className={styles.heroSubtitle}>
+            當食材遇上有趣的靈魂，讓我們用美食對話吧！
+          </h2>
         </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <div className={styles.heroSearch}>
+          <div className={styles.searchInputWrapper}>
+            <div className={styles.searchText}>HI~今天您想吃什麼？</div>
+
+            <SlMagnifier />
+          </div>
+        </div>
+      </div>
+
+      <div className={styles.featuredSection}>
+        <div className={styles.featuredGrid}>
+          <div className={styles.featuredLarge}>
+            <Image
+              src="/images/featured-1.jpg"
+              alt="Featured content"
+              width={600}
+              height={650}
+              className={styles.featuredImage}
+            />
+            <div className={styles.imageOverlay}>
+              <div className={styles.categoryTag}>生活</div>
+              <div className={styles.imageTitle}>全新開幕，話題新餐廳!!</div>
+            </div>
+          </div>
+          <div className={styles.featuredSmallContainer}>
+            <div className={styles.featuredSmall}>
+              <Image
+                src="/images/featured-2.jpg"
+                alt="Featured content"
+                width={600}
+                height={320}
+                className={styles.featuredImage}
+              />
+              <div className={styles.imageOverlay}>
+                <div className={styles.categoryTag}>健康</div>
+                <div className={styles.imageTitle}>由水果所組成的健康吃法</div>
+              </div>
+            </div>
+            <div className={styles.featuredSmall}>
+              <Image
+                src="/images/featured-3.jpg"
+                alt="Featured content"
+                width={600}
+                height={320}
+                className={styles.featuredImage}
+              />
+              <div className={styles.imageOverlay}>
+                <div className={styles.categoryTag}>周末時光</div>
+                <div className={styles.imageTitle}>
+                  與朋友周末相聚時的好選擇!
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className={styles.contentSection}>
+        <div className={styles.contentContainer}>
+          <div className={styles.contentColumn}>
+            <div className={styles.sectionHeader}>
+              <h2 className={styles.sectionTitle}>大廚上菜囉!</h2>
+              <Link href="/recipes-landing" className={styles.moreLink}>
+                More
+              </Link>
+            </div>
+
+            <div className={styles.recipeItem}>
+              <Image
+                src="/images/recipe-1.jpg"
+                alt="Recipe"
+                width={600}
+                height={225}
+                className={styles.recipeImage}
+              />
+              <div className={styles.imageOverlay}>
+                <div className={styles.categoryTag}>名廚上菜</div>
+                <div className={styles.imageTitle}>
+                  在家也能輕鬆做的四種冷麵
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.recipeItem}>
+              <Image
+                src="/images/recipe-2.jpg"
+                alt="Recipe"
+                width={600}
+                height={225}
+                className={styles.recipeImage}
+              />
+              <div className={styles.imageOverlay}>
+                <div className={styles.categoryTag}>名廚上菜</div>
+                <div className={styles.imageTitle}>牛肉西吃的三種吃法</div>
+              </div>
+            </div>
+
+            <div className={styles.recipeItem}>
+              <Image
+                src="/images/recipe-3.jpg"
+                alt="Recipe"
+                width={600}
+                height={225}
+                className={styles.recipeImage}
+              />
+              <div className={styles.imageOverlay}>
+                <div className={styles.categoryTag}>名廚上菜</div>
+                <div className={styles.imageTitle}>炭烤牛肋排</div>
+              </div>
+            </div>
+          </div>
+
+          <div className={styles.contentColumn}>
+            <div className={styles.sectionHeader}>
+              <h2 className={styles.sectionTitle}>生活專區</h2>
+              <Link href="/lifestyle" className={styles.moreLink}>
+                More
+              </Link>
+            </div>
+
+            <div className={styles.recipeItem}>
+              <Image
+                src="/images/lifestyle-1.jpg"
+                alt="Lifestyle"
+                width={600}
+                height={225}
+                className={styles.recipeImage}
+              />
+              <div className={styles.imageOverlay}>
+                <div className={styles.categoryTag}>生活</div>
+                <div className={styles.imageTitle}>全新開幕的話題蛋糕店!!</div>
+              </div>
+            </div>
+
+            <div className={styles.recipeItem}>
+              <Image
+                src="/images/lifestyle-2.jpg"
+                alt="Lifestyle"
+                width={600}
+                height={225}
+                className={styles.recipeImage}
+              />
+              <div className={styles.imageOverlay}>
+                <div className={styles.categoryTag}>生活</div>
+                <div className={styles.imageTitle}>草莓季來襲</div>
+              </div>
+            </div>
+
+            <div className={styles.recipeItem}>
+              <Image
+                src="/images/lifestyle-3.jpg"
+                alt="Lifestyle"
+                width={600}
+                height={225}
+                className={styles.recipeImage}
+              />
+              <div className={styles.imageOverlay}>
+                <div className={styles.categoryTag}>生活</div>
+                <div className={styles.imageTitle}>清爽夏海宴席</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className={styles.categorySection}>
+        <button className={styles.categoryArrowLeft}>
+          {/* 左箭頭 */}
+          <IoMdArrowDropleftCircle />
+        </button>
+
+        <div className={styles.categoryContainer}>
+          <div className={styles.categoryItem}>
+            <div className={styles.categoryCircle}>燒烤</div>
+          </div>
+          <div className={styles.categoryItem}>
+            <div className={styles.categoryCircle}>蔬菜</div>
+          </div>
+          <div className={styles.categoryItem}>
+            <div className={styles.categoryCircle}>甜點</div>
+          </div>
+          <div className={styles.categoryItem}>
+            <div className={styles.categoryCircle}>海鮮</div>
+          </div>
+          <div className={styles.categoryItem}>
+            {/* 右箭頭 */}
+            <IoMdArrowDroprightCircle />
+          </div>
+          <div className={styles.categoryItem}>
+            <Image
+              src="/images/category-2.png"
+              alt="Category"
+              width={142}
+              height={142}
+              className={styles.categoryImage}
+            />
+          </div>
+          <div className={styles.categoryItem}>
+            <div className={styles.categoryCircleWithIcon}>
+              <Image
+                src="/images/drink-icon.png"
+                alt="Drinks"
+                width={82}
+                height={82}
+              />
+              <div className={styles.categoryText}>飲品</div>
+            </div>
+          </div>
+        </div>
+
+        <button className={styles.categoryArrowRight}>
           <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+            src="/images/arrow-right.png"
+            alt="Next"
+            width={71}
+            height={71}
           />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        </button>
+      </div>
+
+      <div className={styles.recipeCardsSection}>
+        <div className={styles.sectionHeader}>
+          <h2 className={styles.sectionTitle}>種類名稱</h2>
+          <Link href="/recipes-landing/list" className={styles.moreLink}>
+            More
+          </Link>
+        </div>
+
+        <div className={styles.recipeCardsGrid}>
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((index) => (
+            <div key={index} className={styles.recipeCard}>
+              <div className={styles.recipeCardImageWrapper}>
+                <Image
+                  src={`/images/recipe-card-${index}.jpg`}
+                  alt="Recipe"
+                  width={320}
+                  height={177}
+                  className={styles.recipeCardImage}
+                />
+              </div>
+              <div className={styles.recipeCardContent}>
+                <h3 className={styles.recipeCardTitle}>H6-文字文字文字H6</h3>
+                <p className={styles.recipeCardDescription}>
+                  p-文字H6-文字文字文字H6-文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字
+                </p>
+              </div>
+              <Image
+                src="/images/favorite-icon.png"
+                alt="Favorite"
+                width={55}
+                height={55}
+                className={styles.favoriteIcon}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className={styles.shopSection}>
+        <Image
+          src="/images/shop-decoration.png"
+          alt="Decoration"
+          width={407}
+          height={407}
+          className={styles.shopDecoration}
+        />
+
+        <div className={styles.sectionHeader}>
+          <h2 className={styles.sectionTitle}>商城</h2>
+          <Link href="/shop" className={styles.moreLink}>
+            More
+          </Link>
+        </div>
+
+        <div className={styles.shopCarousel}>
           <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
+            src="/images/shop-carousel2.jpg"
+            alt="Shop items"
+            width={960}
+            height={400}
+            className={styles.shopCarouselImage}
           />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          <button className={styles.carouselArrowLeft}>
+            {/* 左箭頭 */}
+            <MdOutlineArrowBackIosNew />
+          </button>
+          <button className={styles.carouselArrowRight}>
+            {/* 右箭頭 */}
+            <MdOutlineArrowForwardIos />
+          </button>
+        </div>
+
+        <div className={styles.topProductsSection}>
+          <div className={styles.topProductsImages}>
+            <div className={styles.productRankItem}>
+              <div className={styles.productCard}>
+                <Image
+                  src="/images/product-1.jpg"
+                  alt="Product"
+                  width={284}
+                  height={200}
+                  className={styles.productImage}
+                />
+                <div className={styles.productTitle}>��口美國牛菲力</div>
+              </div>
+              <div className={styles.rankBadge}>
+                <div className={styles.rankNumber}>1</div>
+              </div>
+            </div>
+
+            <div className={styles.productRankItem}>
+              <div className={styles.productCard}>
+                <Image
+                  src="/images/product-2.jpg"
+                  alt="Product"
+                  width={284}
+                  height={200}
+                  className={styles.productImage}
+                />
+                <div className={styles.productTitle}>大西洋鮭魚菲力</div>
+              </div>
+              <div className={styles.rankBadge}>
+                <div className={styles.rankNumber}>2</div>
+              </div>
+            </div>
+
+            <div className={styles.productRankItem}>
+              <div className={styles.productCard}>
+                <Image
+                  src="/images/product-3.jpg"
+                  alt="Product"
+                  width={284}
+                  height={200}
+                  className={styles.productImage}
+                />
+                <div className={styles.productTitle}>生食級干貝</div>
+              </div>
+              <div className={styles.rankBadge}>
+                <div className={styles.rankNumber}>3</div>
+              </div>
+            </div>
+          </div>
+
+          <div className={styles.topProductsList}>
+            <div className={styles.productRankListItem}>
+              <div className={styles.rankNumber}>4</div>
+              <div className={styles.productListTitle}>特選羊小排</div>
+            </div>
+            <div className={styles.productRankListItem}>
+              <div className={styles.rankNumber}>5</div>
+              <div className={styles.productListTitle}>北海道帝王蟹</div>
+            </div>
+            <div className={styles.productRankListItem}>
+              <div className={styles.rankNumber}>6</div>
+              <div className={styles.productListTitle}>三線磯鱸(黃雞魚)</div>
+            </div>
+            <div className={styles.productRankListItem}>
+              <div className={styles.rankNumber}>7</div>
+              <div className={styles.productListTitle}>龍膽石斑</div>
+            </div>
+            <div className={styles.productRankListItem}>
+              <div className={styles.rankNumber}>8</div>
+              <div className={styles.productListTitle}>有機特級杏鮑菇</div>
+            </div>
+            <div className={styles.productRankListItem}>
+              <div className={styles.rankNumber}>9</div>
+              <div className={styles.productListTitle}>日本山藥</div>
+            </div>
+            <div className={styles.productRankListItem}>
+              <div className={styles.rankNumber}>10</div>
+              <div className={styles.productListTitle}>巴薩米克醋</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
