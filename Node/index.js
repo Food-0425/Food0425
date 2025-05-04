@@ -20,6 +20,8 @@ import prouductRouter from "./routes/prouduct.js";
 // import usersRouter from "./routes/users.js";
 // 設定連到評價的路由
 import reviewRouter from "./routes/prouduct-review.js";
+// 設定到餐廳詳細頁面的路由
+import restaurantsRouter from "./routes/restaurants.js";
 
 const MySQLStore = mysql_session(session);
 const sessionStore = new MySQLStore({}, db);
@@ -104,6 +106,8 @@ app.use('/prouduct', prouductRouter);
 // app.use('/users', usersRouter);
 // 連到評價的
 app.use('/prouduct-review', reviewRouter);
+// 連到餐廳詳細頁面的
+app.use('/restaurants', restaurantsRouter);
 
 // 路由定義, 兩個條件: 1. 拜訪的 HTTP 方法, 2. 路徑
 app.get("/", (req, res) => {
