@@ -1,38 +1,20 @@
+/* Main Container */
 .container {
   min-width: 320px;
   align-items: stretch;
-  background-color: #fffaf0;
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-}
-
-.content {
-  align-self: center;
-  z-index: 0;
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-  align-items: stretch;
-}
-
-@media (max-width: 991px) {
-  .content {
-    max-width: 100%;
-  }
+  justify-content: start;
+  background-color: #FFFAF0;
 }
 
 /* Hero Section */
 .heroSection {
+  z-index: 0;
   width: 100%;
   padding-top: 80px;
-}
-
-@media (max-width: 991px) {
-  .heroSection {
-    max-width: 100%;
-  }
+  padding-bottom: 150px;
 }
 
 .heroImage {
@@ -43,67 +25,56 @@
   min-height: 501px;
 }
 
-@media (max-width: 991px) {
-  .heroImage {
-    max-width: 100%;
-  }
-}
-
 /* Ingredients Section */
 .ingredientsSection {
   max-width: 1280px;
-  align-items: flex-start;
+  padding-bottom: 150px;
+  align-items: start;
   align-self: center;
-  position: relative;
+  z-index: 0;
   display: flex;
   width: 1280px;
-  padding-top: 150px;
-  padding-bottom: 100px;
   gap: 30px;
-  justify-content: flex-start;
+  justify-content: start;
+  flex-wrap: wrap;
 }
 
-@media (max-width: 991px) {
-  .ingredientsSection {
-    padding-top: 100px;
-  }
-}
-
-/* Ingredient Card */
-.ingredientCard {
+.ingredientCard, .seasoningCard {
   position: relative;
-  z-index: 0;
   display: flex;
   min-width: 240px;
   flex-direction: column;
   align-items: stretch;
-  color: #423c3a;
   justify-content: center;
   flex: 1;
   flex-shrink: 1;
   flex-basis: 0%;
 }
 
-@media (max-width: 991px) {
-  .ingredientCard {
-    max-width: 100%;
-  }
+.ingredientCard {
+  color: #423C3A;
 }
 
-.ingredientCardBody {
+.seasoningCard {
+  color: #FAF8F9;
+}
+
+.cardBody {
   border-radius: 30px;
-  background-color: #fff;
   z-index: 0;
   width: 100%;
 }
 
-@media (max-width: 991px) {
-  .ingredientCardBody {
-    max-width: 100%;
-  }
+.ingredientCard .cardBody {
+  background-color: #FFF;
 }
 
-.ingredientCardContent {
+.seasoningCard .cardBody {
+  background-color: #DF6C2D;
+  box-shadow: 3px 3px 5px 0px rgba(0, 0, 0, 0.30) inset;
+}
+
+.cardContent {
   display: flex;
   width: 100%;
   flex-direction: column;
@@ -111,60 +82,29 @@
   justify-content: center;
 }
 
-@media (max-width: 991px) {
-  .ingredientCardContent {
-    max-width: 100%;
-  }
-}
-
-.ingredientTitle {
+.cardTitle {
+  color: inherit;
   width: 100%;
-  font-family:
-    "Noto Sans TC",
-    -apple-system,
-    Roboto,
-    Helvetica,
-    sans-serif;
+  font-family: Noto Sans TC, -apple-system, Roboto, Helvetica, sans-serif;
   font-size: 36px;
   font-weight: 700;
   white-space: nowrap;
   padding: 80px 40px 0px 40px;
 }
 
-@media (max-width: 991px) {
-  .ingredientTitle {
-    max-width: 100%;
-    padding-left: 20px;
-    padding-right: 20px;
-    white-space: initial;
-  }
-}
-
-.ingredientList {
+.cardList {
+  color: inherit;
   align-self: stretch;
   width: 100%;
   gap: 40px;
-  font-family:
-    Inter,
-    -apple-system,
-    Roboto,
-    Helvetica,
-    sans-serif;
+  font-family: Inter, -apple-system, Roboto, Helvetica, sans-serif;
   font-size: 20px;
   font-weight: 400;
   letter-spacing: 0.6px;
   padding: 45px 40px;
 }
 
-@media (max-width: 991px) {
-  .ingredientList {
-    max-width: 100%;
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-}
-
-.ingredientIcon {
+.cardIcon {
   aspect-ratio: 1;
   object-fit: contain;
   object-position: center;
@@ -177,410 +117,180 @@
   height: 111px;
 }
 
-/* Seasoning Card */
-.seasoningCard {
-  position: relative;
-  z-index: 0;
-  display: flex;
-  min-width: 240px;
-  flex-direction: column;
-  align-items: stretch;
-  color: #faf8f9;
-  justify-content: center;
-  flex: 1;
-  flex-shrink: 1;
-  flex-basis: 0%;
-}
-
-@media (max-width: 991px) {
-  .seasoningCard {
-    max-width: 100%;
-  }
-}
-
-.seasoningCardBody {
-  border-radius: 30px;
-  box-shadow: 3px 3px 5px 0px rgba(0, 0, 0, 0.3) inset;
-  background-color: #df6c2d;
-  z-index: 0;
-  width: 100%;
-}
-
-@media (max-width: 991px) {
-  .seasoningCardBody {
-    max-width: 100%;
-  }
-}
-
-.seasoningCardContent {
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: center;
-}
-
-@media (max-width: 991px) {
-  .seasoningCardContent {
-    max-width: 100%;
-  }
-}
-
-.seasoningTitle {
-  width: 100%;
-  font-family:
-    "Noto Sans TC",
-    -apple-system,
-    Roboto,
-    Helvetica,
-    sans-serif;
-  font-size: 36px;
-  font-weight: 700;
-  white-space: nowrap;
-  padding: 80px 40px 0px 40px;
-}
-
-@media (max-width: 991px) {
-  .seasoningTitle {
-    max-width: 100%;
-    padding-left: 20px;
-    padding-right: 20px;
-    white-space: initial;
-  }
-}
-
-.seasoningList {
-  align-self: stretch;
-  width: 100%;
-  gap: 40px;
-  font-family:
-    Inter,
-    -apple-system,
-    Roboto,
-    Helvetica,
-    sans-serif;
-  font-size: 20px;
-  font-weight: 400;
-  letter-spacing: 0.6px;
-  padding: 45px 40px;
-}
-
-@media (max-width: 991px) {
-  .seasoningList {
-    max-width: 100%;
-    padding-left: 20px;
-    padding-right: 20px;
-  }
+.seasoningCard .cardIcon {
+  box-shadow: 2px 3px 8px 0px rgba(0, 0, 0, 0.25);
 }
 
 .seasoningHighlight {
-  color: rgba(250, 248, 249, 1);
-}
-
-.seasoningIcon {
-  aspect-ratio: 1;
-  object-fit: contain;
-  object-position: center;
-  width: 111px;
-  box-shadow: 2px 3px 8px 0px rgba(0, 0, 0, 0.25);
-  position: absolute;
-  z-index: 0;
-  max-width: 100%;
-  left: 40px;
-  top: -55px;
-  height: 111px;
-}
-
-.decorationIcon {
-  aspect-ratio: 1;
-  object-fit: contain;
-  object-position: center;
-  width: 85px;
-  box-shadow: 2px 3px 8px 0px rgba(0, 0, 0, 0.25);
-  position: absolute;
-  z-index: 0;
-  flex-shrink: 0;
-  right: 47px;
-  top: 106px;
-  height: 85px;
+  color: rgba(250,248,249,1);
 }
 
 /* Steps Section */
 .stepsSection {
   max-width: 1280px;
-  padding-bottom: 100px;
-  align-items: stretch;
+  padding-bottom: 150px;
+  align-items: center;
   align-self: center;
+  z-index: 0;
   display: flex;
   width: 1280px;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: start;
 }
 
-/* Step Card */
-.stepCard {
-  align-items: center;
-  border-radius: 50px;
-  box-shadow: 2px 3px 8px 0px rgba(0, 0, 0, 0.25);
-  background-color: #fff;
-  display: flex;
-  min-height: 431px;
-  width: 100%;
-  padding-left: 20px;
-  padding-top: 16px;
-  padding-bottom: 16px;
-  overflow: hidden;
-  font-family:
-    "Noto Sans TC",
-    -apple-system,
-    Roboto,
-    Helvetica,
-    sans-serif;
-  font-weight: 700;
-  white-space: nowrap;
-  justify-content: flex-start;
-}
-
-@media (max-width: 991px) {
-  .stepCard {
-    max-width: 100%;
-    white-space: initial;
-  }
-}
-
-.stepCardInner {
-  align-self: stretch;
-  display: flex;
-  min-width: 240px;
-  margin-top: auto;
-  margin-bottom: auto;
-  padding-right: 210px;
-  gap: 40px;
-  justify-content: flex-start;
-  flex-direction: row;
-}
-
-@media (max-width: 991px) {
-  .stepCardInner {
-    max-width: 100%;
-    white-space: initial;
-  }
-}
-
-.stepImage {
-  aspect-ratio: 1;
+.stepsHeader {
+  aspect-ratio: 12.99;
   object-fit: contain;
   object-position: center;
-  width: 400px;
-  border-radius: 40px;
-  align-self: stretch;
-  min-width: 240px;
-  margin-top: auto;
-  margin-bottom: auto;
+  width: 100%;
 }
 
-.stepContent {
-  align-self: stretch;
-  min-width: 240px;
-  margin-top: auto;
-  margin-bottom: auto;
-  padding: 45px 40px;
-  width: 666px;
+.stepsContainer {
+  max-width: 1280px;
+  justify-content: center;
+  align-items: stretch;
+  border-radius: 0px 0px 15px 15px;
+  background-color: #FFF;
+  display: flex;
+  width: 100%;
+  padding: 49px 150px 80px;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 10px 18px 32px 6px rgba(0, 0, 0, 0.15);
 }
 
-@media (max-width: 991px) {
-  .stepContent {
-    max-width: 100%;
-    padding-left: 20px;
-    padding-right: 20px;
-    white-space: initial;
-  }
+.stepsList {
+  width: 100%;
+  font-weight: 700;
 }
 
-.stepNumber {
-  color: #000;
-  font-size: 64px;
+.stepItem {
+  display: flex;
+  width: 100%;
+  align-items: stretch;
+  gap: 80px;
+  justify-content: start;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
 }
 
-@media (max-width: 991px) {
-  .stepNumber {
-    font-size: 40px;
-  }
+.stepItem:first-child {
+  margin-top: 0;
+}
+
+.stepNumberDark, .stepNumberLight {
+  justify-content: center;
+  align-items: stretch;
+  border-radius: 39px;
+  display: flex;
+  padding-left: 14px;
+  padding-right: 10px;
+  gap: 7px;
+  overflow: hidden;
+  color: rgba(255, 255, 255, 1);
+  text-align: center;
+  height: 130px;
+  width: 130px;
+}
+
+.stepNumberDark {
+  background-color: #423C3A;
+}
+
+.stepNumberLight {
+  background-color: #DF6C2D;
+}
+
+.stepNumberText {
+  display: flex;
+  padding: 50px 0;
+  flex-direction: column;
+  align-items: center;
+  font-family: Noto Sans TC, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 35px;
+  line-height: 1.2;
+  justify-content: center;
+}
+
+.stepNumberText div:last-child {
+  margin-top: 11px;
+}
+
+.stepNumberValue {
+  font-size: 96px;
+  font-family: Proza Libre, -apple-system, Roboto, Helvetica, sans-serif;
+  margin: auto 0;
+  width: 54px;
 }
 
 .stepDescription {
-  color: #423c3a;
-  font-size: 36px;
-  margin-top: 30px;
-}
-
-@media (max-width: 991px) {
-  .stepDescription {
-    max-width: 100%;
-  }
-}
-
-/* Step Card Reverse */
-.stepCardReverse {
-  justify-content: flex-end;
-  align-items: center;
-  border-radius: 50px;
-  box-shadow: 2px 3px 8px 0px rgba(0, 0, 0, 0.25);
-  background-color: #fff;
-  display: flex;
-  margin-top: 50px;
-  min-height: 431px;
-  width: 100%;
-  padding-right: 20px;
-  padding-top: 16px;
-  padding-bottom: 16px;
-  overflow: hidden;
-  font-family:
-    "Noto Sans TC",
-    -apple-system,
-    Roboto,
-    Helvetica,
-    sans-serif;
-  font-weight: 700;
-  white-space: nowrap;
-}
-
-@media (max-width: 991px) {
-  .stepCardReverse {
-    max-width: 100%;
-    margin-top: 40px;
-    white-space: initial;
-  }
-}
-
-.stepCardInnerReverse {
-  align-self: stretch;
-  display: flex;
-  min-width: 240px;
-  margin-top: auto;
-  margin-bottom: auto;
-  padding-left: 210px;
-  gap: 40px;
-  justify-content: flex-end;
-  flex-direction: row;
-}
-
-@media (max-width: 991px) {
-  .stepCardInnerReverse {
-    max-width: 100%;
-    white-space: initial;
-  }
-}
-
-.stepContentReverse {
-  align-items: stretch;
-  align-self: stretch;
-  display: flex;
-  min-width: 240px;
-  margin-top: auto;
-  margin-bottom: auto;
-  flex-direction: column;
-  justify-content: flex-start;
-  padding: 45px 40px;
-  width: 666px;
-}
-
-@media (max-width: 991px) {
-  .stepContentReverse {
-    max-width: 100%;
-    padding-left: 20px;
-    padding-right: 20px;
-    white-space: initial;
-  }
-}
-
-.stepNumberReverse {
   color: #000;
-  font-size: 64px;
-  align-self: flex-end;
-}
-
-@media (max-width: 991px) {
-  .stepNumberReverse {
-    font-size: 40px;
-  }
-}
-
-.stepDescriptionReverse {
-  color: #df6c2d;
-  text-align: right;
+  font-family: Noto Sans TC, -apple-system, Roboto, Helvetica, sans-serif;
   font-size: 36px;
-  margin-top: 30px;
+  margin: auto 0;
+  flex: 1;
+  flex-shrink: 1;
+  flex-basis: 24px;
 }
 
-@media (max-width: 991px) {
-  .stepDescriptionReverse {
-    max-width: 100%;
-  }
-}
-
-/* Add to Cart Button */
 .addToCartButton {
-  align-items: flex-start;
+  justify-content: center;
+  align-items: stretch;
   border-radius: 100px;
   box-shadow: 0px 0px 0px 15px rgba(0, 0, 0, 0.05);
-  background-color: #df6c2d;
   align-self: center;
   display: flex;
-  margin-top: 50px;
-  flex-direction: column;
+  margin-top: 80px;
+  padding: 25px 40px 25px 25px;
+  gap: 20px;
   overflow: hidden;
-  color: #faf8f9;
+  color: #FAF8F9;
   text-align: center;
-  justify-content: flex-start;
-  padding: 25px 60px 15px 60px;
+  flex-wrap: wrap;
+  background-color: #DF6C2D;
 }
 
-@media (max-width: 991px) {
-  .addToCartButton {
-    max-width: 100%;
-    padding-left: 20px;
-    padding-right: 20px;
-    margin-top: 40px;
-  }
+.cartIconLarge {
+  aspect-ratio: 1;
+  object-fit: contain;
+  object-position: center;
+  width: 111px;
+  margin: auto 0;
+  flex-shrink: 0;
 }
 
-.addToCartText {
-  font-family:
-    "Noto Sans TC",
-    -apple-system,
-    Roboto,
-    Helvetica,
-    sans-serif;
-  font-size: 36px;
+.addToCartContent {
+  display: flex;
+  min-width: 240px;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  width: 394px;
+}
+
+.addToCartTitle {
+  color: #FAF8F9;
+  font-family: Noto Sans TC, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 48px;
   font-weight: 700;
 }
 
 .addToCartNote {
-  font-family:
-    Inter,
-    -apple-system,
-    Roboto,
-    Helvetica,
-    sans-serif;
-  font-size: 20px;
+  color: #FAF8F9;
+  font-family: Inter, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 24px;
   font-weight: 400;
-  letter-spacing: 0.6px;
-  margin-top: 15px;
+  letter-spacing: 0.72px;
+  align-self: center;
+  margin-top: 10px;
 }
 
 /* Chef Section */
 .chefSection {
+  z-index: 0;
   width: 100%;
-  padding-bottom: 100px;
+  padding-bottom: 150px;
   white-space: nowrap;
-}
-
-@media (max-width: 991px) {
-  .chefSection {
-    max-width: 100%;
-    white-space: initial;
-  }
 }
 
 .chefCard {
@@ -588,17 +298,10 @@
   display: flex;
   width: 100%;
   align-items: stretch;
-  gap: 40px 85px;
+  gap: 85px;
   overflow: hidden;
   justify-content: center;
   flex-wrap: wrap;
-}
-
-@media (max-width: 991px) {
-  .chefCard {
-    max-width: 100%;
-    white-space: initial;
-  }
 }
 
 .chefBackground {
@@ -609,13 +312,7 @@
   min-width: 240px;
   flex: 1;
   flex-shrink: 1;
-  flex-basis: 0%;
-}
-
-@media (max-width: 991px) {
-  .chefBackground {
-    max-width: 100%;
-  }
+  flex-basis: 320px;
 }
 
 .chefContent {
@@ -624,91 +321,99 @@
   display: flex;
   min-width: 240px;
   flex-direction: column;
-  padding: 85px 320px 287px 0px;
   flex: 1;
   flex-shrink: 1;
   flex-basis: 0%;
-}
-
-@media (max-width: 991px) {
-  .chefContent {
-    max-width: 100%;
-    padding-bottom: 100px;
-    white-space: initial;
-  }
+  padding: 85px 320px 287px 0px;
 }
 
 .chefTitle {
-  color: #423c3a;
-  font-family:
-    "Noto Sans TC",
-    -apple-system,
-    Roboto,
-    Helvetica,
-    sans-serif;
+  color: #423C3A;
+  font-family: Noto Sans TC, -apple-system, Roboto, Helvetica, sans-serif;
   font-size: 36px;
   font-weight: 700;
 }
 
-@media (max-width: 991px) {
-  .chefTitle {
-    max-width: 100%;
-  }
-}
-
 .chefDescription {
-  color: #7a7a7a;
-  font-family:
-    Inter,
-    -apple-system,
-    Roboto,
-    Helvetica,
-    sans-serif;
+  color: #7A7A7A;
+  font-family: Inter, -apple-system, Roboto, Helvetica, sans-serif;
   font-size: 20px;
   font-weight: 400;
   letter-spacing: 0.6px;
   margin-top: 25px;
 }
 
-@media (max-width: 991px) {
-  .chefDescription {
-    max-width: 100%;
-  }
-}
-
 /* Comments Section */
 .commentsSection {
   max-width: 1280px;
-  padding-bottom: 100px;
+  padding-bottom: 150px;
   justify-content: center;
-  align-items: center;
+  align-items: stretch;
   align-self: center;
+  z-index: 0;
   display: flex;
   width: 1280px;
-  gap: 30px;
-  font-family:
-    "Noto Sans TC",
-    -apple-system,
-    Roboto,
-    Helvetica,
-    sans-serif;
-  flex-wrap: wrap;
+  flex-direction: column;
+  font-family: Noto Sans TC, -apple-system, Roboto, Helvetica, sans-serif;
 }
 
-.commentArrow {
+.addCommentButton {
+  justify-content: center;
+  align-items: center;
+  align-self: flex-end;
+  position: relative;
+  display: flex;
+  min-height: 75px;
+  padding: 11px 23px;
+  gap: 10px;
+  font-size: 32px;
+  color: #FAF8F9;
+  font-weight: 700;
+  white-space: nowrap;
+  background-color: #DF6C2D;
+  border-radius: 37.5px;
+}
+
+.commentIcon {
   aspect-ratio: 1;
   object-fit: contain;
   object-position: center;
-  width: 86px;
-  border-radius: 200px;
-  box-shadow: 0px 0px 0px 16px rgba(0, 0, 0, 0.05);
+  width: 54px;
   align-self: stretch;
-  margin-top: auto;
-  margin-bottom: auto;
+  z-index: 0;
+  margin: auto 0;
   flex-shrink: 0;
-  padding-top: 24px;
-  padding-bottom: 24px;
+}
+
+.addCommentText {
+  color: #FAF8F9;
+  align-self: stretch;
+  z-index: 0;
+  margin: auto 0;
+}
+
+.commentsList {
+  display: flex;
+  margin-top: 30px;
+  width: 100%;
+  align-items: center;
+  gap: 30px;
+  justify-content: start;
+  flex-wrap: wrap;
+}
+
+.userAvatarLeft, .userAvatarRight {
+  aspect-ratio: 0.74;
+  object-fit: contain;
+  object-position: center;
+  width: 86px;
+  border-radius: 100px;
+  align-self: stretch;
+  margin: auto 0;
+  flex-shrink: 0;
+  padding: 24px 0;
   gap: 10px;
+  overflow: hidden;
 }
 
 .commentCard {
@@ -716,22 +421,15 @@
   align-items: stretch;
   border-radius: 30px;
   box-shadow: 2px 3px 8px 0px rgba(0, 0, 0, 0.25);
-  background-color: #fff;
+  background-color: #FFF;
   align-self: stretch;
   display: flex;
   min-width: 240px;
-  margin-top: auto;
-  margin-bottom: auto;
+  margin: auto 0;
   flex-direction: column;
   flex: 1;
   flex-shrink: 1;
   flex-basis: 0%;
-}
-
-@media (max-width: 991px) {
-  .commentCard {
-    max-width: 100%;
-  }
 }
 
 .commentUser {
@@ -741,15 +439,7 @@
   width: 100%;
   gap: 30px;
   flex-wrap: wrap;
-  padding: 45px 40px 0px 40px;
-}
-
-@media (max-width: 991px) {
-  .commentUser {
-    max-width: 100%;
-    padding-left: 20px;
-    padding-right: 20px;
-  }
+  padding: 45px 40px 0;
 }
 
 .userAvatar {
@@ -765,7 +455,7 @@
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  justify-content: flex-start;
+  justify-content: start;
   flex: 1;
   flex-shrink: 1;
   flex-basis: 0%;
@@ -786,13 +476,13 @@
 }
 
 .userName {
-  color: #423c3a;
+  color: #423C3A;
   font-size: 20px;
   font-weight: 700;
 }
 
 .commentDate {
-  color: #7a7a7a;
+  color: #7A7A7A;
   font-size: 16px;
   font-weight: 400;
   letter-spacing: 0.48px;
@@ -807,110 +497,71 @@
   width: 100%;
   flex-direction: column;
   white-space: nowrap;
-  padding: 0px 40px 45px 40px;
-}
-
-@media (max-width: 991px) {
-  .commentContent {
-    max-width: 100%;
-    padding-left: 20px;
-    padding-right: 20px;
-    margin-top: 40px;
-    white-space: initial;
-  }
+  padding: 0 40px 45px;
+  word-wrap: normal;
 }
 
 .commentTitle {
-  color: #423c3a;
+  color: #423C3A;
   font-size: 20px;
   font-weight: 700;
 }
 
-@media (max-width: 991px) {
-  .commentTitle {
-    max-width: 100%;
-  }
-}
-
 .commentText {
-  color: #7a7a7a;
+  color: #7A7A7A;
   font-size: 16px;
   font-weight: 400;
   letter-spacing: 0.48px;
   margin-top: 25px;
-}
-
-@media (max-width: 991px) {
-  .commentText {
-    max-width: 100%;
-  }
+  word-wrap: break-word;
 }
 
 /* Related Recipes Section */
 .relatedRecipesSection {
   justify-content: center;
-  align-items: center;
-  background-color: #df6c2d;
+  align-items: stretch;
+  z-index: 0;
   display: flex;
   width: 100%;
-  padding-top: 80px;
-  padding-bottom: 80px;
+  padding: 80px 0;
   flex-direction: column;
   overflow: hidden;
-  font-family:
-    "Noto Sans TC",
-    -apple-system,
-    Roboto,
-    Helvetica,
-    sans-serif;
-  font-size: 20px;
-  color: #423c3a;
+  font-family: Noto Sans TC, -apple-system, Roboto, Helvetica, sans-serif;
   font-weight: 700;
   white-space: nowrap;
   text-align: center;
+  background-color: #DF6C2D;
 }
 
-@media (max-width: 991px) {
-  .relatedRecipesSection {
-    max-width: 100%;
-    white-space: initial;
-  }
+.relatedRecipesTitle {
+  color: #FFF;
+  font-size: 48px;
 }
 
 .relatedRecipesGrid {
+  align-self: center;
   display: flex;
+  margin-top: 50px;
   align-items: center;
-  gap: 40px 54px;
-  justify-content: flex-start;
+  gap: 54px;
+  font-size: 20px;
+  color: #423C3A;
+  justify-content: start;
   flex-wrap: wrap;
-}
-
-@media (max-width: 991px) {
-  .relatedRecipesGrid {
-    max-width: 100%;
-    white-space: initial;
-  }
 }
 
 .relatedRecipeCard {
   justify-content: center;
   align-items: stretch;
   border-radius: 30px;
-  background-color: #fff;
+  background-color: #FFF;
   align-self: stretch;
   display: flex;
   min-width: 240px;
-  margin-top: auto;
-  margin-bottom: auto;
+  margin: auto 0;
   flex-direction: column;
   overflow: hidden;
   width: 259px;
-}
-
-@media (max-width: 991px) {
-  .relatedRecipeCard {
-    white-space: initial;
-  }
 }
 
 .relatedRecipeImage {
@@ -923,43 +574,26 @@
 }
 
 .relatedRecipeTitle {
+  color: #423C3A;
   align-self: stretch;
   flex: 1;
   flex-shrink: 1;
   flex-basis: 0%;
   margin-top: 25px;
   width: 100%;
-  padding-left: 25px;
-  padding-right: 25px;
-  padding-bottom: 25px;
-}
-
-@media (max-width: 991px) {
-  .relatedRecipeTitle {
-    padding-left: 20px;
-    padding-right: 20px;
-    white-space: initial;
-  }
+  padding: 0 25px 25px;
 }
 
 /* Footer */
 .footer {
   justify-content: space-between;
   align-items: center;
-  background-color: #423c3a;
   z-index: 0;
   display: flex;
   min-height: 400px;
   width: 100%;
-  padding: 0px 320px;
-}
-
-@media (max-width: 991px) {
-  .footer {
-    max-width: 100%;
-    padding-left: 20px;
-    padding-right: 20px;
-  }
+  padding: 0 320px;
+  background-color: #423C3A;
 }
 
 .footerContent {
@@ -969,11 +603,10 @@
   align-self: stretch;
   display: flex;
   min-width: 240px;
-  margin-top: auto;
-  margin-bottom: auto;
+  margin: auto 0;
   min-height: 348px;
   width: 100%;
-  gap: 40px 100px;
+  gap: 100px;
   overflow: hidden;
   flex-wrap: wrap;
   flex: 1;
@@ -981,45 +614,21 @@
   flex-basis: 0%;
 }
 
-@media (max-width: 991px) {
-  .footerContent {
-    max-width: 100%;
-  }
-}
-
 .footerLeft {
   display: flex;
   min-width: 240px;
-  padding-top: 45px;
-  padding-bottom: 45px;
+  padding: 45px 0;
   flex-direction: column;
   align-items: stretch;
-  font-family:
-    "Noto Sans TC",
-    -apple-system,
-    Roboto,
-    Helvetica,
-    sans-serif;
+  font-family: Noto Sans TC, -apple-system, Roboto, Helvetica, sans-serif;
   justify-content: center;
   width: 457px;
 }
 
-@media (max-width: 991px) {
-  .footerLeft {
-    max-width: 100%;
-  }
-}
-
 .footerThankYou {
-  color: #fff5ee;
+  color: #FFF5EE;
   font-size: 20px;
   font-weight: 700;
-}
-
-@media (max-width: 991px) {
-  .footerThankYou {
-    max-width: 100%;
-  }
 }
 
 .footerFeedback {
@@ -1032,50 +641,29 @@
   letter-spacing: 0.48px;
 }
 
-@media (max-width: 991px) {
-  .footerFeedback {
-    max-width: 100%;
-    white-space: initial;
-  }
-}
-
 .feedbackText {
-  color: #fff5ee;
-}
-
-@media (max-width: 991px) {
-  .feedbackText {
-    max-width: 100%;
-  }
+  color: #FFF5EE;
 }
 
 .feedbackInput {
   justify-content: flex-end;
   align-items: stretch;
   border-radius: 15px;
+  border: 3px solid #FAF8F9;
   background-color: rgba(250, 248, 249, 0.45);
   display: flex;
   margin-top: 15px;
   width: 100%;
-  padding-left: 15px;
-  padding-right: 17px;
-  padding-top: 10px;
-  padding-bottom: 15px;
+  padding: 10px 17px 15px 15px;
   gap: 20px;
   overflow: hidden;
-  color: #faf8f9;
+  color: #FAF8F9;
   flex: 1;
   height: 100%;
 }
 
-@media (max-width: 991px) {
-  .feedbackInput {
-    max-width: 100%;
-    white-space: initial;
-  }
-}
-
 .feedbackPlaceholder {
+  color: #FAF8F9;
   flex: 1;
   flex-shrink: 1;
   flex-basis: 0%;
@@ -1093,39 +681,25 @@
 .footerRight {
   display: flex;
   min-width: 240px;
-  padding-top: 45px;
-  padding-bottom: 45px;
+  padding: 45px 0;
   flex-direction: column;
   align-items: flex-end;
   justify-content: center;
 }
 
 .faqButton {
+  color: #FAF8F9;
   align-self: stretch;
   border-radius: 71.97px;
-  box-shadow: 0px 0px 0px 15px rgba(0, 0, 0, 0.05);
-  background-color: #df6c2d;
+  box-shadow: 0px 0px 0px 10.795px rgba(0, 0, 0, 0.05);
   overflow: hidden;
-  font-family:
-    "Noto Sans TC",
-    -apple-system,
-    Roboto,
-    Helvetica,
-    sans-serif;
-  font-size: 36px;
-  color: #faf8f9;
+  font-family: Noto Sans TC, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 26px;
   font-weight: 700;
   white-space: nowrap;
   text-align: center;
   padding: 25px 60px;
-}
-
-@media (max-width: 991px) {
-  .faqButton {
-    padding-left: 20px;
-    padding-right: 20px;
-    white-space: initial;
-  }
+  background-color: #DF6C2D;
 }
 
 .socialIcons {
@@ -1133,7 +707,7 @@
   margin-top: 40px;
   align-items: flex-end;
   gap: 12px;
-  justify-content: flex-start;
+  justify-content: start;
 }
 
 .socialIcon {
@@ -1151,62 +725,32 @@
 }
 
 .socialIconCircle {
-  background-color: #ececec;
+  background-color: #ECECEC;
   border-radius: 50%;
   display: flex;
   width: 79px;
   flex-shrink: 0;
   height: 79px;
-  fill: #ececec;
 }
 
 /* Navbar */
 .navbar {
   position: absolute;
   z-index: 0;
-  width: 1920px;
-  right: 0px;
-  top: 0px;
+  width: 100%;
+  right: 0;
+  top: 0;
 }
 
-@media (max-width: 991px) {
-  .navbar {
-    max-width: 100%;
-  }
-}
-
-.navbar {
+.navbarInner {
   justify-content: center;
   align-items: center;
   box-shadow: 2px 3px 8px 0px rgba(0, 0, 0, 0.25);
-  background-color: #fff;
+  background-color: #FFF;
   display: flex;
   width: 100%;
   flex-direction: column;
   overflow: hidden;
-}
-
-@media (max-width: 991px) {
-  .navbar {
-    max-width: 100%;
-  }
-}
-
-.navbarInner {
-  display: flex;
-  min-height: 80px;
-  width: 1280px;
-  max-width: 1280px;
-  align-items: stretch;
-  gap: 40px 200px;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-}
-
-@media (max-width: 991px) {
-  .navbarInner {
-    max-width: 100%;
-  }
 }
 
 .navLeftGroup {
@@ -1214,18 +758,13 @@
   min-width: 240px;
   align-items: stretch;
   gap: 40px;
-  font-family:
-    "Noto Sans TC",
-    -apple-system,
-    Roboto,
-    Helvetica,
-    sans-serif;
+  font-family: Noto Sans TC, -apple-system, Roboto, Helvetica, sans-serif;
   font-size: 20px;
-  color: #423c3a;
+  color: #423C3A;
   font-weight: 700;
   white-space: nowrap;
   text-align: center;
-  justify-content: flex-start;
+  justify-content: start;
   flex-wrap: wrap;
   height: 100%;
   flex: 1;
@@ -1233,20 +772,12 @@
   flex-basis: 0%;
 }
 
-@media (max-width: 991px) {
-  .navLeftGroup {
-    max-width: 100%;
-    white-space: initial;
-  }
-}
-
 .logoImage {
   aspect-ratio: 0.67;
   object-fit: contain;
   object-position: center;
   width: 38px;
-  margin-top: auto;
-  margin-bottom: auto;
+  margin: auto 0;
   flex-shrink: 0;
 }
 
@@ -1255,37 +786,21 @@
   min-width: 240px;
   align-items: center;
   gap: 18px;
-  justify-content: flex-start;
+  justify-content: start;
   height: 100%;
   flex: 1;
   flex-shrink: 1;
   flex-basis: 0%;
 }
 
-@media (max-width: 991px) {
-  .navBtnGroup {
-    max-width: 100%;
-    white-space: initial;
-  }
-}
-
 .navBtn {
+  color: #423C3A;
   align-self: stretch;
   border-radius: 100px;
   background-color: rgba(223, 108, 45, 0);
-  margin-top: auto;
-  margin-bottom: auto;
-  padding-left: 14px;
-  padding-right: 14px;
-  padding-top: 8px;
-  padding-bottom: 8px;
+  margin: auto 0;
+  padding: 8px 14px;
   cursor: pointer;
-}
-
-@media (max-width: 991px) {
-  .navBtn {
-    white-space: initial;
-  }
 }
 
 .navRightGroup {
@@ -1301,29 +816,22 @@
   flex-basis: 0%;
 }
 
-@media (max-width: 991px) {
-  .navRightGroup {
-    max-width: 100%;
-  }
-}
-
 .searchBar {
   min-width: 200px;
   max-width: 300px;
   border-radius: 200px;
-  background-color: #faf8f9;
+  border: 2px solid #DF6C2D;
   align-self: stretch;
   display: flex;
-  margin-top: auto;
-  margin-bottom: auto;
+  margin: auto 0;
   width: 300px;
   flex-shrink: 1;
   height: 49px;
-  padding-top: 12px;
-  padding-bottom: 12px;
+  padding: 12px 0;
   gap: 10px;
   flex: 1;
   flex-basis: 0%;
+  background-color: #FAF8F9;
 }
 
 .cartIcon {
@@ -1332,8 +840,7 @@
   object-position: center;
   width: 45px;
   align-self: stretch;
-  margin-top: auto;
-  margin-bottom: auto;
+  margin: auto 0;
   flex-shrink: 0;
 }
 
@@ -1342,9 +849,284 @@
   object-fit: contain;
   object-position: center;
   width: 33px;
-  fill: #df6c2d;
+  fill: #DF6C2D;
   align-self: stretch;
-  margin-top: auto;
-  margin-bottom: auto;
+  margin: auto 0;
   flex-shrink: 0;
+}
+
+/* Decorative Elements */
+.decorationLeft {
+  aspect-ratio: 0.68;
+  object-fit: contain;
+  object-position: center;
+  width: 404px;
+  position: absolute;
+  z-index: 0;
+  max-width: 100%;
+  left: 41px;
+  top: 1646px;
+  height: 592px;
+}
+
+.decorationRight {
+  aspect-ratio: 1.06;
+  object-fit: contain;
+  object-position: center;
+  width: 415px;
+  position: absolute;
+  z-index: 0;
+  max-width: 100%;
+  right: 84px;
+  top: 1463px;
+  height: 391px;
+}
+
+.decorationSticker {
+  aspect-ratio: 0.95;
+  object-fit: contain;
+  object-position: center;
+  width: 108px;
+  position: absolute;
+  z-index: 0;
+  right: 159px;
+  top: 2549px;
+  transform: rotate(180deg);
+}
+
+/* Media Queries */
+@media (max-width: 991px) {
+  .heroSection {
+    max-width: 100%;
+    padding-bottom: 100px;
+  }
+
+  .heroImage {
+    max-width: 100%;
+  }
+
+  .ingredientsSection {
+    padding-bottom: 100px;
+  }
+
+  .ingredientCard, .seasoningCard {
+    max-width: 100%;
+  }
+
+  .cardBody {
+    max-width: 100%;
+  }
+
+  .cardContent {
+    max-width: 100%;
+  }
+
+  .cardTitle {
+    max-width: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
+    white-space: initial;
+  }
+
+  .cardList {
+    max-width: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .stepsSection {
+    padding-bottom: 100px;
+  }
+
+  .stepsContainer {
+    max-width: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .stepItem {
+    max-width: 100%;
+    white-space: initial;
+  }
+
+  .stepNumberDark, .stepNumberLight {
+    white-space: initial;
+  }
+
+  .stepNumberText {
+    white-space: initial;
+  }
+
+  .stepNumberValue {
+    font-size: 40px;
+  }
+
+  .stepDescription {
+    max-width: 100%;
+  }
+
+  .addToCartButton {
+    max-width: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-top: 40px;
+  }
+
+  .addToCartTitle {
+    font-size: 40px;
+  }
+
+  .chefSection {
+    max-width: 100%;
+    padding-bottom: 100px;
+    white-space: initial;
+  }
+
+  .chefCard {
+    max-width: 100%;
+    white-space: initial;
+  }
+
+  .chefBackground {
+    max-width: 100%;
+  }
+
+  .chefContent {
+    max-width: 100%;
+    padding-bottom: 100px;
+    white-space: initial;
+  }
+
+  .chefTitle {
+    max-width: 100%;
+  }
+
+  .chefDescription {
+    max-width: 100%;
+  }
+
+  .commentsSection {
+    padding-bottom: 100px;
+  }
+
+  .addCommentButton {
+    padding-left: 20px;
+    padding-right: 20px;
+    white-space: initial;
+  }
+
+  .commentsList {
+    max-width: 100%;
+  }
+
+  .commentCard {
+    max-width: 100%;
+  }
+
+  .commentUser {
+    max-width: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .commentContent {
+    max-width: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-top: 40px;
+    white-space: initial;
+  }
+
+  .commentTitle {
+    max-width: 100%;
+  }
+
+  .commentText {
+    max-width: 100%;
+  }
+
+  .relatedRecipesSection {
+    max-width: 100%;
+    white-space: initial;
+  }
+
+  .relatedRecipesTitle {
+    max-width: 100%;
+    font-size: 40px;
+  }
+
+  .relatedRecipesGrid {
+    max-width: 100%;
+    margin-top: 40px;
+    white-space: initial;
+  }
+
+  .relatedRecipeCard {
+    white-space: initial;
+  }
+
+  .relatedRecipeTitle {
+    padding-left: 20px;
+    padding-right: 20px;
+    white-space: initial;
+  }
+
+  .footer {
+    max-width: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .footerContent {
+    max-width: 100%;
+  }
+
+  .footerLeft {
+    max-width: 100%;
+  }
+
+  .footerThankYou {
+    max-width: 100%;
+  }
+
+  .feedbackText {
+    max-width: 100%;
+  }
+
+  .feedbackInput {
+    max-width: 100%;
+    white-space: initial;
+  }
+
+  .faqButton {
+    padding-left: 20px;
+    padding-right: 20px;
+    white-space: initial;
+  }
+
+  .navbar {
+    max-width: 100%;
+  }
+
+  .navbarInner {
+    max-width: 100%;
+  }
+
+  .navLeftGroup {
+    max-width: 100%;
+    white-space: initial;
+  }
+
+  .navBtnGroup {
+    max-width: 100%;
+    white-space: initial;
+  }
+
+  .navBtn {
+    white-space: initial;
+  }
+
+  .navRightGroup {
+    max-width: 100%;
+  }
 }
