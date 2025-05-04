@@ -85,6 +85,50 @@ router.get('/api/:id', async (req, res) => {
   
       // 加進 recipe 裡面
       recipe.steps = stepRows;
+
+      // 查這個食譜對應的所有食材
+      const [ingredientRows] = await db.query(
+        'SELECT ingredient_id, name, quantity, unit FROM ingredients WHERE recipe_id = ? ORDER BY ingredient_id ASC',
+        [recipeId]
+      );
+  
+      // 加進 recipe 裡面
+      recipe.ingredients = ingredientRows;
+
+      // 查這個食譜對應的所有調味料
+      const [condimentsRows] = await db.query(
+        'SELECT condiment_id, name, quantity, unit FROM condiments WHERE recipe_id = ? ORDER BY condiment_id ASC',
+        [recipeId]
+      )
+      
+      // 加進 recipe 裡面
+      recipe.condiments = condimentsRows
+
+      // 查這個食譜對應的所有評論
+      const [commentRows] = await db.query(
+
+        // 'SELECT id, context, user_id, created_at FROM user_feedbacks WHERE recipes_id = ? ORDER BY id ASC',
+        // 下面這段是先將用戶名稱與食譜評論JOIN再一起，接著再將這個JOIN過的評論表塞進這個食譜查詢的JSON檔
+        `SELECT 
+     uf.id, uf.context, uf.user_id, uf.created_at, u.username 
+   FROM user_feedbacks uf
+   JOIN users u ON uf.user_id = u.user_id
+   WHERE uf.recipes_id = ? 
+   ORDER BY uf.id ASC`,
+        [recipeId]
+      );
+
+       // 格式化 created_at，只顯示日期（YYYY-MM-DD）
+      //  這邊是先將查詢出的評論commentRows裡面的created_at格式化
+      // (原本是直接把commentRows加進recipe ，但現在因為要時間格式化，所以多了下面這步驟)
+      //  然後再將時間格式化過的commentsWithFormattedDate加進recipe裡面
+    const commentsWithFormattedDate = commentRows.map(comment => {
+      comment.created_at = moment(comment.created_at).format('YYYY-MM-DD');  // 格式化日期
+      return comment;
+    });
+  
+      // 將時間格式化之後的資料加進 recipe 裡面
+      recipe.comments = commentsWithFormattedDate;
   
       res.json({ success: true, data: recipe });
   
