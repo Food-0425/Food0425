@@ -284,10 +284,10 @@ export default function RestaurantDetailPage() {
               </div>
 
               {/* 資料庫忘了寫相關餐廳的資訊。所以下面這個先關掉(註解掉) */}
-              {/* <div className={styles.infoCard}>
+              <div className={styles.infoCard}>
                 <div className={styles.infoCardTitle}>相關餐廳</div>
                 <div className={styles.relatedRestaurants}>
-                  {restaurant.relatedRestaurants.map((related, index) => (
+                  {restaurant.related_restaurants.map((related, index) => (
                     <div
                       key={index}
                       className={
@@ -315,7 +315,7 @@ export default function RestaurantDetailPage() {
                               : styles.relatedName
                           }
                         >
-                          {related.name}
+                          {related.related_restaurant_name}
                         </div>
                         <div className={styles.relatedLocation}>
                           {related.location}
@@ -324,7 +324,7 @@ export default function RestaurantDetailPage() {
                     </div>
                   ))}
                 </div>
-              </div> */}
+              </div>
             </div>
           </div>
         </div>

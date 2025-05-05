@@ -85,6 +85,17 @@ router.get('/api/:id', async (req, res) => {
   
       // 加進 restaurant 裡面
       restaurant.dishes = disheRows;
+
+      // 查這個餐廳對應的關聯餐廳推薦
+      const [recommendRows] = await db.query(
+        
+        'SELECT rr.source_restaurant_id, rr.related_restaurant_id, r.name AS related_restaurant_name, rr.location, rr.image FROM related_restaurants rr JOIN restaurants r ON rr.related_restaurant_id = r.id WHERE rr.source_restaurant_id = ? ORDER BY rr.id ASC',
+        
+        [restaurantId]
+      )
+  
+      // 加進 restaurant 裡面
+      restaurant.related_restaurants = recommendRows;
   
       res.json({ success: true, data: restaurant });
   
