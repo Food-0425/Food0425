@@ -26,6 +26,9 @@ export default function RecipeDetailPage() {
   // 取得評論數據
   const comments = recipe.comments || []
 
+  // 取得相關食譜數據
+  const relatedRecipes = recipe.related_recipes || []
+
   return (
     <div className={styles.container}>
       {/* Hero Section */}
@@ -315,8 +318,8 @@ export default function RecipeDetailPage() {
             comments.map((comment, index) => (
               <div className={styles.commentCard} key={index}>
                 <div className={styles.commentUser}>
-                  {/* 先註解掉，不然會一直去跟後端拿資料(無限讀取) */}
-                  {/* <img
+                  {/* 先註解掉，不然會一直去跟後端拿資料(無限讀取) {目前已解決} */}
+                  <img
                     src={
                       comment.userAvatar ||
                       `/images/recipes/user${(index % 2) + 1}.png`
@@ -324,10 +327,12 @@ export default function RecipeDetailPage() {
                     className={styles.userAvatar}
                     alt="User avatar"
                     onError={(e) => {
-                      e.target.onerror = null
-                      e.target.src = `/images/recipes/user${(index % 2) + 1}.png`
+                      if (!e.target.dataset.fallback) {
+                        e.target.dataset.fallback = true // 標記已經使用過 fallback
+                        e.target.src = `/images/recipes/user${(index % 2) + 1}.png`
+                      }
                     }}
-                  /> */}
+                  />
                   <div className={styles.userInfo}>
                     <img
                       src="/images/recipes/rating.png"
@@ -426,63 +431,101 @@ export default function RecipeDetailPage() {
         </div>
       </div>
 
-      {/* Related Recipes Section */}
+      {/* Related Recipes Section - 動態生成相關食譜 */}
       <div className={styles.relatedRecipesSection}>
         <div className={styles.relatedRecipesTitle}>相關食譜推薦</div>
         <div className={styles.relatedRecipesGrid}>
-          <div className={styles.relatedRecipeCard}>
-            <img
-              src="/images/recipes/related1.jpg"
-              className={styles.relatedRecipeImage}
-              alt="Related recipe"
-            />
-            <div className={styles.relatedRecipeTitle}>希臘沙拉</div>
-          </div>
+          {isLoading ? (
+            <div>正在載入相關食譜...</div>
+          ) : error ? (
+            <div>載入相關食譜時發生錯誤</div>
+          ) : relatedRecipes && relatedRecipes.length > 0 ? (
+            relatedRecipes.map((relatedRecipe, index) => (
+              <Link
+                href={`/recipes/${relatedRecipe.related_recipe_id}`}
+                key={relatedRecipe.related_recipe_id || index}
+                className={styles.relatedRecipeCard}
+              >
+                {/* img先註解掉，不然會一直無限跟後端發API請求 */}
+                <img
+                  src={
+                    relatedRecipe.image ||
+                    `/images/recipes/related${(index % 6) + 1}.jpg`
+                  }
+                  className={styles.relatedRecipeImage}
+                  alt={relatedRecipe.title || '相關食譜'}
+                  onError={(e) => {
+                    if (!e.target.dataset.fallback) {
+                      e.target.dataset.fallback = true // 標記已經使用過 fallback
+                      e.target.src = `/images/recipes/related${(index % 6) + 1}.jpg`
+                    }
+                  }}
+                />
+                <div className={styles.relatedRecipeTitle}>
+                  {relatedRecipe.title || '未命名食譜'}
+                </div>
+              </Link>
+            ))
+          ) : (
+            // 備用的靜態相關食譜，當API沒有返回數據時顯示
+            <>
+              <div className={styles.relatedRecipeCard}>
+                <img
+                  src="/images/recipes/related1.jpg"
+                  className={styles.relatedRecipeImage}
+                  alt="Related recipe"
+                />
+                <div className={styles.relatedRecipeTitle}>希臘沙拉</div>
+              </div>
 
-          <div className={styles.relatedRecipeCard}>
-            <img
-              src="/images/recipes/related2.jpg"
-              className={styles.relatedRecipeImage}
-              alt="Related recipe"
-            />
-            <div className={styles.relatedRecipeTitle}>墨西哥玉米餅沙拉</div>
-          </div>
+              <div className={styles.relatedRecipeCard}>
+                <img
+                  src="/images/recipes/related2.jpg"
+                  className={styles.relatedRecipeImage}
+                  alt="Related recipe"
+                />
+                <div className={styles.relatedRecipeTitle}>
+                  墨西哥玉米餅沙拉
+                </div>
+              </div>
 
-          <div className={styles.relatedRecipeCard}>
-            <img
-              src="/images/recipes/related3.jpg"
-              className={styles.relatedRecipeImage}
-              alt="Related recipe"
-            />
-            <div className={styles.relatedRecipeTitle}>義式焗烤千層麵</div>
-          </div>
+              <div className={styles.relatedRecipeCard}>
+                <img
+                  src="/images/recipes/related3.jpg"
+                  className={styles.relatedRecipeImage}
+                  alt="Related recipe"
+                />
+                <div className={styles.relatedRecipeTitle}>義式焗烤千層麵</div>
+              </div>
 
-          <div className={styles.relatedRecipeCard}>
-            <img
-              src="/images/recipes/related4.jpg"
-              className={styles.relatedRecipeImage}
-              alt="Related recipe"
-            />
-            <div className={styles.relatedRecipeTitle}>巧克力熔岩蛋糕</div>
-          </div>
+              <div className={styles.relatedRecipeCard}>
+                <img
+                  src="/images/recipes/related4.jpg"
+                  className={styles.relatedRecipeImage}
+                  alt="Related recipe"
+                />
+                <div className={styles.relatedRecipeTitle}>巧克力熔岩蛋糕</div>
+              </div>
 
-          <div className={styles.relatedRecipeCard}>
-            <img
-              src="/images/recipes/related5.jpg"
-              className={styles.relatedRecipeImage}
-              alt="Related recipe"
-            />
-            <div className={styles.relatedRecipeTitle}>台式滷肉飯</div>
-          </div>
+              <div className={styles.relatedRecipeCard}>
+                <img
+                  src="/images/recipes/related5.jpg"
+                  className={styles.relatedRecipeImage}
+                  alt="Related recipe"
+                />
+                <div className={styles.relatedRecipeTitle}>台式滷肉飯</div>
+              </div>
 
-          <div className={styles.relatedRecipeCard}>
-            <img
-              src="/images/recipes/related6.jpg"
-              className={styles.relatedRecipeImage}
-              alt="Related recipe"
-            />
-            <div className={styles.relatedRecipeTitle}>泰式綠咖哩雞</div>
-          </div>
+              <div className={styles.relatedRecipeCard}>
+                <img
+                  src="/images/recipes/related6.jpg"
+                  className={styles.relatedRecipeImage}
+                  alt="Related recipe"
+                />
+                <div className={styles.relatedRecipeTitle}>泰式綠咖哩雞</div>
+              </div>
+            </>
+          )}
         </div>
       </div>
 
