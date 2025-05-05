@@ -92,9 +92,6 @@ export default function RestaurantDetailPage() {
   }, [id])
   const fetcher = (url) => fetch(url).then((res) => res.json())
 
-  // 測試取得單筆網頁內容
-  // const router = useRouter()
-
   // 使用 useSWR 來抓取資料，確保有 id 時才發送請求
   const { data, error } = useSWR(
     id ? `${API_SERVER}/restaurants/api/${id}` : null,

@@ -18,22 +18,22 @@ const router = express.Router();
 //     }
 //   });
 
-// 取得所有食譜（但會依照分頁來分別顯示不同的資料)
+// 取得所有餐廳（但會依照分頁來分別顯示不同的資料)
 router.get('/api', async (req, res) => {
     try {
       const page = parseInt(req.query.page) || 1
-    //   這邊的15 就是指一頁幾筆
-      const limit = parseInt(req.query.limit) || 15
+    //   這邊的5 就是指一頁幾筆
+      const limit = parseInt(req.query.limit) || 5
       const offset = (page - 1) * limit
   
       // 取得總筆數
-      const [countResult] = await db.query('SELECT COUNT(*) AS total FROM recipes')
+      const [countResult] = await db.query('SELECT COUNT(*) AS total FROM restaurants')
       const totalItems = countResult[0].total
       const totalPages = Math.ceil(totalItems / limit)
   
       // 取得分頁資料
       const [rows] = await db.query(
-        'SELECT * FROM recipes ORDER BY created_at DESC LIMIT ? OFFSET ?',
+        'SELECT * FROM restaurants ORDER BY created_at DESC LIMIT ? OFFSET ?',
         [limit, offset]
       )
   
