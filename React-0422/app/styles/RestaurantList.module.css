@@ -150,10 +150,7 @@
 }
 
 .restaurantListSection {
-  z-index: 0;
   display: flex;
-  width: 1280px;
-  max-width: 1280px;
   padding-left: 100px;
   padding-right: 100px;
   padding-top: 60px;
@@ -232,7 +229,7 @@
 
 .restaurantImage {
   aspect-ratio: 1.29;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
   width: 100%;
   min-width: 240px;

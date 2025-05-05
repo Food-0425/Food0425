@@ -68,7 +68,7 @@ export default function RestaurantsPage() {
   // 如果需要獲取查詢參數，使用 useSearchParams
   const searchParams = useSearchParams()
 
-  // 為確保客戶端渲染時能正確載入數據，添加一個加載狀態
+  // 為確保客戶���渲染時能正確載入數據，添加一個加載狀態
   const [isLoading, setIsLoading] = useState(true)
 
   const [activePage, setActivePage] = useState(1) // 當前頁碼
@@ -131,17 +131,20 @@ export default function RestaurantsPage() {
         />
       </div>
 
-      <div className={styles.restaurantList}>
-        {restaurants.map((restaurant) => (
-          <RestaurantCard
-            key={restaurant.id}
-            id={restaurant.id}
-            image={restaurant.image}
-            title={restaurant.title}
-            description={restaurant.description}
-            badge={restaurant.badge}
-          />
-        ))}
+      <div className={styles.restaurantListSection}>
+        <div className={styles.sectionTitle}>精選餐廳推薦</div>
+        <div className={styles.restaurantList}>
+          {restaurants.map((restaurant) => (
+            <RestaurantCard
+              key={restaurant.id}
+              id={restaurant.id}
+              image={restaurant.image}
+              title={restaurant.title}
+              description={restaurant.description}
+              badge={restaurant.badge}
+            />
+          ))}
+        </div>
       </div>
 
       <div className={styles.pagination}>

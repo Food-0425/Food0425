@@ -104,6 +104,30 @@ router.get('/api/:id', async (req, res) => {
       // 加進 recipe 裡面
       recipe.condiments = condimentsRows
 
+      // 查這個食譜對應的關聯食譜
+      const [relatedRecipes] = await db.query(
+        `SELECT 
+           rr.related_recipe_id, 
+           r.title, 
+           r.description,
+            r.image, 
+           r.created_at 
+         FROM 
+           related_recipes rr 
+         JOIN 
+           recipes r 
+         ON 
+           rr.related_recipe_id = r.id 
+         WHERE 
+           rr.recipe_id = ? 
+         ORDER BY 
+           rr.id ASC`,
+        [recipeId]
+      );
+      
+      // 加進 recipe 裡面
+      recipe.related_recipes = relatedRecipes;
+
       // 查這個食譜對應的所有評論
       const [commentRows] = await db.query(
 
