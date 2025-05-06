@@ -41,4 +41,41 @@ router.get('/api', async (req, res) => {
     }
   })
 
+  router.get('/api/:id', async (req, res) => {
+    try {
+      const productId = req.params.id; // 使用 product_id 作為查詢條件
+  
+      // 查產品評論
+      const [productReviewRows] = await db.query(
+        `SELECT 
+           product_reviews.*, 
+           food_products.name AS product_name, 
+           users.username 
+         FROM 
+           product_reviews 
+         JOIN 
+           food_products 
+         ON 
+           product_reviews.product_id = food_products.id 
+         JOIN 
+           users 
+         ON 
+           product_reviews.user_id = users.user_id 
+         WHERE 
+           product_reviews.product_id = ? 
+         ORDER BY 
+           review_id DESC`,
+        [productId]
+      );
+  
+      if (!productReviewRows.length) {
+        return res.status(404).json({ success: false, error: "找不到產品評論" });
+      }
+  
+      res.json({ success: true, data: productReviewRows });
+    } catch (error) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
 export default router
