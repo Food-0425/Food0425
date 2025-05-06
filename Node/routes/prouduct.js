@@ -11,8 +11,8 @@ const router = express.Router();
 router.get('/api', async (req, res) => {
     try {
       const page = parseInt(req.query.page) || 1
-    //   這邊的15 就是指一頁幾筆
-      const limit = parseInt(req.query.limit) || 15
+    //   這邊的15 就是指一頁幾筆 (不過這是在後端生頁面時才有差。前端的一頁幾筆是由前端那邊為主)
+    const limit = parseInt(req.query.limit) || 15
       const offset = (page - 1) * limit
   
       // 取得總筆數
@@ -38,7 +38,7 @@ router.get('/api', async (req, res) => {
     }
   })
 
- 
+//  取得單一商品
   router.get('/api/:id', async (req, res) => {
     try {
       const restaurantId = req.params.id;
