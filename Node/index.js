@@ -22,6 +22,8 @@ import usersRouter from "./routes/users.js";
 import reviewRouter from "./routes/prouduct-review.js";
 // 設定到餐廳詳細頁面的路由
 import restaurantsRouter from "./routes/restaurants.js";
+// 設定到購物車的路由
+import cartRouter from "./routes/cart.js";
 
 const MySQLStore = mysql_session(session);
 const sessionStore = new MySQLStore({}, db);
@@ -99,15 +101,17 @@ if (auth && auth.indexOf("Bearer ") === 0) {
 // Top-level middlewares
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());  // <-- 處理 JSON 請求 body
-
+// 連到食譜
 app.use('/recipes', recipesRouter);
 app.use('/prouduct', prouductRouter);
-// 目前還沒使用到use這個路由，所以先關掉
+// 連到use這個路由
 app.use('/users', usersRouter);
 // 連到評價的
 app.use('/prouduct-review', reviewRouter);
 // 連到餐廳詳細頁面的
 app.use('/restaurants', restaurantsRouter);
+// 連到購物車
+ app.use('/cart', cartRouter);
 
 // 路由定義, 兩個條件: 1. 拜訪的 HTTP 方法, 2. 路徑
 app.get("/", (req, res) => {
