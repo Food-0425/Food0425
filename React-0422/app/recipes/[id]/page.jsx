@@ -4,7 +4,9 @@ import React from 'react'
 import Link from 'next/link'
 import styles from '../../styles/RecipeDetail.module.css'
 import { useParams } from 'next/navigation'
+import { useState } from 'react'
 import useSWR from 'swr'
+import FoodFeeBack from '../../components/FoodFeeBack'
 
 export default function RecipeDetailPage() {
   const params = useParams()
@@ -28,6 +30,20 @@ export default function RecipeDetailPage() {
 
   // 取得相關食譜數據
   const relatedRecipes = recipe.related_recipes || []
+
+  // 狀態：控制 FoodFeeBack 是否顯示
+  const [isFeedbackVisible, setIsFeedbackVisible] = useState(false)
+
+  // 點擊按鈕顯示 FoodFeeBack
+  const handleShowFeedback = () => {
+    if (isFeedbackVisible) {
+      setIsFeedbackVisible(false)
+      return
+    }
+    // 如果已經顯示，則隱藏
+    // 否則顯示 FoodFeeBack
+    setIsFeedbackVisible(true)
+  }
 
   return (
     <div className={styles.container}>
@@ -294,14 +310,17 @@ export default function RecipeDetailPage() {
 
       {/* Comments Section - 動態生成評論 */}
       <div className={styles.commentsSection}>
-        <div className={styles.addCommentButton}>
+        <button
+          className={styles.addCommentButton} // 使用樣式
+          onClick={handleShowFeedback} // 點擊事件
+        >
           <img
             src="/images/recipes/comment-icon.png"
             className={styles.commentIcon}
             alt="Comment icon"
           />
           <div className={styles.addCommentText}>添加留言</div>
-        </div>
+        </button>
 
         <div className={styles.commentsList}>
           <img
@@ -430,6 +449,8 @@ export default function RecipeDetailPage() {
           />
         </div>
       </div>
+      {/* FoodFeeBack 區塊 */}
+      {isFeedbackVisible && <FoodFeeBack />}
 
       {/* Related Recipes Section - 動態生成相關食譜 */}
       <div className={styles.relatedRecipesSection}>
