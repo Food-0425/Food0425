@@ -45,9 +45,11 @@
 }
 
 .searchBarContainer {
-  z-index: 5;
+  pointer-events: auto; /* 確保可以互動 */
+  z-index: 10;
   width: 30%;
   padding: 15px;
+  border: 0px;
 }
 
 .searchBarInner {
@@ -59,15 +61,18 @@
   padding: 10px 25px 10px 35px;
 }
 
+.searchInput::placeholder {
+  color: #fff;
+  font-size: 20px;
+}
+
 .searchInput {
   flex-grow: 1;
   border: none;
   background: transparent;
 }
-
-.searchInput::placeholder {
-  color: #fff;
-  font-size: 20px;
+.searchInput:focus {
+  outline: none;
 }
 
 .searchIcon {
@@ -120,19 +125,60 @@
   flex-wrap: wrap;
 }
 
+/* .categoryIcon {
+  background-color: #df6c2d;標有足夠的空間
+  overflow: hidden;
+  font-size: 24px;
+} */
+
 .categoryIcon {
+  width: 142px;
+  height: 142px;
+  font-size: 24px;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  aspect-ratio: 1/1;
-  border-radius: 50%; /* 修改為 50% 使其成為完美的圓圈 */
-  background-color: #df6c2d;
-  width: 142px;
-  height: 142px;
-  padding: 20px; /* 減少 padding 使文字和圖標有足夠的空間 */
+  padding: 20px;
+  border-radius: 50%;
+  color: #fff;
+  text-transform: uppercase;
+  font-size: 1rem;
+  letter-spacing: 0.15rem;
+  transition: all 0.3s;
+  position: relative;
   overflow: hidden;
-  font-size: 24px;
+  z-index: 1;
+  border: none;
+}
+.categoryIcon:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #0cf;
+  border-radius: 10rem;
+  z-index: -2;
+}
+.categoryIcon:before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  height: 100%;
+  background-color: #008fb3;
+  transition: all 0.3s;
+  border-radius: 10rem;
+  z-index: -1;
+}
+.categoryIcon:hover {
+  color: #fff;
+}
+.categoryIcon:hover:before {
+  width: 100%;
 }
 
 .categoryIconImg {
@@ -168,11 +214,8 @@
   flex-direction: column;
   justify-content: center;
   align-items: stretch;
-  overflow: hidden;
   position: relative;
-  aspect-ratio: 0.344;
-  min-width: 240px;
-  padding: 0 33px 100px 34px;
+  padding: 0 34px;
   font-family:
     'Noto Sans TC',
     -apple-system,
@@ -185,7 +228,6 @@
   text-align: center;
   flex: 1;
   flex-shrink: 1;
-  flex-basis: 0%;
 }
 
 .categoryBackground {
@@ -195,6 +237,7 @@
   width: 100%;
   object-fit: cover;
   object-position: center;
+  border-radius: 30px 0px 0px 30px;
 }
 
 .categoryTitle {
@@ -207,38 +250,58 @@
   font-size: 48px;
 }
 
-.viewMoreButton {
-  position: relative;
-  leading-trim: both;
-  text-edge: cap;
-  align-self: center;
-  border-radius: 100px;
-  box-shadow: 0px 0px 0px 15px rgba(0, 0, 0, 0.05);
-  background-color: #df6c2d;
-  margin-top: 40px;
-  min-height: 56px;
-  max-width: 100%;
-  width: 197px;
-  overflow: hidden;
+.viewMoreText {
   font-size: 36px;
-  padding: 25px 60px;
+  font-weight: 700;
+  line-height: 10px;
 }
 
-.viewMoreButtonSpecial {
-  position: relative;
-  leading-trim: both;
-  text-edge: cap;
-  align-self: center;
-  border-radius: 100px;
-  box-shadow: 0px 0px 0px 15px rgba(0, 0, 0, 0.05);
-  background-color: #ff5a00;
+.viewMoreButton {
+  align-content: center;
+  justify-content: center;
+  padding: 10px 0;
+  display: flex;
   margin-top: 40px;
-  min-height: 56px;
-  max-width: 100%;
-  width: 197px;
+  border-radius: 10rem;
+  color: #fff;
+  text-transform: uppercase;
+  font-size: 1rem;
+  letter-spacing: 0.15rem;
+  transition: all 0.3s;
+  position: relative;
   overflow: hidden;
-  font-size: 36px;
-  padding: 25px 60px;
+  z-index: 1;
+  border: none;
+  box-shadow: 0px 0px 0px 15px rgba(0, 0, 0, 0.05);
+}
+.viewMoreButton:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #df6c2d;
+  border-radius: 10rem;
+  z-index: -2;
+}
+.viewMoreButton:before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  height: 100%;
+  background-color: #fffaf0;
+  transition: all 0.3s;
+  border-radius: 10rem;
+  z-index: -1;
+}
+.viewMoreButton:hover {
+  color: #791a1a;
+}
+.viewMoreButton:hover:before {
+  width: 100%;
 }
 
 .recipeCardsContainer {
@@ -251,7 +314,7 @@
   min-width: 240px;
   margin: auto 0;
   gap: 20px;
-  padding: 25px 0;
+  padding: 25px;
   width: 1016px;
 }
 
@@ -261,15 +324,9 @@
   background-color: #fff;
   align-self: stretch;
   min-width: 240px;
-  margin: auto 0;
   overflow: hidden;
   flex-grow: 1;
-  flex-shrink: 1;
   width: 248px;
-}
-
-.recipeCardImageWrapper {
-  width: 100%;
 }
 
 .recipeCardImage {

@@ -3,18 +3,24 @@
 import React from 'react'
 import styles from '../styles/RecipeLanding.module.css'
 import Link from 'next/link'
-import { FaSearch } from 'react-icons/fa'
-import { FaCakeCandles, FaFishFins, FaEarthAmericas } from 'react-icons/fa6'
-import { BiSolidBowlRice } from 'react-icons/bi'
-import { LuDessert, LuSalad } from 'react-icons/lu'
-import { TbMeat } from 'react-icons/tb'
+
+import {
+  FaSearch,
+  FaCakeCandles,
+  FaFishFins,
+  FaEarthAmericas,
+  BiSolidBowlRice,
+  LuDessert,
+  LuSalad,
+  TbMeat,
+  CiBowlNoodles,
+} from '../icons/icons'
 import RecipeCarousel from './components/RecipeCarousel'
 
 export default function RecipesLandingPage() {
   return (
     <div>
       {/* 版首輪播 Start */}
-
       <RecipeCarousel />
       {/* 版首輪播 END */}
       <div className={styles.container}>
@@ -26,10 +32,10 @@ export default function RecipesLandingPage() {
             alt="Left arrow"
           />
           <div className={styles.categoriesWrapper}>
-            <div className={styles.categoryIcon}>
+            <a className={styles.categoryIcon}>
               <TbMeat className={styles.categoryIconImg} />
               肉食
-            </div>
+            </a>
 
             <div className={styles.categoryIcon}>
               <LuSalad className={styles.categoryIconImg} />
@@ -77,11 +83,13 @@ export default function RecipesLandingPage() {
                 <br />
                 甜食
               </div>
-              <div className={styles.viewMoreButton}>看更多</div>
+              <div className={styles.viewMoreButton}>
+                <h3 className={styles.viewMoreText}>看更多</h3>
+              </div>
             </div>
             <div className={styles.recipeCardsContainer}>
               <div className={styles.recipeCard}>
-                <div className={styles.recipeCardImageWrapper}>
+                <div>
                   <img
                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/83e124d78dc7d8eb48837262ff05b46cb3b6def4?placeholderIfAbsent=true"
                     className={styles.recipeCardImage}
@@ -96,7 +104,7 @@ export default function RecipesLandingPage() {
                 </div>
               </div>
               <div className={styles.recipeCard}>
-                <div className={styles.recipeCardImageWrapper}>
+                <div>
                   <img
                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/1030dc196c7226269cf6586ffbe3ddd56e706b1f?placeholderIfAbsent=true"
                     className={styles.recipeCardImage}
@@ -111,7 +119,7 @@ export default function RecipesLandingPage() {
                 </div>
               </div>
               <div className={styles.recipeCard}>
-                <div className={styles.recipeCardImageWrapper}>
+                <div>
                   <img
                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/156fcf8d78659939ad661538b9dfd2b70cfe1c03?placeholderIfAbsent=true"
                     className={styles.recipeCardImage}
@@ -126,7 +134,7 @@ export default function RecipesLandingPage() {
                 </div>
               </div>
               <div className={styles.recipeCard}>
-                <div className={styles.recipeCardImageWrapper}>
+                <div>
                   <img
                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/65a2c4e94c7538b0c96d6459589ad74b6cce188b?placeholderIfAbsent=true"
                     className={styles.recipeCardImage}
@@ -141,7 +149,7 @@ export default function RecipesLandingPage() {
                 </div>
               </div>
               <div className={styles.recipeCard}>
-                <div className={styles.recipeCardImageWrapper}>
+                <div>
                   <img
                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/77902dabad9716197a59e619fa89abc8a634dcb0?placeholderIfAbsent=true"
                     className={styles.recipeCardImage}
@@ -156,7 +164,7 @@ export default function RecipesLandingPage() {
                 </div>
               </div>
               <div className={styles.recipeCard}>
-                <div className={styles.recipeCardImageWrapper}>
+                <div>
                   <img
                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/133958c6aac0d74c79537a1f8fcf328c0c77e3bf?placeholderIfAbsent=true"
                     className={styles.recipeCardImage}
@@ -187,11 +195,13 @@ export default function RecipesLandingPage() {
                 <br />
                 魚肉
               </div>
-              <div className={styles.viewMoreButton}>看更多</div>
+              <div className={styles.viewMoreButton}>
+                <h3 className={styles.viewMoreText}>看更多</h3>
+              </div>
             </div>
             <div className={styles.recipeCardsContainer}>
               <div className={styles.recipeCard}>
-                <div className={styles.recipeCardImageWrapper}>
+                <div>
                   <img
                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/30734114f4e86d79151e86f544df7654c43be9d6?placeholderIfAbsent=true"
                     className={styles.recipeCardImage}
@@ -206,7 +216,7 @@ export default function RecipesLandingPage() {
                 </div>
               </div>
               <div className={styles.recipeCard}>
-                <div className={styles.recipeCardImageWrapper}>
+                <div>
                   <img
                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/27f1865caf29a2c7d646d50599eee03aeed3704f?placeholderIfAbsent=true"
                     className={styles.recipeCardImage}
@@ -221,7 +231,7 @@ export default function RecipesLandingPage() {
                 </div>
               </div>
               <div className={styles.recipeCard}>
-                <div className={styles.recipeCardImageWrapper}>
+                <div>
                   <img
                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/8ce51feee33522d3b5200af9f3cf8208e16edd48?placeholderIfAbsent=true"
                     className={styles.recipeCardImage}
@@ -236,7 +246,7 @@ export default function RecipesLandingPage() {
                 </div>
               </div>
               <div className={styles.recipeCard}>
-                <div className={styles.recipeCardImageWrapper}>
+                <div>
                   <img
                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/710be78fabdc0c441486e3771049cbe3c3cc6409?placeholderIfAbsent=true"
                     className={styles.recipeCardImage}
@@ -251,7 +261,7 @@ export default function RecipesLandingPage() {
                 </div>
               </div>
               <div className={styles.recipeCard}>
-                <div className={styles.recipeCardImageWrapper}>
+                <div>
                   <img
                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/6144db7037b4ec6bcf74064ab838170b50ef0b4f?placeholderIfAbsent=true"
                     className={styles.recipeCardImage}
@@ -266,7 +276,7 @@ export default function RecipesLandingPage() {
                 </div>
               </div>
               <div className={styles.recipeCard}>
-                <div className={styles.recipeCardImageWrapper}>
+                <div>
                   <img
                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/90c4a042dc7685747f1b4720d768c8333f25bddb?placeholderIfAbsent=true"
                     className={styles.recipeCardImage}
@@ -297,11 +307,13 @@ export default function RecipesLandingPage() {
                 <br />
                 料理
               </div>
-              <div className={styles.viewMoreButtonSpecial}>看更多</div>
+              <button className={styles.viewMoreButton}>
+                <h3 className={styles.viewMoreText}>看更多</h3>
+              </button>
             </div>
             <div className={styles.recipeCardsContainer}>
               <div className={styles.recipeCard}>
-                <div className={styles.recipeCardImageWrapper}>
+                <div>
                   <img
                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/afb606b98d9c8e43f5783bfd90bde53054942e77?placeholderIfAbsent=true"
                     className={styles.recipeCardImage}
@@ -316,7 +328,7 @@ export default function RecipesLandingPage() {
                 </div>
               </div>
               <div className={styles.recipeCard}>
-                <div className={styles.recipeCardImageWrapper}>
+                <div>
                   <img
                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/9ae9725e65e24988decf142c03ddb8681effcd74?placeholderIfAbsent=true"
                     className={styles.recipeCardImage}
@@ -331,7 +343,7 @@ export default function RecipesLandingPage() {
                 </div>
               </div>
               <div className={styles.recipeCard}>
-                <div className={styles.recipeCardImageWrapper}>
+                <div>
                   <img
                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/c426623ffc971834ae7aa12747ee81d40f2c4834?placeholderIfAbsent=true"
                     className={styles.recipeCardImage}
@@ -346,7 +358,7 @@ export default function RecipesLandingPage() {
                 </div>
               </div>
               <div className={styles.recipeCard}>
-                <div className={styles.recipeCardImageWrapper}>
+                <div>
                   <img
                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/dfb84559b545c8965dfef75e5f9e1bdd66dc1ec6?placeholderIfAbsent=true"
                     className={styles.recipeCardImage}
@@ -361,7 +373,7 @@ export default function RecipesLandingPage() {
                 </div>
               </div>
               <div className={styles.recipeCard}>
-                <div className={styles.recipeCardImageWrapper}>
+                <div>
                   <img
                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/bd7e8decc8129e35d61a86dd0672bacbce47e18c?placeholderIfAbsent=true"
                     className={styles.recipeCardImage}
@@ -376,7 +388,7 @@ export default function RecipesLandingPage() {
                 </div>
               </div>
               <div className={styles.recipeCard}>
-                <div className={styles.recipeCardImageWrapper}>
+                <div>
                   <img
                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/9fbafe49780012f08fce79d01c930632126395da?placeholderIfAbsent=true"
                     className={styles.recipeCardImage}
@@ -407,11 +419,13 @@ export default function RecipesLandingPage() {
                 <br />
                 風味
               </div>
-              <div className={styles.viewMoreButton}>看更多</div>
+              <div className={styles.viewMoreButton}>
+                <h3 className={styles.viewMoreText}>看更多</h3>
+              </div>
             </div>
             <div className={styles.recipeCardsContainer}>
               <div className={styles.recipeCard}>
-                <div className={styles.recipeCardImageWrapper}>
+                <div>
                   <img
                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/4e040c530583e75cc8166426921242b1e8615377?placeholderIfAbsent=true"
                     className={styles.recipeCardImage}
@@ -426,7 +440,7 @@ export default function RecipesLandingPage() {
                 </div>
               </div>
               <div className={styles.recipeCard}>
-                <div className={styles.recipeCardImageWrapper}>
+                <div>
                   <img
                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/dcaa6dd9ce18e466f1bc6ebbad8afa2ad4030ead?placeholderIfAbsent=true"
                     className={styles.recipeCardImage}
@@ -441,7 +455,7 @@ export default function RecipesLandingPage() {
                 </div>
               </div>
               <div className={styles.recipeCard}>
-                <div className={styles.recipeCardImageWrapper}>
+                <div>
                   <img
                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/a58a472d16e2e3bf1e30b4aebdbf2ba8531c6717?placeholderIfAbsent=true"
                     className={styles.recipeCardImage}
@@ -456,7 +470,7 @@ export default function RecipesLandingPage() {
                 </div>
               </div>
               <div className={styles.recipeCard}>
-                <div className={styles.recipeCardImageWrapper}>
+                <div>
                   <img
                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/82d8f6e5dcebe4eb70106b672c44d01be0365505?placeholderIfAbsent=true"
                     className={styles.recipeCardImage}
@@ -471,7 +485,7 @@ export default function RecipesLandingPage() {
                 </div>
               </div>
               <div className={styles.recipeCard}>
-                <div className={styles.recipeCardImageWrapper}>
+                <div>
                   <img
                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/d7a44bffb25d8fe6acaca559659c17f5b2f8e23b?placeholderIfAbsent=true"
                     className={styles.recipeCardImage}
@@ -486,7 +500,7 @@ export default function RecipesLandingPage() {
                 </div>
               </div>
               <div className={styles.recipeCard}>
-                <div className={styles.recipeCardImageWrapper}>
+                <div>
                   <img
                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/5837bf826aab73f8149f96cad1516fde5cfa15ea?placeholderIfAbsent=true"
                     className={styles.recipeCardImage}

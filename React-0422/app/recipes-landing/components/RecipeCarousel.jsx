@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
-import styles from '../../styles/RecipeLanding.module.css' // 確保路徑正確
+import styles from '../../styles/RecipeLanding.module.css'
 import { FaSearch } from 'react-icons/fa'
 
 export default function RecipeCarousel() {
