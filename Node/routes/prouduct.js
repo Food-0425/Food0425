@@ -38,4 +38,26 @@ router.get('/api', async (req, res) => {
     }
   })
 
+ 
+  router.get('/api/:id', async (req, res) => {
+    try {
+      const restaurantId = req.params.id;
+  
+      // 查產品資料
+      const [restaurantRows] = await db.query('SELECT * FROM food_products WHERE id = ?', [restaurantId]);
+      if (!restaurantRows.length) {
+        return res.status(404).json({ success: false, error: "找不到產品" });
+      }
+  
+      const restaurant = restaurantRows[0];
+  
+      
+  
+      res.json({ success: true, data: restaurant });
+  
+    } catch (error) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
   export default router
