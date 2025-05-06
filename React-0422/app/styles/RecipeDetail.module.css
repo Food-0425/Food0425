@@ -6,7 +6,7 @@
   display: flex;
   flex-direction: column;
   justify-content: start;
-  background-color: #FFFAF0;
+  background-color: #fffaf0;
 }
 
 /* Hero Section */
@@ -19,10 +19,13 @@
 
 .heroImage {
   aspect-ratio: 3.83;
-  object-fit: contain;
+  object-fit: cover;
+  /* 上面的是圖片放大填滿容器，並且超出的範圍會切。下面則是不會被切 */
+  /* object-fit: contain; */
   object-position: center;
   width: 100%;
   min-height: 501px;
+  max-height: 601px;
 }
 
 /* Ingredients Section */
@@ -39,7 +42,8 @@
   flex-wrap: wrap;
 }
 
-.ingredientCard, .seasoningCard {
+.ingredientCard,
+.seasoningCard {
   position: relative;
   display: flex;
   min-width: 240px;
@@ -52,11 +56,11 @@
 }
 
 .ingredientCard {
-  color: #423C3A;
+  color: #423c3a;
 }
 
 .seasoningCard {
-  color: #FAF8F9;
+  color: #faf8f9;
 }
 
 .cardBody {
@@ -66,12 +70,12 @@
 }
 
 .ingredientCard .cardBody {
-  background-color: #FFF;
+  background-color: #fff;
 }
 
 .seasoningCard .cardBody {
-  background-color: #DF6C2D;
-  box-shadow: 3px 3px 5px 0px rgba(0, 0, 0, 0.30) inset;
+  background-color: #df6c2d;
+  box-shadow: 3px 3px 5px 0px rgba(0, 0, 0, 0.3) inset;
 }
 
 .cardContent {
@@ -85,7 +89,12 @@
 .cardTitle {
   color: inherit;
   width: 100%;
-  font-family: Noto Sans TC, -apple-system, Roboto, Helvetica, sans-serif;
+  font-family:
+    Noto Sans TC,
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
   font-size: 36px;
   font-weight: 700;
   white-space: nowrap;
@@ -97,7 +106,12 @@
   align-self: stretch;
   width: 100%;
   gap: 40px;
-  font-family: Inter, -apple-system, Roboto, Helvetica, sans-serif;
+  font-family:
+    Inter,
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
   font-size: 20px;
   font-weight: 400;
   letter-spacing: 0.6px;
@@ -122,7 +136,7 @@
 }
 
 .seasoningHighlight {
-  color: rgba(250,248,249,1);
+  color: rgba(250, 248, 249, 1);
 }
 
 /* Steps Section */
@@ -150,7 +164,7 @@
   justify-content: center;
   align-items: stretch;
   border-radius: 0px 0px 15px 15px;
-  background-color: #FFF;
+  background-color: #fff;
   display: flex;
   width: 100%;
   padding: 49px 150px 80px;
@@ -178,7 +192,8 @@
   margin-top: 0;
 }
 
-.stepNumberDark, .stepNumberLight {
+.stepNumberDark,
+.stepNumberLight {
   justify-content: center;
   align-items: stretch;
   border-radius: 39px;
@@ -194,11 +209,11 @@
 }
 
 .stepNumberDark {
-  background-color: #423C3A;
+  background-color: #423c3a;
 }
 
 .stepNumberLight {
-  background-color: #DF6C2D;
+  background-color: #df6c2d;
 }
 
 .stepNumberText {
@@ -206,7 +221,12 @@
   padding: 50px 0;
   flex-direction: column;
   align-items: center;
-  font-family: Noto Sans TC, -apple-system, Roboto, Helvetica, sans-serif;
+  font-family:
+    Noto Sans TC,
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
   font-size: 35px;
   line-height: 1.2;
   justify-content: center;
@@ -218,14 +238,24 @@
 
 .stepNumberValue {
   font-size: 96px;
-  font-family: Proza Libre, -apple-system, Roboto, Helvetica, sans-serif;
+  font-family:
+    Proza Libre,
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
   margin: auto 0;
   width: 54px;
 }
 
 .stepDescription {
   color: #000;
-  font-family: Noto Sans TC, -apple-system, Roboto, Helvetica, sans-serif;
+  font-family:
+    Noto Sans TC,
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
   font-size: 36px;
   margin: auto 0;
   flex: 1;
@@ -244,10 +274,10 @@
   padding: 25px 40px 25px 25px;
   gap: 20px;
   overflow: hidden;
-  color: #FAF8F9;
+  color: #faf8f9;
   text-align: center;
   flex-wrap: wrap;
-  background-color: #DF6C2D;
+  background-color: #df6c2d;
 }
 
 .cartIconLarge {
@@ -269,15 +299,25 @@
 }
 
 .addToCartTitle {
-  color: #FAF8F9;
-  font-family: Noto Sans TC, -apple-system, Roboto, Helvetica, sans-serif;
+  color: #faf8f9;
+  font-family:
+    Noto Sans TC,
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
   font-size: 48px;
   font-weight: 700;
 }
 
 .addToCartNote {
-  color: #FAF8F9;
-  font-family: Inter, -apple-system, Roboto, Helvetica, sans-serif;
+  color: #faf8f9;
+  font-family:
+    Inter,
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
   font-size: 24px;
   font-weight: 400;
   letter-spacing: 0.72px;
@@ -328,15 +368,25 @@
 }
 
 .chefTitle {
-  color: #423C3A;
-  font-family: Noto Sans TC, -apple-system, Roboto, Helvetica, sans-serif;
+  color: #423c3a;
+  font-family:
+    Noto Sans TC,
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
   font-size: 36px;
   font-weight: 700;
 }
 
 .chefDescription {
-  color: #7A7A7A;
-  font-family: Inter, -apple-system, Roboto, Helvetica, sans-serif;
+  color: #7a7a7a;
+  font-family:
+    Inter,
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
   font-size: 20px;
   font-weight: 400;
   letter-spacing: 0.6px;
@@ -354,7 +404,12 @@
   display: flex;
   width: 1280px;
   flex-direction: column;
-  font-family: Noto Sans TC, -apple-system, Roboto, Helvetica, sans-serif;
+  font-family:
+    Noto Sans TC,
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
 }
 
 .addCommentButton {
@@ -367,10 +422,10 @@
   padding: 11px 23px;
   gap: 10px;
   font-size: 32px;
-  color: #FAF8F9;
+  color: #faf8f9;
   font-weight: 700;
   white-space: nowrap;
-  background-color: #DF6C2D;
+  background-color: #df6c2d;
   border-radius: 37.5px;
 }
 
@@ -386,7 +441,7 @@
 }
 
 .addCommentText {
-  color: #FAF8F9;
+  color: #faf8f9;
   align-self: stretch;
   z-index: 0;
   margin: auto 0;
@@ -396,13 +451,14 @@
   display: flex;
   margin-top: 30px;
   width: 100%;
-  align-items: center;
+  align-items: stretch; /* 讓卡片高度一致 */
   gap: 30px;
-  justify-content: start;
+  justify-content: center;
   flex-wrap: wrap;
 }
 
-.userAvatarLeft, .userAvatarRight {
+.userAvatarLeft,
+.userAvatarRight {
   aspect-ratio: 0.74;
   object-fit: contain;
   object-position: center;
@@ -416,25 +472,51 @@
   overflow: hidden;
 }
 
+.arrowButton {
+  position: absolute; /* 絕對定位 */
+  top: 75%; /* 垂直居中 */
+  transform: translateY(-50%); /* 修正垂直居中的偏移 */
+  background-color: transparent;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 10px;
+  z-index: 10; /* 確保按鈕在其他元素之上 */
+}
+
+.arrowButton.left {
+  left: 50px; /* 左箭頭距離容器左邊的距離 */
+}
+
+.arrowButton.right {
+  right: 50px; /* 右箭頭距離容器右邊的距離 */
+}
+
 .commentCard {
   justify-content: center;
   align-items: stretch;
   border-radius: 30px;
   box-shadow: 2px 3px 8px 0px rgba(0, 0, 0, 0.25);
-  background-color: #FFF;
+  background-color: #fff;
   align-self: stretch;
   display: flex;
-  min-width: 240px;
+  min-width: 520px;
   margin: auto 0;
   flex-direction: column;
-  flex: 1;
-  flex-shrink: 1;
-  flex-basis: 0%;
+  /* flex: 1; */
+  /* width: 300px;  */
+  width: 50%; /* 每行顯示兩個卡片 *
+  margin: 0 auto; /* 卡片居中 */
+  max-width: 400px; /* 可選：限制卡片最大寬度 */
+  flex-shrink: 0; /* 防止卡片縮小 */
+  box-sizing: border-box; /* 包含 padding 和 border */
+
+  /* flex-basis: 0%; */
 }
 
 .commentUser {
   justify-content: center;
-  align-items: stretch;
+  align-items: center;
   display: flex;
   width: 100%;
   gap: 30px;
@@ -443,10 +525,12 @@
 }
 
 .userAvatar {
-  aspect-ratio: 1.19;
+  /* aspect-ratio: 1.19; */
   object-fit: contain;
   object-position: center;
-  width: 163px;
+  width: 120px;
+  border-radius: 50%; /* 圓形圖片 */
+  object-fit: cover; /* 確保圖片不變形 */
   flex-shrink: 0;
   gap: -35px;
 }
@@ -455,7 +539,7 @@
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  justify-content: start;
+  justify-content: center;
   flex: 1;
   flex-shrink: 1;
   flex-basis: 0%;
@@ -476,13 +560,13 @@
 }
 
 .userName {
-  color: #423C3A;
+  color: #423c3a;
   font-size: 20px;
   font-weight: 700;
 }
 
 .commentDate {
-  color: #7A7A7A;
+  color: #7a7a7a;
   font-size: 16px;
   font-weight: 400;
   letter-spacing: 0.48px;
@@ -496,19 +580,30 @@
   margin-top: 45px;
   width: 100%;
   flex-direction: column;
-  white-space: nowrap;
+  white-space: normal; /* 允許文字換行 */
   padding: 0 40px 45px;
   word-wrap: normal;
+  overflow: hidden; /* 隱藏超出區塊的內容 */
+}
+
+.commentTitle,
+.commentText {
+  line-clamp: 3; /* 限制顯示的行數，例如 2 行 */
+  display: -webkit-box; /* 必須搭配 line-clamp 使用 */
+  -webkit-line-clamp: 3; /* 限制顯示的行數，例如 2 行 */
+  -webkit-box-orient: vertical; /* 設定為垂直方向 */
+  overflow: hidden; /* 隱藏超出區塊的內容 */
+  text-overflow: ellipsis; /* 使用省略號表示超出的文字 */
 }
 
 .commentTitle {
-  color: #423C3A;
+  color: #423c3a;
   font-size: 20px;
   font-weight: 700;
 }
 
 .commentText {
-  color: #7A7A7A;
+  color: #7a7a7a;
   font-size: 16px;
   font-weight: 400;
   letter-spacing: 0.48px;
@@ -526,15 +621,20 @@
   padding: 80px 0;
   flex-direction: column;
   overflow: hidden;
-  font-family: Noto Sans TC, -apple-system, Roboto, Helvetica, sans-serif;
+  font-family:
+    Noto Sans TC,
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
   font-weight: 700;
   white-space: nowrap;
   text-align: center;
-  background-color: #DF6C2D;
+  background-color: #df6c2d;
 }
 
 .relatedRecipesTitle {
-  color: #FFF;
+  color: #fff;
   font-size: 48px;
 }
 
@@ -545,7 +645,7 @@
   align-items: center;
   gap: 54px;
   font-size: 20px;
-  color: #423C3A;
+  color: #423c3a;
   justify-content: start;
   flex-wrap: wrap;
 }
@@ -554,7 +654,7 @@
   justify-content: center;
   align-items: stretch;
   border-radius: 30px;
-  background-color: #FFF;
+  background-color: #fff;
   align-self: stretch;
   display: flex;
   min-width: 240px;
@@ -574,7 +674,7 @@
 }
 
 .relatedRecipeTitle {
-  color: #423C3A;
+  color: #423c3a;
   align-self: stretch;
   flex: 1;
   flex-shrink: 1;
@@ -593,7 +693,7 @@
   min-height: 400px;
   width: 100%;
   padding: 0 320px;
-  background-color: #423C3A;
+  background-color: #423c3a;
 }
 
 .footerContent {
@@ -620,13 +720,18 @@
   padding: 45px 0;
   flex-direction: column;
   align-items: stretch;
-  font-family: Noto Sans TC, -apple-system, Roboto, Helvetica, sans-serif;
+  font-family:
+    Noto Sans TC,
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
   justify-content: center;
   width: 457px;
 }
 
 .footerThankYou {
-  color: #FFF5EE;
+  color: #fff5ee;
   font-size: 20px;
   font-weight: 700;
 }
@@ -642,14 +747,14 @@
 }
 
 .feedbackText {
-  color: #FFF5EE;
+  color: #fff5ee;
 }
 
 .feedbackInput {
   justify-content: flex-end;
   align-items: stretch;
   border-radius: 15px;
-  border: 3px solid #FAF8F9;
+  border: 3px solid #faf8f9;
   background-color: rgba(250, 248, 249, 0.45);
   display: flex;
   margin-top: 15px;
@@ -657,13 +762,13 @@
   padding: 10px 17px 15px 15px;
   gap: 20px;
   overflow: hidden;
-  color: #FAF8F9;
+  color: #faf8f9;
   flex: 1;
   height: 100%;
 }
 
 .feedbackPlaceholder {
-  color: #FAF8F9;
+  color: #faf8f9;
   flex: 1;
   flex-shrink: 1;
   flex-basis: 0%;
@@ -688,18 +793,23 @@
 }
 
 .faqButton {
-  color: #FAF8F9;
+  color: #faf8f9;
   align-self: stretch;
   border-radius: 71.97px;
   box-shadow: 0px 0px 0px 10.795px rgba(0, 0, 0, 0.05);
   overflow: hidden;
-  font-family: Noto Sans TC, -apple-system, Roboto, Helvetica, sans-serif;
+  font-family:
+    Noto Sans TC,
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
   font-size: 26px;
   font-weight: 700;
   white-space: nowrap;
   text-align: center;
   padding: 25px 60px;
-  background-color: #DF6C2D;
+  background-color: #df6c2d;
 }
 
 .socialIcons {
@@ -725,7 +835,7 @@
 }
 
 .socialIconCircle {
-  background-color: #ECECEC;
+  background-color: #ececec;
   border-radius: 50%;
   display: flex;
   width: 79px;
@@ -746,7 +856,7 @@
   justify-content: center;
   align-items: center;
   box-shadow: 2px 3px 8px 0px rgba(0, 0, 0, 0.25);
-  background-color: #FFF;
+  background-color: #fff;
   display: flex;
   width: 100%;
   flex-direction: column;
@@ -758,9 +868,14 @@
   min-width: 240px;
   align-items: stretch;
   gap: 40px;
-  font-family: Noto Sans TC, -apple-system, Roboto, Helvetica, sans-serif;
+  font-family:
+    Noto Sans TC,
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
   font-size: 20px;
-  color: #423C3A;
+  color: #423c3a;
   font-weight: 700;
   white-space: nowrap;
   text-align: center;
@@ -794,7 +909,7 @@
 }
 
 .navBtn {
-  color: #423C3A;
+  color: #423c3a;
   align-self: stretch;
   border-radius: 100px;
   background-color: rgba(223, 108, 45, 0);
@@ -820,7 +935,7 @@
   min-width: 200px;
   max-width: 300px;
   border-radius: 200px;
-  border: 2px solid #DF6C2D;
+  border: 2px solid #df6c2d;
   align-self: stretch;
   display: flex;
   margin: auto 0;
@@ -831,7 +946,7 @@
   gap: 10px;
   flex: 1;
   flex-basis: 0%;
-  background-color: #FAF8F9;
+  background-color: #faf8f9;
 }
 
 .cartIcon {
@@ -849,7 +964,7 @@
   object-fit: contain;
   object-position: center;
   width: 33px;
-  fill: #DF6C2D;
+  fill: #df6c2d;
   align-self: stretch;
   margin: auto 0;
   flex-shrink: 0;
@@ -909,7 +1024,8 @@
     padding-bottom: 100px;
   }
 
-  .ingredientCard, .seasoningCard {
+  .ingredientCard,
+  .seasoningCard {
     max-width: 100%;
   }
 
@@ -949,7 +1065,8 @@
     white-space: initial;
   }
 
-  .stepNumberDark, .stepNumberLight {
+  .stepNumberDark,
+  .stepNumberLight {
     white-space: initial;
   }
 
@@ -1006,6 +1123,7 @@
   }
 
   .commentsSection {
+    position: relative; /* 父容器設置相對定位 */
     padding-bottom: 100px;
   }
 

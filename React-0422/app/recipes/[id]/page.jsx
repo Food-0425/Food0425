@@ -9,6 +9,9 @@ import useSWR from 'swr'
 import FoodFeeBack from '../../components/FoodFeeBack'
 
 export default function RecipeDetailPage() {
+  const [currentPage, setCurrentPage] = useState(0) // 當前頁數
+  const commentsPerPage = 2 // 每頁顯示的評論數量
+
   const params = useParams()
   const id = params.id
   const fetcher = (url) => fetch(url).then((res) => res.json())
@@ -27,6 +30,24 @@ export default function RecipeDetailPage() {
 
   // 取得評論數據
   const comments = recipe.comments || []
+
+  // 計算當前頁的評論
+  const startIndex = currentPage * commentsPerPage
+  const endIndex = startIndex + commentsPerPage
+  const currentComments = comments.slice(startIndex, endIndex)
+
+  // 處理翻頁
+  const handleNextPage = () => {
+    if (endIndex < comments.length) {
+      setCurrentPage(currentPage + 1)
+    }
+  }
+
+  const handlePrevPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1)
+    }
+  }
 
   // 取得相關食譜數據
   const relatedRecipes = recipe.related_recipes || []
@@ -50,7 +71,7 @@ export default function RecipeDetailPage() {
       {/* Hero Section */}
       <div className={styles.heroSection}>
         <img
-          src={recipe.heroImage || '/images/recipes/paella.jpg'}
+          src={recipe.image ? `/${recipe.image}` : '/images/recipes/paella.jpg'}
           className={styles.heroImage}
           alt="Recipe hero image"
         />
@@ -323,26 +344,32 @@ export default function RecipeDetailPage() {
         </button>
 
         <div className={styles.commentsList}>
-          <img
+          {/* 左箭頭按鈕 */}
+          <button
+            className={`${styles.arrowButton} ${styles.left}`}
+            onClick={handlePrevPage}
+            disabled={currentPage === 0} // 第一頁禁用
+          >
+            ←
+          </button>
+          {/* 下面這是原本預設要放入的箭頭，先註解後用其他的替代 */}
+          {/* <img
             src="/images/recipes/user-avatar-left.png"
             className={styles.userAvatarLeft}
             alt="User avatar"
-          />
+          /> */}
 
           {isLoading ? (
             <div>正在載入評論...</div>
           ) : error ? (
             <div>載入評論時發生錯誤</div>
-          ) : comments && comments.length > 0 ? (
-            comments.map((comment, index) => (
+          ) : currentComments && currentComments.length > 0 ? (
+            currentComments.map((comment, index) => (
               <div className={styles.commentCard} key={index}>
                 <div className={styles.commentUser}>
                   {/* 先註解掉，不然會一直去跟後端拿資料(無限讀取) {目前已解決} */}
                   <img
-                    src={
-                      comment.userAvatar ||
-                      `/images/recipes/user${(index % 2) + 1}.png`
-                    }
+                    src={comment.userAvatar || `/images/user/default.jpg`}
                     className={styles.userAvatar}
                     alt="User avatar"
                     onError={(e) => {
@@ -353,11 +380,12 @@ export default function RecipeDetailPage() {
                     }}
                   />
                   <div className={styles.userInfo}>
-                    <img
+                    {/* 下面這個註解掉的是用戶等級(目前暫時沒有要做) */}
+                    {/* <img
                       src="/images/recipes/rating.png"
                       className={styles.userRating}
                       alt="User rating"
-                    />
+                    /> */}
                     <div className={styles.userContent}>
                       <div className={styles.userName}>
                         {comment.username || '匿名用戶'}
@@ -442,11 +470,20 @@ export default function RecipeDetailPage() {
             </>
           )}
 
-          <img
+          {/* 右箭頭按鈕 */}
+          <button
+            className={`${styles.arrowButton} ${styles.right}`}
+            onClick={handleNextPage}
+            disabled={endIndex >= comments.length} // 最後一頁禁用
+          >
+            →
+          </button>
+          {/* 這邊是原本預計要放的右箭頭，也先註解掉用別的替代 */}
+          {/* <img
             src="/images/recipes/user-avatar-right.png"
             className={styles.userAvatarRight}
             alt="User avatar"
-          />
+          /> */}
         </div>
       </div>
       {/* FoodFeeBack 區塊 */}
@@ -551,7 +588,7 @@ export default function RecipeDetailPage() {
       </div>
 
       {/* Footer */}
-      <footer className={styles.footer}>
+      {/* <footer className={styles.footer}>
         <div className={styles.footerContent}>
           <div className={styles.footerLeft}>
             <div className={styles.footerThankYou}>
@@ -598,7 +635,7 @@ export default function RecipeDetailPage() {
             </div>
           </div>
         </div>
-      </footer>
+      </footer> */}
 
       {/* Decorative Elements */}
       <img
