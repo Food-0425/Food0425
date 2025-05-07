@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
+import Link from 'next/link'
 import styles from '../styles/ProductList.module.css'
 
 export const ProductCard = ({
@@ -21,35 +22,37 @@ export const ProductCard = ({
   }
 
   return (
-    <div className={styles.productCard}>
-      <div className={styles.productImageContainer}>
+    <Link href={`/products/${product.id}`} style={{ textDecoration: 'none' }}>
+      <div className={styles.productCard}>
+        <div className={styles.productImageContainer}>
+          <img
+            src={product.image}
+            className={styles.productImage}
+            alt={product.title}
+          />
+        </div>
+        <div className={styles.productContent}>
+          <h3 className={styles.productTitle}>
+            {product.title}
+            <br />
+            <span className={styles.productDescription}>
+              {product.description}
+            </span>
+          </h3>
+          <div className={styles.productPrice}>${product.price}</div>
+        </div>
         <img
-          src={product.image}
-          className={styles.productImage}
-          alt={product.title}
+          src={
+            isFavorite
+              ? '/images/favorite-filled.png'
+              : '/images/favorite-outline.png'
+          }
+          className={styles.favoriteIcon}
+          alt={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+          onClick={handleFavoriteToggle}
         />
       </div>
-      <div className={styles.productContent}>
-        <h3 className={styles.productTitle}>
-          {product.title}
-          <br />
-          <span className={styles.productDescription}>
-            {product.description}
-          </span>
-        </h3>
-        <div className={styles.productPrice}>${product.price}</div>
-      </div>
-      <img
-        src={
-          isFavorite
-            ? '/images/favorite-filled.png'
-            : '/images/favorite-outline.png'
-        }
-        className={styles.favoriteIcon}
-        alt={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-        onClick={handleFavoriteToggle}
-      />
-    </div>
+    </Link>
   )
 }
 
