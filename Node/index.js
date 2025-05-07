@@ -10,9 +10,20 @@ import cors from "cors";
 import db from "./utils/connect-mysql.js";
 import { z } from "zod";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 // 設定連到食譜的路由
 import recipesRouter from "./routes/recipes.js";
+// 設定連到商城的路由
+import prouductRouter from "./routes/prouduct.js";
+// 設定連到使用者的路由 (目前還未使用到，所以先關掉)
+import usersRouter from "./routes/users.js";
+// 設定連到評價的路由
+import reviewRouter from "./routes/prouduct-review.js";
+// 設定到餐廳詳細頁面的路由
+import restaurantsRouter from "./routes/restaurants.js";
+// 設定到購物車的路由
+import cartRouter from "./routes/cart.js";
 
 const MySQLStore = mysql_session(session);
 const sessionStore = new MySQLStore({}, db);
@@ -20,6 +31,28 @@ const sessionStore = new MySQLStore({}, db);
 const app = express();
 
 app.set("view engine", "ejs");
+
+// json web token
+app.get('/jwt-sign',(req,res)=>{
+    const data = {
+        id:26,
+        account:"Bang",
+
+    };
+    const token = jwt.sign(data,process.env.JWT_KEY);
+    res.send(token);
+});
+
+app.get("/jwt-verify", (req, res) => {
+    const token =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjYsImFjY291bnQiOiJTaGluZGVyIiwiaWF0IjoxNzQ1OTA4NTU5fQ.LXGvFMNVwMYaHna-ysR7aju5zikDVs5LEWrgaoAjGKE";
+    const payload = jwt.verify(token, process.env.JWT_KEY);
+    res.json(payload);
+  });
+
+  app.post("jwt-verify",(req,res)=>{
+    
+  })
 
 
 // *** 設定靜態內容資料夾
@@ -48,14 +81,37 @@ app.use((req, res, next) => {
     res.locals.session = req.session;  //讓ejs可以取得session
     res.locals.originalUrl = req.originalUrl;
 
+
+// 透過這邊的中介(middleware)處理 JWT (拿Token)
+const auth = req.get("Authorization");
+console.log({ auth });
+if (auth && auth.indexOf("Bearer ") === 0) {
+  const token = auth.slice(7); // 去掉 'Bearer '
+  try {
+    req.my_jwt = jwt.verify(token, process.env.JWT_KEY);
+  } catch (ex) {}
+}
+
     next();
 });
+
+
+
 
 // Top-level middlewares
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());  // <-- 處理 JSON 請求 body
-
+// 連到食譜
 app.use('/recipes', recipesRouter);
+app.use('/prouduct', prouductRouter);
+// 連到use這個路由
+app.use('/users', usersRouter);
+// 連到評價的
+app.use('/prouduct-review', reviewRouter);
+// 連到餐廳詳細頁面的
+app.use('/restaurants', restaurantsRouter);
+// 連到購物車
+ app.use('/cart', cartRouter);
 
 // 路由定義, 兩個條件: 1. 拜訪的 HTTP 方法, 2. 路徑
 app.get("/", (req, res) => {
@@ -200,7 +256,7 @@ app.get("/bcrypt", async (req, res) => {
 // 登入表單
 app.get("/login", async (req, res) => {
     if (req.session.admin) {
-        // 已經登入時不要跳轉到這個頁面
+        // 已經登入時jwt-lo不要跳轉到這個頁面
         return res.redirect("/");
     }
     res.locals.title = "登入 - " + res.locals.title;
@@ -221,46 +277,75 @@ app.get("/logout", async (req, res) => {
 
 
 
-app.post("/login", upload.none(), async (req, res) => {
-    const output = {
-        success: false,
-        bodyData: req.body,
-        code: 0,
-    };
+// app.post("/login", upload.none(), async (req, res) => {
+//     const output = {
+//         success: false,
+//         bodyData: req.body,
+//         code: 0,
+//     };
 
+ // 處理登入, 回應 JWT token
+app.post("/jwt-login", upload.none(), async (req, res) => {
+    const output = {
+      success: false,
+      bodyData: req.body,
+      code: 0,
+      data: {
+        id: 0,
+        email: "",
+        // nickname: "",
+        username: "",
+        token: "",
+      },
+    };
+  
     let { email, password } = req.body;
     email = email.trim();
     password = password.trim();
-
+  
     if (!email || !password) {
-        output.code = 400;
-        return res.json(output);
+      output.code = 400;
+      return res.json(output);
     }
-
-    const sql = "SELECT * FROM members WHERE email=?";
+  
+    const sql = "SELECT * FROM users WHERE email=?";
     const [rows] = await db.query(sql, [email]);
     if (!rows.length) {
-        output.code = 402; // 帳號是錯的
-        return res.json(output);
+      output.code = 402; // 帳號是錯的
+      return res.json(output);
     }
     const result = await bcrypt.compare(password, rows[0].password_hash);
     if (!result) {
-        output.code = 405; // 密碼是錯的
-        return res.json(output);
+      output.code = 405; // 密碼是錯的
+      return res.json(output);
     }
-
-    // 設定 session
-    req.session.admin = {
-        id: rows[0].member_id,
-        email: rows[0].email,
-        nickname: rows[0].nickname,
+    // 帳密驗證成功
+    const payload = {
+      id: rows[0].users_id,
+      email: rows[0].email,
     };
-
+    const token = jwt.sign(payload, process.env.JWT_KEY);
+  
+    // 設定 session
+    output.data = {
+      id: rows[0].users_id,
+      email: rows[0].email,
+    //   nickname: rows[0].nickname,
+    username: rows[0].username,
+      token,
+    };
+  
     output.code = 200;
     output.success = true;
-
+  
     res.json(output);
-});
+  });
+  
+
+// 用來測試 token
+app.get("/jwt-data", (req, res) => {
+    res.json(req.my_jwt);
+  });
 
 app.get("/cate1", async (req, res) => {
     const sql = "SELECT * FROM categories ORDER BY category_id DESC";

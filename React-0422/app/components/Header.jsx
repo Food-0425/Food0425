@@ -1,10 +1,13 @@
-"use client";
+'use client'
 
-import React from "react";
-import styles from "../styles/Header.module.css";
-import Link from "next/link";
+import React from 'react'
+import styles from '../styles/Header.module.css'
+import Link from 'next/link'
+import { useAuth } from '@/hooks/auth-context'
 
 const Header = () => {
+  const { auth, logout } = useAuth()
+
   return (
     <div className={styles.navbar}>
       <div className={styles.navInner}>
@@ -37,10 +40,22 @@ const Header = () => {
             className={styles.navIconSmall}
             alt="User"
           />
+          <li className="nav-item">
+            <a
+              className="nav-link"
+              href="#"
+              onClick={(e) => {
+                e.preventDefault()
+                logout()
+              }}
+            >
+              登出
+            </a>
+          </li>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Header;
+export default Header

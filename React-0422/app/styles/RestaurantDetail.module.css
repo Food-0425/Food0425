@@ -1,0 +1,835 @@
+.container {
+  background-color: #fff;
+  overflow: hidden;
+  width: 100%;
+}
+
+.content {
+  background-color: #fffaf0;
+  display: flex;
+  width: 100%;
+  padding-bottom: 1px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+@media (max-width: 991px) {
+  .content {
+    max-width: 100%;
+  }
+}
+
+.breadcrumb {
+  width: 1277px;
+  max-width: 100%;
+}
+
+.breadcrumbNav {
+  display: flex;
+  padding: 19px 20px 21px;
+  align-items: flex-start;
+  gap: 8px;
+  font-family:
+    Roboto,
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
+  font-size: 14px;
+  color: #666;
+  font-weight: 400;
+  white-space: nowrap;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 991px) {
+  .breadcrumbNav {
+    max-width: 100%;
+    padding-right: 20px;
+    white-space: initial;
+  }
+}
+
+.mainContent {
+  width: 100%;
+  max-width: 1277px;
+  padding: 0 20px 40px;
+}
+
+@media (max-width: 991px) {
+  .mainContent {
+    max-width: 100%;
+  }
+}
+
+.restaurantTitle {
+  color: #423c3a;
+  font-family:
+    "Noto Sans TC",
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
+  font-size: 48px;
+  font-weight: 700;
+}
+
+@media (max-width: 991px) {
+  .restaurantTitle {
+    max-width: 100%;
+    font-size: 40px;
+  }
+}
+
+.actionButtons {
+  display: flex;
+  margin-top: 42px;
+  width: 100%;
+  justify-content: flex-end;
+  align-items: flex-start;
+  gap: 14px;
+  font-family:
+    Roboto,
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
+  font-size: 16px;
+  color: #df6c2d;
+  font-weight: 400;
+  white-space: nowrap;
+  text-align: center;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 991px) {
+  .actionButtons {
+    max-width: 100%;
+    padding-left: 20px;
+    margin-top: 40px;
+    white-space: initial;
+  }
+}
+
+.actionButton {
+  border-radius: 100px;
+  border: 1px solid #df6c2d;
+  display: flex;
+  padding: 9px 17px 11px;
+  align-items: flex-start;
+  gap: 8px;
+  justify-content: flex-start;
+  cursor: pointer;
+}
+
+@media (max-width: 991px) {
+  .actionButton {
+    white-space: initial;
+  }
+}
+
+.actionIcon {
+  aspect-ratio: 1;
+  object-fit: contain;
+  object-position: center;
+  width: 24px;
+  flex-shrink: 0;
+}
+
+.authorInfo {
+  display: flex;
+  margin-top: 42px;
+  width: 100%;
+  align-items: center;
+  gap: 8px;
+  font-family:
+    "Noto Sans TC",
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  white-space: nowrap;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 991px) {
+  .authorInfo {
+    max-width: 100%;
+    margin-top: 40px;
+    white-space: initial;
+  }
+}
+
+.recommendBadge {
+  border-radius: 4px;
+  background-color: #ff5a00;
+  display: flex;
+  padding: 4px 12px;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+  letter-spacing: 0.48px;
+  justify-content: flex-start;
+}
+
+@media (max-width: 991px) {
+  .recommendBadge {
+    white-space: initial;
+  }
+}
+
+.badgeIcon {
+  aspect-ratio: 1;
+  object-fit: contain;
+  object-position: center;
+  width: 16px;
+  align-self: stretch;
+  margin: auto 0;
+  flex-shrink: 0;
+}
+
+.badgeText {
+  align-self: stretch;
+  margin: auto 0;
+}
+
+.authorAvatar {
+  aspect-ratio: 1;
+  object-fit: contain;
+  object-position: center;
+  width: 32px;
+  border-radius: 50%;
+  align-self: stretch;
+  margin: auto 0;
+  flex-shrink: 0;
+}
+
+.authorLabel {
+  color: #666;
+  letter-spacing: 0.48px;
+  align-self: stretch;
+  margin: auto 0;
+}
+
+.publishDate {
+  color: #666;
+  font-family:
+    Roboto,
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
+  align-self: stretch;
+  margin: auto 0;
+}
+
+.heroImage {
+  border-radius: 8px;
+  display: flex;
+  margin-top: 42px;
+  width: 100%;
+  padding-top: 29px;
+  padding-bottom: 40px;
+  align-items: flex-end;
+  overflow: hidden;
+  justify-content: center;
+}
+
+@media (max-width: 991px) {
+  .heroImage {
+    margin-top: 40px;
+  }
+}
+
+.heroImg {
+  aspect-ratio: 2;
+  object-fit: contain;
+  object-position: center;
+  width: 1232px;
+  border-radius: 8px;
+  min-width: 240px;
+}
+
+.restaurantDescription {
+  margin-top: 42px;
+  width: 100%;
+  padding-top: 5px;
+}
+
+@media (max-width: 991px) {
+  .restaurantDescription {
+    max-width: 100%;
+    margin-top: 40px;
+  }
+}
+
+.descriptionText {
+  color: #423c3a;
+  font-family:
+    "Noto Sans TC",
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0.48px;
+}
+
+@media (max-width: 991px) {
+  .descriptionText {
+    max-width: 100%;
+  }
+}
+
+.sectionTitle {
+  color: #423c3a;
+  font-family:
+    "Noto Sans TC",
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  margin-top: 29px;
+}
+
+.quoteBox {
+  border-radius: 8px;
+  background-color: #fff;
+  display: flex;
+  margin-top: 29px;
+  width: 100%;
+  padding: 23px 24px 24px;
+  flex-direction: column;
+  align-items: stretch;
+  font-weight: 400;
+  justify-content: center;
+}
+
+@media (max-width: 991px) {
+  .quoteBox {
+    max-width: 100%;
+    padding: 23px 20px 24px;
+  }
+}
+
+.quoteText {
+  color: #df6c2d;
+  font-family:
+    Inter,
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
+  font-size: 20px;
+  letter-spacing: 0.6px;
+}
+
+@media (max-width: 991px) {
+  .quoteText {
+    max-width: 100%;
+  }
+}
+
+.quoteAuthor {
+  color: #666;
+  font-family:
+    "Noto Sans TC",
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
+  font-size: 16px;
+  letter-spacing: 0.48px;
+  margin-top: 13px;
+}
+
+.dishImage {
+  aspect-ratio: 2;
+  object-fit: contain;
+  object-position: center;
+  width: 100%;
+  border-radius: 8px;
+  margin-top: 29px;
+}
+
+.dishTitle {
+  color: #423c3a;
+  font-family:
+    "Noto Sans TC",
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  margin-top: 29px;
+}
+
+@media (max-width: 991px) {
+  .dishTitle {
+    max-width: 100%;
+  }
+}
+
+.dishDescription {
+  color: #666;
+  font-family:
+    Inter,
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 0.6px;
+  margin-top: 29px;
+}
+
+@media (max-width: 991px) {
+  .dishDescription {
+    max-width: 100%;
+  }
+}
+
+.recommendationBox {
+  border-radius: 8px;
+  background-color: #fff5ee;
+  display: flex;
+  margin-top: 29px;
+  width: 100%;
+  padding: 24px;
+  flex-direction: column;
+  align-items: stretch;
+  font-family:
+    "Noto Sans TC",
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
+  white-space: nowrap;
+  justify-content: center;
+}
+
+@media (max-width: 991px) {
+  .recommendationBox {
+    max-width: 100%;
+    padding: 24px 20px;
+    white-space: initial;
+  }
+}
+
+.recommendationTitle {
+  color: #df6c2d;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.recommendationText {
+  color: #666;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0.48px;
+  margin-top: 16px;
+}
+
+@media (max-width: 991px) {
+  .recommendationText {
+    max-width: 100%;
+  }
+}
+
+.infoSection {
+  display: flex;
+  margin-top: 42px;
+  width: 100%;
+  align-items: stretch;
+  gap: 24px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 991px) {
+  .infoSection {
+    max-width: 100%;
+    margin-top: 40px;
+  }
+}
+
+.infoCard {
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.12);
+  align-self: flex-start;
+  min-width: 240px;
+  padding: 24px;
+  font-weight: 400;
+  flex: 1;
+  flex-shrink: 1;
+  flex-basis: 0%;
+}
+
+@media (max-width: 991px) {
+  .infoCard {
+    max-width: 100%;
+    padding: 24px 20px;
+  }
+}
+
+.infoCardTitle {
+  color: #000;
+  font-size: 20px;
+  font-family:
+    Roboto,
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
+  font-weight: 700;
+}
+
+.infoCardContent {
+  display: flex;
+  margin-top: 17px;
+  width: 100%;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+}
+
+@media (max-width: 991px) {
+  .infoCardContent {
+    max-width: 100%;
+  }
+}
+
+.infoItem {
+  display: flex;
+  width: 100%;
+  align-items: flex-start;
+  gap: 12px;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 991px) {
+  .infoItem {
+    max-width: 100%;
+    padding-right: 20px;
+  }
+}
+
+.infoIcon {
+  aspect-ratio: 1;
+  object-fit: contain;
+  object-position: center;
+  width: 24px;
+  flex-shrink: 0;
+}
+
+.infoTextGroup {
+  display: flex;
+  padding: 3px 0;
+  flex-direction: column;
+  align-items: stretch;
+  width: 187px;
+}
+
+.infoText {
+  color: #423c3a;
+  font-family:
+    "Noto Sans TC",
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
+  font-size: 16px;
+  letter-spacing: 0.48px;
+  z-index: 10;
+}
+
+@media (max-width: 991px) {
+  .infoText {
+    margin-right: -6px;
+  }
+}
+
+.infoLink {
+  color: #df6c2d;
+  font-family:
+    Inter,
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.42px;
+  align-self: flex-start;
+  margin-top: 5px;
+  cursor: pointer;
+}
+
+.infoItemSimple {
+  display: flex;
+  margin-top: 16px;
+  width: 100%;
+  align-items: flex-start;
+  gap: 12px;
+  font-family:
+    "Noto Sans TC",
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
+  font-size: 16px;
+  color: #423c3a;
+  white-space: nowrap;
+  letter-spacing: 0.48px;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 991px) {
+  .infoItemSimple {
+    max-width: 100%;
+    padding-right: 20px;
+    white-space: initial;
+  }
+}
+
+.infoItemHours {
+  display: flex;
+  margin-top: 16px;
+  width: 100%;
+  padding-right: 40px;
+  padding-bottom: 2px;
+  align-items: flex-start;
+  gap: 12px;
+  font-family:
+    "Noto Sans TC",
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
+  font-size: 16px;
+  color: #423c3a;
+  letter-spacing: 0.48px;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 991px) {
+  .infoItemHours {
+    max-width: 100%;
+    padding-right: 20px;
+  }
+}
+
+.infoIconSmall {
+  aspect-ratio: 1;
+  object-fit: contain;
+  object-position: center;
+  width: 15px;
+  flex-shrink: 0;
+}
+
+.infoTextFull {
+  flex: 1;
+  flex-shrink: 1;
+  flex-basis: 0%;
+}
+
+@media (max-width: 991px) {
+  .infoTextFull {
+    max-width: 100%;
+  }
+}
+
+.infoSubtitle {
+  color: #423c3a;
+  font-family:
+    "Noto Sans TC",
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
+  font-size: 16px;
+  letter-spacing: 0.48px;
+  margin-top: 17px;
+}
+
+.infoList {
+  display: flex;
+  margin-top: 17px;
+  width: 100%;
+  padding-right: 104px;
+  flex-direction: column;
+  align-items: stretch;
+  font-family:
+    "Noto Sans TC",
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
+  font-size: 16px;
+  color: #666;
+  letter-spacing: 0.48px;
+  justify-content: center;
+}
+
+@media (max-width: 991px) {
+  .infoList {
+    max-width: 100%;
+    padding-right: 20px;
+  }
+}
+
+.infoListItem {
+  margin-top: 8px;
+}
+
+.infoListItem:first-child {
+  margin-top: 0;
+}
+
+.relatedRestaurants {
+  display: flex;
+  margin-top: 16px;
+  width: 347px;
+  max-width: 100%;
+  flex-direction: column;
+  align-items: stretch;
+  font-weight: 400;
+  justify-content: center;
+}
+
+@media (max-width: 991px) {
+  .relatedRestaurants {
+    white-space: initial;
+  }
+}
+
+.relatedItem {
+  display: flex;
+  width: 100%;
+  align-items: flex-start;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+@media (max-width: 991px) {
+  .relatedItem {
+    padding-right: 20px;
+    white-space: initial;
+  }
+}
+
+.relatedImage {
+  aspect-ratio: 1.5;
+  object-fit: contain;
+  object-position: center;
+  width: 120px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.relatedInfo {
+  display: flex;
+  padding-bottom: 39px;
+  flex-direction: column;
+  align-items: stretch;
+  width: 96px;
+}
+
+@media (max-width: 991px) {
+  .relatedInfo {
+    white-space: initial;
+  }
+}
+
+.relatedName {
+  color: #423c3a;
+  font-family:
+    "Noto Sans TC",
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
+  font-size: 16px;
+  letter-spacing: 0.48px;
+}
+
+@media (max-width: 991px) {
+  .relatedName {
+    margin-right: -2px;
+  }
+}
+
+.relatedLocation {
+  color: #666;
+  font-family:
+    Inter,
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.42px;
+  align-self: flex-start;
+  margin-top: 5px;
+}
+
+.relatedItemWide {
+  display: flex;
+  margin-top: 16px;
+  padding-right: 70px;
+  align-items: flex-start;
+  gap: 12px;
+  justify-content: flex-start;
+}
+
+@media (max-width: 991px) {
+  .relatedItemWide {
+    padding-right: 20px;
+    white-space: initial;
+  }
+}
+
+.relatedInfoWide {
+  display: flex;
+  padding-bottom: 39px;
+  flex-direction: column;
+  align-items: stretch;
+  width: 144px;
+}
+
+@media (max-width: 991px) {
+  .relatedInfoWide {
+    white-space: initial;
+  }
+}
+
+.relatedNameWide {
+  color: #423c3a;
+  font-family:
+    "Noto Sans TC",
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
+  font-size: 16px;
+  letter-spacing: 0.48px;
+}
+
+@media (max-width: 991px) {
+  .relatedNameWide {
+    margin-right: -3px;
+  }
+}
