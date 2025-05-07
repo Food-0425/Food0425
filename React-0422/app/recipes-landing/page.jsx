@@ -23,8 +23,9 @@ export default function RecipesLandingPage() {
       {/* 版首輪播 Start */}
       <RecipeCarousel />
       {/* 版首輪播 END */}
+
       <div className={styles.container}>
-        {/* ICON選單 Start */}
+        {/* 食譜ICON選單 Start */}
         <div className={styles.categoriesContainer}>
           <img
             src="https://cdn.builder.io/api/v1/image/assets/TEMP/53f72b1cdd510a8160b76260d08cccc39de9e6a2?placeholderIfAbsent=true"
@@ -32,35 +33,35 @@ export default function RecipesLandingPage() {
             alt="Left arrow"
           />
           <div className={styles.categoriesWrapper}>
-            <a className={styles.categoryIcon}>
+            <button className={styles.categoryIcon}>
               <TbMeat className={styles.categoryIconImg} />
               肉食
-            </a>
+            </button>
 
-            <div className={styles.categoryIcon}>
+            <button className={styles.categoryIcon}>
               <LuSalad className={styles.categoryIconImg} />
               蔬食
-            </div>
-            <div className={styles.categoryIcon}>
+            </button>
+            <button className={styles.categoryIcon}>
               <LuDessert className={styles.categoryIconImg} />
               甜點
-            </div>
-            <div className={styles.categoryIcon}>
+            </button>
+            <button className={styles.categoryIcon}>
               <BiSolidBowlRice className={styles.categoryIconImg} />
               飯食
-            </div>
-            <div className={styles.categoryIcon}>
+            </button>
+            <button className={styles.categoryIcon}>
               <FaEarthAmericas className={styles.categoryIconImg} />
               異國
-            </div>
-            <div className={styles.categoryIcon}>
+            </button>
+            <button className={styles.categoryIcon}>
               <FaFishFins className={styles.categoryIconImg} />
               生鮮
-            </div>
-            <div className={styles.categoryIcon}>
+            </button>
+            <button className={styles.categoryIcon}>
               <FaCakeCandles className={styles.categoryIconImg} />
               糕點
-            </div>
+            </button>
           </div>
           <img
             src="https://cdn.builder.io/api/v1/image/assets/TEMP/48cafdb4ef4bb734d63a486bf58abbe94c28b5d3?placeholderIfAbsent=true"
@@ -68,8 +69,10 @@ export default function RecipesLandingPage() {
             alt="Right arrow"
           />
         </div>
-        {/* ICON選單 END */}
+        {/* 食譜ICON選單 END */}
 
+        {/* 食譜菜單 Start */}
+        {/* 糕點測試 */}
         <div className={styles.recipeSection}>
           <div className={styles.recipeBlock}>
             <div className={styles.recipeCategory}>
@@ -83,9 +86,9 @@ export default function RecipesLandingPage() {
                 <br />
                 甜食
               </div>
-              <div className={styles.viewMoreButton}>
+              <button className={styles.viewMoreButton}>
                 <h3 className={styles.viewMoreText}>看更多</h3>
-              </div>
+              </button>
             </div>
             <div className={styles.recipeCardsContainer}>
               <div className={styles.recipeCard}>
@@ -181,7 +184,7 @@ export default function RecipesLandingPage() {
             </div>
           </div>
         </div>
-
+        {/* 生鮮測試 */}
         <div className={styles.recipeSection}>
           <div className={styles.recipeBlock}>
             <div className={styles.recipeCategory}>
@@ -195,9 +198,9 @@ export default function RecipesLandingPage() {
                 <br />
                 魚肉
               </div>
-              <div className={styles.viewMoreButton}>
+              <button className={styles.viewMoreButton}>
                 <h3 className={styles.viewMoreText}>看更多</h3>
-              </div>
+              </button>
             </div>
             <div className={styles.recipeCardsContainer}>
               <div className={styles.recipeCard}>
@@ -293,7 +296,6 @@ export default function RecipesLandingPage() {
             </div>
           </div>
         </div>
-
         <div className={styles.recipeSection}>
           <div className={styles.recipeBlock}>
             <div className={styles.recipeCategory}>
@@ -405,7 +407,6 @@ export default function RecipesLandingPage() {
             </div>
           </div>
         </div>
-
         <div className={styles.recipeSection}>
           <div className={styles.recipeBlock}>
             <div className={styles.recipeCategory}>
@@ -419,9 +420,9 @@ export default function RecipesLandingPage() {
                 <br />
                 風味
               </div>
-              <div className={styles.viewMoreButton}>
+              <button className={styles.viewMoreButton}>
                 <h3 className={styles.viewMoreText}>看更多</h3>
-              </div>
+              </button>
             </div>
             <div className={styles.recipeCardsContainer}>
               <div className={styles.recipeCard}>
@@ -517,60 +518,63 @@ export default function RecipesLandingPage() {
             </div>
           </div>
         </div>
-
-        <div className={styles.featuredSection}>
-          <div className={styles.featuredContainer}>
-            <div className={styles.featuredCard}>
-              <img
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/5d1dcaf58bd677b48b45cc3cdf88969626ba1b3e?placeholderIfAbsent=true"
-                className={styles.featuredCardImage}
-                alt="Featured recipe"
-              />
-              <div className={styles.featuredCardTitle}>希臘沙拉</div>
-            </div>
-            <div className={styles.featuredCard}>
-              <img
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/524bb2f7a404cb7f14d3391152a06164ca585549?placeholderIfAbsent=true"
-                className={styles.featuredCardImage}
-                alt="Featured recipe"
-              />
-              <div className={styles.featuredCardTitle}>墨西哥玉米餅沙拉</div>
-            </div>
-            <div className={styles.featuredCard}>
-              <img
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/66805a412f7bde992b6608585e95af8e97e2ba55?placeholderIfAbsent=true"
-                className={styles.featuredCardImage}
-                alt="Featured recipe"
-              />
-              <div className={styles.featuredCardTitle}>義式焗烤千層麵</div>
-            </div>
-            <div className={styles.featuredCard}>
-              <img
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/5f1f50e3bc5ae6d3da77423eb0478c9ef1c7c5bb?placeholderIfAbsent=true"
-                className={styles.featuredCardImage}
-                alt="Featured recipe"
-              />
-              <div className={styles.featuredCardTitle}>巧克力熔岩蛋糕</div>
-            </div>
-            <div className={styles.featuredCard}>
-              <img
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/6d55d204accc4206d3ac81a9ee095171dc343a70?placeholderIfAbsent=true"
-                className={styles.featuredCardImage}
-                alt="Featured recipe"
-              />
-              <div className={styles.featuredCardTitle}>台式滷肉飯</div>
-            </div>
-            <div className={styles.featuredCard}>
-              <img
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/38be65be6bdd471bd2341befa9825ccb01cfa1a5?placeholderIfAbsent=true"
-                className={styles.featuredCardImage}
-                alt="Featured recipe"
-              />
-              <div className={styles.featuredCardTitle}>泰式綠咖哩雞</div>
-            </div>
+        {/* 食譜菜單 End */}
+      </div>
+      {/* 你可能會喜歡 Start */}
+      <div className={styles.featuredSection}>
+        <h3>你可能會喜歡</h3>
+        <div className={styles.featuredContainer}>
+          <div className={styles.featuredCard}>
+            <img
+              src="https://cdn.builder.io/api/v1/image/assets/TEMP/5d1dcaf58bd677b48b45cc3cdf88969626ba1b3e?placeholderIfAbsent=true"
+              className={styles.featuredCardImage}
+              alt="Featured recipe"
+            />
+            <div className={styles.featuredCardTitle}>希臘沙拉</div>
+          </div>
+          <div className={styles.featuredCard}>
+            <img
+              src="https://cdn.builder.io/api/v1/image/assets/TEMP/524bb2f7a404cb7f14d3391152a06164ca585549?placeholderIfAbsent=true"
+              className={styles.featuredCardImage}
+              alt="Featured recipe"
+            />
+            <div className={styles.featuredCardTitle}>墨西哥玉米餅沙拉</div>
+          </div>
+          <div className={styles.featuredCard}>
+            <img
+              src="https://cdn.builder.io/api/v1/image/assets/TEMP/66805a412f7bde992b6608585e95af8e97e2ba55?placeholderIfAbsent=true"
+              className={styles.featuredCardImage}
+              alt="Featured recipe"
+            />
+            <div className={styles.featuredCardTitle}>義式焗烤千層麵</div>
+          </div>
+          <div className={styles.featuredCard}>
+            <img
+              src="https://cdn.builder.io/api/v1/image/assets/TEMP/5f1f50e3bc5ae6d3da77423eb0478c9ef1c7c5bb?placeholderIfAbsent=true"
+              className={styles.featuredCardImage}
+              alt="Featured recipe"
+            />
+            <div className={styles.featuredCardTitle}>巧克力熔岩蛋糕</div>
+          </div>
+          <div className={styles.featuredCard}>
+            <img
+              src="https://cdn.builder.io/api/v1/image/assets/TEMP/6d55d204accc4206d3ac81a9ee095171dc343a70?placeholderIfAbsent=true"
+              className={styles.featuredCardImage}
+              alt="Featured recipe"
+            />
+            <div className={styles.featuredCardTitle}>台式滷肉飯</div>
+          </div>
+          <div className={styles.featuredCard}>
+            <img
+              src="https://cdn.builder.io/api/v1/image/assets/TEMP/38be65be6bdd471bd2341befa9825ccb01cfa1a5?placeholderIfAbsent=true"
+              className={styles.featuredCardImage}
+              alt="Featured recipe"
+            />
+            <div className={styles.featuredCardTitle}>泰式綠咖哩雞</div>
           </div>
         </div>
       </div>
+      {/* 你可能會喜歡 End */}
     </div>
   )
 }
