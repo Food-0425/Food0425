@@ -24,6 +24,8 @@ import reviewRouter from "./routes/prouduct-review.js";
 import restaurantsRouter from "./routes/restaurants.js";
 // 設定到購物車的路由
 import cartRouter from "./routes/cart.js";
+// 設定到聯絡我們的路由
+import contactRouter from "./routes/contact.js";
 
 const MySQLStore = mysql_session(session);
 const sessionStore = new MySQLStore({}, db);
@@ -112,6 +114,8 @@ app.use('/prouduct-review', reviewRouter);
 app.use('/restaurants', restaurantsRouter);
 // 連到購物車
  app.use('/cart', cartRouter);
+// 連到聯絡我們的
+app.use('/contact', contactRouter);
 
 // 路由定義, 兩個條件: 1. 拜訪的 HTTP 方法, 2. 路徑
 app.get("/", (req, res) => {

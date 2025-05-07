@@ -5,6 +5,8 @@ import Link from 'next/link'
 import styles from '../../styles/RecipeList.module.css'
 import useSWR from 'swr'
 
+import { API_SERVER } from '../../../config/api-path'
+
 // 模擬菜譜數據，可以從API獲取
 const RECIPES_PER_PAGE = 15
 
@@ -23,7 +25,7 @@ export default function RecipeListPage() {
   //   )
 
   const { data, isLoading, error } = useSWR(
-    `http://localhost:3001/recipes/api?page=${currentPage}&limit=${RECIPES_PER_PAGE}`,
+    `${API_SERVER}/recipes/api?page=${currentPage}&limit=${RECIPES_PER_PAGE}`,
     fetcher
   )
 
@@ -312,7 +314,6 @@ export default function RecipeListPage() {
 
         {/* Featured Recipes */}
         <FeaturedRecipes />
-
       </div>
     </div>
   )
