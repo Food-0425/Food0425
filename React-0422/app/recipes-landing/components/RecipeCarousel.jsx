@@ -1,11 +1,23 @@
 'use client'
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 import styles from '../../styles/RecipeLanding.module.css'
 import { FaSearch } from 'react-icons/fa'
 
 export default function RecipeCarousel() {
+  const [searchQuery, setSearchQuery] = useState('') // 管理輸入的關鍵字
+  const router = useRouter()
+
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+      router.push(
+        `/recipes-landing/list?page=1&keyword=${encodeURIComponent(searchQuery)}`
+      )
+    }
+  }
+
   return (
     <div
       id="carouselExampleFade"
@@ -23,10 +35,12 @@ export default function RecipeCarousel() {
               type="text"
               className={styles.searchInput}
               placeholder="HI~今天您想吃什麼？"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)} // 更新關鍵字
             />
-            <div>
+            <button onClick={handleSearch} className={styles.searchButton}>
               <FaSearch className={styles.searchIcon} />
-            </div>
+            </button>
           </div>
         </div>
       </div>

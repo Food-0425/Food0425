@@ -21,33 +21,53 @@ const router = express.Router();
 // 取得所有食譜（但會依照分頁來分別顯示不同的資料)
 router.get('/api', async (req, res) => {
     try {
-      const page = parseInt(req.query.page) || 1
-    //   這邊的15 就是指一頁幾筆 (不過這是在後端生頁面時才有差。前端的一頁幾筆是由前端那邊為主)
-    const limit = parseInt(req.query.limit) || 15
-      const offset = (page - 1) * limit
-  
-      // 取得總筆數
-      const [countResult] = await db.query('SELECT COUNT(*) AS total FROM recipes')
-      const totalItems = countResult[0].total
-      const totalPages = Math.ceil(totalItems / limit)
-  
-      // 取得分頁資料
-      const [rows] = await db.query(
-        'SELECT * FROM recipes ORDER BY created_at DESC LIMIT ? OFFSET ?',
-        [limit, offset]
-      )
-  
-      res.json({
-        success: true,
-        rows,
-        totalPages,
-        currentPage: page,
-      })
+        const querySchema = z.object({
+            page: z.string().regex(/^\d+$/).optional(),
+            limit: z.string().regex(/^\d+$/).optional(),
+            keyword: z.string().optional(),
+        });
+
+        const queryValidation = querySchema.safeParse(req.query);
+        if (!queryValidation.success) {
+            return res.status(400).json({ success: false, error: "Invalid query parameters" });
+        }
+
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 15;
+        const keyword = req.query.keyword?.substring(0, 50) || ''; // 限制關鍵字長度
+        const offset = (page - 1) * limit;
+
+        const keywordCondition = keyword
+        // 這行就是看關鍵字有沒有符合標題 或描述  。如果只要符合標題的話，就是把OR後面的拿調
+            ? `WHERE title LIKE ? OR description LIKE ?`
+            : '';
+        // keywordParams 是參數化查詢，防止 SQL injection（例如使用 ? 而不是直接拼字串）
+        // 如果只想要搜尋Title的話，這行就改const keywordParams = keyword ? [`%${keyword}%`] : [];
+        const keywordParams = keyword ? [`%${keyword}%`, `%${keyword}%`] : [];
+
+        const [countResult] = await db.query(
+            `SELECT COUNT(*) AS total FROM recipes ${keywordCondition}`,
+            keywordParams
+        );
+        const totalItems = countResult[0]?.total || 0;
+        const totalPages = Math.ceil(totalItems / limit);
+
+        const [rows] = await db.query(
+            `SELECT * FROM recipes ${keywordCondition} ORDER BY created_at DESC LIMIT ? OFFSET ?`,
+            [...keywordParams, limit, offset]
+        );
+
+        res.json({
+            success: true,
+            rows,
+            totalPages,
+            currentPage: page,
+        });
     } catch (err) {
-      console.error('取得食譜列表失敗:', err)
-      res.status(500).json({ success: false, error: err.message })
+        console.error('取得食譜列表失敗:', err);
+        res.status(500).json({ success: false, error: err.message });
     }
-  })
+});
   
 
   
