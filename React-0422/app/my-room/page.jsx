@@ -23,10 +23,10 @@ export default function MyTestRoomPage(props) {
   // )
 
   // 連到後端(商品評價)
-  // const { data, isLoading, error } = useSWR(
-  //   `http://localhost:3001/prouduct-review/api?page=${currentPage}&limit=${RECIPES_PER_PAGE}`,
-  //   fetcher
-  // )
+  const { data, isLoading, error } = useSWR(
+    `http://localhost:3001/prouduct-review/api?page=${currentPage}&limit=${RECIPES_PER_PAGE}`,
+    fetcher
+  )
 
   // 測試取得單筆網頁內容
   const router = useRouter()
@@ -40,10 +40,10 @@ export default function MyTestRoomPage(props) {
   const { id } = router.query
 
   // 使用 useSWR 來抓取資料
-  const { data, error } = useSWR(id ? `/api/posts/${id}` : null, fetcher)
+  // const { data, error } = useSWR(id ? `/api/posts/${id}` : null, fetcher)
 
   // 判斷是否正在加載資料
-  const isLoading = !post && !error
+  // const isLoading = !post && !error
 
   // 如果正在加載資料
   if (isLoading) return <div>Loading...</div>
@@ -68,7 +68,7 @@ export default function MyTestRoomPage(props) {
       <br />
       <h2>這是我的測試室</h2>
       {/* 下面這行JSON是拿來初步確認是否有拿到後端資料用的 */}
-      <div>{JSON.stringify(prouduct)}</div>
+      <div>{JSON.stringify(data)}</div>
       {/* <div className={styles.recipeSection}>
         {isLoading ? (
           <div className={styles.loading}>載入中...</div>

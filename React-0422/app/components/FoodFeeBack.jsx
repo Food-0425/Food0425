@@ -34,20 +34,40 @@ const styles = {
   },
 }
 
-export default function FoodFeeBack() {
+export default function FoodFeeBack({ recipeId, userId }) {
   const [title, setTitle] = useState('')
-  const [comment, setComment] = useState('')
+  const [context, setComment] = useState('')
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    if (title.trim() === '' || comment.trim() === '') {
+    if (title.trim() === '' || context.trim() === '') {
       alert('請填寫完整的標題和評論！')
       return
     }
-    console.log('提交的資料:', { title, comment })
-    alert('感謝您的評論！')
-    setTitle('')
-    setComment('')
+
+    try {
+      const response = await fetch(
+        'http://localhost:3001/recipes/api/feedback',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ recipeId, userId, title, context }), // 傳送 recipeId 和 userId
+        }
+      )
+
+      if (response.ok) {
+        alert('感謝您的評論！')
+        setTitle('')
+        setComment('')
+      } else {
+        alert('提交失敗，請稍後再試！')
+      }
+    } catch (error) {
+      console.error('提交表單時發生錯誤：', error)
+      alert('提交失敗，請檢查您的網路連線！')
+    }
   }
 
   return (
@@ -56,7 +76,7 @@ export default function FoodFeeBack() {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        minHeight: '100vh', // 改為 minHeight
+        minHeight: '100vh',
         backgroundColor: '#F5F5F5',
       }}
     >
@@ -138,7 +158,7 @@ export default function FoodFeeBack() {
           >
             <div style={styles.subtitle}>評論</div>
             <textarea
-              value={comment}
+              value={context}
               onChange={(e) => setComment(e.target.value)}
               placeholder="嘿~和大家說說您的感想吧~"
               style={{

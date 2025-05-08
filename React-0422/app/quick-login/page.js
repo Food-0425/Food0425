@@ -40,6 +40,7 @@ export default function QuickLoginPage() {
       <hr />
       <hr />
       <div className="alert alert-success">登入的用戶: {auth.email}</div>
+      <div className="alert alert-success">登入的用戶ID: {auth.id}</div>
     </div>
   )
 }

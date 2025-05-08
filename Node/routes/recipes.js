@@ -7,16 +7,7 @@ import upload from "../utils/upload-imgs.js";
 
 const router = express.Router();
 
-// 取得所有食譜（可擴充分頁）
-// router.get('/api', async (req, res) => {
-//     try {
-//       const [rows] = await db.query('SELECT * FROM recipes ORDER BY created_at DESC');
-//       res.json({ success: true, rows });
-//     } catch (err) {
-//       console.error('取得食譜列表失敗:', err); // ✅ 印出錯誤訊息
-//       res.status(500).json({ success: false, error: err.message });
-//     }
-//   });
+
 
 // 取得所有食譜（但會依照分頁來分別顯示不同的資料)
 router.get('/api', async (req, res) => {
@@ -69,21 +60,8 @@ router.get('/api', async (req, res) => {
     }
 });
   
-
-  
-
 // 取得單一食譜
-// router.get('/api/:id',async(req,res)=>{
-//     try{
-//         const [rows] = await db.query('SELECT * FROM recipes WHERE id=?', [req.params.id]);
-//         if(!rows.length){
-//             return res.status(404).json({ success: false, error:"找不到食譜" });
-//         }
-//         res.json({ success: true, data:rows[0] });
-//     }catch(error){
-//         res.status(500).json({ success: false, error:error.message });
-//     }
-// });
+// 這邊是取得單一食譜的API，會根據食譜ID來查詢資料庫，並且將相關的步驟、食材、調味料、關聯食譜和評論一起回傳
 
 router.get('/api/:id', async (req, res) => {
     try {
@@ -154,7 +132,7 @@ router.get('/api/:id', async (req, res) => {
         // 'SELECT id, context, user_id, created_at FROM user_feedbacks WHERE recipes_id = ? ORDER BY id ASC',
         // 下面這段是先將用戶名稱與食譜評論JOIN再一起，接著再將這個JOIN過的評論表塞進這個食譜查詢的JSON檔
         `SELECT 
-     uf.id, uf.context, uf.user_id, uf.created_at, u.username 
+     uf.id, uf.context,uf.title, uf.user_id, uf.created_at, u.username 
    FROM user_feedbacks uf
    JOIN users u ON uf.user_id = u.user_id
    WHERE uf.recipes_id = ? 
@@ -180,6 +158,30 @@ router.get('/api/:id', async (req, res) => {
       res.status(500).json({ success: false, error: error.message });
     }
   });
+
+// 新增評論
+router.post('/api/feedback', async (req, res) => {
+  const { recipeId, userId, title, context } = req.body;
+
+  // 驗證輸入
+  if (!recipeId || !userId || !title || !context) {
+      return res.status(400).json({ success: false, error: "RecipeId, UserId, Title, and Context are required" });
+  }
+
+  try {
+      // 插入評論到資料庫
+      const [result] = await db.query(
+          'INSERT INTO user_feedbacks (recipe_id, user_id, title, context, created_at) VALUES (?, ?, ?, ?, NOW())',
+          [recipeId, userId, title, context]
+      );
+
+      res.json({ success: true, insertedId: result.insertId });
+  } catch (error) {
+      console.error('新增評論失敗:', error);
+      res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 
 
 // 新增食譜
