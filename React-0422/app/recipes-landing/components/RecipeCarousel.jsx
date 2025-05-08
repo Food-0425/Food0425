@@ -38,7 +38,7 @@ export default function RecipeCarousel() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)} // 更新關鍵字
             />
-            <button onClick={handleSearch} className={styles.searchButton}>
+            <button className={styles.searchButton} onClick={handleSearch}>
               <FaSearch className={styles.searchIcon} />
             </button>
           </div>

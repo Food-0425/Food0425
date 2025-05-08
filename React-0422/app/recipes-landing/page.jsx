@@ -3,7 +3,6 @@
 import React from 'react'
 import styles from '../styles/RecipeLanding.module.css'
 import Link from 'next/link'
-
 import {
   FaSearch,
   FaCakeCandles,
@@ -35,32 +34,32 @@ export default function RecipesLandingPage() {
           <div className={styles.categoriesWrapper}>
             <button className={styles.categoryIcon}>
               <TbMeat className={styles.categoryIconImg} />
-              肉食
+              肉食主義
             </button>
 
             <button className={styles.categoryIcon}>
               <LuSalad className={styles.categoryIconImg} />
-              蔬食
+              蔬食主義
             </button>
             <button className={styles.categoryIcon}>
               <LuDessert className={styles.categoryIconImg} />
-              甜點
+              甜點零嘴
             </button>
             <button className={styles.categoryIcon}>
               <BiSolidBowlRice className={styles.categoryIconImg} />
-              飯食
+              飯食料理
             </button>
             <button className={styles.categoryIcon}>
               <FaEarthAmericas className={styles.categoryIconImg} />
-              異國
+              異國風味
             </button>
             <button className={styles.categoryIcon}>
               <FaFishFins className={styles.categoryIconImg} />
-              生鮮
+              生猛海鮮
             </button>
             <button className={styles.categoryIcon}>
               <FaCakeCandles className={styles.categoryIconImg} />
-              糕點
+              精緻糕點
             </button>
           </div>
           <img
@@ -72,7 +71,6 @@ export default function RecipesLandingPage() {
         {/* 食譜ICON選單 END */}
 
         {/* 食譜菜單 Start */}
-        {/* 糕點測試 */}
         <div className={styles.recipeSection}>
           <div className={styles.recipeBlock}>
             <div className={styles.recipeCategory}>
@@ -82,9 +80,9 @@ export default function RecipesLandingPage() {
                 alt="Desserts background"
               />
               <div className={styles.categoryTitle}>
-                糕點
+                肉食
                 <br />
-                甜食
+                主義
               </div>
               <button className={styles.viewMoreButton}>
                 <h3 className={styles.viewMoreText}>看更多</h3>
