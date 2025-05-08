@@ -171,7 +171,7 @@ router.post('/api/feedback', async (req, res) => {
   try {
       // 插入評論到資料庫
       const [result] = await db.query(
-          'INSERT INTO user_feedbacks (recipe_id, user_id, title, context, created_at) VALUES (?, ?, ?, ?, NOW())',
+          'INSERT INTO user_feedbacks (recipes_id, user_id, title, context, created_at) VALUES (?, ?, ?, ?, NOW())',
           [recipeId, userId, title, context]
       );
 

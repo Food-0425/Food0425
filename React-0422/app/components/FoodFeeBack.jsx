@@ -1,6 +1,8 @@
 'use client'
 
 import React, { useState } from 'react'
+import { useParams } from 'next/navigation'
+import { useAuth } from '@/hooks/auth-context'
 
 const styles = {
   title: {
@@ -34,9 +36,13 @@ const styles = {
   },
 }
 
-export default function FoodFeeBack({ recipeId, userId }) {
+export default function FoodFeeBack() {
+  const { id } = useParams() // 從動態路由中獲取 recipeId
+  const { auth } = useAuth()
   const [title, setTitle] = useState('')
   const [context, setComment] = useState('')
+  console.log('recipeId:', id) // 確認 recipeId 是否正確獲取
+  console.log('auth:', auth.id) // 確認 auth 是否正確獲取
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -53,7 +59,12 @@ export default function FoodFeeBack({ recipeId, userId }) {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ recipeId, userId, title, context }), // 傳送 recipeId 和 userId
+          body: JSON.stringify({
+            recipeId: id, // 傳送 recipeId
+            userId: auth.id,
+            title,
+            context,
+          }), // 傳送 recipeId 和 userId
         }
       )
 
