@@ -41,6 +41,8 @@ export default function FoodFeeBack() {
   const { auth } = useAuth()
   const [title, setTitle] = useState('')
   const [context, setComment] = useState('')
+  const [isLike, setIsLike] = useState(0) // 預設為按讚
+
   console.log('recipeId:', id) // 確認 recipeId 是否正確獲取
   console.log('auth:', auth.id) // 確認 auth 是否正確獲取
 
@@ -64,6 +66,7 @@ export default function FoodFeeBack() {
             userId: auth.id,
             title,
             context,
+            is_like: isLike, // 傳送 is_like
           }), // 傳送 recipeId 和 userId
         }
       )
@@ -72,6 +75,7 @@ export default function FoodFeeBack() {
         alert('感謝您的評論！')
         setTitle('')
         setComment('')
+        setIsLike(0) // 重置為預設值
       } else {
         alert('提交失敗，請稍後再試！')
       }
@@ -188,6 +192,25 @@ export default function FoodFeeBack() {
                 resize: 'none',
               }}
             />
+          </div>
+          <div
+            style={{
+              alignSelf: 'stretch',
+              paddingLeft: 40,
+              paddingRight: 40,
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+              alignItems: 'center',
+              gap: 10,
+              display: 'flex',
+            }}
+          >
+            <input
+              type="checkbox"
+              checked={isLike === 1}
+              onChange={(e) => setIsLike(e.target.checked ? 1 : 0)}
+            />
+            <label>我喜歡這個食譜</label>
           </div>
         </div>
         <button

@@ -161,18 +161,18 @@ router.get('/api/:id', async (req, res) => {
 
 // 新增評論
 router.post('/api/feedback', async (req, res) => {
-  const { recipeId, userId, title, context } = req.body;
+  const { recipeId, userId, title, context,is_like } = req.body;
 
   // 驗證輸入
-  if (!recipeId || !userId || !title || !context) {
+  if (!recipeId || !userId || !title || !context || !is_like) {
       return res.status(400).json({ success: false, error: "RecipeId, UserId, Title, and Context are required" });
   }
 
   try {
       // 插入評論到資料庫
       const [result] = await db.query(
-          'INSERT INTO user_feedbacks (recipes_id, user_id, title, context, created_at) VALUES (?, ?, ?, ?, NOW())',
-          [recipeId, userId, title, context]
+          'INSERT INTO user_feedbacks (recipes_id, user_id, title, context, is_like, created_at) VALUES (?, ?, ?, ?, ?,NOW())',
+          [recipeId, userId, title, context,is_like]
       );
 
       res.json({ success: true, insertedId: result.insertId });
