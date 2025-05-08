@@ -3,6 +3,8 @@
 import React from 'react'
 import Link from 'next/link'
 import styles from '../../styles/RecipeDetail.module.css'
+import { SlLike } from 'react-icons/sl'
+
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
 import useSWR from 'swr'
@@ -386,6 +388,10 @@ export default function RecipeDetailPage() {
                       className={styles.userRating}
                       alt="User rating"
                     /> */}
+                    <div className={styles.userLike}>
+                      <SlLike size={30} />
+                    </div>
+
                     <div className={styles.userContent}>
                       <div className={styles.userName}>
                         {comment.username || '匿名用戶'}
