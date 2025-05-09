@@ -1,0 +1,72 @@
+@use './variables' as *;
+
+.recipeCard {
+  border-radius: 30px;
+  box-shadow: 2px 3px 5px 0 rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  position: relative;
+  min-width: 240px;
+  overflow: hidden;
+  flex-shrink: 1;
+  width: 320px;
+  height: 350px;
+}
+
+.recipeImage {
+  object-fit: cover;
+  object-position: center;
+  width: 100%;
+}
+
+.recipeContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  z-index: 0;
+  width: 100%;
+  padding: 25px 40px;
+  font-family: $font-family-default;
+  text-align: center;
+
+  @media (max-width: 991px) {
+    padding: 25px 20px;
+  }
+}
+
+.recipeTitle {
+  color: $color-primary;
+  font-size: $font-size-h3;
+  font-weight: $font-weight-h3;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+}
+
+.recipeDescription {
+  color: $color-content;
+  font-size: $font-size-p;
+  letter-spacing: 0.48px;
+  margin-top: 10px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.favoriteIcon {
+  color: #fff;
+  background: $color-accent;
+  border: none;
+  border-radius: 9rem;
+  font-size: $font-size-icon;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  right: 13px;
+  top: 14px;
+  height: 55px;
+  width: 55px;
+}

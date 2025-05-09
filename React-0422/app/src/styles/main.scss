@@ -1,0 +1,8 @@
+// main.scss 全域樣式
+
+@use './variables';
+
+body {
+  background-color: variables.$color-background;
+  color: variables.$color-primary;
+}
