@@ -1,10 +1,13 @@
-"use client";
+'use client'
 
-import React from "react";
-import styles from "../styles/Header.module.css";
-import Link from "next/link";
+import React from 'react'
+import styles from '../styles/Header.module.css'
+import Link from 'next/link'
+import { useAuth } from '@/hooks/auth-context'
 
 const Header = () => {
+  const { auth, logout } = useAuth()
+
   return (
     <div className={styles.navbar}>
       <div className={styles.navInner}>
@@ -39,10 +42,38 @@ const Header = () => {
             className={styles.navIconSmall}
             alt="User"
           />
+          {/* <li className="nav-item">
+            <a className="nav-link" href="#">
+              {auth ? auth.name : '登入/註冊'}
+            </a>
+          </li> */}
+          <li>
+            {auth.id ? (
+              <div>{auth.username}</div>
+            ) : (
+              <Link href="/login">
+                <div>登入/註冊</div>
+              </Link>
+            )}
+            {/* 如果已經登入，顯示會員名稱，否則顯示登入/註冊按鈕 */}
+          </li>
+          <li className="nav-item">
+            {/* 如果已經登入，顯示登出按鈕 */}
+            <a
+              className="nav-link"
+              href="#"
+              onClick={(e) => {
+                e.preventDefault()
+                logout()
+              }}
+            >
+              登出
+            </a>
+          </li>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Header;
+export default Header
