@@ -25,6 +25,7 @@ router.get('/api', async (req, res) => {
             page: z.string().regex(/^\d+$/).optional(),
             limit: z.string().regex(/^\d+$/).optional(),
             keyword: z.string().optional(),
+            category: z.string().optional(), // 新增 category 過濾參數
         });
 
         const queryValidation = querySchema.safeParse(req.query);
@@ -35,15 +36,30 @@ router.get('/api', async (req, res) => {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 15;
         const keyword = req.query.keyword?.substring(0, 50) || ''; // 限制關鍵字長度
+        const category = req.query.category || ''; // 取得 category 參數
         const offset = (page - 1) * limit;
 
-        const keywordCondition = keyword
+        // const keywordCondition = keyword
         // 這行就是看關鍵字有沒有符合標題 或描述  。如果只要符合標題的話，就是把OR後面的拿調
-            ? `WHERE title LIKE ? OR description LIKE ?`
-            : '';
+            // ? `WHERE title LIKE ? OR description LIKE ?`
+            // : '';
         // keywordParams 是參數化查詢，防止 SQL injection（例如使用 ? 而不是直接拼字串）
         // 如果只想要搜尋Title的話，這行就改const keywordParams = keyword ? [`%${keyword}%`] : [];
-        const keywordParams = keyword ? [`%${keyword}%`, `%${keyword}%`] : [];
+        // const keywordParams = keyword ? [`%${keyword}%`, `%${keyword}%`] : [];
+
+        // 5/9測試recipeCard和輪撥搜索有沒有效果，成功後拿掉本行備註
+        let keywordCondition = '';
+        const keywordParams = [];
+        if (keyword) {
+            keywordCondition = `WHERE (title LIKE ? OR description LIKE ?)`;
+            keywordParams.push(`%${keyword}%`, `%${keyword}%`);
+        }
+
+        if (category) {
+            keywordCondition += keyword ? ` AND category = ?` : `WHERE category = ?`;
+            keywordParams.push(category);
+        }
+        // 5/9測試recipeCard和輪撥搜索有沒有效果，成功後拿掉本行備註
 
         const [countResult] = await db.query(
             `SELECT COUNT(*) AS total FROM recipes ${keywordCondition}`,
