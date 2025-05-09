@@ -28,7 +28,7 @@
   width: 100%;
   padding-top: 80px;
   font-family:
-    "Noto Sans TC",
+    'Noto Sans TC',
     -apple-system,
     Roboto,
     Helvetica,
@@ -134,7 +134,7 @@
   flex-direction: column;
   overflow: hidden;
   font-family:
-    "Noto Sans TC",
+    'Noto Sans TC',
     -apple-system,
     Roboto,
     Helvetica,
@@ -250,7 +250,6 @@
 .recipeGrid {
   display: flex;
   width: 100%;
-  align-items: start;
   gap: 40px;
   justify-content: center;
   flex-wrap: wrap;
@@ -272,6 +271,7 @@
   flex-grow: 1;
   flex-shrink: 1;
   width: 320px;
+  height: 350px;
 }
 
 .recipeImageContainer {
@@ -280,8 +280,7 @@
 }
 
 .recipeImage {
-  aspect-ratio: 1.81;
-  object-fit: contain;
+  object-fit: cover;
   object-position: center;
   width: 100%;
 }
@@ -294,7 +293,7 @@
   width: 100%;
   flex-direction: column;
   font-family:
-    "Noto Sans TC",
+    'Noto Sans TC',
     -apple-system,
     Roboto,
     Helvetica,
@@ -355,7 +354,7 @@
   flex-direction: column;
   align-items: center;
   font-family:
-    "Noto Sans TC",
+    'Noto Sans TC',
     -apple-system,
     Roboto,
     Helvetica,
@@ -455,7 +454,7 @@
   flex-direction: column;
   overflow: hidden;
   font-family:
-    "Noto Sans TC",
+    'Noto Sans TC',
     -apple-system,
     Roboto,
     Helvetica,
@@ -580,7 +579,7 @@
   flex-direction: column;
   align-items: stretch;
   font-family:
-    "Noto Sans TC",
+    'Noto Sans TC',
     -apple-system,
     Roboto,
     Helvetica,
@@ -685,7 +684,7 @@
   background-color: #df6c2d;
   overflow: hidden;
   font-family:
-    "Noto Sans TC",
+    'Noto Sans TC',
     -apple-system,
     Roboto,
     Helvetica,
@@ -793,7 +792,7 @@
   align-items: stretch;
   gap: 40px;
   font-family:
-    "Noto Sans TC",
+    'Noto Sans TC',
     -apple-system,
     Roboto,
     Helvetica,

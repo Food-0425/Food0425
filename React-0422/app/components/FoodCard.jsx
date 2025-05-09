@@ -1,8 +1,11 @@
-"use client";
-import React, { useState } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { FaHeart, FaRegHeart } from "react-icons/fa";
+// 這個FoodCard不要用!!!!!
+// 但他有做收藏的判斷功能了可參考這部分就好
+
+'use client'
+import React, { useState } from 'react'
+import Link from 'next/link'
+import Image from 'next/image'
+import { FaHeart, FaRegHeart } from 'react-icons/fa'
 
 /**
  * FoodCard component for displaying food items in a grid
@@ -14,14 +17,14 @@ import { FaHeart, FaRegHeart } from "react-icons/fa";
  * @param {string} props.food.image - Food item image URL
  * @param {string} props.className - Additional CSS class
  */
-const FoodCard = ({ food, className = "" }) => {
-  const [isFavorite, setIsFavorite] = useState(false);
+const FoodCard = ({ food, className = '' }) => {
+  const [isFavorite, setIsFavorite] = useState(false)
 
   const toggleFavorite = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsFavorite(!isFavorite);
-  };
+    e.preventDefault()
+    e.stopPropagation()
+    setIsFavorite(!isFavorite)
+  }
 
   return (
     <Link href={`/products/${food.id}`}>
@@ -40,7 +43,7 @@ const FoodCard = ({ food, className = "" }) => {
             onClick={toggleFavorite}
             className="absolute z-10 right-3 top-3"
             aria-label={
-              isFavorite ? "Remove from favorites" : "Add to favorites"
+              isFavorite ? 'Remove from favorites' : 'Add to favorites'
             }
           >
             {isFavorite ? (
@@ -60,7 +63,7 @@ const FoodCard = ({ food, className = "" }) => {
         </div>
       </div>
     </Link>
-  );
-};
+  )
+}
 
-export default FoodCard;
+export default FoodCard

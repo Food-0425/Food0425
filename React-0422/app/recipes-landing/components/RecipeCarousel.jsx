@@ -1,8 +1,6 @@
 'use client'
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 import styles from '../../styles/RecipeLanding.module.css'
 import { FaSearch } from 'react-icons/fa'
 

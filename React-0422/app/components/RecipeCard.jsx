@@ -39,10 +39,14 @@ export default function RecipeCard({
       style={{ cursor: clickable ? 'pointer' : 'default' }}
     >
       <div className={styles.recipeImageContainer}>
-        <img src={image} className={styles.recipeImage} alt={title} />
+        <img
+          src={image} // 從 public 資料夾的根目錄開始
+          className={styles.recipeImage}
+          alt={title}
+        />
         {showViewButton && (
           <div className={styles.viewButtonOverlay}>
-            <button className={styles.viewButton}>查看食譜</button>
+            {/* <button className={styles.viewButton}>查看食譜</button> */}
           </div>
         )}
       </div>
