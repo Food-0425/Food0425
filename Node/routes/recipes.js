@@ -30,21 +30,44 @@ router.get('/api', async (req, res) => {
 
         const keywordCondition = keyword
         // 這行就是看關鍵字有沒有符合標題 或描述  。如果只要符合標題的話，就是把OR後面的拿調
-            ? `WHERE title LIKE ? OR description LIKE ?`
+            ? `WHERE r.title LIKE ? OR r.description LIKE ? OR c.name LIKE ?`
             : '';
         // keywordParams 是參數化查詢，防止 SQL injection（例如使用 ? 而不是直接拼字串）
         // 如果只想要搜尋Title的話，這行就改const keywordParams = keyword ? [`%${keyword}%`] : [];
-        const keywordParams = keyword ? [`%${keyword}%`, `%${keyword}%`] : [];
+        const keywordParams = keyword ? [`%${keyword}%`, `%${keyword}%`, `%${keyword}%`] : [];
 
+         // 取得總筆數
         const [countResult] = await db.query(
-            `SELECT COUNT(*) AS total FROM recipes ${keywordCondition}`,
+            `SELECT COUNT(DISTINCT r.id) AS total 
+             FROM recipes r 
+             LEFT JOIN recipe_category rc ON r.id = rc.recipe_id 
+             LEFT JOIN categories_sc c ON rc.category_id = c.id 
+             ${keywordCondition}`,
             keywordParams
         );
         const totalItems = countResult[0]?.total || 0;
         const totalPages = Math.ceil(totalItems / limit);
 
+        // 取得分頁資料，包含分類
         const [rows] = await db.query(
-            `SELECT * FROM recipes ${keywordCondition} ORDER BY created_at DESC LIMIT ? OFFSET ?`,
+            `SELECT 
+                r.id, 
+                r.title, 
+                r.description , 
+                r.image, 
+                GROUP_CONCAT(c.name ORDER BY c.name SEPARATOR ', ') AS categories 
+             FROM 
+                recipes r 
+             LEFT JOIN 
+                recipe_category rc ON r.id = rc.recipe_id 
+             LEFT JOIN 
+                categories_sc c ON rc.category_id = c.id 
+             ${keywordCondition} 
+             GROUP BY 
+                r.id, r.title, r.description, r.image 
+             ORDER BY 
+                r.created_at DESC 
+             LIMIT ? OFFSET ?`,
             [...keywordParams, limit, offset]
         );
 
@@ -66,7 +89,7 @@ router.get('/api/category', async (req, res) => {
     try {
           const page = parseInt(req.query.page) || 1
         //   這邊的5 就是指一頁幾筆
-          const limit = parseInt(req.query.limit) || 70
+          const limit = parseInt(req.query.limit) || 80
           const offset = (page - 1) * limit
       
           // 取得總筆數

@@ -156,7 +156,10 @@ export default function RecipesLandingPage() {
                 alt="Desserts background"
               />
               <div className={styles.categoryTitle}>肉食</div>
-              <button className={styles.viewMoreButton}>
+              <button
+                onClick={() => handleSearch('肉食')}
+                className={styles.viewMoreButton}
+              >
                 <h3 className={styles.viewMoreText}>看更多</h3>
               </button>
             </div>
@@ -196,7 +199,10 @@ export default function RecipesLandingPage() {
                 alt="Desserts background"
               />
               <div className={styles.categoryTitle}>蔬食</div>
-              <button className={styles.viewMoreButton}>
+              <button
+                onClick={() => handleSearch('蔬食')}
+                className={styles.viewMoreButton}
+              >
                 <h3 className={styles.viewMoreText}>看更多</h3>
               </button>
             </div>
@@ -237,7 +243,10 @@ export default function RecipesLandingPage() {
                 alt="Desserts background"
               />
               <div className={styles.categoryTitle}>甜點</div>
-              <button className={styles.viewMoreButton}>
+              <button
+                onClick={() => handleSearch('甜點')}
+                className={styles.viewMoreButton}
+              >
                 <h3 className={styles.viewMoreText}>看更多</h3>
               </button>
             </div>
@@ -277,7 +286,10 @@ export default function RecipesLandingPage() {
                 alt="Desserts background"
               />
               <div className={styles.categoryTitle}>飯食</div>
-              <button className={styles.viewMoreButton}>
+              <button
+                onClick={() => handleSearch('飯食')}
+                className={styles.viewMoreButton}
+              >
                 <h3 className={styles.viewMoreText}>看更多</h3>
               </button>
             </div>
@@ -317,7 +329,10 @@ export default function RecipesLandingPage() {
                 alt="Desserts background"
               />
               <div className={styles.categoryTitle}>異國</div>
-              <button className={styles.viewMoreButton}>
+              <button
+                onClick={() => handleSearch('異國')}
+                className={styles.viewMoreButton}
+              >
                 <h3 className={styles.viewMoreText}>看更多</h3>
               </button>
             </div>
@@ -357,7 +372,10 @@ export default function RecipesLandingPage() {
                 alt="Desserts background"
               />
               <div className={styles.categoryTitle}>生鮮</div>
-              <button className={styles.viewMoreButton}>
+              <button
+                onClick={() => handleSearch('生鮮')}
+                className={styles.viewMoreButton}
+              >
                 <h3 className={styles.viewMoreText}>看更多</h3>
               </button>
             </div>
@@ -397,7 +415,10 @@ export default function RecipesLandingPage() {
                 alt="Desserts background"
               />
               <div className={styles.categoryTitle}>糕點</div>
-              <button className={styles.viewMoreButton}>
+              <button
+                onClick={() => handleSearch('糕點')}
+                className={styles.viewMoreButton}
+              >
                 <h3 className={styles.viewMoreText}>看更多</h3>
               </button>
             </div>
