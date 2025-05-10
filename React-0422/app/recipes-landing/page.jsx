@@ -7,6 +7,7 @@ import useSWR from 'swr'
 import { useState, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { API_SERVER } from '@/config/api-path'
+import { useRouter } from 'next/navigation'
 
 import {
   FaSearch,
@@ -22,6 +23,7 @@ import {
 import RecipeCarousel from './components/RecipeCarousel'
 
 export default function RecipesLandingPage() {
+  const router = useRouter()
   // 如果需要獲取查詢參數，使用 useSearchParams
   const searchParams = useSearchParams()
 
@@ -42,6 +44,10 @@ export default function RecipesLandingPage() {
   // 獲取數據
   const restaurants = data?.rows || []
   const totalPages = data?.totalPages || 10
+
+  const handleSearch = (category) => {
+    router.push(`/recipes-landing/list?page=1&keyword=${category}`)
+  }
 
   return (
     <div>
@@ -108,7 +114,10 @@ export default function RecipesLandingPage() {
                 alt="Desserts background"
               />
               <div className={styles.categoryTitle}>麵食</div>
-              <button className={styles.viewMoreButton}>
+              <button
+                onClick={() => handleSearch('麵食')}
+                className={styles.viewMoreButton}
+              >
                 <h3 className={styles.viewMoreText}>看更多</h3>
               </button>
             </div>
