@@ -5,15 +5,19 @@ import Link from 'next/link'
 import styles from '../../styles/RecipeList.module.css'
 import useSWR from 'swr'
 import { useSearchParams } from 'next/navigation'
+import { useAuth } from '@/hooks/auth-context'
 
 import { API_SERVER } from '../../../config/api-path'
 
 const RECIPES_PER_PAGE = 15
 
 export default function RecipeListPage() {
+  const { auth } = useAuth() || {} // 使用 useAuth 鉤子獲取用戶信息
   const searchParams = useSearchParams()
   const currentPage = parseInt(searchParams.get('page') || 1, 10) // 確保是數字
   const keyword = searchParams.get('keyword') || ''
+
+  console.log('auth:', auth) // 確認 auth 是否正確獲取
 
   const fetcher = (url) => fetch(url).then((res) => res.json())
 
@@ -30,6 +34,20 @@ export default function RecipeListPage() {
       setTotalPages(data.totalPages) // 從 API 響應中設置 totalPages
     }
   }, [data])
+
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      try {
+        const response = await fetch(`${API_SERVER}/recipes/api/favorite`)
+        const data = await response.json()
+        setFavorites(data) // 假設後端返回的格式是 { recipeId: true/false }
+      } catch (error) {
+        console.error('載入收藏狀態失敗:', error)
+      }
+    }
+
+    fetchFavorites()
+  }, [])
 
   // 處理換頁
   const handlePageChange = (newPage) => {
@@ -61,15 +79,36 @@ export default function RecipeListPage() {
   const [favorites, setFavorites] = useState({})
 
   const toggleFavorite = (recipeId) => {
+    const newFavoriteStatus = !favorites[recipeId]
+
+    // 更新前端狀態
     setFavorites((prev) => ({
       ...prev,
-      [recipeId]: !prev[recipeId],
+      [recipeId]: newFavoriteStatus,
     }))
+
+    // 發送 API 請求更新後端狀態
+    try {
+      fetch(`${API_SERVER}/recipes/api/favorite`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: auth.id,
+          recipeId,
+          isFavorite: newFavoriteStatus,
+        }),
+      })
+    } catch (error) {
+      console.error('更新收藏狀態失敗:', error)
+    }
   }
 
   return (
     <div className={styles.container}>
       <div className={styles.content}>
+        {/* <div>{JSON.stringify(user)}</div> */}
         {/* Hero Section */}
         <div className={styles.heroSection}>
           <div className={styles.heroContent}>
@@ -206,7 +245,7 @@ function RecipeCard({
       <img
         src={
           isFavorite
-            ? 'https://cdn.builder.io/api/v1/image/assets/TEMP/8a6ddd1b69b5dee16612f13ff720cd4410d1f183?placeholderIfAbsent=true'
+            ? '/images/like/like.png'
             : 'https://cdn.builder.io/api/v1/image/assets/TEMP/8a6ddd1b69b5dee16612f13ff720cd4410d1f183?placeholderIfAbsent=true'
         }
         className={styles.favoriteIcon}
