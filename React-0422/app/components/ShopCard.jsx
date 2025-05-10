@@ -1,15 +1,17 @@
-// RecipeCard.jsx
+// ShopCard.jsx
 import React, { useState } from 'react'
 import Link from 'next/link'
-import styles from '../src/styles/RecipeList.module.scss' // 使用相對路徑
+import styles from '../src/styles/ShopList.module.scss' // 使用相對路徑
 
-import { BsBookmarkStarFill, BsBookmarkPlus } from '../icons/icons'
+import { MdFavorite, MdFavoriteBorder } from '../icons/icons'
 
-export default function RecipeCard({
+export default function ShopCard({
   id,
   image,
-  title,
-  description,
+  name,
+  brand,
+  price,
+  original_price,
   initialFavorite = false,
   onFavoriteToggle,
   clickable = true,
@@ -29,35 +31,42 @@ export default function RecipeCard({
   const handleCardClick = () => {
     if (clickable) {
       // 跳轉到菜譜詳情頁
-      window.location.href = `/recipe/${id}`
-      // 或使用Next.js的路由: router.push(`/recipe/${id}`);
+      window.location.href = `/shop/${id}`
+      // 或使用Next.js的路由: router.push(`/shop/${id}`);
     }
   }
 
   return (
     <div
-      className={`${styles.recipeCard} ${className}`}
+      className={`${styles.shopCard} ${className}`}
       onClick={handleCardClick}
       style={{ cursor: clickable ? 'pointer' : 'default' }}
     >
       <div>
         <img
           src={image} // 從 public 資料夾的根目錄開始
-          alt={title}
+          alt={name}
         />
       </div>
       <span>
-        <h3>{title}</h3>
-        <p>{description}</p>
+        <div>
+          <p>{name}</p>
+          <h3>{brand}</h3>
+        </div>
+        <div>
+          <p>${original_price}</p>
+          <h2>${price}</h2>
+        </div>
       </span>
+
       {/* 收藏按鈕 Start */}
       <button
         alt={isFavorite ? '已收藏' : '加入收藏'}
         onClick={handleFavoriteClick}
         style={{ cursor: 'pointer' }}
       >
-        {/* <BsBookmarkStarFill /> */}
-        <BsBookmarkPlus />
+        {/* <MdFavorite /> */}
+        <MdFavoriteBorder />
       </button>
       {/* 收藏按鈕 End */}
     </div>
