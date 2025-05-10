@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-import RecipesLandingPage from "app/recipes-landing/page"
-=======
 'use client'
 
 import React from 'react'
@@ -16,14 +13,9 @@ import {
   MdOutlineArrowBackIosNew,
   MdOutlineArrowForwardIos,
 } from 'react-icons/md'
->>>>>>> b7ddae74ea46a666d793de76ed3940f57faedb5d
 
 export default function HomePage() {
   return (
-<<<<<<< HEAD
-    <div>
-      <RecipesLandingPage/>
-=======
     <div className={styles.homePage}>
       <div className={styles.heroSection}>
         <Image
@@ -414,7 +406,6 @@ export default function HomePage() {
           </div>
         </div>
       </div>
->>>>>>> b7ddae74ea46a666d793de76ed3940f57faedb5d
     </div>
   )
 }
