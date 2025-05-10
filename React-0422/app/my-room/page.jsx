@@ -9,15 +9,16 @@ import styles from '../styles/RecipeLanding.module.css'
 export default function MyRoomPage() {
   // 下為測試用假資料，都已改成資料庫欄位名稱了
   const mockRecipe = {
+    // 資料庫名稱：recipes
     id: '1',
     title: '麻婆豆腐',
     description:
       '濃郁奶油醬汁搭配大蒜香氣的經典義大利麵料理，簡單又美味。典義大利麵料理，簡單又美味。',
-    image: '/images/recipes-img/recipes-01.jpg',
+    image: '',
   }
-
   const mockShop = {
-    id: '1',
+    // 資料庫名稱：food_products
+    id: '1014',
     name: '深海之味',
     brand: '冷凍海鮮什錦',
     image: '/images/recipes-img/recipes-15.jpg',

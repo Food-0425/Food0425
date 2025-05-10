@@ -42,7 +42,7 @@ export default function ShopCard({
       onClick={handleCardClick}
       style={{ cursor: clickable ? 'pointer' : 'default' }}
     >
-      <div>
+      <div className={styles.shopCardImg}>
         <img
           src={image} // 從 public 資料夾的根目錄開始
           alt={name}

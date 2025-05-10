@@ -1,5 +1,11 @@
 import { FaSearch } from 'react-icons/fa'
-import { FaCakeCandles, FaFishFins, FaEarthAmericas } from 'react-icons/fa6'
+import {
+  FaCakeCandles,
+  FaFishFins,
+  FaEarthAmericas,
+  FaCartShopping,
+  FaUser,
+} from 'react-icons/fa6'
 import { BiSolidBowlRice } from 'react-icons/bi'
 import { LuDessert, LuSalad } from 'react-icons/lu'
 import { TbMeat } from 'react-icons/tb'
@@ -21,4 +27,6 @@ export {
   MdFavoriteBorder,
   BsBookmarkStarFill,
   BsBookmarkPlus,
+  FaCartShopping,
+  FaUser,
 }

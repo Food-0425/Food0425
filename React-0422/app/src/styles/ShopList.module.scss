@@ -18,10 +18,14 @@
     transform: scale(1.02); // 放大卡片
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); // 增加陰影
   }
-  img {
-    object-fit: cover;
-    object-position: center;
-    width: 100%;
+  .shopCardImg {
+    height: 215px;
+    background-color: $color-background-error;
+    img {
+      object-fit: cover;
+      object-position: center;
+      height: 100%;
+    }
   }
   span {
     display: flex;
