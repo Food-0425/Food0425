@@ -60,6 +60,37 @@ router.get('/api', async (req, res) => {
     }
 });
   
+
+// 取得所有食譜(JOIN分類的版本)
+router.get('/api/category', async (req, res) => {
+    try {
+          const page = parseInt(req.query.page) || 1
+        //   這邊的5 就是指一頁幾筆
+          const limit = parseInt(req.query.limit) || 70
+          const offset = (page - 1) * limit
+      
+          // 取得總筆數
+          const [countResult] = await db.query('SELECT COUNT(*) AS total FROM restaurants')
+          const totalItems = countResult[0].total
+          const totalPages = Math.ceil(totalItems / limit)
+      
+          // 取得分頁資料
+          const [rows] = await db.query(
+            `SELECT r.id, r.title AS recipe_title, r.description AS recipe_description, r.image,GROUP_CONCAT(c.name ORDER BY c.name SEPARATOR ', ') AS categories FROM recipes r LEFT JOIN recipe_category rc ON r.id = rc.recipe_id LEFT JOIN categories_sc c ON rc.category_id = c.id GROUP BY r.id, r.title, r.description ORDER BY r.id LIMIT ? OFFSET ?`,
+            [limit, offset]
+          )
+      
+          res.json({
+            success: true,
+            rows,
+            totalPages,
+            currentPage: page,
+          })
+        } catch (err) {
+          console.error('取得食譜列表失敗:', err)
+          res.status(500).json({ success: false, error: err.message })
+        }
+      })
 // 取得單一食譜
 // 這邊是取得單一食譜的API，會根據食譜ID來查詢資料庫，並且將相關的步驟、食材、調味料、關聯食譜和評論一起回傳
 

@@ -3,6 +3,10 @@
 import React from 'react'
 import styles from '../styles/RecipeLanding.module.css'
 import Link from 'next/link'
+import useSWR from 'swr'
+import { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { API_SERVER } from '@/config/api-path'
 
 import {
   FaSearch,
@@ -18,6 +22,27 @@ import {
 import RecipeCarousel from './components/RecipeCarousel'
 
 export default function RecipesLandingPage() {
+  // 如果需要獲取查詢參數，使用 useSearchParams
+  const searchParams = useSearchParams()
+
+  // 為確保客戶���渲染時能正確載入數據，添加一個加載狀態
+  const [isLoading, setIsLoading] = useState(true)
+
+  const [activePage, setActivePage] = useState(1) // 當前頁碼
+  const itemsPerPage = 5 // 每頁顯示的餐廳數量
+  // 使用 useEffect 確保客戶端渲染
+  useEffect(() => {
+    setIsLoading(false)
+  }, [])
+  const fetcher = (url) => fetch(url).then((res) => res.json())
+
+  // 使用 useSWR 來抓取資料
+  const { data, error } = useSWR(`${API_SERVER}/recipes/api/category`, fetcher)
+
+  // 獲取數據
+  const restaurants = data?.rows || []
+  const totalPages = data?.totalPages || 10
+
   return (
     <div>
       {/* 版首輪播 Start */}
@@ -70,9 +95,331 @@ export default function RecipesLandingPage() {
           />
         </div>
         {/* 食譜ICON選單 END */}
-
+        {/* 確認資料有沒有拉對用的 */}
+        {/* <div>{JSON.stringify(data)}</div> */}
         {/* 食譜菜單 Start */}
+        {/* 麵食 */}
+        <div className={styles.recipeSection}>
+          <div className={styles.recipeBlock}>
+            <div className={styles.recipeCategory}>
+              <img
+                src="https://cdn.builder.io/api/v1/image/assets/TEMP/342df7d551f513a8966757cc07c7a877c1abf5eb?placeholderIfAbsent=true"
+                className={styles.categoryBackground}
+                alt="Desserts background"
+              />
+              <div className={styles.categoryTitle}>麵食</div>
+              <button className={styles.viewMoreButton}>
+                <h3 className={styles.viewMoreText}>看更多</h3>
+              </button>
+            </div>
+            <div className={styles.recipeCardsContainer}>
+              {data?.rows
+                .filter((recipe) => recipe.categories?.includes('麵食')) // 過濾出分類為「麵食」的資料
+                .map((recipe) => (
+                  <div key={recipe.id} className={styles.recipeCard}>
+                    <div>
+                      <img
+                        src={recipe.image}
+                        className={styles.recipeCardImage}
+                        alt={recipe.recipe_title}
+                      />
+                    </div>
+                    <div className={styles.recipeCardContent}>
+                      <div className={styles.recipeCardTitle}>
+                        {recipe.recipe_title}
+                      </div>
+                      <div className={styles.recipeCardDescription}>
+                        {recipe.recipe_description}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
+        </div>
+        {/* 肉食 */}
+        <div className={styles.recipeSection}>
+          <div className={styles.recipeBlock}>
+            <div className={styles.recipeCategory}>
+              <img
+                src="https://cdn.builder.io/api/v1/image/assets/TEMP/342df7d551f513a8966757cc07c7a877c1abf5eb?placeholderIfAbsent=true"
+                className={styles.categoryBackground}
+                alt="Desserts background"
+              />
+              <div className={styles.categoryTitle}>肉食</div>
+              <button className={styles.viewMoreButton}>
+                <h3 className={styles.viewMoreText}>看更多</h3>
+              </button>
+            </div>
+            <div className={styles.recipeCardsContainer}>
+              {data?.rows
+                .filter((recipe) => recipe.categories?.includes('肉食'))
+                .slice(0, 6) // 過濾出分類為「肉食」的資料，取前6筆
+                .map((recipe) => (
+                  <div key={recipe.id} className={styles.recipeCard}>
+                    <div>
+                      <img
+                        src={recipe.image}
+                        className={styles.recipeCardImage}
+                        alt={recipe.recipe_title}
+                      />
+                    </div>
+                    <div className={styles.recipeCardContent}>
+                      <div className={styles.recipeCardTitle}>
+                        {recipe.recipe_title}
+                      </div>
+                      <div className={styles.recipeCardDescription}>
+                        {recipe.recipe_description}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
+        </div>
+        {/* 蔬食 */}
+        <div className={styles.recipeSection}>
+          <div className={styles.recipeBlock}>
+            <div className={styles.recipeCategory}>
+              <img
+                src="https://cdn.builder.io/api/v1/image/assets/TEMP/342df7d551f513a8966757cc07c7a877c1abf5eb?placeholderIfAbsent=true"
+                className={styles.categoryBackground}
+                alt="Desserts background"
+              />
+              <div className={styles.categoryTitle}>蔬食</div>
+              <button className={styles.viewMoreButton}>
+                <h3 className={styles.viewMoreText}>看更多</h3>
+              </button>
+            </div>
+            <div className={styles.recipeCardsContainer}>
+              {data?.rows
+                .filter((recipe) => recipe.categories?.includes('蔬食'))
+                .slice(0, 6) // 過濾出分類為「肉食」的資料，取前6筆
+                .map((recipe) => (
+                  <div key={recipe.id} className={styles.recipeCard}>
+                    <div>
+                      <img
+                        src={recipe.image}
+                        className={styles.recipeCardImage}
+                        alt={recipe.recipe_title}
+                      />
+                    </div>
+                    <div className={styles.recipeCardContent}>
+                      <div className={styles.recipeCardTitle}>
+                        {recipe.recipe_title}
+                      </div>
+                      <div className={styles.recipeCardDescription}>
+                        {recipe.recipe_description}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
+        </div>
+
+        {/* 甜點 */}
+        <div className={styles.recipeSection}>
+          <div className={styles.recipeBlock}>
+            <div className={styles.recipeCategory}>
+              <img
+                src="https://cdn.builder.io/api/v1/image/assets/TEMP/342df7d551f513a8966757cc07c7a877c1abf5eb?placeholderIfAbsent=true"
+                className={styles.categoryBackground}
+                alt="Desserts background"
+              />
+              <div className={styles.categoryTitle}>甜點</div>
+              <button className={styles.viewMoreButton}>
+                <h3 className={styles.viewMoreText}>看更多</h3>
+              </button>
+            </div>
+            <div className={styles.recipeCardsContainer}>
+              {data?.rows
+                .filter((recipe) => recipe.categories?.includes('甜點'))
+                .slice(0, 6) // 過濾出分類為「肉食」的資料，取前6筆
+                .map((recipe) => (
+                  <div key={recipe.id} className={styles.recipeCard}>
+                    <div>
+                      <img
+                        src={recipe.image}
+                        className={styles.recipeCardImage}
+                        alt={recipe.recipe_title}
+                      />
+                    </div>
+                    <div className={styles.recipeCardContent}>
+                      <div className={styles.recipeCardTitle}>
+                        {recipe.recipe_title}
+                      </div>
+                      <div className={styles.recipeCardDescription}>
+                        {recipe.recipe_description}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
+        </div>
+        {/* 飯食 */}
+        <div className={styles.recipeSection}>
+          <div className={styles.recipeBlock}>
+            <div className={styles.recipeCategory}>
+              <img
+                src="https://cdn.builder.io/api/v1/image/assets/TEMP/342df7d551f513a8966757cc07c7a877c1abf5eb?placeholderIfAbsent=true"
+                className={styles.categoryBackground}
+                alt="Desserts background"
+              />
+              <div className={styles.categoryTitle}>飯食</div>
+              <button className={styles.viewMoreButton}>
+                <h3 className={styles.viewMoreText}>看更多</h3>
+              </button>
+            </div>
+            <div className={styles.recipeCardsContainer}>
+              {data?.rows
+                .filter((recipe) => recipe.categories?.includes('飯食'))
+                .slice(0, 6) // 過濾出分類為「肉食」的資料，取前6筆
+                .map((recipe) => (
+                  <div key={recipe.id} className={styles.recipeCard}>
+                    <div>
+                      <img
+                        src={recipe.image}
+                        className={styles.recipeCardImage}
+                        alt={recipe.recipe_title}
+                      />
+                    </div>
+                    <div className={styles.recipeCardContent}>
+                      <div className={styles.recipeCardTitle}>
+                        {recipe.recipe_title}
+                      </div>
+                      <div className={styles.recipeCardDescription}>
+                        {recipe.recipe_description}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
+        </div>
+        {/* 異國 */}
+        <div className={styles.recipeSection}>
+          <div className={styles.recipeBlock}>
+            <div className={styles.recipeCategory}>
+              <img
+                src="https://cdn.builder.io/api/v1/image/assets/TEMP/342df7d551f513a8966757cc07c7a877c1abf5eb?placeholderIfAbsent=true"
+                className={styles.categoryBackground}
+                alt="Desserts background"
+              />
+              <div className={styles.categoryTitle}>異國</div>
+              <button className={styles.viewMoreButton}>
+                <h3 className={styles.viewMoreText}>看更多</h3>
+              </button>
+            </div>
+            <div className={styles.recipeCardsContainer}>
+              {data?.rows
+                .filter((recipe) => recipe.categories?.includes('異國'))
+                .slice(0, 6) // 過濾出分類為「肉食」的資料，取前6筆
+                .map((recipe) => (
+                  <div key={recipe.id} className={styles.recipeCard}>
+                    <div>
+                      <img
+                        src={recipe.image}
+                        className={styles.recipeCardImage}
+                        alt={recipe.recipe_title}
+                      />
+                    </div>
+                    <div className={styles.recipeCardContent}>
+                      <div className={styles.recipeCardTitle}>
+                        {recipe.recipe_title}
+                      </div>
+                      <div className={styles.recipeCardDescription}>
+                        {recipe.recipe_description}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
+        </div>
+        {/* 生鮮 */}
+        <div className={styles.recipeSection}>
+          <div className={styles.recipeBlock}>
+            <div className={styles.recipeCategory}>
+              <img
+                src="https://cdn.builder.io/api/v1/image/assets/TEMP/342df7d551f513a8966757cc07c7a877c1abf5eb?placeholderIfAbsent=true"
+                className={styles.categoryBackground}
+                alt="Desserts background"
+              />
+              <div className={styles.categoryTitle}>生鮮</div>
+              <button className={styles.viewMoreButton}>
+                <h3 className={styles.viewMoreText}>看更多</h3>
+              </button>
+            </div>
+            <div className={styles.recipeCardsContainer}>
+              {data?.rows
+                .filter((recipe) => recipe.categories?.includes('生鮮'))
+                .slice(0, 6) // 過濾出分類為「肉食」的資料，取前6筆
+                .map((recipe) => (
+                  <div key={recipe.id} className={styles.recipeCard}>
+                    <div>
+                      <img
+                        src={recipe.image}
+                        className={styles.recipeCardImage}
+                        alt={recipe.recipe_title}
+                      />
+                    </div>
+                    <div className={styles.recipeCardContent}>
+                      <div className={styles.recipeCardTitle}>
+                        {recipe.recipe_title}
+                      </div>
+                      <div className={styles.recipeCardDescription}>
+                        {recipe.recipe_description}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
+        </div>
+        {/* 糕點 */}
+        <div className={styles.recipeSection}>
+          <div className={styles.recipeBlock}>
+            <div className={styles.recipeCategory}>
+              <img
+                src="https://cdn.builder.io/api/v1/image/assets/TEMP/342df7d551f513a8966757cc07c7a877c1abf5eb?placeholderIfAbsent=true"
+                className={styles.categoryBackground}
+                alt="Desserts background"
+              />
+              <div className={styles.categoryTitle}>糕點</div>
+              <button className={styles.viewMoreButton}>
+                <h3 className={styles.viewMoreText}>看更多</h3>
+              </button>
+            </div>
+            <div className={styles.recipeCardsContainer}>
+              {data?.rows
+                .filter((recipe) => recipe.categories?.includes('糕點'))
+                .slice(0, 6) // 過濾出分類為「肉食」的資料，取前6筆
+                .map((recipe) => (
+                  <div key={recipe.id} className={styles.recipeCard}>
+                    <div>
+                      <img
+                        src={recipe.image}
+                        className={styles.recipeCardImage}
+                        alt={recipe.recipe_title}
+                      />
+                    </div>
+                    <div className={styles.recipeCardContent}>
+                      <div className={styles.recipeCardTitle}>
+                        {recipe.recipe_title}
+                      </div>
+                      <div className={styles.recipeCardDescription}>
+                        {recipe.recipe_description}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
+        </div>
         {/* 糕點測試 */}
+
         <div className={styles.recipeSection}>
           <div className={styles.recipeBlock}>
             <div className={styles.recipeCategory}>
