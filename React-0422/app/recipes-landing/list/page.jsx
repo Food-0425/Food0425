@@ -194,13 +194,15 @@ function RecipeCard({
 }) {
   return (
     <div className={styles.recipeCard}>
-      <div className={styles.recipeImageContainer}>
-        <img src={`/${image}`} className={styles.recipeImage} alt={title} />
-      </div>
-      <div className={styles.recipeContent}>
-        <h3 className={styles.recipeTitle}>{title}</h3>
-        <p className={styles.recipeDescription}>{description}</p>
-      </div>
+      <Link key={id} href={`/recipes/${id}`} passHref>
+        <div className={styles.recipeImageContainer}>
+          <img src={`/${image}`} className={styles.recipeImage} alt={title} />
+        </div>
+        <div className={styles.recipeContent}>
+          <h3 className={styles.recipeTitle}>{title}</h3>
+          <p className={styles.recipeDescription}>{description}</p>
+        </div>
+      </Link>
       <img
         src={
           isFavorite
