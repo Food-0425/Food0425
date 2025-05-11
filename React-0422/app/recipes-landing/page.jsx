@@ -944,7 +944,24 @@ export default function RecipesLandingPage() {
       <div className={styles.featuredSection}>
         <h3>你可能會喜歡</h3>
         <div className={styles.featuredContainer}>
-          <div className={styles.featuredCard}>
+          {data?.rows
+            /* 減去 0.5，就會得到一個介於 -0.5 到 0.5 之間的值。
+          這個值正負隨機，所以 .sort() 的比較結果也就隨機，從而讓陣列被隨機打亂。 */
+            .sort(() => Math.random() - 0.5) // 隨機打亂陣列
+            .slice(0, 6) // 取出前 6 筆資料
+            .map((recipe) => (
+              <div key={recipe.id} className={styles.featuredCard}>
+                <img
+                  src={recipe.image}
+                  className={styles.featuredCardImage}
+                  alt="Featured recipe"
+                />
+                <div className={styles.featuredCardTitle}>
+                  {recipe.recipe_title}
+                </div>
+              </div>
+            ))}
+          {/* <div className={styles.featuredCard}>
             <img
               src="https://cdn.builder.io/api/v1/image/assets/TEMP/5d1dcaf58bd677b48b45cc3cdf88969626ba1b3e?placeholderIfAbsent=true"
               className={styles.featuredCardImage}
@@ -991,7 +1008,7 @@ export default function RecipesLandingPage() {
               alt="Featured recipe"
             />
             <div className={styles.featuredCardTitle}>泰式綠咖哩雞</div>
-          </div>
+          </div> */}
         </div>
       </div>
       {/* 你可能會喜歡 End */}
