@@ -141,7 +141,7 @@ router.get('/api/:id', async (req, res) => {
 
       // 查這個食譜對應的所有食材
       const [ingredientRows] = await db.query(
-        'SELECT ingredient_id, name, quantity, unit FROM ingredients WHERE recipe_id = ? ORDER BY ingredient_id ASC',
+        'SELECT ingredient_id, name, quantity, product_id, unit FROM ingredients WHERE recipe_id = ? ORDER BY ingredient_id ASC',
         [recipeId]
       );
   
@@ -313,6 +313,76 @@ router.post('/api/favorite', async (req, res) => {
     }
 });
 
+
+// 從食譜加進購物車的動作
+router.post('/api/add', async (req, res) => {
+    // 驗證是否已通過 JWT 驗證
+    if (!req.my_jwt) {
+        return res.status(401).json({ success: false, error: "Unauthorized: Missing or invalid token" });
+    }
+
+    const userId = req.my_jwt.id; // 從解碼的 token 中取得 userId
+    const { ingredients  } = req.body; // 從請求中取得食材資料
+
+    if (
+  !ingredients ||
+  !Array.isArray(ingredients) ||
+  ingredients.length === 0
+) {
+  return res.status(400).json({
+    success: false,
+    error: "Ingredients are required and must be an array",
+  });
+}
+
+// 從 ingredients 中取出所有的 product_id
+const product_id = ingredients.map((item) => item.product_id);
+
+    
+
+    // 驗證輸入
+    if (!product_id || !Array.isArray(product_id) || product_id.length === 0) {
+        return res.status(400).json({ success: false, error: "Product ID are required and must be an array" });
+    }
+
+    try {
+       // 查詢每個 product_id 的 original_price，並插入購物車
+        const insertPromises = ingredients.map(async (item) => {
+            const { product_id } = item;
+
+            // 驗證 product_id 是否有效
+            if (!product_id) {
+                throw new Error("Each product_id must be valid");
+            }
+
+            // 查詢 food_products 表中的 original_price
+            const [productRows] = await db.query(
+                'SELECT original_price FROM food_products WHERE id = ?',
+                [product_id]
+            );
+
+            if (productRows.length === 0) {
+                throw new Error(`Product with id ${product_id} not found`);
+            }
+
+            const unitPrice = productRows[0].original_price;
+
+              // 插入購物車資料表
+            return db.query(
+                'INSERT INTO carts (user_id, product_id, unit_price, added_time) VALUES (?, ?, ?, NOW())',
+                [userId, product_id, unitPrice]
+            );
+        });
+        
+        // 等待所有插入操作完成
+        await Promise.all(insertPromises);
+
+        res.json({ success: true, message: "Products added to carts successfully" });
+    } catch (error) {
+        console.error('加入購物車失敗:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
 
 // 新增食譜
 router.post('/api',async(req,res)=>{
