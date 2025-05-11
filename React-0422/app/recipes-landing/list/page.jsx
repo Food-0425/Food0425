@@ -18,6 +18,7 @@ export default function RecipeListPage() {
   const keyword = searchParams.get('keyword') || ''
 
   console.log('auth:', auth) // 確認 auth 是否正確獲取
+  // console.log('TOKEN', auth.token)
 
   const fetcher = (url) => fetch(url).then((res) => res.json())
 
@@ -28,6 +29,9 @@ export default function RecipeListPage() {
 
   const recipes = data?.rows || []
   const [totalPages, setTotalPages] = useState(1) // 初始化 totalPages 為 1
+  // 收藏功能
+  const [favorites, setFavorites] = useState({})
+  const [favoritesLoaded, setFavoritesLoaded] = useState(false)
 
   useEffect(() => {
     if (data?.totalPages) {
@@ -36,18 +40,34 @@ export default function RecipeListPage() {
   }, [data])
 
   useEffect(() => {
+    console.log('Updated Favorites State:', favorites) // 確認 favorites 狀態
+  }, [favorites])
+  // 從後端獲取收藏狀態
+  useEffect(() => {
+    // console.log('Authorization Token:', auth.token) // 檢查 token 是否正確
+
     const fetchFavorites = async () => {
+      // console.log('Authorization Token:', auth.token)
       try {
-        const response = await fetch(`${API_SERVER}/recipes/api/favorite`)
+        const response = await fetch(`${API_SERVER}/recipes/api/favorite/get`, {
+          headers: {
+            Authorization: `Bearer ${auth.token}`, // 假設需要用戶的 token
+          },
+        })
         const data = await response.json()
-        setFavorites(data) // 假設後端返回的格式是 { recipeId: true/false }
+        // console.log('Fetched Favorites:', data.favorites)
+        // 確認 favorites 資料
+
+        setFavorites(data.favorites || {}) // 假設後端返回的格式是 { recipeId: true/false }
       } catch (error) {
         console.error('載入收藏狀態失敗:', error)
       }
     }
 
-    fetchFavorites()
-  }, [])
+    if (auth?.token) {
+      fetchFavorites()
+    }
+  }, [auth])
 
   // 處理換頁
   const handlePageChange = (newPage) => {
@@ -75,9 +95,7 @@ export default function RecipeListPage() {
     return buttons
   }
 
-  // 收藏功能
-  const [favorites, setFavorites] = useState({})
-
+  // 處理收藏切換
   const toggleFavorite = (recipeId) => {
     const newFavoriteStatus = !favorites[recipeId]
 
@@ -93,6 +111,7 @@ export default function RecipeListPage() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${auth.token}`, // 假設需要用戶的 token
         },
         body: JSON.stringify({
           userId: auth.id,
@@ -173,7 +192,7 @@ export default function RecipeListPage() {
 
         {/* Recipe Cards Section 列表頁的食物卡片區塊 */}
         <div className={styles.recipeSection}>
-          {isLoading ? (
+          {isLoading || Object.keys(favorites).length === 0 ? (
             <div className={styles.loading}>載入中...</div>
           ) : (
             <div className={styles.recipeGrid}>
@@ -245,8 +264,8 @@ function RecipeCard({
       <img
         src={
           isFavorite
-            ? '/images/like/like.png'
-            : 'https://cdn.builder.io/api/v1/image/assets/TEMP/8a6ddd1b69b5dee16612f13ff720cd4410d1f183?placeholderIfAbsent=true'
+            ? '/images/like/like.png' // 收藏的圖示
+            : '/images/like/unlike.png' // 未收藏的圖示
         }
         className={styles.favoriteIcon}
         alt={isFavorite ? 'Remove from favorites' : 'Add to favorites'}

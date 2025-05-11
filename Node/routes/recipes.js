@@ -4,6 +4,7 @@ import fs from "node:fs/promises";
 import { z } from "zod";
 import moment from "moment-timezone";
 import upload from "../utils/upload-imgs.js";
+import jwt from "jsonwebtoken";
 
 const router = express.Router();
 
@@ -237,14 +238,14 @@ router.post('/api/feedback', async (req, res) => {
 });
 
 // 讀取收藏
-// 這邊是讀取用戶的收藏食譜，會根據用戶ID來查詢資料庫
-router.get('/api/favorite', async (req, res) => {
-    const { userId } = req.query; // 假設前端會傳遞 userId 作為查詢參數
-
-    // 驗證輸入
-    if (!userId) {
-        return res.status(400).json({ success: false, error: "UserId is required" });
+// 這邊是讀取用戶的收藏食譜，會根據 JWT 中的用戶 ID 來查詢資料庫
+router.get('/api/favorite/get', async (req, res) => {
+// 驗證是否已通過 JWT 驗證
+    if (!req.my_jwt) {
+        return res.status(401).json({ success: false, error: "Unauthorized: Missing or invalid token" });
     }
+
+    const userId = req.my_jwt.id; // 從解碼的 token 中取得 userId
 
     try {
         // 查詢會員的所有收藏
@@ -259,7 +260,7 @@ router.get('/api/favorite', async (req, res) => {
             favoriteStatus[favorite.recipe_id] = true;
         });
 
-        res.json(favoriteStatus);
+        res.json({ success: true, favorites: favoriteStatus });
     } catch (error) {
         console.error('載入收藏狀態失敗:', error);
         res.status(500).json({ success: false, error: error.message });
@@ -270,14 +271,21 @@ router.get('/api/favorite', async (req, res) => {
 // 收藏食譜
 // 這邊是將食譜的收藏狀態更新，會根據用戶ID和食譜ID來判斷是否已經收藏
 router.post('/api/favorite', async (req, res) => {
-    const { userId, recipeId } = req.body;
+    const {recipeId } = req.body;
 
+    // 驗證是否已通過 JWT 驗證
+    if (!req.my_jwt) {
+      return res.status(401).json({ success: false, error: "Unauthorized: Missing or invalid token" });
+    }
+    
+    const userId = req.my_jwt.id; // 從解碼的 token 中取得 userId
     // 驗證輸入
-    if (!userId || !recipeId) {
+    if (!recipeId) {
         return res.status(400).json({ success: false, error: "UserId and RecipeId are required" });
     }
 
-    try {
+
+     try {
         // 檢查是否已收藏
         const [existingFavorite] = await db.query(
             'SELECT id FROM favorites WHERE user_id = ? AND recipe_id = ?',
