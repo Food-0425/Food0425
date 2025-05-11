@@ -9,6 +9,7 @@ export default function CartPage() {
         rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.12.1/font/bootstrap-icons.min.css"
       />
+      {/*
       <header>
         <div className="container">
           <div className="logo">FOOD</div>
@@ -39,10 +40,10 @@ export default function CartPage() {
               <a href="#">
                 <i className="bi bi-cart-plus-fill" />
               </a>
-            </div>
           </div>
         </div>
       </header>
+      */}
       <main>
         <div className="container">
           <h1>購物清單</h1>
@@ -141,6 +142,7 @@ export default function CartPage() {
           </div>
         </div>
       </main>
+      {/*
       <footer>
         <div className="container">
           <div className="footer-left">
@@ -167,6 +169,7 @@ export default function CartPage() {
           </div>
         </div>
       </footer>
+      */}
     </div>
   )
 }
