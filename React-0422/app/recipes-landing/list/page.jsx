@@ -192,7 +192,7 @@ export default function RecipeListPage() {
 
         {/* Recipe Cards Section 列表頁的食物卡片區塊 */}
         <div className={styles.recipeSection}>
-          {isLoading || Object.keys(favorites).length === 0 ? (
+          {isLoading ? (
             <div className={styles.loading}>載入中...</div>
           ) : (
             <div className={styles.recipeGrid}>
@@ -292,6 +292,15 @@ function PaginationButton({ number, active, onClick }) {
 
 // 特色菜譜組件，作為獨立組件抽出
 function FeaturedRecipes() {
+  const fetcher = (url) => fetch(url).then((res) => res.json())
+
+  const { data, isLoading, error } = useSWR(
+    `${API_SERVER}/recipes/api`,
+    fetcher
+  )
+
+  const recipes = data?.rows || []
+
   const featuredItems = [
     {
       id: 1,
@@ -333,10 +342,18 @@ function FeaturedRecipes() {
 
   return (
     <div className={styles.featuredSection}>
+      <h3>你可能會喜歡</h3>
       <div className={styles.featuredGrid}>
-        {featuredItems.map((item) => (
-          <FeaturedRecipe key={item.id} image={item.image} title={item.title} />
-        ))}
+        {recipes
+          .sort(() => Math.random() - 0.5) // 隨機打亂陣列
+          .slice(0, 6) // 取出前 6 筆資料
+          .map((item) => (
+            <FeaturedRecipe
+              key={item.id}
+              image={item.image}
+              title={item.title}
+            />
+          ))}
       </div>
     </div>
   )
