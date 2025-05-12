@@ -346,7 +346,7 @@ function FeaturedRecipes() {
       <div className={styles.featuredGrid}>
         {recipes
           .sort(() => Math.random() - 0.5) // 隨機打亂陣列
-          .slice(0, 6) // 取出前 6 筆資料
+          .slice(0, 4) // 取出前 6 筆資料
           .map((item) => (
             <FeaturedRecipe
               key={item.id}
