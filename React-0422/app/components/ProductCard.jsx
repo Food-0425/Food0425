@@ -41,16 +41,16 @@ export const ProductCard = ({
           </h3>
           <div className={styles.productPrice}>${product.price}</div>
         </div>
-        <img
-          src={
-            isFavorite
-              ? '/images/favorite-filled.png'
-              : '/images/favorite-outline.png'
-          }
-          className={styles.favoriteIcon}
-          alt={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+
+        {/* Favorite Button */}
+        <button
+          className={`${styles.favoriteIcon} ${isFavorite ? styles.active : ''}`}
           onClick={handleFavoriteToggle}
-        />
+          aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+        >
+          123
+        </button>
+        {/* Favorite Button */}
       </div>
     </Link>
   )

@@ -121,12 +121,14 @@ export default function ProductDetailPage() {
           <div className={styles.ratingContainer}>
             <div className={styles.starsContainer}>
               {[...Array(5)].map((_, index) => (
-                <img
-                  key={index}
-                  src="/images/star.png"
-                  className={styles.starIcon}
-                  alt="Star rating"
-                />
+                <div key={index}>
+                  <img
+                    key={index}
+                    src="/images/star.png"
+                    className={styles.starIcon}
+                    alt="Star rating"
+                  />
+                </div>
               ))}
             </div>
             <div className={styles.reviewCount}>
@@ -134,18 +136,22 @@ export default function ProductDetailPage() {
             </div>
           </div>
           <div className={styles.productPrice}>${product.price}</div>
-          <img
-            src="/images/add-to-cart-button.png"
-            className={styles.actionButton}
-            alt="Add to cart"
-            onClick={handleAddToCart}
-          />
-          <img
-            src="/images/add-to-wishlist-button.png"
-            className={styles.actionButton}
-            alt="Add to wishlist"
-            onClick={handleAddToWishlist}
-          />
+          <button>
+            <img
+              src="/images/add-to-cart-button.png"
+              className={styles.actionButton}
+              alt="Add to cart"
+              onClick={handleAddToCart}
+            />
+          </button>
+          <button>
+            <img
+              src="/images/add-to-wishlist-button.png"
+              className={styles.actionButton}
+              alt="Add to wishlist"
+              onClick={handleAddToWishlist}
+            />
+          </button>
         </div>
       </div>
 
@@ -201,6 +207,7 @@ export default function ProductDetailPage() {
                   />
                 </div>
                 <div className={styles.userInfo}>
+                  {/*這裡會放icon*/}
                   <img
                     src="/images/five-stars.png"
                     className={styles.userRating}
