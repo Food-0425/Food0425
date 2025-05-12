@@ -10,7 +10,6 @@ import { useSearchParams } from 'next/navigation'
 import { API_SERVER } from '@/config/api-path'
 import { useRouter } from 'next/navigation'
 
-
 import {
   FaSearch,
   FaCakeCandles,
@@ -79,7 +78,6 @@ export default function RecipesLandingPage() {
           />
           <div className={styles.categoriesWrapper}>
             <button className={styles.categoryIcon}>
-
               <TbMeat
                 className={styles.categoryIconImg}
                 onClick={() => handleCategory('肉食')}
@@ -128,7 +126,6 @@ export default function RecipesLandingPage() {
                 onClick={() => handleCategory('糕點')}
               />
               糕點
-
             </button>
 
             <button className={styles.categoryIcon}>
@@ -1009,7 +1006,7 @@ export default function RecipesLandingPage() {
               </div>
             </div>
           </div>
-        </div> */}
+        </div>
         {/* 食譜菜單 End */}
       </div>
 
