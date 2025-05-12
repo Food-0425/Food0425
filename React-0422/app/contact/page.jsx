@@ -1,36 +1,52 @@
-"use client";
+'use client'
 
-import React, { useState } from "react";
-import styles from "../styles/Contact.module.css";
+import React, { useState } from 'react'
+import styles from '../styles/Contact.module.css'
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
-  });
+    name: '',
+    email: '',
+    subject: '',
+    message: '',
+  })
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
     setFormData((prev) => ({
       ...prev,
       [name]: value,
-    }));
-  };
+    }))
+  }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form submitted:", formData);
-    // Here you would typically send the data to your backend
-    alert("感謝您的留言，我們會盡快回覆！");
-    setFormData({
-      name: "",
-      email: "",
-      subject: "",
-      message: "",
-    });
-  };
+  const handleSubmit = async (e) => {
+    e.preventDefault() // 防止表單預設提交行為
+
+    try {
+      const response = await fetch('http://localhost:3001/contact/api', {
+        method: 'POST', // 使用 POST 方法
+        headers: {
+          'Content-Type': 'application/json', // 設定請求的內容類型
+        },
+        body: JSON.stringify(formData), // 將表單資料轉換為 JSON 格式
+      })
+
+      if (response.ok) {
+        alert('感謝您的留言，我們會盡快回覆！')
+        setFormData({
+          name: '',
+          email: '',
+          subject: '',
+          message: '',
+        })
+      } else {
+        alert('提交失敗，請稍後再試！')
+      }
+    } catch (error) {
+      console.error('提交表單時發生錯誤：', error)
+      alert('提交失敗，請檢查您的網路連線！')
+    }
+  }
 
   return (
     <div className={styles.container}>
@@ -122,7 +138,7 @@ const ContactPage = () => {
                     value={formData.name}
                     onChange={handleChange}
                     className={styles.textField}
-                    placeholder="請輸入您���姓名"
+                    placeholder="請輸入您的姓名"
                     required
                   />
                 </div>
@@ -198,7 +214,7 @@ const ContactPage = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ContactPage;
+export default ContactPage

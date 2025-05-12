@@ -109,6 +109,7 @@ export default function RestaurantsPage() {
 
   return (
     <div className={styles.pageContainer}>
+      {/* <div>{JSON.stringify(data)}</div> */}
       <div className={styles.heroSection}>
         <div className={styles.heroContent}>
           <div className={styles.heroTitle}>精選餐廳推薦</div>

@@ -1,0 +1,67 @@
+.paymentFormContainer {
+    padding: 20px;
+    border: 1px solid #ddd; /* 示意邊框 */
+    border-radius: 8px;
+    margin-bottom: 20px;
+    background-color: #fff; 
+  }
+  
+  .paymentFormContainer h2 {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    color: #333; /* 標題顏色 */
+  }
+  
+  .paymentOption {
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee; /* 分隔線 */
+  }
+  
+  .paymentOption:last-child {
+    border-bottom: none; /* 最後一個選項不用底線 */
+    margin-bottom: 0;
+  }
+  
+  .paymentOption label { /* 指的是 radio button 旁邊的文字 */
+    font-weight: bold;
+    margin-left: 8px;
+    display: inline-block; /* 讓 label 跟 radio button 在同一行 */
+    margin-bottom: 10px; /* 跟下面的 input group 有點間距 */
+  }
+  
+  .inputGroup {
+    margin-bottom: 10px;
+    display: flex; /* 讓 label 和 input 在同一行，並對齊 */
+    align-items: center;
+  }
+  
+  .inputGroup label { /* 指的是輸入框左邊的文字，例如「卡號」 */
+    font-weight: normal; /* 不用粗體 */
+    margin-right: 10px;
+    min-width: 80px; /* 固定寬度，讓輸入框對齊 */
+    text-align: right; /* 文字靠右對齊，比較好看 */
+    font-size: 0.9em;
+    color: #555;
+  }
+  
+  .inputGroup input[type="text"] {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    flex-grow: 1; /* 讓輸入框填滿剩餘空間 */
+    font-size: 0.9em;
+  }
+  
+  .inputGroup input[type="text"]::placeholder {
+    color: #aaa;
+  }
+  
+  .atmInfo,
+  .convenienceStoreInfo {
+    font-size: 0.85em;
+    color: #777;
+    margin-top: 5px;
+    margin-left: 25px; /* 跟 radio button 對齊一下 */
+    line-height: 1.4;
+  }

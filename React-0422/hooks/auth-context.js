@@ -38,6 +38,10 @@ export function AuthContextProvider({ children }) {
       },
     })
     const result = await r.json()
+
+    // 調試輸出後端返回的數據
+    console.log('後端返回的數據:', result)
+
     if (result.success) {
       // 把登入的狀態記錄起來
       localStorage.setItem(storageKey, JSON.stringify(result.data))

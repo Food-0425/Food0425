@@ -3,14 +3,20 @@
 import React from 'react'
 import Link from 'next/link'
 import styles from '../../styles/RecipeDetail.module.css'
+import { SlLike } from 'react-icons/sl'
+
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
+import { useEffect } from 'react'
+// 特別注意，這個useAuth的鉤子一定要選auth-context.js的
+import { useAuth } from '@/hooks/auth-context'
 import useSWR from 'swr'
 import FoodFeeBack from '../../components/FoodFeeBack'
 
 export default function RecipeDetailPage() {
   const [currentPage, setCurrentPage] = useState(0) // 當前頁數
   const commentsPerPage = 2 // 每頁顯示的評論數量
+  const { auth } = useAuth() || {} // 使用 useAuth 鉤子獲取用戶信息
 
   const params = useParams()
   const id = params.id
@@ -64,6 +70,42 @@ export default function RecipeDetailPage() {
     // 如果已經顯示，則隱藏
     // 否則顯示 FoodFeeBack
     setIsFeedbackVisible(true)
+  }
+
+  // 點擊按鈕添加食材至購物車
+  // 假設購物車資料存儲在 localStorage 或透過 API 傳送
+  // 這裡的 ingredients 是從 recipe.ingredients 中取得的
+
+  const handleAddToCart = async (ingredients) => {
+    if (!ingredients || ingredients.length === 0) {
+      alert('沒有可添加的食材！')
+      return
+    }
+
+    if (!auth || !auth.token) {
+      alert('請先登入以添加食材至購物車！')
+      return
+    }
+
+    try {
+      const response = await fetch('http://localhost:3001/recipes/api/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${auth.token}`, // 假設需要用戶的 token
+        },
+        body: JSON.stringify({ ingredients }),
+      })
+
+      if (response.ok) {
+        alert('已成功將食材添加至購物車！')
+      } else {
+        const errorData = await response.json()
+        alert(`添加失敗：${errorData.message || '未知錯誤'}`)
+      }
+    } catch (error) {
+      alert(`添加失敗：${error.message}`)
+    }
   }
 
   return (
@@ -291,7 +333,10 @@ export default function RecipeDetailPage() {
             )}
           </div>
 
-          <div className={styles.addToCartButton}>
+          <button
+            className={styles.addToCartButton}
+            onClick={() => handleAddToCart(recipe.ingredients)}
+          >
             <img
               src="/images/recipes/cart-icon-large.png"
               className={styles.cartIconLarge}
@@ -303,7 +348,7 @@ export default function RecipeDetailPage() {
                 （ 食材分量依商品標示為準 ）
               </div>
             </div>
-          </div>
+          </button>
         </div>
       </div>
 
@@ -386,6 +431,10 @@ export default function RecipeDetailPage() {
                       className={styles.userRating}
                       alt="User rating"
                     /> */}
+                    <div className={styles.userLike}>
+                      <SlLike size={30} />
+                    </div>
+
                     <div className={styles.userContent}>
                       <div className={styles.userName}>
                         {comment.username || '匿名用戶'}
@@ -411,6 +460,46 @@ export default function RecipeDetailPage() {
             // 備用的靜態評論，當API沒有返回評論時顯示
             <>
               <div className={styles.commentCard}>
+                <div className={styles.commentUser}>
+                  {/* 因為這一塊是假設沒人留言的情況下，所以先註解掉 */}
+                  {/* <img
+                    src={`/images/user/default.jpg`}
+                    className={styles.userAvatar}
+                    alt="User avatar"
+                    onError={(e) => {
+                      if (!e.target.dataset.fallback) {
+                        e.target.dataset.fallback = true // 標記已經使用過 fallback
+                        e.target.src = `/images/recipes/user${(index % 2) + 1}.png`
+                      }
+                    }}
+                  /> */}
+                  <div className={styles.userInfo}>
+                    {/* 下面這個註解掉的是用戶等級(目前暫時沒有要做) */}
+                    {/* <img
+                      src="/images/recipes/rating.png"
+                      className={styles.userRating}
+                      alt="User rating"
+                    /> */}
+                    {/* <div className={styles.userLike}>
+                      <SlLike size={30} />
+                    </div> */}
+
+                    <div className={styles.userContent}>
+                      <div className={styles.userName}>
+                        {'目前這個食譜尚未有人留言'}
+                      </div>
+                      {/* <div className={styles.commentDate}>{'日期'}</div> */}
+                    </div>
+                  </div>
+                </div>
+                <div className={styles.commentContent}>
+                  {/* 這個標題我不太確定要放什麼，之後考慮拿掉或替換成別的顯示內容 */}
+                  {/* <div className={styles.commentTitle}>{'無標題'}</div> */}
+                  <div className={styles.commentText}>{'無評論內容'}</div>
+                </div>
+              </div>
+              {/* 下面是原本的預設食譜評論卡片樣式 */}
+              {/* <div className={styles.commentCard}>
                 <div className={styles.commentUser}>
                   <img
                     src="/images/recipes/user1.png"
@@ -466,7 +555,7 @@ export default function RecipeDetailPage() {
                     一個不成熟男子的標誌是他願意為某種事業英勇地死去，一個成熟男子的標誌是他願意為某種事業卑賤地活著。
                   </div>
                 </div>
-              </div>
+              </div> */}
             </>
           )}
 

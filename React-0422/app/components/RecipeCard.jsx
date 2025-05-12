@@ -27,6 +27,7 @@ export default function RecipeCard({
   const handleCardClick = () => {
     if (clickable) {
       // 跳轉到菜譜詳情頁
+      // 錯誤有可能是這個?
       window.location.href = `/recipe/${id}`
       // 或使用Next.js的路由: router.push(`/recipe/${id}`);
     }
