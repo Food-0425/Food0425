@@ -4,19 +4,11 @@ import fs from "node:fs/promises";
 import { z } from "zod";
 import moment from "moment-timezone";
 import upload from "../utils/upload-imgs.js";
+import jwt from "jsonwebtoken";
 
 const router = express.Router();
 
-// 取得所有食譜（可擴充分頁）
-// router.get('/api', async (req, res) => {
-//     try {
-//       const [rows] = await db.query('SELECT * FROM recipes ORDER BY created_at DESC');
-//       res.json({ success: true, rows });
-//     } catch (err) {
-//       console.error('取得食譜列表失敗:', err); // ✅ 印出錯誤訊息
-//       res.status(500).json({ success: false, error: err.message });
-//     }
-//   });
+
 
 // 取得所有食譜（但會依照分頁來分別顯示不同的資料)
 router.get('/api', async (req, res) => {
@@ -41,35 +33,48 @@ router.get('/api', async (req, res) => {
 
         // const keywordCondition = keyword
         // 這行就是看關鍵字有沒有符合標題 或描述  。如果只要符合標題的話，就是把OR後面的拿調
-            // ? `WHERE title LIKE ? OR description LIKE ?`
-            // : '';
+
+
+
+            ? `WHERE r.title LIKE ? OR r.description LIKE ? OR c.name LIKE ?`
+            : '';
         // keywordParams 是參數化查詢，防止 SQL injection（例如使用 ? 而不是直接拼字串）
         // 如果只想要搜尋Title的話，這行就改const keywordParams = keyword ? [`%${keyword}%`] : [];
-        // const keywordParams = keyword ? [`%${keyword}%`, `%${keyword}%`] : [];
+        const keywordParams = keyword ? [`%${keyword}%`, `%${keyword}%`, `%${keyword}%`] : [];
 
-        // 5/9測試recipeCard和輪撥搜索有沒有效果，成功後拿掉本行備註
-        let keywordCondition = '';
-        const keywordParams = [];
-        if (keyword) {
-            keywordCondition = `WHERE (title LIKE ? OR description LIKE ?)`;
-            keywordParams.push(`%${keyword}%`, `%${keyword}%`);
-        }
 
-        if (category) {
-            keywordCondition += keyword ? ` AND category = ?` : `WHERE category = ?`;
-            keywordParams.push(category);
-        }
-        // 5/9測試recipeCard和輪撥搜索有沒有效果，成功後拿掉本行備註
-
+         // 取得總筆數
         const [countResult] = await db.query(
-            `SELECT COUNT(*) AS total FROM recipes ${keywordCondition}`,
+            `SELECT COUNT(DISTINCT r.id) AS total 
+             FROM recipes r 
+             LEFT JOIN recipe_category rc ON r.id = rc.recipe_id 
+             LEFT JOIN categories_sc c ON rc.category_id = c.id 
+             ${keywordCondition}`,
             keywordParams
         );
         const totalItems = countResult[0]?.total || 0;
         const totalPages = Math.ceil(totalItems / limit);
 
+        // 取得分頁資料，包含分類
         const [rows] = await db.query(
-            `SELECT * FROM recipes ${keywordCondition} ORDER BY created_at DESC LIMIT ? OFFSET ?`,
+            `SELECT 
+                r.id, 
+                r.title, 
+                r.description , 
+                r.image, 
+                GROUP_CONCAT(c.name ORDER BY c.name SEPARATOR ', ') AS categories 
+             FROM 
+                recipes r 
+             LEFT JOIN 
+                recipe_category rc ON r.id = rc.recipe_id 
+             LEFT JOIN 
+                categories_sc c ON rc.category_id = c.id 
+             ${keywordCondition} 
+             GROUP BY 
+                r.id, r.title, r.description, r.image 
+             ORDER BY 
+                r.created_at DESC 
+             LIMIT ? OFFSET ?`,
             [...keywordParams, limit, offset]
         );
 
@@ -86,20 +91,38 @@ router.get('/api', async (req, res) => {
 });
   
 
-  
-
+// 取得所有食譜(JOIN分類的版本)
+router.get('/api/category', async (req, res) => {
+    try {
+          const page = parseInt(req.query.page) || 1
+        //   這邊的5 就是指一頁幾筆
+          const limit = parseInt(req.query.limit) || 80
+          const offset = (page - 1) * limit
+      
+          // 取得總筆數
+          const [countResult] = await db.query('SELECT COUNT(*) AS total FROM restaurants')
+          const totalItems = countResult[0].total
+          const totalPages = Math.ceil(totalItems / limit)
+      
+          // 取得分頁資料
+          const [rows] = await db.query(
+            `SELECT r.id, r.title AS recipe_title, r.description AS recipe_description, r.image,GROUP_CONCAT(c.name ORDER BY c.name SEPARATOR ', ') AS categories FROM recipes r LEFT JOIN recipe_category rc ON r.id = rc.recipe_id LEFT JOIN categories_sc c ON rc.category_id = c.id GROUP BY r.id, r.title, r.description ORDER BY r.id LIMIT ? OFFSET ?`,
+            [limit, offset]
+          )
+      
+          res.json({
+            success: true,
+            rows,
+            totalPages,
+            currentPage: page,
+          })
+        } catch (err) {
+          console.error('取得食譜列表失敗:', err)
+          res.status(500).json({ success: false, error: err.message })
+        }
+      })
 // 取得單一食譜
-// router.get('/api/:id',async(req,res)=>{
-//     try{
-//         const [rows] = await db.query('SELECT * FROM recipes WHERE id=?', [req.params.id]);
-//         if(!rows.length){
-//             return res.status(404).json({ success: false, error:"找不到食譜" });
-//         }
-//         res.json({ success: true, data:rows[0] });
-//     }catch(error){
-//         res.status(500).json({ success: false, error:error.message });
-//     }
-// });
+// 這邊是取得單一食譜的API，會根據食譜ID來查詢資料庫，並且將相關的步驟、食材、調味料、關聯食譜和評論一起回傳
 
 router.get('/api/:id', async (req, res) => {
     try {
@@ -124,7 +147,7 @@ router.get('/api/:id', async (req, res) => {
 
       // 查這個食譜對應的所有食材
       const [ingredientRows] = await db.query(
-        'SELECT ingredient_id, name, quantity, unit FROM ingredients WHERE recipe_id = ? ORDER BY ingredient_id ASC',
+        'SELECT ingredient_id, name, quantity, product_id, unit FROM ingredients WHERE recipe_id = ? ORDER BY ingredient_id ASC',
         [recipeId]
       );
   
@@ -170,7 +193,7 @@ router.get('/api/:id', async (req, res) => {
         // 'SELECT id, context, user_id, created_at FROM user_feedbacks WHERE recipes_id = ? ORDER BY id ASC',
         // 下面這段是先將用戶名稱與食譜評論JOIN再一起，接著再將這個JOIN過的評論表塞進這個食譜查詢的JSON檔
         `SELECT 
-     uf.id, uf.context, uf.user_id, uf.created_at, u.username 
+     uf.id, uf.context,uf.title, uf.user_id, uf.created_at, u.username 
    FROM user_feedbacks uf
    JOIN users u ON uf.user_id = u.user_id
    WHERE uf.recipes_id = ? 
@@ -197,6 +220,175 @@ router.get('/api/:id', async (req, res) => {
     }
   });
 
+// 新增評論
+router.post('/api/feedback', async (req, res) => {
+  const { recipeId, userId, title, context,is_like } = req.body;
+
+  // 驗證輸入
+  if (!recipeId || !userId || !title || !context || !is_like) {
+      return res.status(400).json({ success: false, error: "RecipeId, UserId, Title, and Context are required" });
+  }
+
+  try {
+      // 插入評論到資料庫
+      const [result] = await db.query(
+          'INSERT INTO user_feedbacks (recipes_id, user_id, title, context, is_like, created_at) VALUES (?, ?, ?, ?, ?,NOW())',
+          [recipeId, userId, title, context,is_like]
+      );
+
+      res.json({ success: true, insertedId: result.insertId });
+  } catch (error) {
+      console.error('新增評論失敗:', error);
+      res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// 讀取收藏
+// 這邊是讀取用戶的收藏食譜，會根據 JWT 中的用戶 ID 來查詢資料庫
+router.get('/api/favorite/get', async (req, res) => {
+// 驗證是否已通過 JWT 驗證
+    if (!req.my_jwt) {
+        return res.status(401).json({ success: false, error: "Unauthorized: Missing or invalid token" });
+    }
+
+    const userId = req.my_jwt.id; // 從解碼的 token 中取得 userId
+
+    try {
+        // 查詢會員的所有收藏
+        const [favorites] = await db.query(
+            'SELECT recipe_id FROM favorites WHERE user_id = ?',
+            [userId]
+        );
+
+        // 將結果轉換為 { recipeId: true } 的格式
+        const favoriteStatus = {};
+        favorites.forEach(favorite => {
+            favoriteStatus[favorite.recipe_id] = true;
+        });
+
+        res.json({ success: true, favorites: favoriteStatus });
+    } catch (error) {
+        console.error('載入收藏狀態失敗:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+
+// 收藏食譜
+// 這邊是將食譜的收藏狀態更新，會根據用戶ID和食譜ID來判斷是否已經收藏
+router.post('/api/favorite', async (req, res) => {
+    const {recipeId } = req.body;
+
+    // 驗證是否已通過 JWT 驗證
+    if (!req.my_jwt) {
+      return res.status(401).json({ success: false, error: "Unauthorized: Missing or invalid token" });
+    }
+    
+    const userId = req.my_jwt.id; // 從解碼的 token 中取得 userId
+    // 驗證輸入
+    if (!recipeId) {
+        return res.status(400).json({ success: false, error: "UserId and RecipeId are required" });
+    }
+
+
+     try {
+        // 檢查是否已收藏
+        const [existingFavorite] = await db.query(
+            'SELECT id FROM favorites WHERE user_id = ? AND recipe_id = ?',
+            [userId, recipeId]
+        );
+
+        if (existingFavorite.length > 0) {
+            // 如果已收藏，則取消收藏（刪除記錄）
+            await db.query(
+                'DELETE FROM favorites WHERE user_id = ? AND recipe_id = ?',
+                [userId, recipeId]
+            );
+            return res.json({ success: true, message: "Favorite removed" });
+        } else {
+            // 如果未收藏，則新增收藏
+            await db.query(
+                'INSERT INTO favorites (user_id, recipe_id, created_at) VALUES (?, ?, NOW())',
+                [userId, recipeId]
+            );
+            return res.json({ success: true, message: "Favorite added" });
+        }
+    } catch (error) {
+        console.error('更新收藏狀態失敗:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+
+// 從食譜加進購物車的動作
+router.post('/api/add', async (req, res) => {
+    // 驗證是否已通過 JWT 驗證
+    if (!req.my_jwt) {
+        return res.status(401).json({ success: false, error: "Unauthorized: Missing or invalid token" });
+    }
+
+    const userId = req.my_jwt.id; // 從解碼的 token 中取得 userId
+    const { ingredients  } = req.body; // 從請求中取得食材資料
+
+    if (
+  !ingredients ||
+  !Array.isArray(ingredients) ||
+  ingredients.length === 0
+) {
+  return res.status(400).json({
+    success: false,
+    error: "Ingredients are required and must be an array",
+  });
+}
+
+// 從 ingredients 中取出所有的 product_id
+const product_id = ingredients.map((item) => item.product_id);
+
+    
+
+    // 驗證輸入
+    if (!product_id || !Array.isArray(product_id) || product_id.length === 0) {
+        return res.status(400).json({ success: false, error: "Product ID are required and must be an array" });
+    }
+
+    try {
+       // 查詢每個 product_id 的 original_price，並插入購物車
+        const insertPromises = ingredients.map(async (item) => {
+            const { product_id } = item;
+
+            // 驗證 product_id 是否有效
+            if (!product_id) {
+                throw new Error("Each product_id must be valid");
+            }
+
+            // 查詢 food_products 表中的 original_price
+            const [productRows] = await db.query(
+                'SELECT original_price FROM food_products WHERE id = ?',
+                [product_id]
+            );
+
+            if (productRows.length === 0) {
+                throw new Error(`Product with id ${product_id} not found`);
+            }
+
+            const unitPrice = productRows[0].original_price;
+
+              // 插入購物車資料表
+            return db.query(
+                'INSERT INTO carts (user_id, product_id, unit_price, added_time) VALUES (?, ?, ?, NOW())',
+                [userId, product_id, unitPrice]
+            );
+        });
+        
+        // 等待所有插入操作完成
+        await Promise.all(insertPromises);
+
+        res.json({ success: true, message: "Products added to carts successfully" });
+    } catch (error) {
+        console.error('加入購物車失敗:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
 
 // 新增食譜
 router.post('/api',async(req,res)=>{

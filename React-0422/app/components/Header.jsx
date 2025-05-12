@@ -36,6 +36,7 @@ const Header = () => {
             </button>
           </div>
         </div>
+
         <div>
           <div style={{ position: 'relative' }}>
             <button alt="User" onClick={toggleDropdown}>
@@ -45,6 +46,16 @@ const Header = () => {
             </button>
             {isDropdownOpen && (
               <ul className={styles.dropdownMenu}>
+               <li>
+            {auth.id ? (
+              <div>{auth.username}</div>
+            ) : (
+              <Link href="/login">
+                <div>登入/註冊</div>
+              </Link>
+            )}
+            {/* 如果已經登入，顯示會員名稱，否則顯示登入/註冊按鈕 */}
+          </li>
                 <li>
                   <a href="">會員中心</a>
                 </li>
@@ -54,9 +65,23 @@ const Header = () => {
                 <li>
                   <a href="">我的訂單</a>
                 </li>
+<li className="nav-item">
+            {/* 如果已經登入，顯示登出按鈕 */}
+            <a
+              className="nav-link"
+              href="#"
+              onClick={(e) => {
+                e.preventDefault()
+                logout()
+              }}
+            >
+              登出
+            </a>
+          </li>
                 <li>
                   <a href="">登出</a>
                 </li>
+
               </ul>
             )}
           </div>
@@ -65,6 +90,7 @@ const Header = () => {
               <FaCartShopping />
             </div>
           </button>
+
         </div>
       </span>
     </div>

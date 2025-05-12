@@ -5,15 +5,20 @@ import Link from 'next/link'
 import styles from '../../styles/RecipeList.module.css'
 import useSWR from 'swr'
 import { useSearchParams } from 'next/navigation'
+import { useAuth } from '@/hooks/auth-context'
 
 import { API_SERVER } from '../../../config/api-path'
 
 const RECIPES_PER_PAGE = 15
 
 export default function RecipeListPage() {
+  const { auth } = useAuth() || {} // 使用 useAuth 鉤子獲取用戶信息
   const searchParams = useSearchParams()
   const currentPage = parseInt(searchParams.get('page') || 1, 10) // 確保是數字
   const keyword = searchParams.get('keyword') || ''
+
+  console.log('auth:', auth) // 確認 auth 是否正確獲取
+  // console.log('TOKEN', auth.token)
 
   const fetcher = (url) => fetch(url).then((res) => res.json())
 
@@ -24,12 +29,45 @@ export default function RecipeListPage() {
 
   const recipes = data?.rows || []
   const [totalPages, setTotalPages] = useState(1) // 初始化 totalPages 為 1
+  // 收藏功能
+  const [favorites, setFavorites] = useState({})
+  const [favoritesLoaded, setFavoritesLoaded] = useState(false)
 
   useEffect(() => {
     if (data?.totalPages) {
       setTotalPages(data.totalPages) // 從 API 響應中設置 totalPages
     }
   }, [data])
+
+  useEffect(() => {
+    console.log('Updated Favorites State:', favorites) // 確認 favorites 狀態
+  }, [favorites])
+  // 從後端獲取收藏狀態
+  useEffect(() => {
+    // console.log('Authorization Token:', auth.token) // 檢查 token 是否正確
+
+    const fetchFavorites = async () => {
+      // console.log('Authorization Token:', auth.token)
+      try {
+        const response = await fetch(`${API_SERVER}/recipes/api/favorite/get`, {
+          headers: {
+            Authorization: `Bearer ${auth.token}`, // 假設需要用戶的 token
+          },
+        })
+        const data = await response.json()
+        // console.log('Fetched Favorites:', data.favorites)
+        // 確認 favorites 資料
+
+        setFavorites(data.favorites || {}) // 假設後端返回的格式是 { recipeId: true/false }
+      } catch (error) {
+        console.error('載入收藏狀態失敗:', error)
+      }
+    }
+
+    if (auth?.token) {
+      fetchFavorites()
+    }
+  }, [auth])
 
   // 處理換頁
   const handlePageChange = (newPage) => {
@@ -57,19 +95,39 @@ export default function RecipeListPage() {
     return buttons
   }
 
-  // 收藏功能
-  const [favorites, setFavorites] = useState({})
-
+  // 處理收藏切換
   const toggleFavorite = (recipeId) => {
+    const newFavoriteStatus = !favorites[recipeId]
+
+    // 更新前端狀態
     setFavorites((prev) => ({
       ...prev,
-      [recipeId]: !prev[recipeId],
+      [recipeId]: newFavoriteStatus,
     }))
+
+    // 發送 API 請求更新後端狀態
+    try {
+      fetch(`${API_SERVER}/recipes/api/favorite`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${auth.token}`, // 假設需要用戶的 token
+        },
+        body: JSON.stringify({
+          userId: auth.id,
+          recipeId,
+          isFavorite: newFavoriteStatus,
+        }),
+      })
+    } catch (error) {
+      console.error('更新收藏狀態失敗:', error)
+    }
   }
 
   return (
     <div className={styles.container}>
       <div className={styles.content}>
+        {/* <div>{JSON.stringify(user)}</div> */}
         {/* Hero Section */}
         <div className={styles.heroSection}>
           <div className={styles.heroContent}>
@@ -153,18 +211,20 @@ function RecipeCard({
 }) {
   return (
     <div className={styles.recipeCard}>
-      <div className={styles.recipeImageContainer}>
-        <img src={`/${image}`} className={styles.recipeImage} alt={title} />
-      </div>
-      <div className={styles.recipeContent}>
-        <h3 className={styles.recipeTitle}>{title}</h3>
-        <p className={styles.recipeDescription}>{description}</p>
-      </div>
+      <Link key={id} href={`/recipes/${id}`} passHref>
+        <div className={styles.recipeImageContainer}>
+          <img src={`/${image}`} className={styles.recipeImage} alt={title} />
+        </div>
+        <div className={styles.recipeContent}>
+          <h3 className={styles.recipeTitle}>{title}</h3>
+          <p className={styles.recipeDescription}>{description}</p>
+        </div>
+      </Link>
       <img
         src={
           isFavorite
-            ? 'https://cdn.builder.io/api/v1/image/assets/TEMP/8a6ddd1b69b5dee16612f13ff720cd4410d1f183?placeholderIfAbsent=true'
-            : 'https://cdn.builder.io/api/v1/image/assets/TEMP/8a6ddd1b69b5dee16612f13ff720cd4410d1f183?placeholderIfAbsent=true'
+            ? '/images/like/like.png' // 收藏的圖示
+            : '/images/like/unlike.png' // 未收藏的圖示
         }
         className={styles.favoriteIcon}
         alt={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
@@ -191,6 +251,15 @@ function PaginationButton({ number, active, onClick }) {
 
 // 特色菜譜組件，作為獨立組件抽出
 function FeaturedRecipes() {
+  const fetcher = (url) => fetch(url).then((res) => res.json())
+
+  const { data, isLoading, error } = useSWR(
+    `${API_SERVER}/recipes/api`,
+    fetcher
+  )
+
+  const recipes = data?.rows || []
+
   const featuredItems = [
     {
       id: 1,
@@ -232,10 +301,18 @@ function FeaturedRecipes() {
 
   return (
     <div className={styles.featuredSection}>
+      <h3>你可能會喜歡</h3>
       <div className={styles.featuredGrid}>
-        {featuredItems.map((item) => (
-          <FeaturedRecipe key={item.id} image={item.image} title={item.title} />
-        ))}
+        {recipes
+          .sort(() => Math.random() - 0.5) // 隨機打亂陣列
+          .slice(0, 4) // 取出前 6 筆資料
+          .map((item) => (
+            <FeaturedRecipe
+              key={item.id}
+              image={item.image}
+              title={item.title}
+            />
+          ))}
       </div>
     </div>
   )

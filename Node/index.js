@@ -295,11 +295,12 @@ app.post("/jwt-login", upload.none(), async (req, res) => {
       bodyData: req.body,
       code: 0,
       data: {
-        id: 0,
+        id: "",
         email: "",
         // nickname: "",
         username: "",
         token: "",
+        full_name: "",
       },
     };
   
@@ -325,14 +326,14 @@ app.post("/jwt-login", upload.none(), async (req, res) => {
     }
     // 帳密驗證成功
     const payload = {
-      id: rows[0].users_id,
+      id: rows[0].user_id,
       email: rows[0].email,
     };
     const token = jwt.sign(payload, process.env.JWT_KEY);
   
     // 設定 session
     output.data = {
-      id: rows[0].users_id,
+      id: rows[0].user_id,
       email: rows[0].email,
     //   nickname: rows[0].nickname,
     username: rows[0].username,

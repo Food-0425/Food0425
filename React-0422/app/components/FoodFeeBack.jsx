@@ -1,6 +1,8 @@
 'use client'
 
 import React, { useState } from 'react'
+import { useParams } from 'next/navigation'
+import { useAuth } from '@/hooks/auth-context'
 
 const styles = {
   title: {
@@ -35,19 +37,52 @@ const styles = {
 }
 
 export default function FoodFeeBack() {
+  const { id } = useParams() // 從動態路由中獲取 recipeId
+  const { auth } = useAuth()
   const [title, setTitle] = useState('')
-  const [comment, setComment] = useState('')
+  const [context, setComment] = useState('')
+  const [isLike, setIsLike] = useState(0) // 預設為按讚
 
-  const handleSubmit = (e) => {
+  console.log('recipeId:', id) // 確認 recipeId 是否正確獲取
+  console.log('auth:', auth.id) // 確認 auth 是否正確獲取
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    if (title.trim() === '' || comment.trim() === '') {
+    if (title.trim() === '' || context.trim() === '') {
       alert('請填寫完整的標題和評論！')
       return
     }
-    console.log('提交的資料:', { title, comment })
-    alert('感謝您的評論！')
-    setTitle('')
-    setComment('')
+
+    try {
+      const response = await fetch(
+        'http://localhost:3001/recipes/api/feedback',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            recipeId: id, // 傳送 recipeId
+            userId: auth.id,
+            title,
+            context,
+            is_like: isLike, // 傳送 is_like
+          }), // 傳送 recipeId 和 userId
+        }
+      )
+
+      if (response.ok) {
+        alert('感謝您的評論！')
+        setTitle('')
+        setComment('')
+        setIsLike(0) // 重置為預設值
+      } else {
+        alert('提交失敗，請稍後再試！')
+      }
+    } catch (error) {
+      console.error('提交表單時發生錯誤：', error)
+      alert('提交失敗，請檢查您的網路連線！')
+    }
   }
 
   return (
@@ -56,7 +91,7 @@ export default function FoodFeeBack() {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        minHeight: '100vh', // 改為 minHeight
+        minHeight: '100vh',
         backgroundColor: '#F5F5F5',
       }}
     >
@@ -138,7 +173,7 @@ export default function FoodFeeBack() {
           >
             <div style={styles.subtitle}>評論</div>
             <textarea
-              value={comment}
+              value={context}
               onChange={(e) => setComment(e.target.value)}
               placeholder="嘿~和大家說說您的感想吧~"
               style={{
@@ -157,6 +192,25 @@ export default function FoodFeeBack() {
                 resize: 'none',
               }}
             />
+          </div>
+          <div
+            style={{
+              alignSelf: 'stretch',
+              paddingLeft: 40,
+              paddingRight: 40,
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+              alignItems: 'center',
+              gap: 10,
+              display: 'flex',
+            }}
+          >
+            <input
+              type="checkbox"
+              checked={isLike === 1}
+              onChange={(e) => setIsLike(e.target.checked ? 1 : 0)}
+            />
+            <label>我喜歡這個食譜</label>
           </div>
         </div>
         <button

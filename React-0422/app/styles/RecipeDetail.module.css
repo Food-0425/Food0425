@@ -537,6 +537,7 @@
 
 .userInfo {
   display: flex;
+  position: relative;
   flex-direction: column;
   align-items: stretch;
   justify-content: center;
@@ -552,6 +553,13 @@
   width: 100px;
   align-self: flex-end;
   max-width: 100%;
+}
+
+.userLike {
+  width: 0px;
+  /* align-self: flex-end; */
+  position: absolute;
+  right: 30px;
 }
 
 .userContent {
