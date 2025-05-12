@@ -120,6 +120,14 @@ export default function RecipesLandingPage() {
               />
               糕點
             </button>
+
+            <button className={styles.categoryIcon}>
+              <FaCakeCandles
+                className={styles.categoryIconImg}
+                onClick={() => handleCategory('麵食')}
+              />
+              麵食
+            </button>
           </div>
           <img
             src="https://cdn.builder.io/api/v1/image/assets/TEMP/48cafdb4ef4bb734d63a486bf58abbe94c28b5d3?placeholderIfAbsent=true"
