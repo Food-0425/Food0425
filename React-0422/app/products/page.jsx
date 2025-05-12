@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react'
 import styles from '../styles/ProductList.module.css'
 import { ProductCard } from '../components/ProductCard'
 
-// Mock product data - in a real app, this would come from an API
+
 const mockProducts = [
   {
     id: 1,
@@ -127,39 +127,35 @@ const mockProducts = [
     isFavorite: false,
   },
 ]
-
+//  每頁顯示商品數量
 const PRODUCTS_PER_PAGE = 15
 
 export default function ProductListPage() {
-  const [products, setProducts] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [currentPage, setCurrentPage] = useState(4) // Starting at page 4 as shown in design
-  const [totalPages, setTotalPages] = useState(6)
-  const [activeCategory, setActiveCategory] = useState('本周熱銷')
-  const [sortByPrice, setSortByPrice] = useState(false)
+  //  State 狀態管理
+  const [products, setProducts] = useState([]) // 顯示中的產品資料
+  const [loading, setLoading] = useState(true) // 是否在載入中
+  const [currentPage, setCurrentPage] = useState(4) // 目前頁碼
+  const [totalPages, setTotalPages] = useState(6) // 總頁數（預設）
+  const [activeCategory, setActiveCategory] = useState('本周熱銷') // 目前分類
+  const [sortByPrice, setSortByPrice] = useState(false) // 是否以價格排序
 
-  // Fetch products (simulated)
+  //  當頁碼、分類、排序條件改變時，重新取得產品資料
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true)
       try {
-        // In a real app, this would be an API call
-        // const response = await fetch(`/api/products?page=${currentPage}&category=${activeCategory}`);
-        // const data = await response.json();
-
-        // Simulate API delay
+        // 模擬 API 延遲
         await new Promise((resolve) => setTimeout(resolve, 500))
 
-        // Apply category filter (in a real app, this would be done on the server)
         let filteredProducts = [...mockProducts]
 
-        // Apply price sorting if enabled
+        //  價格排序
         if (sortByPrice) {
           filteredProducts.sort((a, b) => a.price - b.price)
         }
 
         setProducts(filteredProducts)
-        setTotalPages(6) // Simulated total pages
+        setTotalPages(6) // 模擬固定頁數
       } catch (error) {
         console.error('Error fetching products:', error)
       } finally {
@@ -170,18 +166,18 @@ export default function ProductListPage() {
     fetchProducts()
   }, [currentPage, activeCategory, sortByPrice])
 
-  // Handle category change
+  //  點選分類按鈕
   const handleCategoryChange = (category) => {
     setActiveCategory(category)
-    setCurrentPage(1) // Reset to first page when changing category
+    setCurrentPage(1)
   }
 
-  // Handle price sorting
+  //  切換價格排序
   const togglePriceSorting = () => {
     setSortByPrice(!sortByPrice)
   }
 
-  // Handle page change
+  //  分頁控制：前後頁或指定頁碼
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
       setCurrentPage(newPage)
@@ -190,39 +186,42 @@ export default function ProductListPage() {
 
   return (
     <div className={styles.container}>
-      {/* Filter Section */}
+      {/*  篩選區塊：分類 + 價格排序 */}
       <div className={styles.filterSection}>
-        <div
+        {/* 分類篩選按鈕（動態 active 樣式） */}
+        <button
           className={`${styles.filterItem} ${activeCategory === '本周熱銷' ? styles.active : ''}`}
           onClick={() => handleCategoryChange('本周熱銷')}
         >
           本周熱銷
-        </div>
-        <div
+        </button>
+        <button
           className={`${styles.filterItem} ${styles.filterCategory} ${activeCategory === '蔬菜' ? styles.active : ''}`}
           onClick={() => handleCategoryChange('蔬菜')}
         >
           蔬菜
-        </div>
-        <div
-          className={`${styles.filterItem} ${styles.filterCategory} ${activeCategory === '���品' ? styles.active : ''}`}
+        </button>
+        <button
+          className={`${styles.filterItem} ${styles.filterCategory} ${activeCategory === '肉品' ? styles.active : ''}`}
           onClick={() => handleCategoryChange('肉品')}
         >
           肉品
-        </div>
-        <div
+        </button>
+        <button
           className={`${styles.filterItem} ${styles.filterCategory} ${activeCategory === '乾貨' ? styles.active : ''}`}
           onClick={() => handleCategoryChange('乾貨')}
         >
           乾貨
-        </div>
-        <div
+        </button>
+        <button
           className={`${styles.filterItem} ${activeCategory === '調味品' ? styles.active : ''}`}
           onClick={() => handleCategoryChange('調味品')}
         >
           調味品
-        </div>
-        <div className={styles.priceFilter} onClick={togglePriceSorting}>
+        </button>
+
+        {/* 價格排序按鈕 */}
+        <button className={styles.priceFilter} onClick={togglePriceSorting}>
           <div className={styles.sortIcon}>
             <img
               src="https://via.placeholder.com/37x34"
@@ -231,83 +230,54 @@ export default function ProductListPage() {
             />
           </div>
           <div className={styles.priceText}>價格</div>
-        </div>
+        </button>
       </div>
 
-      {/* Product Grid Section */}
+      {/*  商品區塊 */}
       <div className={styles.productSection}>
         <div className={styles.productGrid}>
           {loading ? (
-            <div>載入中...</div>
+            <div>載入中...</div> //  載入狀態
           ) : (
             products.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard key={product.id} product={product} /> //  商品卡片元件
             ))
           )}
         </div>
       </div>
 
-      {/* Pagination Section */}
+      {/*  分頁區塊 */}
       <div className={styles.paginationSection}>
         <div className={styles.pagination}>
-          <img
-            src="https://via.placeholder.com/11x16"
-            className={styles.paginationArrow}
-            alt="Previous page"
-            onClick={() => handlePageChange(currentPage - 1)}
-          />
+          {/* 上一頁 */}
+          <button onClick={() => handlePageChange(currentPage - 1)}>
+            <img
+              src="https://via.placeholder.com/11x16"
+              className={styles.paginationArrow}
+              alt="Previous page"
+            />
+          </button>
 
-          <div className={styles.paginationItem}>
-            <div
-              className={`${styles.paginationButton} ${currentPage === 2 ? styles.paginationButtonActive : ''}`}
-              onClick={() => handlePageChange(2)}
-            >
-              2
+          {/* 動態頁碼按鈕 */}
+          {[2, 3, 4, 5, 6].map((page) => (
+            <div className={styles.paginationItem} key={page}>
+              <button
+                className={`${styles.paginationButton} ${currentPage === page ? styles.paginationButtonActive : ''}`}
+                onClick={() => handlePageChange(page)}
+              >
+                {page}
+              </button>
             </div>
-          </div>
+          ))}
 
-          <div className={styles.paginationItem}>
-            <div
-              className={`${styles.paginationButton} ${currentPage === 3 ? styles.paginationButtonActive : ''}`}
-              onClick={() => handlePageChange(3)}
-            >
-              3
-            </div>
-          </div>
-
-          <div className={styles.paginationItem}>
-            <div
-              className={`${styles.paginationButton} ${currentPage === 4 ? styles.paginationButtonActive : ''}`}
-              onClick={() => handlePageChange(4)}
-            >
-              4
-            </div>
-          </div>
-
-          <div className={styles.paginationItem}>
-            <div
-              className={`${styles.paginationButton} ${currentPage === 5 ? styles.paginationButtonActive : ''}`}
-              onClick={() => handlePageChange(5)}
-            >
-              5
-            </div>
-          </div>
-
-          <div className={styles.paginationItem}>
-            <div
-              className={`${styles.paginationButton} ${currentPage === 6 ? styles.paginationButtonActive : ''}`}
-              onClick={() => handlePageChange(6)}
-            >
-              6
-            </div>
-          </div>
-
-          <img
-            src="https://via.placeholder.com/11x16"
-            className={styles.paginationArrow}
-            alt="Next page"
-            onClick={() => handlePageChange(currentPage + 1)}
-          />
+          {/* 下一頁 */}
+          <button onClick={() => handlePageChange(currentPage + 1)}>
+            <img
+              src="https://via.placeholder.com/11x16"
+              className={styles.paginationArrow}
+              alt="Next page"
+            />
+          </button>
         </div>
       </div>
     </div>
