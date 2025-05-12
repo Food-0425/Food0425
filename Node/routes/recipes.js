@@ -31,11 +31,8 @@ router.get('/api', async (req, res) => {
         const category = req.query.category || ''; // 取得 category 參數
         const offset = (page - 1) * limit;
 
-        // const keywordCondition = keyword
+         const keywordCondition = keyword
         // 這行就是看關鍵字有沒有符合標題 或描述  。如果只要符合標題的話，就是把OR後面的拿調
-
-
-
             ? `WHERE r.title LIKE ? OR r.description LIKE ? OR c.name LIKE ?`
             : '';
         // keywordParams 是參數化查詢，防止 SQL injection（例如使用 ? 而不是直接拼字串）
