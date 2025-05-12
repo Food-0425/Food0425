@@ -15,3 +15,22 @@ Builder.registerComponent(ProductCard, {
     },
   ],
 })
+
+// Register the new e-commerce ProductCard
+Builder.registerComponent(ProductCard, {
+  name: 'EcommerceProductCard',
+  inputs: [
+    {
+      name: 'product',
+      type: 'object',
+      defaultValue: {
+        id: 1,
+        image: '/placeholder.jpg',
+        title: 'Product Title',
+        description: 'Product Description',
+        price: 100,
+        isFavorite: false,
+      },
+    },
+  ],
+})

@@ -8,136 +8,96 @@
   justify-content: start;
 }
 
-.heroSection {
-  align-self: stretch;
-  z-index: 0;
-  width: 100%;
-  padding-top: 120px;
+/* 版首輪播 Start */
+.carouselOverlay {
   font-family:
-    "Noto Sans TC",
+    'Noto Sans TC',
     -apple-system,
     Roboto,
     Helvetica,
     sans-serif;
   color: #faf8f9;
   font-weight: 700;
+  z-index: 5;
   text-align: center;
-}
-
-.heroInner {
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  min-height: 640px;
-  width: 100%;
-  padding: 216px 0;
-  overflow: hidden;
-  align-items: stretch;
-  justify-content: center;
-}
-
-.heroImage {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
   height: 100%;
-  width: 100%;
-  object-fit: cover;
-  object-position: center;
-}
-
-.heroContent {
-  position: relative;
   display: flex;
-  width: 100%;
   flex-direction: column;
-  align-items: stretch;
-  justify-content: center;
-}
-
-.heroTitle {
-  leading-trim: both;
-  text-edge: cap;
-  text-shadow: 0px 3px 10px rgba(0, 0, 0, 0.5);
-  font-size: 64px;
-}
-
-.heroSubtitle {
-  leading-trim: both;
-  text-edge: cap;
-  text-shadow: 0px 3px 10px rgba(0, 0, 0, 0.5);
-  font-size: 32px;
-  margin-top: 35px;
-}
-
-.searchBar {
-  position: relative;
-  justify-content: center;
   align-items: center;
-  border-radius: 100px;
-  background-color: rgba(250, 248, 249, 0.45);
-  align-self: center;
-  display: flex;
-  margin-top: 40px;
-  gap: 20px;
-  overflow: hidden;
-  font-size: 20px;
-  white-space: nowrap;
+  justify-content: center;
+  pointer-events: none; /* 允許點擊穿透到輪播控制按鈕 */
+}
+
+.heroContent h2 {
+  font-size: 64px;
+  text-shadow: 0px 3px 10px rgba(0, 0, 0, 0.5);
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.heroContent h3 {
+  font-size: 32px;
+  text-shadow: 0px 3px 10px rgba(0, 0, 0, 0.5);
+}
+
+.searchBarContainer {
+  pointer-events: auto; /* 確保可以互動 */
+  z-index: 10;
+  width: 30%;
+  padding: 15px;
+  border: 0px;
 }
 
 .searchBarInner {
-  align-self: stretch;
   display: flex;
-  min-width: 240px;
-  margin: auto 0;
-  padding: 10px 15px 10px 20px;
   align-items: center;
-  gap: 15px;
-  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.7); /* 半透明白色背景 */
+  border-radius: 100px;
+  border: 5px solid #fff;
+  padding: 10px 25px 10px 35px;
 }
 
-.searchText {
-  leading-trim: both;
-  text-edge: cap;
-  text-shadow: 2px 3px 8px rgba(0, 0, 0, 0.25);
-  align-self: stretch;
-  margin: auto 0;
+.searchInput::placeholder {
+  color: #fff;
+  font-size: 20px;
+}
+
+.searchInput {
+  flex-grow: 1;
+  border: none;
+  background: transparent;
+}
+
+.searchInput:focus {
+  outline: none;
+}
+
+.searchButton {
+  border: none;
+  background: none;
 }
 
 .searchIcon {
-  align-self: stretch;
-  display: flex;
-  margin: auto 0;
-  width: 43px;
-  flex-shrink: 0;
-  height: 43px;
+  font-size: 35px;
+  color: #fff;
 }
 
-.categoriesSection {
-  justify-content: center;
-  align-items: center;
-  z-index: 0;
-  display: flex;
-  width: 1440px;
-  max-width: 100%;
-  flex-direction: column;
-  overflow: hidden;
-  font-family:
-    "Noto Sans TC",
-    -apple-system,
-    Roboto,
-    Helvetica,
-    sans-serif;
-  font-size: 20px;
-  color: #faf8f9;
-  font-weight: 700;
-  white-space: nowrap;
-  text-align: center;
-  padding: 45px 0;
+.carousel-inner .carousel-item img {
+  object-fit: cover; /* 確保圖片填滿容器並保持比例 */
+  height: 500px; /* 你可以調整輪播的高度 */
 }
+/* 版首輪播 END */
 
 .categoriesContainer {
+  color: #faf8f9;
+  font-weight: 700;
+  padding: 45px 0;
   display: flex;
-  width: 1280px;
+  width: 1280px1;
   max-width: 100%;
   align-items: center;
   gap: 20px;
@@ -170,42 +130,57 @@
   flex-wrap: wrap;
 }
 
+/* categoryIcon 漸層Start */
 .categoryIcon {
-  leading-trim: both;
-  text-edge: cap;
-  aspect-ratio: 1/1;
-  border-radius: 500px;
+  width: 142px;
+  height: 142px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  border-radius: 50%;
+  color: #fff;
+  text-transform: uppercase;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  border: none;
+  font-size: 20px;
+  letter-spacing: 0px;
+  font-family:
+    'Noto Sans TC',
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
+  font-weight: 700;
   background-color: #df6c2d;
-  align-self: stretch;
-  margin: auto 0;
-  padding: 107px 51px 20px;
-  overflow: hidden;
-  width: 142px;
-  height: 142px;
 }
 
-.categoryIconSpecial {
-  leading-trim: both;
-  text-edge: cap;
-  aspect-ratio: 1/1;
-  border-radius: 500px;
-  background-color: #ff5a00;
-  align-self: stretch;
-  margin: auto 0;
-  padding: 107px 51px 20px;
-  overflow: hidden;
-  width: 142px;
-  height: 142px;
+.categoryIcon::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: #423c3a;
+  z-index: -1;
+  transition: all 1s ease; /* 控制漸變的過渡效果 */
+  transform: translate(-50%, -50%);
 }
 
-.categoryImage {
-  aspect-ratio: 1/1;
-  object-fit: contain;
-  object-position: center;
-  width: 142px;
-  align-self: stretch;
-  margin: auto 0;
-  flex-shrink: 0;
+.categoryIcon:hover::before {
+  width: 200%;
+  height: 200%;
+  background: #423c3a;
+}
+/* categoryIcon 漸層End */
+
+.categoryIconImg {
+  font-size: 4rem;
+  margin-bottom: 0px;
 }
 
 .recipeSection {
@@ -236,13 +211,10 @@
   flex-direction: column;
   justify-content: center;
   align-items: stretch;
-  overflow: hidden;
   position: relative;
-  aspect-ratio: 0.344;
-  min-width: 240px;
-  padding: 0 33px 100px 34px;
+  padding: 0 34px;
   font-family:
-    "Noto Sans TC",
+    'Noto Sans TC',
     -apple-system,
     Roboto,
     Helvetica,
@@ -253,7 +225,6 @@
   text-align: center;
   flex: 1;
   flex-shrink: 1;
-  flex-basis: 0%;
 }
 
 .categoryBackground {
@@ -263,6 +234,7 @@
   width: 100%;
   object-fit: cover;
   object-position: center;
+  border-radius: 30px 0px 0px 30px;
 }
 
 .categoryTitle {
@@ -275,38 +247,57 @@
   font-size: 48px;
 }
 
-.viewMoreButton {
-  position: relative;
-  leading-trim: both;
-  text-edge: cap;
-  align-self: center;
-  border-radius: 100px;
-  box-shadow: 0px 0px 0px 15px rgba(0, 0, 0, 0.05);
-  background-color: #df6c2d;
-  margin-top: 40px;
-  min-height: 56px;
-  max-width: 100%;
-  width: 197px;
-  overflow: hidden;
+.viewMoreText {
   font-size: 36px;
-  padding: 25px 60px;
+  font-weight: 700;
 }
 
-.viewMoreButtonSpecial {
-  position: relative;
-  leading-trim: both;
-  text-edge: cap;
-  align-self: center;
-  border-radius: 100px;
-  box-shadow: 0px 0px 0px 15px rgba(0, 0, 0, 0.05);
-  background-color: #ff5a00;
+.viewMoreButton {
+  align-content: center;
+  justify-content: center;
+  padding: 10px 0;
+  display: flex;
   margin-top: 40px;
-  min-height: 56px;
-  max-width: 100%;
-  width: 197px;
+  border-radius: 10rem;
+  color: #fff;
+  text-transform: uppercase;
+  font-size: 1rem;
+  letter-spacing: 0.15rem;
+  transition: all 0.3s;
+  position: relative;
   overflow: hidden;
-  font-size: 36px;
-  padding: 25px 60px;
+  z-index: 1;
+  border: none;
+  box-shadow: 0px 0px 0px 15px rgba(0, 0, 0, 0.05);
+}
+.viewMoreButton:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #df6c2d;
+  border-radius: 10rem;
+  z-index: -2;
+}
+.viewMoreButton:before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  height: 100%;
+  background-color: #fffaf0;
+  transition: all 0.3s;
+  border-radius: 10rem;
+  z-index: -1;
+}
+.viewMoreButton:hover {
+  color: #423c3a;
+}
+.viewMoreButton:hover:before {
+  width: 100%;
 }
 
 .recipeCardsContainer {
@@ -319,7 +310,7 @@
   min-width: 240px;
   margin: auto 0;
   gap: 20px;
-  padding: 25px 0;
+  padding: 25px;
   width: 1016px;
 }
 
@@ -329,15 +320,9 @@
   background-color: #fff;
   align-self: stretch;
   min-width: 240px;
-  margin: auto 0;
   overflow: hidden;
   flex-grow: 1;
-  flex-shrink: 1;
   width: 248px;
-}
-
-.recipeCardImageWrapper {
-  width: 100%;
 }
 
 .recipeCardImage {
@@ -354,7 +339,7 @@
   width: 100%;
   flex-direction: column;
   font-family:
-    "Noto Sans TC",
+    'Noto Sans TC',
     -apple-system,
     Roboto,
     Helvetica,
@@ -390,14 +375,13 @@
   align-items: center;
   align-self: stretch;
   background-color: #df6c2d;
-  z-index: 0;
   display: flex;
   width: 100%;
-  padding: 80px 0;
+  padding-bottom: 80px;
   flex-direction: column;
   overflow: hidden;
   font-family:
-    "Noto Sans TC",
+    'Noto Sans TC',
     -apple-system,
     Roboto,
     Helvetica,
@@ -409,10 +393,17 @@
   text-align: center;
 }
 
+.featuredSection h3 {
+  font-size: 36px;
+  color: #fff;
+  padding: 80px 0 40px 0;
+  font-weight: bold;
+}
+
 .featuredContainer {
   display: flex;
   align-items: center;
-  gap: 40px 54px;
+  gap: 40px 20px;
   justify-content: start;
   flex-wrap: wrap;
 }
@@ -489,7 +480,7 @@
   flex-direction: column;
   align-items: stretch;
   font-family:
-    "Noto Sans TC",
+    'Noto Sans TC',
     -apple-system,
     Roboto,
     Helvetica,
@@ -553,7 +544,7 @@
   background-color: #df6c2d;
   overflow: hidden;
   font-family:
-    "Noto Sans TC",
+    'Noto Sans TC',
     -apple-system,
     Roboto,
     Helvetica,
@@ -619,7 +610,7 @@
   gap: 40px 150px;
   overflow: hidden;
   font-family:
-    "Noto Sans TC",
+    'Noto Sans TC',
     -apple-system,
     Roboto,
     Helvetica,
@@ -671,7 +662,7 @@
   align-items: stretch;
   gap: 40px;
   font-family:
-    "Noto Sans TC",
+    'Noto Sans TC',
     -apple-system,
     Roboto,
     Helvetica,
@@ -772,37 +763,6 @@
 }
 
 @media (max-width: 991px) {
-  .heroSection {
-    max-width: 100%;
-    padding-top: 100px;
-  }
-
-  .heroInner {
-    max-width: 100%;
-    padding: 100px 0;
-  }
-
-  .heroContent {
-    max-width: 100%;
-  }
-
-  .heroTitle {
-    max-width: 100%;
-    font-size: 40px;
-  }
-
-  .heroSubtitle {
-    max-width: 100%;
-  }
-
-  .searchBar {
-    white-space: initial;
-  }
-
-  .searchBarInner {
-    white-space: initial;
-  }
-
   .categoriesSection {
     white-space: initial;
   }

@@ -5,6 +5,8 @@ import Providers from './providers'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import './styles/globals.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import Script from 'next/script'
 // 這邊要先註解，不然會報錯誤
 // import './builder/builder-register'
 
@@ -17,6 +19,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="zh-TW">
       <body>
+        <Script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></Script>
         <Providers>
           <Header />
           <main>{children}</main>

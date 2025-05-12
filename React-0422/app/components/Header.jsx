@@ -1,46 +1,98 @@
-"use client";
+'use client'
 
-import React from "react";
-import styles from "../styles/Header.module.css";
-import Link from "next/link";
+import React, { useState } from 'react'
+import styles from '../src/styles/Header.module.scss'
+import Link from 'next/link'
+import { useAuth } from '@/hooks/auth-context'
+import { FaCartShopping, FaUser } from '../icons/icons'
 
 const Header = () => {
+  const { auth, logout } = useAuth()
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen)
+  }
+
   return (
     <div className={styles.navbar}>
-      <div className={styles.navInner}>
-        <div className={styles.navLeftGroup}>
-          <img
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/147ffededb40ea0e14bf97b005d572350cf667e7?placeholderIfAbsent=true"
-            className={styles.logo}
-            alt="Logo"
-          />
-          <div className={styles.navBtnGroup}>
-            <Link href="/recipes-landing">
-              <div className={styles.navBtn}>美味食譜</div>
-            </Link>
-            <div className={styles.navBtn}>食材商城</div>
-            <div className={styles.navBtn}>我的收藏</div>
-            <Link href="/contact">
-              <div className={styles.navBtn}>客服中心</div>
-            </Link>
+      <span>
+        <div>
+          <a href="">
+            <img src="/images/logo/logo-onlyFont-02.png" alt="FOOD-logo" />
+          </a>
+          <div>
+            <button>
+              <h3>美味食譜</h3>
+            </button>
+            <button>
+              <h3>食材商城</h3>
+            </button>
+            <button>
+              <h3>我的收藏</h3>
+            </button>
+            <button>
+              <h3>常見問題</h3>
+            </button>
           </div>
         </div>
-        <div className={styles.navRightGroup}>
-          <div className={styles.searchBar}></div>
-          <img
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/3b4106d2d7a7ff195be9319db4cefb439b3a1618?placeholderIfAbsent=true"
-            className={styles.navIcon}
-            alt="Cart"
-          />
-          <img
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/a4c69ecdb397ef30ee07fb46eb98010b30a24aa1?placeholderIfAbsent=true"
-            className={styles.navIconSmall}
-            alt="User"
-          />
-        </div>
-      </div>
-    </div>
-  );
-};
 
-export default Header;
+        <div>
+          <div style={{ position: 'relative' }}>
+            <button alt="User" onClick={toggleDropdown}>
+              <div>
+                <FaUser />
+              </div>
+            </button>
+            {isDropdownOpen && (
+              <ul className={styles.dropdownMenu}>
+                <li>
+                  {auth.id ? (
+                    <div>{auth.username}</div>
+                  ) : (
+                    <Link href="/login">
+                      <div>登入/註冊</div>
+                    </Link>
+                  )}
+                  {/* 如果已經登入，顯示會員名稱，否則顯示登入/註冊按鈕 */}
+                </li>
+                <li>
+                  <a href="">會員中心</a>
+                </li>
+                {/* <li>
+                  <a href="">我的收藏</a>
+                </li> */}
+                <li>
+                  <a href="">我的訂單</a>
+                </li>
+                <li className="nav-item">
+                  {/* 如果已經登入，顯示登出按鈕 */}
+                  <a
+                    className="nav-link"
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      logout()
+                    }}
+                  >
+                    登出
+                  </a>
+                </li>
+                <li>
+                  <a href="">登出</a>
+                </li>
+              </ul>
+            )}
+          </div>
+          <button alt="Cart">
+            <div>
+              <FaCartShopping />
+            </div>
+          </button>
+        </div>
+      </span>
+    </div>
+  )
+}
+
+export default Header

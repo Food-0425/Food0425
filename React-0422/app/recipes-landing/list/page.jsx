@@ -4,174 +4,78 @@ import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import styles from '../../styles/RecipeList.module.css'
 import useSWR from 'swr'
+import { useSearchParams } from 'next/navigation'
+import { useAuth } from '@/hooks/auth-context'
 
-// 模擬菜譜數據，可以從API獲取
+import { API_SERVER } from '../../../config/api-path'
+
 const RECIPES_PER_PAGE = 15
 
 export default function RecipeListPage() {
-  //   const [recipes, setRecipes] = useState([])
-  //   const [loading, setLoading] = useState(true)
-  const [currentPage, setCurrentPage] = useState(1) // 從第4頁開始，與原本靜態頁面一致
-  const [totalPages, setTotalPages] = useState(6)
-  //   const [favorites, setFavorites] = useState({})
+  const { auth } = useAuth() || {} // 使用 useAuth 鉤子獲取用戶信息
+  const searchParams = useSearchParams()
+  const currentPage = parseInt(searchParams.get('page') || 1, 10) // 確保是數字
+  const keyword = searchParams.get('keyword') || ''
+
+  console.log('auth:', auth) // 確認 auth 是否正確獲取
+  // console.log('TOKEN', auth.token)
 
   const fetcher = (url) => fetch(url).then((res) => res.json())
-  // 原本AI生的
-  //   const { data, isLoading, error } = useSWR(
-  //     `/api/recipes?page=${currentPage}&limit=${RECIPES_PER_PAGE}`,
-  //     fetcher
-  //   )
 
   const { data, isLoading, error } = useSWR(
-    `http://localhost:3001/recipes/api?page=${currentPage}&limit=${RECIPES_PER_PAGE}`,
+    `${API_SERVER}/recipes/api?page=${currentPage}&limit=${RECIPES_PER_PAGE}&keyword=${encodeURIComponent(keyword)}`,
     fetcher
   )
 
   const recipes = data?.rows || []
+  const [totalPages, setTotalPages] = useState(1) // 初始化 totalPages 為 1
+  // 收藏功能
+  const [favorites, setFavorites] = useState({})
+  const [favoritesLoaded, setFavoritesLoaded] = useState(false)
 
   useEffect(() => {
     if (data?.totalPages) {
-      setTotalPages(data.totalPages)
+      setTotalPages(data.totalPages) // 從 API 響應中設置 totalPages
     }
   }, [data])
 
-  // 模擬從API獲取數據
-  //   useEffect(() => {
-  //     // 這裡可以替換為實際的API調用
-  //     const fetchRecipes = async () => {
-  //       setLoading(true)
-  //       try {
-  //         // 在實際應用中，這裡應該是API請求
-  //         // const response = await fetch(`/api/recipes?page=${currentPage}&limit=${RECIPES_PER_PAGE}`);
-  //         // const data = await response.json();
+  useEffect(() => {
+    console.log('Updated Favorites State:', favorites) // 確認 favorites 狀態
+  }, [favorites])
+  // 從後端獲取收藏狀態
+  useEffect(() => {
+    // console.log('Authorization Token:', auth.token) // 檢查 token 是否正確
 
-  //         // 使用模擬數據替代API
-  //         const mockRecipes = [
-  //           {
-  //             id: 1,
-  //             image:
-  //               'https://cdn.builder.io/api/v1/image/assets/TEMP/efc9459b3edcbb46ebec33a55ae0d897315191be?placeholderIfAbsent=true',
-  //             title: '草莓蛋糕',
-  //             description: '新鮮草莓與綿密蛋糕的完美結合，每一口都充滿幸福感。',
-  //           },
-  //           {
-  //             id: 2,
-  //             image:
-  //               'https://cdn.builder.io/api/v1/image/assets/TEMP/848f17b1cb0d44210a03ad544f4e2500df0d6acf?placeholderIfAbsent=true',
-  //             title: '巧克力餅乾',
-  //             description: '香濃巧克力與酥脆餅乾的絕妙組合，讓人無法抗拒的美味。',
-  //           },
-  //           {
-  //             id: 3,
-  //             image:
-  //               'https://cdn.builder.io/api/v1/image/assets/TEMP/36a2bc6f31141f4a2a2efe103a9591b154f30c38?placeholderIfAbsent=true',
-  //             title: '法式馬卡龍',
-  //             description: '色彩繽紛的法式甜點，外酥內軟，每一口都是味蕾的享受。',
-  //           },
-  //           {
-  //             id: 4,
-  //             image:
-  //               'https://cdn.builder.io/api/v1/image/assets/TEMP/34938888c4cb88dce235ce0b70e7da746952a3ea?placeholderIfAbsent=true',
-  //             title: '提拉米蘇',
-  //             description: '經典義式甜點，咖啡與起司的完美融合，層次豐富。',
-  //           },
-  //           {
-  //             id: 5,
-  //             image:
-  //               'https://cdn.builder.io/api/v1/image/assets/TEMP/af4b70eb8d64e9f4d8f4f30f98033f5f2699c2f8?placeholderIfAbsent=true',
-  //             title: '藍莓鬆餅',
-  //             description: '鬆軟可口的鬆餅配上新鮮藍莓，早餐的絕佳選擇。',
-  //           },
-  //           {
-  //             id: 6,
-  //             image:
-  //               'https://cdn.builder.io/api/v1/image/assets/TEMP/339c166141b28bdaaffdb3d8e356f66e7624b06b?placeholderIfAbsent=true',
-  //             title: '檸檬塔',
-  //             description: '酸甜適中的檸檬塔，清爽的口感讓人回味無窮。',
-  //           },
-  //           {
-  //             id: 7,
-  //             image:
-  //               'https://cdn.builder.io/api/v1/image/assets/TEMP/6b26bff4e985267e5412fd8c5741a1fa234127ab?placeholderIfAbsent=true',
-  //             title: '紅豆麻糬',
-  //             description: '傳統東方甜點，軟糯的外皮包裹著香甜紅豆餡，口感豐富。',
-  //           },
-  //           {
-  //             id: 8,
-  //             image:
-  //               'https://cdn.builder.io/api/v1/image/assets/TEMP/c7a5f65a9c05736618d7fdf18a1f538eab043690?placeholderIfAbsent=true',
-  //             title: '芒果冰淇淋',
-  //             description: '新鮮芒果製成的冰淇淋，清涼爽口，夏日必備甜點。',
-  //           },
-  //           {
-  //             id: 9,
-  //             image:
-  //               'https://cdn.builder.io/api/v1/image/assets/TEMP/53ccb406ab4ea9d0ee80446e47190c79a3732121?placeholderIfAbsent=true',
-  //             title: '抹茶蛋糕',
-  //             description: '濃郁的抹茶風味，搭配輕盈的蛋糕體，日式甜點的經典。',
-  //           },
-  //           {
-  //             id: 10,
-  //             image:
-  //               'https://cdn.builder.io/api/v1/image/assets/TEMP/396a8286aec1f403093c97bdf3979a61a26f536e?placeholderIfAbsent=true',
-  //             title: '肉桂捲',
-  //             description: '香氣四溢的肉桂捲，溫暖的肉桂香氣配上甜膩的糖霜。',
-  //           },
-  //           {
-  //             id: 11,
-  //             image:
-  //               'https://cdn.builder.io/api/v1/image/assets/TEMP/0824354a93d24a922ef46935f19c53d4ea11a00f?placeholderIfAbsent=true',
-  //             title: '蘋果派',
-  //             description: '酥脆的派皮包裹著香甜的蘋果餡，傳統美式甜點。',
-  //           },
-  //           {
-  //             id: 12,
-  //             image:
-  //               'https://cdn.builder.io/api/v1/image/assets/TEMP/9717946f7052db47a2f6a14f5ec3a9a293dc83a2?placeholderIfAbsent=true',
-  //             title: '奶油泡芙',
-  //             description: '外酥內軟的泡芙，填滿香濃的奶油，法式經典甜點。',
-  //           },
-  //           {
-  //             id: 13,
-  //             image:
-  //               'https://cdn.builder.io/api/v1/image/assets/TEMP/1a9d40b9c295f814f3c8d2333726dbd245130e8b?placeholderIfAbsent=true',
-  //             title: '巧克力慕斯',
-  //             description: '絲滑的巧克力慕斯，入口即化，濃郁的巧克力風味。',
-  //           },
-  //           {
-  //             id: 14,
-  //             image:
-  //               'https://cdn.builder.io/api/v1/image/assets/TEMP/08a6553761ea55ff77eeba7fb6fb616b54aced7b?placeholderIfAbsent=true',
-  //             title: '焦糖布丁',
-  //             description: '滑嫩的布丁配上香甜的焦糖，簡單卻美味的甜點。',
-  //           },
-  //           {
-  //             id: 15,
-  //             image:
-  //               'https://cdn.builder.io/api/v1/image/assets/TEMP/37b67b17a92a6743f67d5ec75f2c1a4083793fbc?placeholderIfAbsent=true',
-  //             title: '紅絲絨蛋糕',
-  //             description:
-  //               '鮮豔的紅色蛋糕配上奶油起司糖霜，視覺與味覺的雙重享受。',
-  //           },
-  //         ]
+    const fetchFavorites = async () => {
+      // console.log('Authorization Token:', auth.token)
+      try {
+        const response = await fetch(`${API_SERVER}/recipes/api/favorite/get`, {
+          headers: {
+            Authorization: `Bearer ${auth.token}`, // 假設需要用戶的 token
+          },
+        })
+        const data = await response.json()
+        // console.log('Fetched Favorites:', data.favorites)
+        // 確認 favorites 資料
 
-  //         setRecipes(mockRecipes)
-  //         setTotalPages(6) // 假設總共有6頁
-  //       } catch (error) {
-  //         console.error('獲取菜譜失敗:', error)
-  //       } finally {
-  //         setLoading(false)
-  //       }
-  //     }
+        setFavorites(data.favorites || {}) // 假設後端返回的格式是 { recipeId: true/false }
+      } catch (error) {
+        console.error('載入收藏狀態失敗:', error)
+      }
+    }
 
-  //     fetchRecipes()
-  //   }, [currentPage])
+    if (auth?.token) {
+      fetchFavorites()
+    }
+  }, [auth])
 
   // 處理換頁
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
-      setCurrentPage(newPage)
-      // 在實際應用中，這裡會觸發新的API調用
+      // 更新 URL 的查詢參數
+      const params = new URLSearchParams(searchParams)
+      params.set('page', newPage)
+      window.history.pushState({}, '', `?${params.toString()}`)
     }
   }
 
@@ -191,19 +95,39 @@ export default function RecipeListPage() {
     return buttons
   }
 
-  // 收藏功能
-  const [favorites, setFavorites] = useState({})
-
+  // 處理收藏切換
   const toggleFavorite = (recipeId) => {
+    const newFavoriteStatus = !favorites[recipeId]
+
+    // 更新前端狀態
     setFavorites((prev) => ({
       ...prev,
-      [recipeId]: !prev[recipeId],
+      [recipeId]: newFavoriteStatus,
     }))
+
+    // 發送 API 請求更新後端狀態
+    try {
+      fetch(`${API_SERVER}/recipes/api/favorite`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${auth.token}`, // 假設需要用戶的 token
+        },
+        body: JSON.stringify({
+          userId: auth.id,
+          recipeId,
+          isFavorite: newFavoriteStatus,
+        }),
+      })
+    } catch (error) {
+      console.error('更新收藏狀態失敗:', error)
+    }
   }
 
   return (
     <div className={styles.container}>
       <div className={styles.content}>
+        {/* <div>{JSON.stringify(user)}</div> */}
         {/* Hero Section */}
         <div className={styles.heroSection}>
           <div className={styles.heroContent}>
@@ -224,47 +148,6 @@ export default function RecipeListPage() {
         </div>
 
         {/* Category Section */}
-        <div className={styles.categorySection}>
-          <div className={styles.categoryContainer}>
-            <img
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/fd1f919d0b6158366db45eb8a8bc08cc3b71c099?placeholderIfAbsent=true"
-              className={styles.arrowIcon}
-              alt="Left arrow"
-              onClick={() => {
-                /* 處理類別左滑 */
-              }}
-            />
-            <div className={styles.categoryItems}>
-              <div className={styles.categoryItem}>餅乾</div>
-              <img
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/7b9131227f9841bbf4a23d000701625fd0d7ce54?placeholderIfAbsent=true"
-                className={styles.categoryImage}
-                alt="Category"
-              />
-              <img
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/cbdacfbfb4caa61ebe1173ba6e56d1094371f75e?placeholderIfAbsent=true"
-                className={styles.categoryImage}
-                alt="Category"
-              />
-              <img
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/d9393c58fd1403ef3204d730145da06b044bddfd?placeholderIfAbsent=true"
-                className={styles.categoryImage}
-                alt="Category"
-              />
-              <div className={styles.categoryItem}>中式糕點</div>
-              <div className={styles.categoryItem}>零嘴小飴</div>
-              <div className={styles.categoryItem}>雪糕</div>
-            </div>
-            <img
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/aff87650c37f3c885c3a4d4827c325d78272ad96?placeholderIfAbsent=true"
-              className={styles.arrowIcon}
-              alt="Right arrow"
-              onClick={() => {
-                /* 處理類別右滑 */
-              }}
-            />
-          </div>
-        </div>
 
         {/* Recipe Cards Section 列表頁的食物卡片區塊 */}
         <div className={styles.recipeSection}>
@@ -312,55 +195,6 @@ export default function RecipeListPage() {
 
         {/* Featured Recipes */}
         <FeaturedRecipes />
-
-        {/* Footer */}
-        <footer className={styles.footer}>
-          <div className={styles.footerContainer}>
-            <div className={styles.footerLeft}>
-              <div className={styles.footerThankYou}>
-                謝謝您來逛逛我們的網站！有您的瀏覽，我們超開心 🎉
-              </div>
-              <div className={styles.footerFeedback}>
-                <div className={styles.feedbackText}>
-                  如果您願意也歡迎留下回饋，讓我們變得更棒、更貼近您的期待！
-                </div>
-                <div className={styles.feedbackInput}>
-                  <span>請留下您寶貴的意見，讓我們變得更好唷~</span>
-                  <img
-                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/daa18dd540c7951fd24669f6a4242f04619d0741?placeholderIfAbsent=true"
-                    className={styles.sendIcon}
-                    alt="Send"
-                  />
-                </div>
-              </div>
-            </div>
-            <div className={styles.footerRight}>
-              <Link href="/faq">
-                <div className={styles.faqButton}>常見問題</div>
-              </Link>
-              <div className={styles.socialIcons}>
-                <img
-                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/87880e006fdc4fff25e1e873258ee8a1cba73a66?placeholderIfAbsent=true"
-                  className={styles.socialIcon}
-                  alt="Social media"
-                />
-                <img
-                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/7de86b100997fabfbef4d0568abb5096258773a8?placeholderIfAbsent=true"
-                  className={styles.socialIcon}
-                  alt="Social media"
-                />
-                <div className={styles.socialIconPlaceholder}>
-                  <div className={styles.socialIconCircle} />
-                </div>
-                <img
-                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/675704454945697e25884bd259ca1e891b453127?placeholderIfAbsent=true"
-                  className={styles.socialIcon}
-                  alt="Social media"
-                />
-              </div>
-            </div>
-          </div>
-        </footer>
       </div>
     </div>
   )
@@ -377,18 +211,20 @@ function RecipeCard({
 }) {
   return (
     <div className={styles.recipeCard}>
-      <div className={styles.recipeImageContainer}>
-        <img src={`/${image}`} className={styles.recipeImage} alt={title} />
-      </div>
-      <div className={styles.recipeContent}>
-        <h3 className={styles.recipeTitle}>{title}</h3>
-        <p className={styles.recipeDescription}>{description}</p>
-      </div>
+      <Link key={id} href={`/recipes/${id}`} passHref>
+        <div className={styles.recipeImageContainer}>
+          <img src={`/${image}`} className={styles.recipeImage} alt={title} />
+        </div>
+        <div className={styles.recipeContent}>
+          <h3 className={styles.recipeTitle}>{title}</h3>
+          <p className={styles.recipeDescription}>{description}</p>
+        </div>
+      </Link>
       <img
         src={
           isFavorite
-            ? 'https://cdn.builder.io/api/v1/image/assets/TEMP/8a6ddd1b69b5dee16612f13ff720cd4410d1f183?placeholderIfAbsent=true'
-            : 'https://cdn.builder.io/api/v1/image/assets/TEMP/8a6ddd1b69b5dee16612f13ff720cd4410d1f183?placeholderIfAbsent=true'
+            ? '/images/like/like.png' // 收藏的圖示
+            : '/images/like/unlike.png' // 未收藏的圖示
         }
         className={styles.favoriteIcon}
         alt={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
@@ -415,6 +251,15 @@ function PaginationButton({ number, active, onClick }) {
 
 // 特色菜譜組件，作為獨立組件抽出
 function FeaturedRecipes() {
+  const fetcher = (url) => fetch(url).then((res) => res.json())
+
+  const { data, isLoading, error } = useSWR(
+    `${API_SERVER}/recipes/api`,
+    fetcher
+  )
+
+  const recipes = data?.rows || []
+
   const featuredItems = [
     {
       id: 1,
@@ -456,10 +301,18 @@ function FeaturedRecipes() {
 
   return (
     <div className={styles.featuredSection}>
+      <h3>你可能會喜歡</h3>
       <div className={styles.featuredGrid}>
-        {featuredItems.map((item) => (
-          <FeaturedRecipe key={item.id} image={item.image} title={item.title} />
-        ))}
+        {recipes
+          .sort(() => Math.random() - 0.5) // 隨機打亂陣列
+          .slice(0, 4) // 取出前 6 筆資料
+          .map((item) => (
+            <FeaturedRecipe
+              key={item.id}
+              image={item.image}
+              title={item.title}
+            />
+          ))}
       </div>
     </div>
   )
