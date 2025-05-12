@@ -15,3 +15,9 @@ prettier套件運行問題？
 所以
 -->"prettier.configPath": ".prettierrc.json"要修改成
 "prettier.prettierPath": "./node_modules/prettier" 來除錯
+
+在react裡面製作ＡＰＩ的時後不可以把const在寫變數<--不合邏輯
+const app ={...`{$...}`}錯誤
+Clint ----- Server ----- MYSQL 發送ＡＰＩ請求
+Clint request請求(通常是使用Fetchc或或)--> Server 
+
