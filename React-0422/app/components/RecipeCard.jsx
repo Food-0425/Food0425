@@ -1,7 +1,7 @@
 // RecipeCard.jsx
 import React, { useState } from 'react'
 import Link from 'next/link'
-import styles from '../src/styles/RecipeList.module.scss' // 使用相對路徑
+import styles from '../src/styles/RecipeCard.module.scss' // 使用相對路徑
 
 import { BsBookmarkStarFill, BsBookmarkPlus } from '../icons/icons'
 
@@ -56,8 +56,8 @@ export default function RecipeCard({
         onClick={handleFavoriteClick}
         style={{ cursor: 'pointer' }}
       >
-        {/* <BsBookmarkStarFill /> */}
-        <BsBookmarkPlus />
+        <BsBookmarkStarFill />
+        {/* <BsBookmarkPlus /> */}
       </button>
       {/* 收藏按鈕 End */}
     </div>
