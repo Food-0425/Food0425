@@ -6,6 +6,7 @@ import styles from '../../styles/RecipeList.module.css'
 import useSWR from 'swr'
 import { useSearchParams } from 'next/navigation'
 import { useAuth } from '@/hooks/auth-context'
+import RecipeCard from '@/app/components/RecipeCard'
 
 import { API_SERVER } from '../../../config/api-path'
 
@@ -59,6 +60,7 @@ export default function RecipeListPage() {
         // 確認 favorites 資料
 
         setFavorites(data.favorites || {}) // 假設後端返回的格式是 { recipeId: true/false }
+        setFavoritesLoaded(true) // 標記 favorites 已加載完成
       } catch (error) {
         console.error('載入收藏狀態失敗:', error)
       }
@@ -151,7 +153,7 @@ export default function RecipeListPage() {
 
         {/* Recipe Cards Section 列表頁的食物卡片區塊 */}
         <div className={styles.recipeSection}>
-          {isLoading ? (
+          {isLoading || !favoritesLoaded ? ( // 確保 favorites 已加載
             <div className={styles.loading}>載入中...</div>
           ) : (
             <div className={styles.recipeGrid}>
@@ -162,8 +164,8 @@ export default function RecipeListPage() {
                   image={recipe.image}
                   title={recipe.title}
                   description={recipe.description}
-                  isFavorite={favorites[recipe.id] || false}
-                  onFavoriteToggle={() => toggleFavorite(recipe.id)}
+                  initialFavorite={favorites[recipe.id] || false}
+                  onFavoriteToggle={toggleFavorite}
                 />
               ))}
             </div>
@@ -201,39 +203,39 @@ export default function RecipeListPage() {
 }
 
 // 改進的Recipe Card組件，添加了可交互功能
-function RecipeCard({
-  id,
-  image,
-  title,
-  description,
-  isFavorite,
-  onFavoriteToggle,
-}) {
-  return (
-    <div className={styles.recipeCard}>
-      <Link key={id} href={`/recipes/${id}`} passHref>
-        <div className={styles.recipeImageContainer}>
-          <img src={`/${image}`} className={styles.recipeImage} alt={title} />
-        </div>
-        <div className={styles.recipeContent}>
-          <h3 className={styles.recipeTitle}>{title}</h3>
-          <p className={styles.recipeDescription}>{description}</p>
-        </div>
-      </Link>
-      <img
-        src={
-          isFavorite
-            ? '/images/like/like.png' // 收藏的圖示
-            : '/images/like/unlike.png' // 未收藏的圖示
-        }
-        className={styles.favoriteIcon}
-        alt={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-        onClick={onFavoriteToggle}
-        style={{ cursor: 'pointer' }}
-      />
-    </div>
-  )
-}
+// function RecipeCard({
+//   id,
+//   image,
+//   title,
+//   description,
+//   isFavorite,
+//   onFavoriteToggle,
+// }) {
+//   return (
+//     <div className={styles.recipeCard}>
+//       <Link key={id} href={`/recipes/${id}`} passHref>
+//         <div className={styles.recipeImageContainer}>
+//           <img src={`/${image}`} className={styles.recipeImage} alt={title} />
+//         </div>
+//         <div className={styles.recipeContent}>
+//           <h3 className={styles.recipeTitle}>{title}</h3>
+//           <p className={styles.recipeDescription}>{description}</p>
+//         </div>
+//       </Link>
+//       <img
+//         src={
+//           isFavorite
+//             ? '/images/like/like.png' // 收藏的圖示
+//             : '/images/like/unlike.png' // 未收藏的圖示
+//         }
+//         className={styles.favoriteIcon}
+//         alt={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+//         onClick={onFavoriteToggle}
+//         style={{ cursor: 'pointer' }}
+//       />
+//     </div>
+//   )
+// }
 
 // 改進的分頁按鈕，添加了點擊事件
 function PaginationButton({ number, active, onClick }) {
