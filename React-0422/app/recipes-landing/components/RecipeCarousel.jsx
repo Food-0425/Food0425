@@ -1,8 +1,6 @@
 'use client'
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 import styles from '../../styles/RecipeLanding.module.css'
 import { FaSearch } from 'react-icons/fa'
 
@@ -38,7 +36,7 @@ export default function RecipeCarousel() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)} // 更新關鍵字
             />
-            <button onClick={handleSearch} className={styles.searchButton}>
+            <button className={styles.searchButton} onClick={handleSearch}>
               <FaSearch className={styles.searchIcon} />
             </button>
           </div>

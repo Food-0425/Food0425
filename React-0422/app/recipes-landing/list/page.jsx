@@ -148,47 +148,6 @@ export default function RecipeListPage() {
         </div>
 
         {/* Category Section */}
-        <div className={styles.categorySection}>
-          <div className={styles.categoryContainer}>
-            <img
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/fd1f919d0b6158366db45eb8a8bc08cc3b71c099?placeholderIfAbsent=true"
-              className={styles.arrowIcon}
-              alt="Left arrow"
-              onClick={() => {
-                /* 處理類別左滑 */
-              }}
-            />
-            <div className={styles.categoryItems}>
-              <div className={styles.categoryItem}>餅乾</div>
-              <img
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/7b9131227f9841bbf4a23d000701625fd0d7ce54?placeholderIfAbsent=true"
-                className={styles.categoryImage}
-                alt="Category"
-              />
-              <img
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/cbdacfbfb4caa61ebe1173ba6e56d1094371f75e?placeholderIfAbsent=true"
-                className={styles.categoryImage}
-                alt="Category"
-              />
-              <img
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/d9393c58fd1403ef3204d730145da06b044bddfd?placeholderIfAbsent=true"
-                className={styles.categoryImage}
-                alt="Category"
-              />
-              <div className={styles.categoryItem}>中式糕點</div>
-              <div className={styles.categoryItem}>零嘴小飴</div>
-              <div className={styles.categoryItem}>雪糕</div>
-            </div>
-            <img
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/aff87650c37f3c885c3a4d4827c325d78272ad96?placeholderIfAbsent=true"
-              className={styles.arrowIcon}
-              alt="Right arrow"
-              onClick={() => {
-                /* 處理類別右滑 */
-              }}
-            />
-          </div>
-        </div>
 
         {/* Recipe Cards Section 列表頁的食物卡片區塊 */}
         <div className={styles.recipeSection}>

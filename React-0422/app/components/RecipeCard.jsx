@@ -1,7 +1,9 @@
 // RecipeCard.jsx
 import React, { useState } from 'react'
 import Link from 'next/link'
-import styles from '../styles/RecipeList.module.css' // 假設你會分離CSS樣式
+import styles from '../src/styles/RecipeCard.module.scss' // 使用相對路徑
+
+import { BsBookmarkStarFill, BsBookmarkPlus } from '../icons/icons'
 
 export default function RecipeCard({
   id,
@@ -39,31 +41,26 @@ export default function RecipeCard({
       onClick={handleCardClick}
       style={{ cursor: clickable ? 'pointer' : 'default' }}
     >
-      <div className={styles.recipeImageContainer}>
-        <img src={image} className={styles.recipeImage} alt={title} />
-        {showViewButton && (
-          <div className={styles.viewButtonOverlay}>
-            <button className={styles.viewButton}>查看食譜</button>
-          </div>
-        )}
+      <div>
+        <img
+          src={image} // 從 public 資料夾的根目錄開始
+          alt={title}
+        />
       </div>
-
-      <div className={styles.recipeContent}>
-        <h3 className={styles.recipeTitle}>{title}</h3>
-        <p className={styles.recipeDescription}>{description}</p>
-      </div>
-
-      <img
-        src={
-          isFavorite
-            ? 'https://cdn.builder.io/api/v1/image/assets/TEMP/8a6ddd1b69b5dee16612f13ff720cd4410d1f183?placeholderIfAbsent=true'
-            : 'https://cdn.builder.io/api/v1/image/assets/TEMP/8a6ddd1b69b5dee16612f13ff720cd4410d1f183?placeholderIfAbsent=true'
-        }
-        className={styles.favoriteIcon}
+      <span>
+        <h3>{title}</h3>
+        <p>{description}</p>
+      </span>
+      {/* 收藏按鈕 Start */}
+      <button
         alt={isFavorite ? '已收藏' : '加入收藏'}
         onClick={handleFavoriteClick}
         style={{ cursor: 'pointer' }}
-      />
+      >
+        <BsBookmarkStarFill />
+        {/* <BsBookmarkPlus /> */}
+      </button>
+      {/* 收藏按鈕 End */}
     </div>
   )
 }

@@ -3,11 +3,13 @@
 import React from 'react'
 import styles from '../styles/RecipeLanding.module.css'
 import Link from 'next/link'
+
 import useSWR from 'swr'
 import { useState, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { API_SERVER } from '@/config/api-path'
 import { useRouter } from 'next/navigation'
+
 
 import {
   FaSearch,
@@ -20,7 +22,13 @@ import {
   TbMeat,
   CiBowlNoodles,
 } from '../icons/icons'
-import RecipeCarousel from './components/RecipeCarousel'
+//dynamic import
+// 這邊是為了讓RecipeCarousel這個元件不會在伺服器端渲染，因為它裡面有使用useState和useEffect等hook
+import dynamic from 'next/dynamic'
+const RecipeCarousel = dynamic(() => import('./components/RecipeCarousel'), {
+  ssr: false, // 這樣就不會在伺服器端渲染了
+})
+// import RecipeCarousel from './components/RecipeCarousel'
 
 export default function RecipesLandingPage() {
   const router = useRouter()
@@ -71,6 +79,7 @@ export default function RecipesLandingPage() {
           />
           <div className={styles.categoriesWrapper}>
             <button className={styles.categoryIcon}>
+
               <TbMeat
                 className={styles.categoryIconImg}
                 onClick={() => handleCategory('肉食')}
@@ -119,6 +128,7 @@ export default function RecipesLandingPage() {
                 onClick={() => handleCategory('糕點')}
               />
               糕點
+
             </button>
 
             <button className={styles.categoryIcon}>
@@ -139,6 +149,7 @@ export default function RecipesLandingPage() {
         {/* 確認資料有沒有拉對用的 */}
         {/* <div>{JSON.stringify(data)}</div> */}
         {/* 食譜菜單 Start */}
+
         {/* 麵食 */}
         {activeCategory === '麵食' && (
           <div className={styles.recipeSection}>
@@ -550,6 +561,7 @@ export default function RecipesLandingPage() {
         {/* 糕點測試 */}
 
         {/* <div className={styles.recipeSection}>
+        
           <div className={styles.recipeBlock}>
             <div className={styles.recipeCategory}>
               <img
@@ -558,9 +570,9 @@ export default function RecipesLandingPage() {
                 alt="Desserts background"
               />
               <div className={styles.categoryTitle}>
-                糕點
+                肉食
                 <br />
-                甜食
+                主義
               </div>
               <button className={styles.viewMoreButton}>
                 <h3 className={styles.viewMoreText}>看更多</h3>
@@ -659,9 +671,11 @@ export default function RecipesLandingPage() {
               </div>
             </div>
           </div>
+
         </div> */}
         {/* 生鮮測試 */}
         {/* <div className={styles.recipeSection}>
+
           <div className={styles.recipeBlock}>
             <div className={styles.recipeCategory}>
               <img
@@ -670,9 +684,9 @@ export default function RecipesLandingPage() {
                 alt="Seafood background"
               />
               <div className={styles.categoryTitle}>
-                生鮮
+                蔬食
                 <br />
-                魚肉
+                主義
               </div>
               <button className={styles.viewMoreButton}>
                 <h3 className={styles.viewMoreText}>看更多</h3>
@@ -772,6 +786,7 @@ export default function RecipesLandingPage() {
             </div>
           </div>
         </div>
+        {/* 甜點零嘴 */}
         <div className={styles.recipeSection}>
           <div className={styles.recipeBlock}>
             <div className={styles.recipeCategory}>
@@ -781,9 +796,9 @@ export default function RecipesLandingPage() {
                 alt="Japanese cuisine background"
               />
               <div className={styles.categoryTitle}>
-                日式
+                甜點
                 <br />
-                料理
+                零嘴
               </div>
               <button className={styles.viewMoreButton}>
                 <h3 className={styles.viewMoreText}>看更多</h3>
@@ -883,6 +898,7 @@ export default function RecipesLandingPage() {
             </div>
           </div>
         </div>
+        {/* 飯食料理 */}
         <div className={styles.recipeSection}>
           <div className={styles.recipeBlock}>
             <div className={styles.recipeCategory}>
@@ -892,9 +908,9 @@ export default function RecipesLandingPage() {
                 alt="Western cuisine background"
               />
               <div className={styles.categoryTitle}>
-                西洋
+                飯食
                 <br />
-                風味
+                料理
               </div>
               <button className={styles.viewMoreButton}>
                 <h3 className={styles.viewMoreText}>看更多</h3>
@@ -996,6 +1012,7 @@ export default function RecipesLandingPage() {
         </div> */}
         {/* 食譜菜單 End */}
       </div>
+
       {/* 你可能會喜歡 Start */}
       <div className={styles.featuredSection}>
         <h3>你可能會喜歡</h3>

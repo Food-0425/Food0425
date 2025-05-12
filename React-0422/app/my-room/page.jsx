@@ -1,17 +1,37 @@
 'use client'
-// 這個頁面是拿來做測試用的
 
 import React, { useState, useEffect } from 'react'
-import Link from 'next/link'
-import styles from './../styles/RecipeList.module.css'
 import RecipeCard from '../components/RecipeCard'
+
+import ShopCard from '../components/ShopCard'
+import FoodCard from '../components/FoodCard'
+import styles from '../styles/RecipeLanding.module.css'
 import { useRouter } from 'next/navigation'
 import useSWR from 'swr'
 
 // 顯示一頁幾筆
 const RECIPES_PER_PAGE = 15
 
-export default function MyTestRoomPage(props) {
+export default function MyRoomPage() {
+  // 下為測試用假資料，都已改成資料庫欄位名稱了
+  const mockRecipe = {
+    // 資料庫名稱：recipes
+    id: '1',
+    title: '麻婆豆腐',
+    description:
+      '濃郁奶油醬汁搭配大蒜香氣的經典義大利麵料理，簡單又美味。典義大利麵料理，簡單又美味。',
+    image: '',
+  }
+  const mockShop = {
+    // 資料庫名稱：food_products
+    id: '1014',
+    name: '深海之味',
+    brand: '冷凍海鮮什錦',
+    image: '/images/recipes-img/recipes-15.jpg',
+    price: 350,
+    original_price: 390,
+  }
+  
   const [currentPage, setCurrentPage] = useState(1) // 從第1頁開始，與原本靜態頁面一致
   const [totalPages, setTotalPages] = useState(6)
   const fetcher = (url) => fetch(url).then((res) => res.json())
@@ -59,61 +79,40 @@ export default function MyTestRoomPage(props) {
 
   const prouduct = data?.rows || []
 
+
   return (
     <>
       <br />
       <br />
       <br />
       <br />
-      <br />
-      <h2>這是我的測試室</h2>
-      {/* 下面這行JSON是拿來初步確認是否有拿到後端資料用的 */}
-      <div>{JSON.stringify(data)}</div>
-      {/* <div className={styles.recipeSection}>
-        {isLoading ? (
-          <div className={styles.loading}>載入中...</div>
-        ) : (
-          <div className={styles.recipeGrid}>
-            {prouduct.map((prouduct) => (
-              <RecipeCard
-                key={prouduct.id}
-                id={prouduct.id}
-                image={prouduct.image}
-                title={prouduct.title}
-                description={prouduct.description}
-                // isFavorite={favorites[prouduct.id] || false}
-                // onFavoriteToggle={() => toggleFavorite(prouduct.id)}
-              />
-            ))}
-          </div>
-        )}
-      </div> */}
 
-      <div className={styles.recipeSection}>
-        {isLoading ? (
-          <div className={styles.loading}>載入中...</div>
-        ) : (
-          <div className={styles.recipeGrid}>
-            {prouduct.map((prouduct) => (
-              <div key={prouduct.review_id}>
-                <RecipeCard
-                  key={prouduct.review_id}
-                  id={prouduct.name}
-                  image={prouduct.user_id}
-                  title={prouduct.name}
-                  description={prouduct.review_text}
-                  // isFavorite={favorites[prouduct.id] || false}
-                  // onFavoriteToggle={() => toggleFavorite(prouduct.id)}
-                />
-                <div className={styles.extraContent}>
-                  {/* 這裡是額外的內容 */}
-                  <p>{prouduct.username}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+      {/* <div className={styles.container}> */}
+      <RecipeCard
+        id={mockRecipe.id}
+        image={mockRecipe.image}
+        title={mockRecipe.title}
+        description={mockRecipe.description}
+        initialFavorite={false}
+        showViewButton={true}
+      />
+      <ShopCard
+        id={mockShop.id}
+        image={mockShop.image}
+        name={mockShop.name}
+        brand={mockShop.brand}
+        price={mockShop.price}
+        original_price={mockShop.original_price}
+        initialFavorite={false}
+        showViewButton={true}
+      />
+
+      {/* 不要用 FoodCard 可參考她的收藏功能就好!!! */}
+      {/* <FoodCard
+        food={mockRecipe} // 傳遞整個 food 物件
+      /> */}
+      {/* </div> */}
+
     </>
   )
 }

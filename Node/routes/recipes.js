@@ -17,6 +17,7 @@ router.get('/api', async (req, res) => {
             page: z.string().regex(/^\d+$/).optional(),
             limit: z.string().regex(/^\d+$/).optional(),
             keyword: z.string().optional(),
+            category: z.string().optional(), // 新增 category 過濾參數
         });
 
         const queryValidation = querySchema.safeParse(req.query);
@@ -27,15 +28,20 @@ router.get('/api', async (req, res) => {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 15;
         const keyword = req.query.keyword?.substring(0, 50) || ''; // 限制關鍵字長度
+        const category = req.query.category || ''; // 取得 category 參數
         const offset = (page - 1) * limit;
 
-        const keywordCondition = keyword
+        // const keywordCondition = keyword
         // 這行就是看關鍵字有沒有符合標題 或描述  。如果只要符合標題的話，就是把OR後面的拿調
+
+
+
             ? `WHERE r.title LIKE ? OR r.description LIKE ? OR c.name LIKE ?`
             : '';
         // keywordParams 是參數化查詢，防止 SQL injection（例如使用 ? 而不是直接拼字串）
         // 如果只想要搜尋Title的話，這行就改const keywordParams = keyword ? [`%${keyword}%`] : [];
         const keywordParams = keyword ? [`%${keyword}%`, `%${keyword}%`, `%${keyword}%`] : [];
+
 
          // 取得總筆數
         const [countResult] = await db.query(

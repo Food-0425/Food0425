@@ -71,12 +71,17 @@
   border: none;
   background: transparent;
 }
+
 .searchInput:focus {
   outline: none;
 }
 
+.searchButton {
+  border: none;
+  background: none;
+}
+
 .searchIcon {
-  text-shadow: 0px 3px 10px rgba(0, 0, 0, 0.5);
   font-size: 35px;
   color: #fff;
 }
@@ -133,16 +138,15 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  padding: 20px;
   border-radius: 50%;
   color: #fff;
   text-transform: uppercase;
-  letter-spacing: 0.15rem;
   position: relative;
   overflow: hidden;
   z-index: 1;
   border: none;
-  font-size: 24px;
+  font-size: 20px;
+  letter-spacing: 0px;
   font-family:
     'Noto Sans TC',
     -apple-system,
@@ -176,7 +180,7 @@
 
 .categoryIconImg {
   font-size: 4rem;
-  margin-bottom: 5px;
+  margin-bottom: 0px;
 }
 
 .recipeSection {
@@ -399,7 +403,7 @@
 .featuredContainer {
   display: flex;
   align-items: center;
-  gap: 40px 54px;
+  gap: 40px 20px;
   justify-content: start;
   flex-wrap: wrap;
 }
