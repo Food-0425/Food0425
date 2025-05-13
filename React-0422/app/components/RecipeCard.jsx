@@ -42,10 +42,11 @@ export default function RecipeCard({
       style={{ cursor: clickable ? 'pointer' : 'default' }}
     >
       <div>
-        <img
-          src={image} // 從 public 資料夾的根目錄開始
-          alt={title}
-        />
+        {image ? (
+          <img src={image} alt={title} />
+        ) : (
+          <img src="/images/default.jpg" alt="預設圖片" />
+        )}
       </div>
       <span>
         <h3>{title}</h3>

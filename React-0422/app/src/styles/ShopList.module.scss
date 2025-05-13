@@ -32,7 +32,6 @@
     justify-content: space-between;
     width: 100%;
     padding: 25px 40px;
-    font-family: $font-family-default;
 
     @media (max-width: 991px) {
       padding: 25px 20px;
@@ -47,7 +46,7 @@
     letter-spacing: 0.48px;
     h3 {
       font-size: $font-size-h3;
-      font-weight: $font-weight-h3;
+      font-weight: $font-weight-title;
       margin-bottom: 0;
     }
     p {
@@ -63,7 +62,7 @@
     text-align: end;
     h2 {
       font-size: $font-size-h2;
-      font-weight: $font-weight-h2;
+      font-weight: $font-weight-title;
       color: $color-accent;
       margin-bottom: 0;
     }

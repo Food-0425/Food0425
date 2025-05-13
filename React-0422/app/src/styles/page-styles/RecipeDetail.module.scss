@@ -1,3 +1,6 @@
+@use '../variables' as *;
+@import '../mixins';
+
 /* Main Container */
 .container {
   min-width: 320px;
@@ -6,133 +9,91 @@
   display: flex;
   flex-direction: column;
   justify-content: start;
-  background-color: #fffaf0;
 }
 
 /* Hero Section */
 .heroSection {
-  z-index: 0;
+  position: relative;
   width: 100%;
-  padding-top: 80px;
-  padding-bottom: 150px;
-}
+  height: 300px;
+  overflow: hidden;
+  margin-bottom: 50px;
 
-.heroImage {
-  aspect-ratio: 3.83;
-  object-fit: cover;
-  /* 上面的是圖片放大填滿容器，並且超出的範圍會切。下面則是不會被切 */
-  /* object-fit: contain; */
-  object-position: center;
-  width: 100%;
-  min-height: 501px;
-  max-height: 600px;
+  div:nth-of-type(1) {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    text-align: center;
+    z-index: 2;
+    text-shadow: $title-shadow;
+    p {
+      font-size: $font-size-p1;
+      padding-top: 10px;
+    }
+  }
+  img {
+    background-color: $color-background-error;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 55%;
+    z-index: 1;
+  }
 }
 
 /* Ingredients Section */
 .ingredientsSection {
-  max-width: 1280px;
-  padding-bottom: 150px;
-  align-items: start;
   align-self: center;
-  z-index: 0;
   display: flex;
   width: 1280px;
   gap: 30px;
-  justify-content: start;
-  flex-wrap: wrap;
-}
-
-.ingredientCard,
-.seasoningCard {
-  position: relative;
-  display: flex;
-  min-width: 240px;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: center;
-  flex: 1;
-  flex-shrink: 1;
-  flex-basis: 0%;
 }
 
 .ingredientCard {
-  color: #423c3a;
-}
-
-.seasoningCard {
-  color: #faf8f9;
+  position: relative;
+  flex: 1;
 }
 
 .cardBody {
   border-radius: 30px;
-  z-index: 0;
-  width: 100%;
-}
-
-.ingredientCard .cardBody {
   background-color: #fff;
-}
-
-.seasoningCard .cardBody {
-  background-color: #df6c2d;
-  box-shadow: 3px 3px 5px 0px rgba(0, 0, 0, 0.3) inset;
-}
-
-.cardContent {
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: center;
-}
-
-.cardTitle {
-  color: inherit;
-  width: 100%;
-  font-family:
-    Noto Sans TC,
-    -apple-system,
-    Roboto,
-    Helvetica,
-    sans-serif;
-  font-size: 36px;
-  font-weight: 700;
-  white-space: nowrap;
-  padding: 80px 40px 0px 40px;
+  // box-shadow: 3px 3px 5px 0px rgba(0, 0, 0, 0.3) inset;
+  padding: 20px 40px;
+  h2 {
+    margin-bottom: 20px;
+  }
 }
 
 .cardList {
-  color: inherit;
-  align-self: stretch;
-  width: 100%;
-  gap: 40px;
-  font-family:
-    Inter,
-    -apple-system,
-    Roboto,
-    Helvetica,
-    sans-serif;
+  
+  height: 90px;
   font-size: 20px;
-  font-weight: 400;
   letter-spacing: 0.6px;
-  padding: 45px 40px;
+  // padding: 45px 40px;
 }
 
 .cardIcon {
-  aspect-ratio: 1;
-  object-fit: contain;
-  object-position: center;
-  width: 111px;
   position: absolute;
-  z-index: 0;
-  max-width: 100%;
-  left: 40px;
-  top: -55px;
-  height: 111px;
-}
+  right: 13px;
+  top: 14px;
+  color: #fff;
+  background: $color-accent;
+  border: none;
+  border-radius: 9rem;
+  font-size: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80px;
+  width: 80px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 
-.seasoningCard .cardIcon {
-  box-shadow: 2px 3px 8px 0px rgba(0, 0, 0, 0.25);
+  &:hover {
+    background-color: #c55a24;
+  }
 }
 
 .seasoningHighlight {

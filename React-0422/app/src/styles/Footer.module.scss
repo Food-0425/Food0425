@@ -7,11 +7,6 @@
 }
 
 .footerContent {
-  a {
-    text-decoration: none;
-    color: inherit; // 保持與周圍文字一致
-  }
-  font-family: $font-family-default;
   max-width: 1280px;
   justify-content: space-between;
   display: flex;
@@ -24,7 +19,7 @@
     h3 {
       color: #fff5ee;
       font-size: $font-size-h3;
-      font-weight: $font-weight-h3;
+      font-weight: $font-weight-title;
     }
 
     div {

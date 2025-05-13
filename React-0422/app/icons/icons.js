@@ -4,15 +4,18 @@ import {
   FaFishFins,
   FaEarthAmericas,
   FaCartShopping,
+  FaCartPlus,
   FaUser,
   FaXTwitter,
 } from 'react-icons/fa6'
-import { BiSolidBowlRice } from 'react-icons/bi'
+import { BiSolidBowlRice, BiLike } from 'react-icons/bi'
 import { LuDessert, LuSalad } from 'react-icons/lu'
-import { TbMeat } from 'react-icons/tb'
+import { TbMeat, TbBowlSpoon } from 'react-icons/tb'
 import { CiBowlNoodles } from 'react-icons/ci'
 import { MdFavorite, MdFavoriteBorder } from 'react-icons/md'
 import { BsBookmarkPlus, BsBookmarkStarFill } from 'react-icons/bs'
+import { GiKitchenScale } from 'react-icons/gi'
+import { PiJarLabelBold } from 'react-icons/pi'
 
 export {
   FaSearch,
@@ -29,9 +32,14 @@ export {
   BsBookmarkStarFill,
   BsBookmarkPlus,
   FaCartShopping,
+  FaCartPlus,
   FaUser,
   FaFacebook,
   FaInstagram,
   FaYoutube,
   FaXTwitter,
+  GiKitchenScale,
+  PiJarLabelBold,
+  BiLike,
+  TbBowlSpoon,
 }

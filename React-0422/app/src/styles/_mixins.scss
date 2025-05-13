@@ -12,8 +12,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  right: 13px;
-  top: 14px;
   height: 55px;
   width: 55px;
   cursor: pointer;
@@ -29,7 +27,7 @@
   background-color: $color-background;
   color: $color-primary;
   font-size: $font-size-h2;
-  font-weight: $font-weight-h3;
+  font-weight: $font-weight-title;
   border-radius: 9rem;
   margin: auto 0;
   padding: 8px 20px;
