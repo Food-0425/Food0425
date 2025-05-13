@@ -216,31 +216,19 @@ export default function RecipesLandingPage() {
               </div>
               <div className={styles.recipeCardsContainer}>
                 {data?.rows
-                  .filter((recipe) => recipe.categories?.includes('麵食')) // 過濾出分類為「麵食」的資料
+                  .filter((recipe) => recipe.categories?.includes('麵食'))
+                  .sort((a, b) => a.id - b.id) // 按ID穩定排序
+                  .slice(0, 6) // 過濾出分類為「麵食」的資料，取前6筆
                   .map((recipe) => (
-                    <Link
+                    <RecipeCard
                       key={recipe.id}
-                      href={`/recipes/${recipe.id}`}
-                      passHref
-                    >
-                      <div key={recipe.id} className={styles.recipeCard}>
-                        <div>
-                          <img
-                            src={recipe.image}
-                            className={styles.recipeCardImage}
-                            alt={recipe.recipe_title}
-                          />
-                        </div>
-                        <div className={styles.recipeCardContent}>
-                          <div className={styles.recipeCardTitle}>
-                            {recipe.recipe_title}
-                          </div>
-                          <div className={styles.recipeCardDescription}>
-                            {recipe.recipe_description}
-                          </div>
-                        </div>
-                      </div>
-                    </Link>
+                      id={recipe.id}
+                      image={recipe.image}
+                      title={recipe.recipe_title}
+                      description={recipe.recipe_description}
+                      initialFavorite={favorites[recipe.id] || false}
+                      onFavoriteToggle={toggleFavorite}
+                    />
                   ))}
               </div>
             </div>
@@ -305,31 +293,18 @@ export default function RecipesLandingPage() {
               <div className={styles.recipeCardsContainer}>
                 {data?.rows
                   .filter((recipe) => recipe.categories?.includes('蔬食'))
-                  .slice(0, 6) // 過濾出分類為「肉食」的資料，取前6筆
+                  .sort((a, b) => a.id - b.id) // 按ID穩定排序
+                  .slice(0, 6) // 過濾出分類為「蔬食」的資料，取前6筆
                   .map((recipe) => (
-                    <div key={recipe.id} className={styles.recipeCard}>
-                      <Link
-                        key={recipe.id}
-                        href={`/recipes/${recipe.id}`}
-                        passHref
-                      >
-                        <div>
-                          <img
-                            src={recipe.image}
-                            className={styles.recipeCardImage}
-                            alt={recipe.recipe_title}
-                          />
-                        </div>
-                        <div className={styles.recipeCardContent}>
-                          <div className={styles.recipeCardTitle}>
-                            {recipe.recipe_title}
-                          </div>
-                          <div className={styles.recipeCardDescription}>
-                            {recipe.recipe_description}
-                          </div>
-                        </div>
-                      </Link>
-                    </div>
+                    <RecipeCard
+                      key={recipe.id}
+                      id={recipe.id}
+                      image={recipe.image}
+                      title={recipe.recipe_title}
+                      description={recipe.recipe_description}
+                      initialFavorite={favorites[recipe.id] || false}
+                      onFavoriteToggle={toggleFavorite}
+                    />
                   ))}
               </div>
             </div>
@@ -357,31 +332,18 @@ export default function RecipesLandingPage() {
               <div className={styles.recipeCardsContainer}>
                 {data?.rows
                   .filter((recipe) => recipe.categories?.includes('甜點'))
-                  .slice(0, 6) // 過濾出分類為「肉食」的資料，取前6筆
+                  .sort((a, b) => a.id - b.id) // 按ID穩定排序
+                  .slice(0, 6) // 過濾出分類為「甜點」的資料，取前6筆
                   .map((recipe) => (
-                    <div key={recipe.id} className={styles.recipeCard}>
-                      <Link
-                        key={recipe.id}
-                        href={`/recipes/${recipe.id}`}
-                        passHref
-                      >
-                        <div>
-                          <img
-                            src={recipe.image}
-                            className={styles.recipeCardImage}
-                            alt={recipe.recipe_title}
-                          />
-                        </div>
-                        <div className={styles.recipeCardContent}>
-                          <div className={styles.recipeCardTitle}>
-                            {recipe.recipe_title}
-                          </div>
-                          <div className={styles.recipeCardDescription}>
-                            {recipe.recipe_description}
-                          </div>
-                        </div>
-                      </Link>
-                    </div>
+                    <RecipeCard
+                      key={recipe.id}
+                      id={recipe.id}
+                      image={recipe.image}
+                      title={recipe.recipe_title}
+                      description={recipe.recipe_description}
+                      initialFavorite={favorites[recipe.id] || false}
+                      onFavoriteToggle={toggleFavorite}
+                    />
                   ))}
               </div>
             </div>
@@ -408,31 +370,18 @@ export default function RecipesLandingPage() {
               <div className={styles.recipeCardsContainer}>
                 {data?.rows
                   .filter((recipe) => recipe.categories?.includes('飯食'))
-                  .slice(0, 6) // 過濾出分類為「肉食」的資料，取前6筆
+                  .sort((a, b) => a.id - b.id) // 按ID穩定排序
+                  .slice(0, 6) // 過濾出分類為「飯食」的資料，取前6筆
                   .map((recipe) => (
-                    <div key={recipe.id} className={styles.recipeCard}>
-                      <Link
-                        key={recipe.id}
-                        href={`/recipes/${recipe.id}`}
-                        passHref
-                      >
-                        <div>
-                          <img
-                            src={recipe.image}
-                            className={styles.recipeCardImage}
-                            alt={recipe.recipe_title}
-                          />
-                        </div>
-                        <div className={styles.recipeCardContent}>
-                          <div className={styles.recipeCardTitle}>
-                            {recipe.recipe_title}
-                          </div>
-                          <div className={styles.recipeCardDescription}>
-                            {recipe.recipe_description}
-                          </div>
-                        </div>
-                      </Link>
-                    </div>
+                    <RecipeCard
+                      key={recipe.id}
+                      id={recipe.id}
+                      image={recipe.image}
+                      title={recipe.recipe_title}
+                      description={recipe.recipe_description}
+                      initialFavorite={favorites[recipe.id] || false}
+                      onFavoriteToggle={toggleFavorite}
+                    />
                   ))}
               </div>
             </div>
@@ -459,31 +408,18 @@ export default function RecipesLandingPage() {
               <div className={styles.recipeCardsContainer}>
                 {data?.rows
                   .filter((recipe) => recipe.categories?.includes('異國'))
-                  .slice(0, 6) // 過濾出分類為「肉食」的資料，取前6筆
+                  .sort((a, b) => a.id - b.id) // 按ID穩定排序
+                  .slice(0, 6) // 過濾出分類為「異國」的資料，取前6筆
                   .map((recipe) => (
-                    <div key={recipe.id} className={styles.recipeCard}>
-                      <Link
-                        key={recipe.id}
-                        href={`/recipes/${recipe.id}`}
-                        passHref
-                      >
-                        <div>
-                          <img
-                            src={recipe.image}
-                            className={styles.recipeCardImage}
-                            alt={recipe.recipe_title}
-                          />
-                        </div>
-                        <div className={styles.recipeCardContent}>
-                          <div className={styles.recipeCardTitle}>
-                            {recipe.recipe_title}
-                          </div>
-                          <div className={styles.recipeCardDescription}>
-                            {recipe.recipe_description}
-                          </div>
-                        </div>
-                      </Link>
-                    </div>
+                    <RecipeCard
+                      key={recipe.id}
+                      id={recipe.id}
+                      image={recipe.image}
+                      title={recipe.recipe_title}
+                      description={recipe.recipe_description}
+                      initialFavorite={favorites[recipe.id] || false}
+                      onFavoriteToggle={toggleFavorite}
+                    />
                   ))}
               </div>
             </div>
@@ -510,31 +446,18 @@ export default function RecipesLandingPage() {
               <div className={styles.recipeCardsContainer}>
                 {data?.rows
                   .filter((recipe) => recipe.categories?.includes('生鮮'))
-                  .slice(0, 6) // 過濾出分類為「肉食」的資料，取前6筆
+                  .sort((a, b) => a.id - b.id) // 按ID穩定排序
+                  .slice(0, 6) // 過濾出分類為「生鮮」的資料，取前6筆
                   .map((recipe) => (
-                    <div key={recipe.id} className={styles.recipeCard}>
-                      <Link
-                        key={recipe.id}
-                        href={`/recipes/${recipe.id}`}
-                        passHref
-                      >
-                        <div>
-                          <img
-                            src={recipe.image}
-                            className={styles.recipeCardImage}
-                            alt={recipe.recipe_title}
-                          />
-                        </div>
-                        <div className={styles.recipeCardContent}>
-                          <div className={styles.recipeCardTitle}>
-                            {recipe.recipe_title}
-                          </div>
-                          <div className={styles.recipeCardDescription}>
-                            {recipe.recipe_description}
-                          </div>
-                        </div>
-                      </Link>
-                    </div>
+                    <RecipeCard
+                      key={recipe.id}
+                      id={recipe.id}
+                      image={recipe.image}
+                      title={recipe.recipe_title}
+                      description={recipe.recipe_description}
+                      initialFavorite={favorites[recipe.id] || false}
+                      onFavoriteToggle={toggleFavorite}
+                    />
                   ))}
               </div>
             </div>
@@ -561,37 +484,23 @@ export default function RecipesLandingPage() {
               <div className={styles.recipeCardsContainer}>
                 {data?.rows
                   .filter((recipe) => recipe.categories?.includes('糕點'))
-                  .slice(0, 6) // 過濾出分類為「肉食」的資料，取前6筆
+                  .sort((a, b) => a.id - b.id) // 按ID穩定排序
+                  .slice(0, 6) // 過濾出分類為「糕點」的資料，取前6筆
                   .map((recipe) => (
-                    <div key={recipe.id} className={styles.recipeCard}>
-                      <Link
-                        key={recipe.id}
-                        href={`/recipes/${recipe.id}`}
-                        passHref
-                      >
-                        <div>
-                          <img
-                            src={recipe.image}
-                            className={styles.recipeCardImage}
-                            alt={recipe.recipe_title}
-                          />
-                        </div>
-                        <div className={styles.recipeCardContent}>
-                          <div className={styles.recipeCardTitle}>
-                            {recipe.recipe_title}
-                          </div>
-                          <div className={styles.recipeCardDescription}>
-                            {recipe.recipe_description}
-                          </div>
-                        </div>
-                      </Link>
-                    </div>
+                    <RecipeCard
+                      key={recipe.id}
+                      id={recipe.id}
+                      image={recipe.image}
+                      title={recipe.recipe_title}
+                      description={recipe.recipe_description}
+                      initialFavorite={favorites[recipe.id] || false}
+                      onFavoriteToggle={toggleFavorite}
+                    />
                   ))}
               </div>
             </div>
           </div>
         )}
-
       </div>
 
       {/* 你可能會喜歡 Start */}
