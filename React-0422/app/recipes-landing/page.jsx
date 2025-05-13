@@ -123,6 +123,33 @@ export default function RecipesLandingPage() {
     })
   }
 
+  const [visibleRange, setVisibleRange] = useState([0, 6]) // 初始顯示範圍
+
+  // 右邊箭頭
+  const handleNext = () => {
+    if (visibleRange[1] < categories.length) {
+      setVisibleRange([visibleRange[0] + 1, visibleRange[1] + 1])
+    }
+  }
+  // 左邊箭頭
+  const handlePrev = () => {
+    if (visibleRange[0] > 0) {
+      setVisibleRange([visibleRange[0] - 1, visibleRange[1] - 1])
+    }
+  }
+
+  // 分類的資料，分類名以及它的icon (要加新分類icon的話要在這邊寫)
+  const categories = [
+    { name: '肉食', icon: <TbMeat /> },
+    { name: '蔬食', icon: <LuSalad /> },
+    { name: '甜點', icon: <LuDessert /> },
+    { name: '飯食', icon: <BiSolidBowlRice /> },
+    { name: '異國', icon: <FaEarthAmericas /> },
+    { name: '生鮮', icon: <FaFishFins /> },
+    { name: '糕點', icon: <FaCakeCandles /> },
+    { name: '麵食', icon: <FaCakeCandles /> },
+  ]
+
   return (
     <div>
       {/* 版首輪播 Start */}
@@ -132,76 +159,37 @@ export default function RecipesLandingPage() {
       <div className={styles.container}>
         {/* 食譜ICON選單 Start */}
         <div className={styles.categoriesContainer}>
-          <img
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/53f72b1cdd510a8160b76260d08cccc39de9e6a2?placeholderIfAbsent=true"
-            className={styles.arrowIcon}
-            alt="Left arrow"
-          />
+          <button onClick={handlePrev} disabled={visibleRange[0] === 0}>
+            <img
+              src="https://cdn.builder.io/api/v1/image/assets/TEMP/53f72b1cdd510a8160b76260d08cccc39de9e6a2?placeholderIfAbsent=true"
+              className={styles.arrowIcon}
+              alt="Left arrow"
+            />
+          </button>
           <div className={styles.categoriesWrapper}>
-            <button className={styles.categoryIcon}>
-              <TbMeat
-                className={styles.categoryIconImg}
-                onClick={() => handleCategory('肉食')}
-              />
-              肉食
-            </button>
-
-            <button className={styles.categoryIcon}>
-              <LuSalad
-                className={styles.categoryIconImg}
-                onClick={() => handleCategory('蔬食')}
-              />
-              蔬食
-            </button>
-            <button className={styles.categoryIcon}>
-              <LuDessert
-                className={styles.categoryIconImg}
-                onClick={() => handleCategory('甜點')}
-              />
-              甜點
-            </button>
-            <button className={styles.categoryIcon}>
-              <BiSolidBowlRice
-                className={styles.categoryIconImg}
-                onClick={() => handleCategory('飯食')}
-              />
-              飯食
-            </button>
-            <button className={styles.categoryIcon}>
-              <FaEarthAmericas
-                className={styles.categoryIconImg}
-                onClick={() => handleCategory('異國')}
-              />
-              異國
-            </button>
-            <button className={styles.categoryIcon}>
-              <FaFishFins
-                className={styles.categoryIconImg}
-                onClick={() => handleCategory('生鮮')}
-              />
-              生鮮
-            </button>
-            <button className={styles.categoryIcon}>
-              <FaCakeCandles
-                className={styles.categoryIconImg}
-                onClick={() => handleCategory('糕點')}
-              />
-              糕點
-            </button>
-
-            <button className={styles.categoryIcon}>
-              <FaCakeCandles
-                className={styles.categoryIconImg}
-                onClick={() => handleCategory('麵食')}
-              />
-              麵食
-            </button>
+            {categories
+              .slice(visibleRange[0], visibleRange[1])
+              .map((category, index) => (
+                <button
+                  key={index}
+                  className={styles.categoryIcon}
+                  onClick={() => handleCategory(category.name)}
+                >
+                  {category.icon}
+                  {category.name}
+                </button>
+              ))}
           </div>
-          <img
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/48cafdb4ef4bb734d63a486bf58abbe94c28b5d3?placeholderIfAbsent=true"
-            className={styles.arrowIcon}
-            alt="Right arrow"
-          />
+          <button
+            onClick={handleNext}
+            disabled={visibleRange[1] >= categories.length}
+          >
+            <img
+              src="https://cdn.builder.io/api/v1/image/assets/TEMP/48cafdb4ef4bb734d63a486bf58abbe94c28b5d3?placeholderIfAbsent=true"
+              className={styles.arrowIcon}
+              alt="Right arrow"
+            />
+          </button>
         </div>
         {/* 食譜ICON選單 END */}
         {/* 確認資料有沒有拉對用的 */}
