@@ -5,8 +5,8 @@ import Link from 'next/link'
 import styles from '../../src/styles/page-styles/RecipeDetail.module.scss'
 import {
   TbBowlSpoon,
-  GiKitchenScale,
   PiJarLabelBold,
+  FaCartShopping,
   FaCartPlus,
   BiLike,
 } from '../../icons/icons'
@@ -140,6 +140,7 @@ export default function RecipeDetailPage() {
                     {/* •{ingredient} */}• {ingredient.name} -{' '}
                     {ingredient.quantity} {ingredient.unit}
                     <FaCartPlus />
+                    <FaCartShopping />
                     <br />
                   </React.Fragment>
                 ))
@@ -163,36 +164,34 @@ export default function RecipeDetailPage() {
         {/* 這區是調味料。 但資料庫裡面的食材和調味料寫在一起了。所以暫時註解掉 */}
         <div className={styles.ingredientCard}>
           <div className={styles.cardBody}>
-            <div className={styles.cardContent}>
-              <div className={styles.cardTitle}>調味料</div>
-              <div className={styles.cardList}>
-                {recipe.condiments ? (
-                  recipe.condiments.map((seasoning, index) => (
-                    <React.Fragment key={index}>
-                      {/* •{seasoning} */}• {seasoning.name} -{' '}
-                      {seasoning.quantity} {seasoning.unit}
-                      <br />
-                    </React.Fragment>
-                  ))
-                ) : (
-                  <>
-                    •魚高湯 600 毫升
+            <h2>調味料</h2>
+            <div className={styles.cardList}>
+              {recipe.ingredients ? (
+                recipe.condiments.map((seasoning, index) => (
+                  <React.Fragment key={index}>
+                    {/* •{seasoning} */}• {seasoning.name} -{' '}
+                    {seasoning.quantity} {seasoning.unit}
+                    <FaCartPlus />
+                    <FaCartShopping />
                     <br />
-                    •白酒 100 毫升 <br />
-                    •奶油 40 克<br />
-                    <span className={styles.seasoningHighlight}>
-                      •帕馬森起司 50克 (磨碎)
-                    </span>
-                  </>
-                )}
-              </div>
+                  </React.Fragment>
+                ))
+              ) : (
+                <>
+                  •魚高湯 600 毫升
+                  <br />
+                  •白酒 100 毫升 <br />
+                  •奶油 40 克<br />
+                  <span className={styles.seasoningHighlight}>
+                    •帕馬森起司 50克 (磨碎)
+                  </span>
+                </>
+              )}
             </div>
           </div>
-          <img
-            src="/images/recipes/seasoning-icon.png"
-            className={styles.cardIcon}
-            alt="Seasoning icon"
-          />
+          <div className={styles.cardIcon}>
+            <PiJarLabelBold />
+          </div>
         </div>
       </div>
 
