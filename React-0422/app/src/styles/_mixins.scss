@@ -1,14 +1,14 @@
-@use '_variables' as *;
+@use 'variables' as vars; // Sass 會自動尋找名為 _variables.scss 的檔案
 
 // 按鈕樣式
 
 // 👇Footer 那邊的社群軟體icon有使用
 @mixin button-icon {
   color: #fff;
-  background: $color-accent;
+  background: vars.$color-accent;
   border: none;
   border-radius: 9rem;
-  font-size: $font-size-icon;
+  font-size: vars.$font-size-icon;
   display: flex;
   align-items: center;
   justify-content: center;
