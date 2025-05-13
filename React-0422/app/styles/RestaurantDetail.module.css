@@ -67,7 +67,7 @@
 .restaurantTitle {
   color: #423c3a;
   font-family:
-    "Noto Sans TC",
+    'Noto Sans TC',
     -apple-system,
     Roboto,
     Helvetica,
@@ -118,9 +118,10 @@
   border: 1px solid #df6c2d;
   display: flex;
   padding: 9px 17px 11px;
-  align-items: flex-start;
+  /* 修改以下屬性 */
+  align-items: center; /* 改為 center，使圖示和文字垂直置中對齊 */
   gap: 8px;
-  justify-content: flex-start;
+  justify-content: center; /* 改為 center，使內容水平置中 */
   cursor: pointer;
 }
 
@@ -145,7 +146,7 @@
   align-items: center;
   gap: 8px;
   font-family:
-    "Noto Sans TC",
+    'Noto Sans TC',
     -apple-system,
     Roboto,
     Helvetica,
@@ -231,10 +232,10 @@
 .heroImage {
   border-radius: 8px;
   display: flex;
-  margin-top: 42px;
+  margin-top: 20px;
   width: 100%;
-  padding-top: 29px;
-  padding-bottom: 40px;
+  padding-top: 20px;
+  padding-bottom: 20px;
   align-items: flex-end;
   overflow: hidden;
   justify-content: center;
@@ -242,7 +243,7 @@
 
 @media (max-width: 991px) {
   .heroImage {
-    margin-top: 40px;
+    margin-top: 20px;
   }
 }
 
@@ -271,7 +272,7 @@
 .descriptionText {
   color: #423c3a;
   font-family:
-    "Noto Sans TC",
+    'Noto Sans TC',
     -apple-system,
     Roboto,
     Helvetica,
@@ -290,7 +291,7 @@
 .sectionTitle {
   color: #423c3a;
   font-family:
-    "Noto Sans TC",
+    'Noto Sans TC',
     -apple-system,
     Roboto,
     Helvetica,
@@ -341,7 +342,7 @@
 .quoteAuthor {
   color: #666;
   font-family:
-    "Noto Sans TC",
+    'Noto Sans TC',
     -apple-system,
     Roboto,
     Helvetica,
@@ -363,7 +364,7 @@
 .dishTitle {
   color: #423c3a;
   font-family:
-    "Noto Sans TC",
+    'Noto Sans TC',
     -apple-system,
     Roboto,
     Helvetica,
@@ -409,13 +410,13 @@
   flex-direction: column;
   align-items: stretch;
   font-family:
-    "Noto Sans TC",
+    'Noto Sans TC',
     -apple-system,
     Roboto,
     Helvetica,
     sans-serif;
-  white-space: nowrap;
   justify-content: center;
+  /* 移除 white-space: nowrap; 允許文字換行 */
 }
 
 @media (max-width: 991px) {
@@ -438,6 +439,11 @@
   font-weight: 400;
   letter-spacing: 0.48px;
   margin-top: 16px;
+  /* 添加以下屬性 */
+  white-space: normal; /* 允許文字換行 */
+  word-wrap: break-word; /* 允許長單字換行 */
+  line-height: 1.6; /* 設定行高 */
+  max-width: 100%; /* 確保不會超出父元素 */
 }
 
 @media (max-width: 991px) {
@@ -513,10 +519,19 @@
 .infoItem {
   display: flex;
   width: 100%;
-  align-items: flex-start;
+  align-items: center;
   gap: 12px;
   justify-content: flex-start;
   flex-wrap: wrap;
+}
+.infoItem svg {
+  width: 24px;
+  height: 24px;
+  color: #423c3a; /* 設定圖標顏色 */
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 @media (max-width: 991px) {
@@ -539,13 +554,15 @@
   padding: 3px 0;
   flex-direction: column;
   align-items: stretch;
-  width: 187px;
+  width: auto; /* 改為 auto，讓寬度自適應 */
+  min-width: 187px; /* 設定最小寬度 */
+  flex: 1; /* 添加 flex: 1 讓元素可以填充剩餘空間 */
 }
 
 .infoText {
   color: #423c3a;
   font-family:
-    "Noto Sans TC",
+    'Noto Sans TC',
     -apple-system,
     Roboto,
     Helvetica,
@@ -553,6 +570,9 @@
   font-size: 16px;
   letter-spacing: 0.48px;
   z-index: 10;
+  white-space: normal; /* 允許文字自然換行 */
+  word-wrap: break-word; /* 允許長單字換行 */
+  max-width: 100%; /* 確保不會超出父元素 */
 }
 
 @media (max-width: 991px) {
@@ -580,10 +600,10 @@
   display: flex;
   margin-top: 16px;
   width: 100%;
-  align-items: flex-start;
+  align-items: flex-start; /* 改為 flex-start，避免內容過長時的對齊問題 */
   gap: 12px;
   font-family:
-    "Noto Sans TC",
+    'Noto Sans TC',
     -apple-system,
     Roboto,
     Helvetica,
@@ -593,7 +613,18 @@
   white-space: nowrap;
   letter-spacing: 0.48px;
   justify-content: flex-start;
-  flex-wrap: wrap;
+  flex-wrap: nowrap; /* 改為 nowrap，避免內容換行 */
+  padding-right: 20px; /* 添加右邊距 */
+}
+
+.infoItemSimple svg {
+  width: 24px;
+  height: 24px;
+  color: #423c3a; /* 設定圖標顏色 */
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 @media (max-width: 991px) {
@@ -610,10 +641,10 @@
   width: 100%;
   padding-right: 40px;
   padding-bottom: 2px;
-  align-items: flex-start;
+  align-items: center;
   gap: 12px;
   font-family:
-    "Noto Sans TC",
+    'Noto Sans TC',
     -apple-system,
     Roboto,
     Helvetica,
@@ -625,11 +656,31 @@
   flex-wrap: wrap;
 }
 
+.infoItemHours svg {
+  width: 24px;
+  height: 24px;
+  color: #423c3a; /* 設定圖標顏色 */
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 @media (max-width: 991px) {
   .infoItemHours {
     max-width: 100%;
     padding-right: 20px;
   }
+}
+
+.relatedItem a,
+.relatedItemWide a {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
 }
 
 .infoIconSmall {
@@ -655,7 +706,7 @@
 .infoSubtitle {
   color: #423c3a;
   font-family:
-    "Noto Sans TC",
+    'Noto Sans TC',
     -apple-system,
     Roboto,
     Helvetica,
@@ -673,7 +724,7 @@
   flex-direction: column;
   align-items: stretch;
   font-family:
-    "Noto Sans TC",
+    'Noto Sans TC',
     -apple-system,
     Roboto,
     Helvetica,
@@ -740,12 +791,12 @@
   flex-shrink: 0;
 }
 
-.relatedInfo {
+.relatedInfo,
+.relatedInfoWide {
+  padding: 16px; /* 增加內部間距 */
   display: flex;
-  padding-bottom: 39px;
   flex-direction: column;
-  align-items: stretch;
-  width: 96px;
+  gap: 8px; /* 增加元素之間的間距 */
 }
 
 @media (max-width: 991px) {
@@ -754,16 +805,13 @@
   }
 }
 
-.relatedName {
+.relatedName,
+.relatedNameWide {
   color: #423c3a;
-  font-family:
-    "Noto Sans TC",
-    -apple-system,
-    Roboto,
-    Helvetica,
-    sans-serif;
   font-size: 16px;
-  letter-spacing: 0.48px;
+  font-weight: 600;
+  margin-top: 13px; /* 增加與圖片的間距 */
+  line-height: 1.4;
 }
 
 @media (max-width: 991px) {
@@ -802,30 +850,10 @@
   }
 }
 
-.relatedInfoWide {
-  display: flex;
-  padding-bottom: 39px;
-  flex-direction: column;
-  align-items: stretch;
-  width: 144px;
-}
-
 @media (max-width: 991px) {
   .relatedInfoWide {
     white-space: initial;
   }
-}
-
-.relatedNameWide {
-  color: #423c3a;
-  font-family:
-    "Noto Sans TC",
-    -apple-system,
-    Roboto,
-    Helvetica,
-    sans-serif;
-  font-size: 16px;
-  letter-spacing: 0.48px;
 }
 
 @media (max-width: 991px) {

@@ -9,6 +9,11 @@ import { useEffect } from 'react'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { API_SERVER } from '@/config/api-path'
+import { IoStar } from 'react-icons/io5'
+import { IoMdShare } from 'react-icons/io'
+import { FaMapMarkerAlt } from 'react-icons/fa'
+import { FaPhoneAlt } from 'react-icons/fa'
+import { FaRegClock } from 'react-icons/fa6'
 
 // Mock data for restaurant details
 const getRestaurantData = (id) => {
@@ -18,7 +23,7 @@ const getRestaurantData = (id) => {
     title: '隱身巷弄的美味秘境：山丘上的義式餐廳',
     author: '美食編輯',
     publishDate: '2024.01.15',
-    heroImage: '/images/restaurant/hero-image.jpg',
+    image: '/images/restaurant/hero-image.jpg',
     description:
       '位於台北市郊的「山丘上的義式餐廳」，是一間充滿浪漫氛圍的義式料理餐廳。餐廳由米其林星級主廚 Marco 主理，將傳統義大利美食與在地食材完美結合，為饕客們帶來獨特的美食體驗。',
     dishes: [
@@ -129,48 +134,56 @@ export default function RestaurantDetailPage() {
             <div>餐廳介紹</div>
           </div>
           <div className={styles.mainContent}>
-            <h1 className={styles.restaurantTitle}>{restaurant.title}</h1>
+            <h1 className={styles.restaurantTitle}>
+              隱身巷弄的美味秘境：{restaurant.name}
+            </h1>
 
             <div className={styles.actionButtons}>
               <div className={styles.actionButton}>
                 <img
-                  src="/images/restaurant/favorite-icon.png"
+                  src="/images/like/love1.png"
                   className={styles.actionIcon}
                   alt="收藏"
                 />
                 <div>收藏餐廳</div>
               </div>
               <div className={styles.actionButton}>
-                <img
+                {/* <img
                   src="/images/restaurant/share-icon.png"
                   className={styles.actionIcon}
                   alt="分享"
-                />
+                /> */}
+                <IoMdShare />
                 <div>分享</div>
               </div>
             </div>
 
             <div className={styles.authorInfo}>
               <div className={styles.recommendBadge}>
-                <img
+                {/* <img
                   src="/images/restaurant/recommend-icon.png"
                   className={styles.badgeIcon}
                   alt="特別推薦"
-                />
+                /> */}
+                <IoStar />
                 <div className={styles.badgeText}>特別推薦</div>
               </div>
               <img
-                src="/images/restaurant/author-avatar.png"
+                src="/images/user/default.jpg"
                 className={styles.authorAvatar}
                 alt="作者頭像"
               />
-              <div className={styles.authorLabel}>{restaurant.author}</div>
-              <div className={styles.publishDate}>{restaurant.publishDate}</div>
+              <div className={styles.authorLabel}>
+                {restaurant.author}美食編輯
+              </div>
+              <div className={styles.publishDate}>
+                {restaurant.publishDate}2024.01.15
+              </div>
             </div>
 
             <div className={styles.heroImage}>
               <img
-                src={restaurant.heroImage}
+                src={restaurant.image}
                 className={styles.heroImg}
                 alt={restaurant.title}
               />
@@ -193,7 +206,7 @@ export default function RestaurantDetailPage() {
               {restaurant.dishes.map((dish, index) => (
                 <React.Fragment key={index}>
                   <img
-                    src={dish.image}
+                    src={dish.image_url}
                     className={styles.dishImage}
                     alt={dish.title}
                   />
@@ -217,11 +230,13 @@ export default function RestaurantDetailPage() {
                 <div className={styles.infoCardTitle}>餐廳資訊</div>
                 <div className={styles.infoCardContent}>
                   <div className={styles.infoItem}>
-                    <img
+                    {/* <img
                       src="/images/restaurant/location-icon.png"
                       className={styles.infoIcon}
                       alt="地址"
-                    />
+                    /> */}
+
+                    <FaMapMarkerAlt />
                     <div className={styles.infoTextGroup}>
                       <div className={styles.infoText}>
                         {restaurant.address}
@@ -231,20 +246,24 @@ export default function RestaurantDetailPage() {
                   </div>
 
                   <div className={styles.infoItemSimple}>
-                    <img
+                    {/* <img
                       src="/images/restaurant/phone-icon.png"
                       className={styles.infoIcon}
                       alt="電話"
-                    />
+                    /> */}
+                    <FaPhoneAlt />
+
                     <div>{restaurant.phone}</div>
                   </div>
 
                   <div className={styles.infoItemHours}>
-                    <img
+                    {/* <img
                       src="/images/restaurant/time-icon.png"
                       className={styles.infoIconSmall}
                       alt="營業時間"
-                    />
+                    /> */}
+                    <FaRegClock />
+
                     <div className={styles.infoTextFull}>
                       {restaurant.hours}
                     </div>
@@ -293,31 +312,35 @@ export default function RestaurantDetailPage() {
                           : styles.relatedItem
                       }
                     >
-                      <img
-                        src={related.image}
-                        className={styles.relatedImage}
-                        alt={related.name}
-                      />
-                      <div
-                        className={
-                          index === 2
-                            ? styles.relatedInfoWide
-                            : styles.relatedInfo
-                        }
+                      <Link
+                        href={`/restaurants/${related.related_restaurant_id}`}
                       >
+                        <img
+                          src={related.image}
+                          className={styles.relatedImage}
+                          alt={related.name}
+                        />
                         <div
                           className={
                             index === 2
-                              ? styles.relatedNameWide
-                              : styles.relatedName
+                              ? styles.relatedInfoWide
+                              : styles.relatedInfo
                           }
                         >
-                          {related.related_restaurant_name}
+                          <div
+                            className={
+                              index === 2
+                                ? styles.relatedNameWide
+                                : styles.relatedName
+                            }
+                          >
+                            {related.related_restaurant_name}
+                          </div>
+                          <div className={styles.relatedLocation}>
+                            {related.location}
+                          </div>
                         </div>
-                        <div className={styles.relatedLocation}>
-                          {related.location}
-                        </div>
-                      </div>
+                      </Link>
                     </div>
                   ))}
                 </div>
