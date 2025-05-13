@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import styles from '../styles/ProductList.module.css'
 import { ProductCard } from '../components/ProductCard'
+import { ShopCard } from '../components/ShopCard'
 
 //  每頁顯示商品數量
 const PRODUCTS_PER_PAGE = 15 // 雖然定義了，但目前 API 回傳中已包含分頁邏輯
@@ -185,7 +186,7 @@ export default function ProductListPage() {
             <div>載入中...</div> //  載入狀態
           ) : products && products.length > 0 ? ( // 修改：檢查 products 是否有內容
             products.map((product) => (
-              <ProductCard key={product.id} product={product} /> //  商品卡片元件
+              <ProductCard key={product.id} product={product} />
             ))
           ) : (
             <div>沒有找到符合條件的商品。</div> // 新增：無商品時的提示
