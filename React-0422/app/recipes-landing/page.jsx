@@ -3,12 +3,14 @@
 import React from 'react'
 import styles from '../styles/RecipeLanding.module.css'
 import Link from 'next/link'
+import RecipeCard from '@/app/components/RecipeCard'
 
 import useSWR from 'swr'
 import { useState, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { API_SERVER } from '@/config/api-path'
 import { useRouter } from 'next/navigation'
+import { useAuth } from '@/hooks/auth-context'
 
 import {
   FaSearch,
@@ -30,13 +32,17 @@ const RecipeCarousel = dynamic(() => import('./components/RecipeCarousel'), {
 // import RecipeCarousel from './components/RecipeCarousel'
 
 export default function RecipesLandingPage() {
+  const { auth } = useAuth() || {} // 使用 useAuth 鉤子獲取用戶信息
+
   const router = useRouter()
+  const [favorites, setFavorites] = useState({})
+  const [favoritesLoaded, setFavoritesLoaded] = useState(false)
   const [activeCategory, setActiveCategory] = useState('肉食') // 用於追蹤當前選中的分類
 
   // 如果需要獲取查詢參數，使用 useSearchParams
   const searchParams = useSearchParams()
 
-  // 為確保客戶���渲染時能正確載入數據，添加一個加載狀態
+  // 為確保客戶端渲染時能正確載入數據，添加一個加載狀態
   const [isLoading, setIsLoading] = useState(true)
 
   const [activePage, setActivePage] = useState(1) // 當前頁碼
@@ -62,6 +68,88 @@ export default function RecipesLandingPage() {
     router.push(`/recipes-landing/list?page=1&keyword=${category}`)
   }
 
+  // 從後端獲取收藏狀態
+  useEffect(() => {
+    // console.log('Authorization Token:', auth.token) // 檢查 token 是否正確
+
+    const fetchFavorites = async () => {
+      // console.log('Authorization Token:', auth.token)
+      try {
+        const response = await fetch(`${API_SERVER}/recipes/api/favorite/get`, {
+          headers: {
+            Authorization: `Bearer ${auth.token}`, // 假設需要用戶的 token
+          },
+        })
+        const data = await response.json()
+        // console.log('Fetched Favorites:', data.favorites)
+        // 確認 favorites 資料
+
+        setFavorites(data.favorites || {}) // 假設後端返回的格式是 { recipeId: true/false }
+        setFavoritesLoaded(true) // 標記 favorites 已加載完成
+      } catch (error) {
+        console.error('載入收藏狀態失敗:', error)
+      }
+    }
+
+    if (auth?.token) {
+      fetchFavorites()
+    }
+  }, [auth])
+
+  // 處理收藏切換
+  const toggleFavorite = (recipeId) => {
+    const newFavoriteStatus = !favorites[recipeId]
+
+    // 更新前端狀態
+    setFavorites((prev) => ({
+      ...prev,
+      [recipeId]: newFavoriteStatus,
+    }))
+
+    // 發送 API 請求更新後端狀態
+    fetch(`${API_SERVER}/recipes/api/favorite`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${auth.token}`,
+      },
+      body: JSON.stringify({
+        userId: auth.id,
+        recipeId,
+        isFavorite: newFavoriteStatus,
+      }),
+    }).catch((error) => {
+      console.error('更新收藏狀態失敗:', error)
+    })
+  }
+
+  const [visibleRange, setVisibleRange] = useState([0, 6]) // 初始顯示範圍
+
+  // 右邊箭頭
+  const handleNext = () => {
+    if (visibleRange[1] < categories.length) {
+      setVisibleRange([visibleRange[0] + 1, visibleRange[1] + 1])
+    }
+  }
+  // 左邊箭頭
+  const handlePrev = () => {
+    if (visibleRange[0] > 0) {
+      setVisibleRange([visibleRange[0] - 1, visibleRange[1] - 1])
+    }
+  }
+
+  // 分類的資料，分類名以及它的icon (要加新分類icon的話要在這邊寫)
+  const categories = [
+    { name: '肉食', icon: <TbMeat /> },
+    { name: '蔬食', icon: <LuSalad /> },
+    { name: '甜點', icon: <LuDessert /> },
+    { name: '飯食', icon: <BiSolidBowlRice /> },
+    { name: '異國', icon: <FaEarthAmericas /> },
+    { name: '生鮮', icon: <FaFishFins /> },
+    { name: '糕點', icon: <FaCakeCandles /> },
+    { name: '麵食', icon: <FaCakeCandles /> },
+  ]
+
   return (
     <div>
       {/* 版首輪播 Start */}
@@ -71,76 +159,37 @@ export default function RecipesLandingPage() {
       <div className={styles.container}>
         {/* 食譜ICON選單 Start */}
         <div className={styles.categoriesContainer}>
-          <img
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/53f72b1cdd510a8160b76260d08cccc39de9e6a2?placeholderIfAbsent=true"
-            className={styles.arrowIcon}
-            alt="Left arrow"
-          />
+          <button onClick={handlePrev} disabled={visibleRange[0] === 0}>
+            <img
+              src="https://cdn.builder.io/api/v1/image/assets/TEMP/53f72b1cdd510a8160b76260d08cccc39de9e6a2?placeholderIfAbsent=true"
+              className={styles.arrowIcon}
+              alt="Left arrow"
+            />
+          </button>
           <div className={styles.categoriesWrapper}>
-            <button className={styles.categoryIcon}>
-              <TbMeat
-                className={styles.categoryIconImg}
-                onClick={() => handleCategory('肉食')}
-              />
-              肉食
-            </button>
-
-            <button className={styles.categoryIcon}>
-              <LuSalad
-                className={styles.categoryIconImg}
-                onClick={() => handleCategory('蔬食')}
-              />
-              蔬食
-            </button>
-            <button className={styles.categoryIcon}>
-              <LuDessert
-                className={styles.categoryIconImg}
-                onClick={() => handleCategory('甜點')}
-              />
-              甜點
-            </button>
-            <button className={styles.categoryIcon}>
-              <BiSolidBowlRice
-                className={styles.categoryIconImg}
-                onClick={() => handleCategory('飯食')}
-              />
-              飯食
-            </button>
-            <button className={styles.categoryIcon}>
-              <FaEarthAmericas
-                className={styles.categoryIconImg}
-                onClick={() => handleCategory('異國')}
-              />
-              異國
-            </button>
-            <button className={styles.categoryIcon}>
-              <FaFishFins
-                className={styles.categoryIconImg}
-                onClick={() => handleCategory('生鮮')}
-              />
-              生鮮
-            </button>
-            <button className={styles.categoryIcon}>
-              <FaCakeCandles
-                className={styles.categoryIconImg}
-                onClick={() => handleCategory('糕點')}
-              />
-              糕點
-            </button>
-
-            <button className={styles.categoryIcon}>
-              <FaCakeCandles
-                className={styles.categoryIconImg}
-                onClick={() => handleCategory('麵食')}
-              />
-              麵食
-            </button>
+            {categories
+              .slice(visibleRange[0], visibleRange[1])
+              .map((category, index) => (
+                <button
+                  key={index}
+                  className={styles.categoryIcon}
+                  onClick={() => handleCategory(category.name)}
+                >
+                  {category.icon}
+                  {category.name}
+                </button>
+              ))}
           </div>
-          <img
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/48cafdb4ef4bb734d63a486bf58abbe94c28b5d3?placeholderIfAbsent=true"
-            className={styles.arrowIcon}
-            alt="Right arrow"
-          />
+          <button
+            onClick={handleNext}
+            disabled={visibleRange[1] >= categories.length}
+          >
+            <img
+              src="https://cdn.builder.io/api/v1/image/assets/TEMP/48cafdb4ef4bb734d63a486bf58abbe94c28b5d3?placeholderIfAbsent=true"
+              className={styles.arrowIcon}
+              alt="Right arrow"
+            />
+          </button>
         </div>
         {/* 食譜ICON選單 END */}
         {/* 確認資料有沒有拉對用的 */}
@@ -218,31 +267,18 @@ export default function RecipesLandingPage() {
               <div className={styles.recipeCardsContainer}>
                 {data?.rows
                   .filter((recipe) => recipe.categories?.includes('肉食'))
+                  .sort((a, b) => a.id - b.id) // 按ID穩定排序
                   .slice(0, 6) // 過濾出分類為「肉食」的資料，取前6筆
                   .map((recipe) => (
-                    <Link
+                    <RecipeCard
                       key={recipe.id}
-                      href={`/recipes/${recipe.id}`}
-                      passHref
-                    >
-                      <div key={recipe.id} className={styles.recipeCard}>
-                        <div>
-                          <img
-                            src={recipe.image}
-                            className={styles.recipeCardImage}
-                            alt={recipe.recipe_title}
-                          />
-                        </div>
-                        <div className={styles.recipeCardContent}>
-                          <div className={styles.recipeCardTitle}>
-                            {recipe.recipe_title}
-                          </div>
-                          <div className={styles.recipeCardDescription}>
-                            {recipe.recipe_description}
-                          </div>
-                        </div>
-                      </div>
-                    </Link>
+                      id={recipe.id}
+                      image={recipe.image}
+                      title={recipe.recipe_title}
+                      description={recipe.recipe_description}
+                      initialFavorite={favorites[recipe.id] || false}
+                      onFavoriteToggle={toggleFavorite}
+                    />
                   ))}
               </div>
             </div>
@@ -555,6 +591,7 @@ export default function RecipesLandingPage() {
             </div>
           </div>
         )}
+
       </div>
 
       {/* 你可能會喜歡 Start */}

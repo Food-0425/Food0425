@@ -4,312 +4,230 @@ import React, { useState, useEffect } from 'react'
 import styles from '../styles/ProductList.module.css'
 import { ProductCard } from '../components/ProductCard'
 
-// Mock product data - in a real app, this would come from an API
-const mockProducts = [
-  {
-    id: 1,
-    image: 'https://via.placeholder.com/320x180',
-    title: '宜蘭三星蔥',
-    description: '清甜爽脆炒菜超香',
-    price: 80,
-    isFavorite: false,
-  },
-  {
-    id: 2,
-    image: 'https://via.placeholder.com/320x180',
-    title: '高山高麗菜',
-    description: '冬季鮮嫩口感好',
-    price: 60,
-    isFavorite: false,
-  },
-  {
-    id: 3,
-    image: 'https://via.placeholder.com/320x180',
-    title: '屏東鳳梨',
-    description: '酸甜多汁一口滿足',
-    price: 120,
-    isFavorite: false,
-  },
-  {
-    id: 4,
-    image: 'https://via.placeholder.com/320x180',
-    title: '溪頭香菇',
-    description: '肉厚鮮香燉湯佳',
-    price: 90,
-    isFavorite: false,
-  },
-  {
-    id: 5,
-    image: 'https://via.placeholder.com/320x180',
-    title: '雲林蒜頭',
-    description: '濃郁香氣提味神器',
-    price: 60,
-    isFavorite: false,
-  },
-  {
-    id: 6,
-    image: 'https://via.placeholder.com/320x180',
-    title: '阿里山山葵',
-    description: '刺激辣香壽司好搭',
-    price: 150,
-    isFavorite: false,
-  },
-  {
-    id: 7,
-    image: 'https://via.placeholder.com/320x180',
-    title: '西螺米',
-    description: 'Q彈飽滿煮飯超香',
-    price: 200,
-    isFavorite: false,
-  },
-  {
-    id: 8,
-    image: 'https://via.placeholder.com/320x180',
-    title: '桃園米苔目',
-    description: '古早風味Q彈爽口',
-    price: 135,
-    isFavorite: false,
-  },
-  {
-    id: 9,
-    image: 'https://via.placeholder.com/320x180',
-    title: '宜蘭筊白筍',
-    description: '清甜爽脆快炒美味',
-    price: 85,
-    isFavorite: false,
-  },
-  {
-    id: 10,
-    image: 'https://via.placeholder.com/320x180',
-    title: '屏東龍眼乾',
-    description: '甘甜濃郁下午茶點',
-    price: 95,
-    isFavorite: false,
-  },
-  {
-    id: 11,
-    image: 'https://via.placeholder.com/320x180',
-    title: '宜蘭金棗',
-    description: '微酸果香且清新',
-    price: 45,
-    isFavorite: false,
-  },
-  {
-    id: 12,
-    image: 'https://via.placeholder.com/320x180',
-    title: '南投百香果',
-    description: '酸甜開胃可當果汁',
-    price: 75,
-    isFavorite: false,
-  },
-  {
-    id: 13,
-    image: 'https://via.placeholder.com/320x180',
-    title: '澎湖紫菜',
-    description: '海味濃郁可煮味噌湯',
-    price: 115,
-    isFavorite: false,
-  },
-  {
-    id: 14,
-    image: 'https://via.placeholder.com/320x180',
-    title: '美濃白玉蘿蔔',
-    description: '鮮脆多汁非常爽口',
-    price: 70,
-    isFavorite: false,
-  },
-  {
-    id: 15,
-    image: 'https://via.placeholder.com/320x180',
-    title: '小農地瓜',
-    description: '綿密香甜',
-    price: 55,
-    isFavorite: false,
-  },
-]
-
-const PRODUCTS_PER_PAGE = 15
+//  每頁顯示商品數量
+const PRODUCTS_PER_PAGE = 15 // 雖然定義了，但目前 API 回傳中已包含分頁邏輯
 
 export default function ProductListPage() {
-  const [products, setProducts] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [currentPage, setCurrentPage] = useState(4) // Starting at page 4 as shown in design
-  const [totalPages, setTotalPages] = useState(6)
-  const [activeCategory, setActiveCategory] = useState('本周熱銷')
-  const [sortByPrice, setSortByPrice] = useState(false)
+  //  State 狀態管理
+  const [products, setProducts] = useState([]) // 顯示中的產品資料
+  const [loading, setLoading] = useState(true) // 是否在載入中
+  const [currentPage, setCurrentPage] = useState(1) // 目前頁碼 (初始值改為 1，因為有分類和搜尋時通常從第一頁開始)
+  const [totalPages, setTotalPages] = useState(1) // 總頁數（預設改為 1）
+  const [activeCategory, setActiveCategory] = useState('本周熱銷') // 目前分類
+  const [sortByPrice, setSortByPrice] = useState(false) // 是否以價格排序
+  const [searchTerm, setSearchTerm] = useState('') // 新增：搜尋關鍵字狀態
 
-  // Fetch products (simulated)
+  //  當頁碼、分類、排序條件、搜尋關鍵字改變時，重新取得產品資料
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true)
       try {
-        // In a real app, this would be an API call
-        // const response = await fetch(`/api/products?page=${currentPage}&category=${activeCategory}`);
-        // const data = await response.json();
+        const queryParams = new URLSearchParams({
+          page: currentPage.toString(),
+          category: activeCategory,
+          sort: sortByPrice ? 'price' : '',
+          search: searchTerm, // 新增：將搜尋關鍵字加入查詢參數
+        })
 
-        // Simulate API delay
-        await new Promise((resolve) => setTimeout(resolve, 500))
-
-        // Apply category filter (in a real app, this would be done on the server)
-        let filteredProducts = [...mockProducts]
-
-        // Apply price sorting if enabled
-        if (sortByPrice) {
-          filteredProducts.sort((a, b) => a.price - b.price)
+        // 注意：原 API URL 為 http://localhost:3001/products (可能有拼寫錯誤，應為 product)
+        // 這裡保持原樣，但請確認後端 API 端點是否正確
+        const response = await fetch(
+          `http://localhost:3001/products?${queryParams.toString()}`
+        )
+        if (!response.ok) {
+          throw new Error('後端 API 回傳錯誤')
         }
 
-        setProducts(filteredProducts)
-        setTotalPages(6) // Simulated total pages
+        const data = await response.json()
+        setProducts(data.rows || []) // 確保 data.rows 存在，否則給予空陣列
+        setTotalPages(data.totalPages || 1) // 確保 data.totalPages 存在，否則給予 1
       } catch (error) {
         console.error('Error fetching products:', error)
+        setProducts([]) // 發生錯誤時，清空產品列表
+        setTotalPages(1) // 發生錯誤時，重置總頁數
       } finally {
         setLoading(false)
       }
     }
 
     fetchProducts()
-  }, [currentPage, activeCategory, sortByPrice])
+  }, [currentPage, activeCategory, sortByPrice, searchTerm]) // 新增：searchTerm 加入依賴項
 
-  // Handle category change
+  //  點選分類按鈕
   const handleCategoryChange = (category) => {
     setActiveCategory(category)
-    setCurrentPage(1) // Reset to first page when changing category
+    setCurrentPage(1) //  切換分類時，重置到第一頁
+    setSearchTerm('') // 新增：切換分類時，清空搜尋關鍵字 (可選行為)
   }
 
-  // Handle price sorting
+  //  切換價格排序
   const togglePriceSorting = () => {
     setSortByPrice(!sortByPrice)
+    setCurrentPage(1) //  切換排序時，重置到第一頁
   }
 
-  // Handle page change
+  //  分頁控制：前後頁或指定頁碼
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
       setCurrentPage(newPage)
     }
   }
 
+  // 新增：處理搜尋輸入框變化的函式
+  const handleSearchInputChange = (event) => {
+    setSearchTerm(event.target.value)
+    setCurrentPage(1) //  當使用者輸入搜尋條件時，重置到第一頁
+  }
+
+  //  用於產生分頁按鈕的輔助函數 (可選，讓分頁更動態)
+  const renderPageNumbers = () => {
+    const pageNumbers = []
+    const maxPagesToShow = 5 // 最多顯示多少個頁碼按鈕
+    let startPage, endPage
+
+    if (totalPages <= maxPagesToShow) {
+      startPage = 1
+      endPage = totalPages
+    } else {
+      const maxPagesBeforeCurrentPage = Math.floor(maxPagesToShow / 2)
+      const maxPagesAfterCurrentPage = Math.ceil(maxPagesToShow / 2) - 1
+
+      if (currentPage <= maxPagesBeforeCurrentPage) {
+        startPage = 1
+        endPage = maxPagesToShow
+      } else if (currentPage + maxPagesAfterCurrentPage >= totalPages) {
+        startPage = totalPages - maxPagesToShow + 1
+        endPage = totalPages
+      } else {
+        startPage = currentPage - maxPagesBeforeCurrentPage
+        endPage = currentPage + maxPagesAfterCurrentPage
+      }
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pageNumbers.push(
+        <div className={styles.paginationItem} key={i}>
+          <button
+            className={`${styles.paginationButton} ${currentPage === i ? styles.paginationButtonActive : ''}`}
+            onClick={() => handlePageChange(i)}
+          >
+            {i}
+          </button>
+        </div>
+      )
+    }
+    return pageNumbers
+  }
+
   return (
     <div className={styles.container}>
-      {/* Filter Section */}
+      {/* 篩選區塊：分類 + 價格排序 + 搜尋 */}
       <div className={styles.filterSection}>
-        <div
+        {/* 新增：搜尋輸入框 */}
+        <input
+          type="text"
+          placeholder="搜尋商品名稱..."
+          value={searchTerm}
+          onChange={handleSearchInputChange}
+          className={styles.searchInput} //  您可能需要在 ProductList.module.css 中添加此樣式
+        />
+
+        {/* 分類篩選按鈕（動態 active 樣式） */}
+        <button
           className={`${styles.filterItem} ${activeCategory === '本周熱銷' ? styles.active : ''}`}
           onClick={() => handleCategoryChange('本周熱銷')}
         >
           本周熱銷
-        </div>
-        <div
+        </button>
+        <button
           className={`${styles.filterItem} ${styles.filterCategory} ${activeCategory === '蔬菜' ? styles.active : ''}`}
           onClick={() => handleCategoryChange('蔬菜')}
         >
           蔬菜
-        </div>
-        <div
-          className={`${styles.filterItem} ${styles.filterCategory} ${activeCategory === '���品' ? styles.active : ''}`}
+        </button>
+        <button
+          className={`${styles.filterItem} ${styles.filterCategory} ${activeCategory === '肉品' ? styles.active : ''}`}
           onClick={() => handleCategoryChange('肉品')}
         >
           肉品
-        </div>
-        <div
+        </button>
+        <button
           className={`${styles.filterItem} ${styles.filterCategory} ${activeCategory === '乾貨' ? styles.active : ''}`}
           onClick={() => handleCategoryChange('乾貨')}
         >
           乾貨
-        </div>
-        <div
+        </button>
+        <button
           className={`${styles.filterItem} ${activeCategory === '調味品' ? styles.active : ''}`}
           onClick={() => handleCategoryChange('調味品')}
         >
           調味品
-        </div>
-        <div className={styles.priceFilter} onClick={togglePriceSorting}>
+        </button>
+
+        {/* 價格排序按鈕 */}
+        <button className={styles.priceFilter} onClick={togglePriceSorting}>
           <div className={styles.sortIcon}>
             <img
-              src="https://via.placeholder.com/37x34"
+              src="https://via.placeholder.com/37x34" // 建議替換為實際圖示路徑或 SVG
               className={styles.sortIconImage}
               alt="Sort by price"
             />
           </div>
-          <div className={styles.priceText}>價格</div>
-        </div>
+          <div className={styles.priceText}>價格 {sortByPrice ? '↑' : '↓'}</div>{' '}
+          {/* 新增：排序指示 */}
+        </button>
       </div>
 
-      {/* Product Grid Section */}
+      {/* 商品區塊 */}
       <div className={styles.productSection}>
         <div className={styles.productGrid}>
           {loading ? (
-            <div>載入中...</div>
-          ) : (
+            <div>載入中...</div> //  載入狀態
+          ) : products && products.length > 0 ? ( // 修改：檢查 products 是否有內容
             products.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard key={product.id} product={product} /> //  商品卡片元件
             ))
+          ) : (
+            <div>沒有找到符合條件的商品。</div> // 新增：無商品時的提示
           )}
         </div>
       </div>
 
-      {/* Pagination Section */}
-      <div className={styles.paginationSection}>
-        <div className={styles.pagination}>
-          <img
-            src="https://via.placeholder.com/11x16"
-            className={styles.paginationArrow}
-            alt="Previous page"
-            onClick={() => handlePageChange(currentPage - 1)}
-          />
+      {/* 分頁區塊 */}
+      {totalPages > 0 &&
+        products &&
+        products.length > 0 && ( // 修改：只有在有商品且總頁數大於0時顯示分頁
+          <div className={styles.paginationSection}>
+            <div className={styles.pagination}>
+              {/* 上一頁 */}
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1} // 新增：第一頁時禁用
+              >
+                <img
+                  src="https://via.placeholder.com/11x16" // 建議替換為實際圖示路徑或 SVG
+                  className={styles.paginationArrow}
+                  alt="Previous page"
+                />
+              </button>
 
-          <div className={styles.paginationItem}>
-            <div
-              className={`${styles.paginationButton} ${currentPage === 2 ? styles.paginationButtonActive : ''}`}
-              onClick={() => handlePageChange(2)}
-            >
-              2
+              {/* 動態頁碼按鈕 (使用輔助函數) */}
+              {renderPageNumbers()}
+
+              {/* 下一頁 */}
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages} // 新增：最後一頁時禁用
+              >
+                <img
+                  src="https://via.placeholder.com/11x16" // 建議替換為實際圖示路徑或 SVG
+                  className={styles.paginationArrow}
+                  alt="Next page"
+                />
+              </button>
             </div>
           </div>
-
-          <div className={styles.paginationItem}>
-            <div
-              className={`${styles.paginationButton} ${currentPage === 3 ? styles.paginationButtonActive : ''}`}
-              onClick={() => handlePageChange(3)}
-            >
-              3
-            </div>
-          </div>
-
-          <div className={styles.paginationItem}>
-            <div
-              className={`${styles.paginationButton} ${currentPage === 4 ? styles.paginationButtonActive : ''}`}
-              onClick={() => handlePageChange(4)}
-            >
-              4
-            </div>
-          </div>
-
-          <div className={styles.paginationItem}>
-            <div
-              className={`${styles.paginationButton} ${currentPage === 5 ? styles.paginationButtonActive : ''}`}
-              onClick={() => handlePageChange(5)}
-            >
-              5
-            </div>
-          </div>
-
-          <div className={styles.paginationItem}>
-            <div
-              className={`${styles.paginationButton} ${currentPage === 6 ? styles.paginationButtonActive : ''}`}
-              onClick={() => handlePageChange(6)}
-            >
-              6
-            </div>
-          </div>
-
-          <img
-            src="https://via.placeholder.com/11x16"
-            className={styles.paginationArrow}
-            alt="Next page"
-            onClick={() => handlePageChange(currentPage + 1)}
-          />
-        </div>
-      </div>
+        )}
     </div>
   )
 }
