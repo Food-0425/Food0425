@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useState } from 'react'
-import Link from 'next/link'
 import styles from '../src/styles/ShopList.module.scss' // 使用相對路徑
 import { MdFavorite, MdFavoriteBorder } from '../icons/icons'
 
@@ -14,24 +13,27 @@ export const ProductCard = ({
     description: 'Product Description',
     price: 'price',
     isFavorite: false,
-    brand,
-    original_price,
+    brand: '',
+    original_price: '',
     initialFavorite: false,
     clickable: true,
     showViewButton: false,
   },
 }) => {
-  // temp props
-  const id = 0
-  const className = ''
-  const image = ''
-  const name = ''
-  const brand = ''
-  const price = 0
-  const original_price = 0
-  const onFavoriteToggle = () => {}
-  const clickable = true,
-    constshowViewButton = false
+  const {
+    id,
+    name,
+    image,
+    brand,
+    price,
+    original_price,
+    isFavorite: initialFavorite,
+    clickable = true,
+    onFavoriteToggle,
+  } = product
+
+  const [isFavorite, setIsFavorite] = useState(initialFavorite || false)
+  console.log('product:', product)
 
   const handleFavoriteClick = (e) => {
     e.stopPropagation() // 防止點擊收藏圖標時觸發卡片點擊
@@ -48,22 +50,13 @@ export const ProductCard = ({
       // 或使用Next.js的路由: router.push(`/shop/${id}`);
     }
   }
-  // temp props
-
-  const [isFavorite, setIsFavorite] = useState(product.isFavorite || false)
-  console.log('product:', product)
-
-  const handleFavoriteToggle = (e) => {
-    e.stopPropagation()
-    setIsFavorite(!isFavorite)
-  }
 
   return (
     <>
       {/* ShopCard */}
       <div>
         <div
-          className={`${styles.shopCard} ${className}`}
+          className={`${styles.shopCard}`}
           onClick={handleCardClick}
           style={{ cursor: clickable ? 'pointer' : 'default' }}
         >
@@ -75,12 +68,12 @@ export const ProductCard = ({
           </div>
           <span>
             <div>
-              <p> {product.brand}</p>
-              <h3>{product.name}</h3>
+              <p> {brand}</p>
+              <h3>{name}</h3>
             </div>
             <div>
-              <p>${product.original_price}</p>
-              <h2>${product.price}</h2>
+              <p>${original_price}</p>
+              <h2>${price}</h2>
             </div>
           </span>
 
@@ -90,8 +83,7 @@ export const ProductCard = ({
             onClick={handleFavoriteClick}
             style={{ cursor: 'pointer' }}
           >
-            {/* <MdFavorite /> */}
-            <MdFavoriteBorder />
+            {isFavorite ? <MdFavorite /> : <MdFavoriteBorder />}
           </button>
           {/* 收藏按鈕 End */}
         </div>
