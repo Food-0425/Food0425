@@ -14,8 +14,6 @@ import jwt from "jsonwebtoken";
 
 // 設定連到食譜的路由
 import recipesRouter from "./routes/recipes.js";
-<<<<<<< HEAD
-=======
 // 設定連到商城的路由
 import prouductRouter from "./routes/prouduct.js";
 // 設定連到使用者的路由 (目前還未使用到，所以先關掉)
@@ -28,7 +26,6 @@ import restaurantsRouter from "./routes/restaurants.js";
 import cartRouter from "./routes/cart.js";
 // 設定到聯絡我們的路由
 import contactRouter from "./routes/contact.js";
->>>>>>> b7ddae74ea46a666d793de76ed3940f57faedb5d
 
 const MySQLStore = mysql_session(session);
 const sessionStore = new MySQLStore({}, db);
@@ -108,8 +105,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());  // <-- 處理 JSON 請求 body
 // 連到食譜
 app.use('/recipes', recipesRouter);
-<<<<<<< HEAD
-=======
 app.use('/prouduct', prouductRouter);
 // 連到use這個路由
 app.use('/users', usersRouter);
@@ -118,10 +113,9 @@ app.use('/prouduct-review', reviewRouter);
 // 連到餐廳詳細頁面的
 app.use('/restaurants', restaurantsRouter);
 // 連到購物車
- app.use('/cart', cartRouter);
+app.use('/cart', cartRouter);
 // 連到聯絡我們的
 app.use('/contact', contactRouter);
->>>>>>> b7ddae74ea46a666d793de76ed3940f57faedb5d
 
 // 路由定義, 兩個條件: 1. 拜訪的 HTTP 方法, 2. 路徑
 app.get("/", (req, res) => {

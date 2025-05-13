@@ -61,19 +61,6 @@ router.get('/api', async (req, res) => {
 });
   
 // 取得單一食譜
-<<<<<<< HEAD
-router.get('/api/:id',async(req,res)=>{
-    try{
-        const [rows] = await db.query('SELECT * FROM recipes WHERE id=?', [req.params.id]);
-        if(!rows.length){
-            return res.status(404).json({ success: false, error:"找不到食譜" });
-        }
-        res.json({ success: true, data:rows[0] });
-    }catch(error){
-        res.status(500).json({ success: false, error:error.message });
-    }
-});
-=======
 // 這邊是取得單一食譜的API，會根據食譜ID來查詢資料庫，並且將相關的步驟、食材、調味料、關聯食譜和評論一起回傳
 
 router.get('/api/:id', async (req, res) => {
@@ -196,7 +183,6 @@ router.post('/api/feedback', async (req, res) => {
 });
 
 
->>>>>>> b7ddae74ea46a666d793de76ed3940f57faedb5d
 
 // 新增食譜
 router.post('/api',async(req,res)=>{

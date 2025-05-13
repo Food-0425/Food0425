@@ -17,6 +17,9 @@ const PaymentForm = () => {
     setSelectedInvoiceOption(event.target.value);
   };
   return (
+
+    
+
     <div className={styles.paymentFormContainer}>
       <h2>選擇付款方式</h2>
       {/* 選項：信用卡一次付清 */}
@@ -194,12 +197,11 @@ const PaymentForm = () => {
                   placeholder="請輸入公司完整名稱" // placeholder 可以更明確一點
                 />
               </div>
+              <button>送出</button>
             </>
           )}
-        
       </div>
     </div>
   );
 };
-
 export default PaymentForm;

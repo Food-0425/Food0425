@@ -1,7 +1,154 @@
-import React from 'react'
+'use client'
+
+import React, { useState, useEffect } from 'react'
+// useState 記東西的（購物車裡商品）
+// useEffect 在特定時間做事
+import { useAuth } from '@/hooks/auth-context' 
 import './style.css' // style.css 在同一資料夾或正確路徑
 
 export default function CartPage() {
+  //箱子
+  const [cartItems, setCartItems] = useState()
+  //狀態指示燈
+  const [loading, setLoading] = useState(true)
+  //錯誤訊息
+  const [error, setError] = useState(null)
+
+  const { user, isAuth } = useAuth()
+  const currentUserId = user?.id
+
+  useEffect(() => {
+    // 1.使用者有無登入
+    if (isAuth && currentUserId && currentUserId !== 0) {
+      // defaultUser.id 是 0，排除
+      console.log(`✅ 使用者 ${currentUserId} 已登入，準備撈取購物車！`)
+      setLoading(true)
+      setError(null)
+      // 2. 呼叫正確的 API URL (加上 currentUserId)
+      fetch(`http://localhost:3001/cart/api/${currentUserId}`)
+        .then((response) => {
+          console.log(
+            `📞 後端 API (${response.url}) 回應狀態：${response.status}`
+          )
+          if (!response.ok) {
+            return response
+              .json()
+              .then((errorData) => {
+                throw new Error(
+                  errorData.message || `請求失敗，狀態碼：${response.status}`
+                )
+              })
+              .catch(() => {
+                throw new Error(
+                  `請求失敗，狀態碼：${response.status} (且錯誤內容非JSON)`
+                )
+              })
+          }
+          return response.json()
+        })
+        .then((dataFromApi) => {
+          // 3. dataFromApi 就是後端回傳的購物車商品陣列！
+          console.log(
+            `🎉 成功從後端拿到使用者 ${currentUserId} 的購物車資料：`,
+            dataFromApi
+          )
+          setCartItems(dataFromApi) // 用 API 回傳的資料更新購物車狀態
+        })
+        .catch((err) => {
+          // 4. 捕捉所有錯誤
+          console.error('😭 撈取購物車資料時發生悲劇：', err)
+          setError(err.message || '發生未知的錯誤，請稍後再試。')
+          setCartItems([]) // 清空購物車
+        })
+        .finally(() => {
+          // 5. 不管成功或失敗，最後都要做的事
+          setLoading(false)
+          console.log('🏁 API 請求流程結束。')
+        })
+    } else {
+      // 如果未登入，或 currentUserId 無效
+      console.log(
+        '🚫 使用者未登入或 userId 無效，不執行 API 請求。 isAuth:',
+        isAuth,
+        'userId:',
+        currentUserId
+      )
+      let userMessage = '請先登入才能查看您的購物車喔～😉'
+      if (isAuth && (!currentUserId || currentUserId === 0)) {
+        userMessage = '登入狀態好像有點怪怪的，拿不到正確的使用者ID耶～🤔'
+      }
+      setError(userMessage)
+      setCartItems([]) // 確保購物車是空的
+      setLoading(false)
+    }
+  }, [currentUserId, isAuth]) // 6. useEffect 的依賴：當 currentUserId 或 isAuth 改變時，重新觸發！
+
+  // 狀態一：還在載入中...
+  if (loading) {
+    return (
+      <div style={{ textAlign: 'center', padding: '50px', fontSize: '1.2em' }}>
+        <p>購物車努力跑跑跑... 🏃‍♀️💨 請稍等一下下！</p>
+      </div>
+    )
+  }
+
+  // 狀態二：發生錯誤了...
+  if (error && (!cartItems || cartItems.length === 0)) {
+    // 只有在購物車也沒東西時才優先顯示錯誤
+    return (
+      <div
+        style={{
+          color: 'red',
+          textAlign: 'center',
+          padding: '50px',
+          //border: '1px solid red',
+          margin: '20px',
+        }}
+      >
+        <h2>糟糕，出狀況了！😱</h2>
+        <p>{error}</p>
+        <p>
+          你可以試試看
+          <button
+            onClick={() => window.location.reload()}
+            style={{ marginLeft: '5px', padding: '5px 10px' }}
+          >
+            重新整理
+          </button>
+          ，或者檢查一下登入狀態。
+        </p>
+      </div>
+    )
+  }
+
+  // 狀態三：成功載入，但購物車是空的 (或因錯誤而清空)
+  if (!cartItems || cartItems.length === 0) {
+    return (
+      <div>
+        {/*  Header 等等 */}
+        <main>
+          <div
+            className="container"
+            style={{ textAlign: 'center', padding: '50px' }}
+          >
+            <h1>我的購物清單</h1>
+            <p style={{ fontSize: '1.2em', color: '#555' }}>
+              你的購物車目前空空如也～ 🛒
+            </p>
+            <p>快去把心愛的商品加進來吧！Let's Go Shopping! 🛍️</p>
+            {error && (
+              <p style={{ color: 'orange', marginTop: '10px' }}>
+                提示：{error}
+              </p>
+            )}{' '}
+            {/* 如果有錯誤但還是顯示空購物車，可以把錯誤提示放在這裡 */}
+          </div>
+        </main>
+      </div>
+    )
+  }
+
+  // 四：成功載入，且購物車有商品！
   return (
     <div>
       <link rel="stylesheet" href="style.css" />
@@ -9,76 +156,67 @@ export default function CartPage() {
         rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.12.1/font/bootstrap-icons.min.css"
       />
-      {/*
-      <header>
-        <div className="container">
-          <div className="logo">FOOD</div>
-          <nav>
-            <ul>
-              <li>
-                <a href="#">美食分類</a>
-              </li>
-              <li>
-                <a href="#">食譜總覽</a>
-              </li>
-              <li>
-                <a href="#">精選</a>
-              </li>
-            </ul>
-          </nav>
-          <div className="header-right">
-            <div className="search-bar">
-              <input type="text" placeholder="搜尋" />
-              <button type="submit">
-                <i className="bi bi-search" />
-              </button>
-            </div>
-            <div className="user-actions">
-              <a href="#">
-                <i className="bi bi-person-fill" />
-              </a>
-              <a href="#">
-                <i className="bi bi-cart-plus-fill" />
-              </a>
-          </div>
-        </div>
-      </header>
-      */}
+      
       <main>
         <div className="container">
-          <h1>購物清單</h1>
+          <h1>購物清單 ({cartItems.length} 件好物！)</h1>
+          {error && (
+            <p style={{ color: 'orange', textAlign: 'center' }}>
+              小小提示：{error}
+            </p>
+          )}{' '}
+          {/* 如果 fetch 過程中有非致命錯誤，但還是有舊資料可以顯示，可以提示 */}
           <div className="checkout-layout">
             <div className="checkout-left">
               <section className="shopping-list">
-                <div className="cart-item">
-                  <img src="/images/cart/brocoli.avif" alt="嚴選綠花椰菜" />
-                  <div className="item-details">
-                    <p>嚴選綠花椰菜</p>
+                {/* --- 動態渲染購物車商品 --- */}
+                {cartItems.map((item) => (
+                  <div
+                    className="cart-item"
+                    key={item.cartItemId || item.productId}
+                  >
+                    <img
+                      src={item.imageUrl || '/images/default_product.png'}
+                      alt={item.name}
+                      style={{
+                        width: '80px',
+                        height: '80px',
+                        objectFit: 'cover',
+                        marginRight: '15px',
+                        borderRadius: '4px',
+                      }}
+                    />
+                    <div className="item-details">
+                      <p style={{ fontWeight: 'bold' }}>{item.name}</p>
+                    </div>
+                    <div className="item-quantity">
+                      <button>-</button>
+                      <input
+                        type="text"
+                        value={item.quantity}
+                        readOnly
+                        style={{
+                          width: '40px',
+                          textAlign: 'center',
+                          margin: '0 5px',
+                        }}
+                      />
+                      <button>+</button>
+                    </div>
+                    <div
+                      className="item-price"
+                      style={{ minWidth: '70px', textAlign: 'right' }}
+                    >
+                      ${item.price ? item.price.toFixed(2) : 'N/A'}
+                    </div>
                   </div>
-                  <div className="item-quantity">
-                    <button>-</button>
-                    <input type="text" defaultValue={1} readOnly />
-                    <button>+</button>
-                  </div>
-                  <div className="item-price">$40</div>
-                </div>
-                <div className="cart-item">
-                  <img src="/images/cart/chili.avif" alt="新鮮辣椒" />
-                  <div className="item-details">
-                    <p>新鮮辣椒</p>
-                  </div>
-                  <div className="item-quantity">
-                    <button>-</button>
-                    <input type="text" defaultValue={1} readOnly />
-                    <button>+</button>
-                  </div>
-                  <div className="item-price">$25</div>
-                </div>
+                ))}
                 <div className="coupon-code">
                   <input type="text" placeholder="使用優惠券" />
                   <button>使用優惠券</button>
                 </div>
               </section>
+              {/* 其他的 section */}
               <section className="recipient-info">
                 <h2>收件人資料</h2>
                 <form>
@@ -121,9 +259,10 @@ export default function CartPage() {
             <aside className="checkout-right">
               <div className="order-summary">
                 <h2>訂單總計</h2>
+                {/* 這裡的總計金額之後也要改成動態計算 */}
                 <div className="summary-item">
                   <span>小計</span>
-                  <span>NT $65</span>
+                  <span>NT ${/* 計算 cartItems 的總金額 */}</span>
                 </div>
                 <div className="summary-item">
                   <span>運費</span>
@@ -132,7 +271,7 @@ export default function CartPage() {
                 <hr />
                 <div className="summary-item total">
                   <span>總計</span>
-                  <span>NT $65</span>
+                  <span>NT ${/* 計算 cartItems 的總金額 */}</span>
                 </div>
                 <button className="btn-proceed-payment">
                   下一步 前往付款方式
@@ -142,34 +281,7 @@ export default function CartPage() {
           </div>
         </div>
       </main>
-      {/*
-      <footer>
-        <div className="container">
-          <div className="footer-left">
-            <p>謝謝您來逛我們的網站！有您的瀏覽，我們超開心！</p>
-            <p>如果您願意也歡迎您留下回饋，讓我們做得更好、更貼近您的期待！</p>
-            <textarea
-              placeholder="請留下您寶貴的意見，讓我們做得更好。"
-              defaultValue={''}
-            />
-          </div>
-          <div className="footer-right">
-            <button className="btn-faq">常見問題</button>
-            <div className="social-icons">
-              <a href="#" className="social-icon">
-                <i className="bi bi-facebook" />
-              </a>
-              <a href="#" className="social-icon">
-                <i className="bi bi-instagram" />
-              </a>
-              <a href="#" className="social-icon">
-                <i className="bi bi-youtube" />
-              </a>
-            </div>
-          </div>
-        </div>
-      </footer>
-      */}
+      {/* 你的 Footer 可以放回來 */}
     </div>
   )
 }
