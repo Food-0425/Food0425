@@ -35,7 +35,6 @@
     z-index: 0;
     width: 100%;
     padding: 25px 40px;
-    font-family: $font-family-default;
     text-align: center;
     @media (max-width: 991px) {
       padding: 25px 20px;
@@ -43,7 +42,7 @@
     h3 {
       color: $color-primary;
       font-size: $font-size-h3;
-      font-weight: $font-weight-h3;
+      font-weight: $font-weight-title;
       margin-bottom: 0.5rem;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -52,7 +51,6 @@
       color: $color-content;
       font-size: $font-size-p;
       letter-spacing: 0.48px;
-      margin-bottom: 0;
       overflow: hidden;
       display: -webkit-box;
       -webkit-line-clamp: 2;

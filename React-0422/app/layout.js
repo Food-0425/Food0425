@@ -7,6 +7,7 @@ import Footer from './components/Footer'
 import './styles/globals.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Script from 'next/script'
+import './src/styles/main.scss' // 全域樣式
 // 這邊要先註解，不然會報錯誤
 // import './builder/builder-register'
 

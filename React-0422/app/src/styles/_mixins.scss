@@ -12,8 +12,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  right: 13px;
-  top: 14px;
   height: 55px;
   width: 55px;
   cursor: pointer;
@@ -24,4 +22,19 @@
   }
 }
 
-// 👇文字圓角按鈕
+// 👇文字圓角按鈕 (Footer的常見問題按鈕)
+@mixin button-text {
+  background-color: $color-background;
+  color: $color-primary;
+  font-size: $font-size-h2;
+  font-weight: $font-weight-title;
+  border-radius: 9rem;
+  margin: auto 0;
+  padding: 8px 20px;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: $color-accent;
+    color: $color-background;
+  }
+}

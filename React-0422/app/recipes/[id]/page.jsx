@@ -2,9 +2,14 @@
 
 import React from 'react'
 import Link from 'next/link'
-import styles from '../../styles/RecipeDetail.module.css'
-import { SlLike } from 'react-icons/sl'
-
+import styles from '../../src/styles/page-styles/RecipeDetail.module.scss'
+import {
+  TbBowlSpoon,
+  GiKitchenScale,
+  PiJarLabelBold,
+  FaCartPlus,
+  BiLike,
+} from '../../icons/icons'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
 import { useEffect } from 'react'
@@ -110,51 +115,53 @@ export default function RecipeDetailPage() {
 
   return (
     <div className={styles.container}>
-      {/* Hero Section */}
+      {/* 版頭 Start */}
       <div className={styles.heroSection}>
+        <div>
+          <h1>{recipe.title}</h1>
+          <p>{recipe.description}</p>
+        </div>
         <img
-          src={recipe.image ? `/${recipe.image}` : '/images/recipes/paella.jpg'}
-          className={styles.heroImage}
+          src={recipe.image ? `${recipe.image}` : '讀取中...'}
           alt="Recipe hero image"
         />
       </div>
+      {/* 版頭 End */}
 
       {/* Ingredients Section */}
       <div className={styles.ingredientsSection}>
         <div className={styles.ingredientCard}>
           <div className={styles.cardBody}>
-            <div className={styles.cardContent}>
-              <div className={styles.cardTitle}>食材</div>
-              <div className={styles.cardList}>
-                {recipe.ingredients ? (
-                  recipe.ingredients.map((ingredient, index) => (
-                    <React.Fragment key={index}>
-                      {/* •{ingredient} */}• {ingredient.name} -{' '}
-                      {ingredient.quantity} {ingredient.unit}
-                      <br />
-                    </React.Fragment>
-                  ))
-                ) : (
-                  <>
-                    •短米 300 克<br />
-                    •海鮮 500 克 (蝦、魷魚、貽貝)
+            <h2>食材</h2>
+            <div className={styles.cardList}>
+              {recipe.ingredients ? (
+                recipe.ingredients.map((ingredient, index) => (
+                  <React.Fragment key={index}>
+                    {/* •{ingredient} */}• {ingredient.name} -{' '}
+                    {ingredient.quantity} {ingredient.unit}
+                    <FaCartPlus />
                     <br />
-                    •洋蔥 1 顆 (切碎)
-                    <br />
-                    •大蒜 3 瓣 (切碎)
-                  </>
-                )}
-              </div>
+                  </React.Fragment>
+                ))
+              ) : (
+                <>
+                  <li>
+                    短米 300 克 <FaCartPlus />
+                  </li>
+
+                  <li>海鮮 500 克 (蝦、魷魚、貽貝)</li>
+                  <li>洋蔥 1 顆 (切碎)</li>
+                  <li>大蒜 3 瓣 (切碎)</li>
+                </>
+              )}
             </div>
           </div>
-          <img
-            src="/images/recipes/ingredients-icon.png"
-            className={styles.cardIcon}
-            alt="Ingredients icon"
-          />
+          <div className={styles.cardIcon}>
+            <TbBowlSpoon />
+          </div>
         </div>
         {/* 這區是調味料。 但資料庫裡面的食材和調味料寫在一起了。所以暫時註解掉 */}
-        <div className={styles.seasoningCard}>
+        <div className={styles.ingredientCard}>
           <div className={styles.cardBody}>
             <div className={styles.cardContent}>
               <div className={styles.cardTitle}>調味料</div>
@@ -432,7 +439,7 @@ export default function RecipeDetailPage() {
                       alt="User rating"
                     /> */}
                     <div className={styles.userLike}>
-                      <SlLike size={30} />
+                      <BiLike size={30} />
                     </div>
 
                     <div className={styles.userContent}>
@@ -481,7 +488,7 @@ export default function RecipeDetailPage() {
                       alt="User rating"
                     /> */}
                     {/* <div className={styles.userLike}>
-                      <SlLike size={30} />
+                      <BiLike size={30} />
                     </div> */}
 
                     <div className={styles.userContent}>

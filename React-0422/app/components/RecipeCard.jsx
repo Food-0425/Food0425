@@ -48,6 +48,7 @@ export default function RecipeCard({
       onClick={handleCardClick}
       style={{ cursor: clickable ? 'pointer' : 'default' }}
     >
+
       <Link key={id} href={`/recipes/${id}`} passHref>
         <div>
           <img src={image} alt={title} />
@@ -57,6 +58,7 @@ export default function RecipeCard({
           <p>{description}</p>
         </span>
       </Link>
+
       <button
         alt={isFavorite ? '已收藏' : '加入收藏'}
         onClick={handleFavoriteClick}
