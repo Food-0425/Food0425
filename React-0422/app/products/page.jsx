@@ -4,129 +4,6 @@ import React, { useState, useEffect } from 'react'
 import styles from '../styles/ProductList.module.css'
 import { ProductCard } from '../components/ProductCard'
 
-
-const mockProducts = [
-  {
-    id: 1,
-    image: 'https://via.placeholder.com/320x180',
-    title: '宜蘭三星蔥',
-    description: '清甜爽脆炒菜超香',
-    price: 80,
-    isFavorite: false,
-  },
-  {
-    id: 2,
-    image: 'https://via.placeholder.com/320x180',
-    title: '高山高麗菜',
-    description: '冬季鮮嫩口感好',
-    price: 60,
-    isFavorite: false,
-  },
-  {
-    id: 3,
-    image: 'https://via.placeholder.com/320x180',
-    title: '屏東鳳梨',
-    description: '酸甜多汁一口滿足',
-    price: 120,
-    isFavorite: false,
-  },
-  {
-    id: 4,
-    image: 'https://via.placeholder.com/320x180',
-    title: '溪頭香菇',
-    description: '肉厚鮮香燉湯佳',
-    price: 90,
-    isFavorite: false,
-  },
-  {
-    id: 5,
-    image: 'https://via.placeholder.com/320x180',
-    title: '雲林蒜頭',
-    description: '濃郁香氣提味神器',
-    price: 60,
-    isFavorite: false,
-  },
-  {
-    id: 6,
-    image: 'https://via.placeholder.com/320x180',
-    title: '阿里山山葵',
-    description: '刺激辣香壽司好搭',
-    price: 150,
-    isFavorite: false,
-  },
-  {
-    id: 7,
-    image: 'https://via.placeholder.com/320x180',
-    title: '西螺米',
-    description: 'Q彈飽滿煮飯超香',
-    price: 200,
-    isFavorite: false,
-  },
-  {
-    id: 8,
-    image: 'https://via.placeholder.com/320x180',
-    title: '桃園米苔目',
-    description: '古早風味Q彈爽口',
-    price: 135,
-    isFavorite: false,
-  },
-  {
-    id: 9,
-    image: 'https://via.placeholder.com/320x180',
-    title: '宜蘭筊白筍',
-    description: '清甜爽脆快炒美味',
-    price: 85,
-    isFavorite: false,
-  },
-  {
-    id: 10,
-    image: 'https://via.placeholder.com/320x180',
-    title: '屏東龍眼乾',
-    description: '甘甜濃郁下午茶點',
-    price: 95,
-    isFavorite: false,
-  },
-  {
-    id: 11,
-    image: 'https://via.placeholder.com/320x180',
-    title: '宜蘭金棗',
-    description: '微酸果香且清新',
-    price: 45,
-    isFavorite: false,
-  },
-  {
-    id: 12,
-    image: 'https://via.placeholder.com/320x180',
-    title: '南投百香果',
-    description: '酸甜開胃可當果汁',
-    price: 75,
-    isFavorite: false,
-  },
-  {
-    id: 13,
-    image: 'https://via.placeholder.com/320x180',
-    title: '澎湖紫菜',
-    description: '海味濃郁可煮味噌湯',
-    price: 115,
-    isFavorite: false,
-  },
-  {
-    id: 14,
-    image: 'https://via.placeholder.com/320x180',
-    title: '美濃白玉蘿蔔',
-    description: '鮮脆多汁非常爽口',
-    price: 70,
-    isFavorite: false,
-  },
-  {
-    id: 15,
-    image: 'https://via.placeholder.com/320x180',
-    title: '小農地瓜',
-    description: '綿密香甜',
-    price: 55,
-    isFavorite: false,
-  },
-]
 //  每頁顯示商品數量
 const PRODUCTS_PER_PAGE = 15
 
@@ -144,18 +21,22 @@ export default function ProductListPage() {
     const fetchProducts = async () => {
       setLoading(true)
       try {
-        // 模擬 API 延遲
-        await new Promise((resolve) => setTimeout(resolve, 500))
+        const queryParams = new URLSearchParams({
+          page: currentPage.toString(),
+          category: activeCategory,
+          sort: sortByPrice ? 'price' : '',
+        })
 
-        let filteredProducts = [...mockProducts]
-
-        //  價格排序
-        if (sortByPrice) {
-          filteredProducts.sort((a, b) => a.price - b.price)
+        const response = await fetch(
+          `http://localhost:3001/prouduct?${queryParams.toString()}`
+        )
+        if (!response.ok) {
+          throw new Error('後端 API 回傳錯誤')
         }
 
-        setProducts(filteredProducts)
-        setTotalPages(6) // 模擬固定頁數
+        const data = await response.json()
+        setProducts(data.rows)
+        setTotalPages(data.totalPages)
       } catch (error) {
         console.error('Error fetching products:', error)
       } finally {
@@ -239,7 +120,7 @@ export default function ProductListPage() {
           {loading ? (
             <div>載入中...</div> //  載入狀態
           ) : (
-            products.map((product) => (
+            products?.map((product) => (
               <ProductCard key={product.id} product={product} /> //  商品卡片元件
             ))
           )}
@@ -259,7 +140,7 @@ export default function ProductListPage() {
           </button>
 
           {/* 動態頁碼按鈕 */}
-          {[2, 3, 4, 5, 6].map((page) => (
+          {[1, 2, 3, 4, 5].map((page) => (
             <div className={styles.paginationItem} key={page}>
               <button
                 className={`${styles.paginationButton} ${currentPage === page ? styles.paginationButtonActive : ''}`}
