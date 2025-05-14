@@ -511,7 +511,7 @@ export default function RecipesLandingPage() {
             /* 減去 0.5，就會得到一個介於 -0.5 到 0.5 之間的值。
           這個值正負隨機，所以 .sort() 的比較結果也就隨機，從而讓陣列被隨機打亂。 */
             .sort(() => Math.random() - 0.5) // 隨機打亂陣列
-            .slice(0, 4) // 取出前 6 筆資料
+            .slice(0, 5) // 取出前 6 筆資料
             .map((recipe) => (
               <div key={recipe.id} className={styles.featuredCard}>
                 <Link key={recipe.id} href={`/recipes/${recipe.id}`} passHref>

@@ -204,7 +204,7 @@ export default function RestaurantDetailPage() {
               </div>
 
               {restaurant.dishes.map((dish, index) => (
-                <React.Fragment key={index}>
+                <div className={styles.dishContainer} key={index}>
                   <img
                     src={dish.image_url}
                     className={styles.dishImage}
@@ -214,7 +214,7 @@ export default function RestaurantDetailPage() {
                   <div className={styles.dishDescription}>
                     {dish.description}
                   </div>
-                </React.Fragment>
+                </div>
               ))}
 
               <div className={styles.recommendationBox}>

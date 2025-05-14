@@ -353,11 +353,29 @@
   margin-top: 13px;
 }
 
+.dishContainer {
+  width: 75%;
+  margin: 29px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@media (max-width: 991px) {
+  .dishContainer {
+    width: 90%;
+  }
+
+  .dishImage {
+    min-height: 200px;
+  }
+}
+
 .dishImage {
   aspect-ratio: 16/9; /* 使用更常見的 16:9 比例 */
   object-fit: cover;
   object-position: center;
-  width: 75%;
+  width: 100%;
   max-height: 600px; /* 設定最大高度 */
   min-height: 300px; /* 設定最小高度 */
   border-radius: 8px;
@@ -365,13 +383,8 @@
   display: block; /* 加入這行確保圖片作為區塊元素 */
 }
 
-@media (max-width: 991px) {
-  .dishImage {
-    min-height: 200px; /* 在手機版降低最小高度 */
-  }
-}
-
 .dishTitle {
+  width: 100%;
   color: #423c3a;
   font-family:
     'Noto Sans TC',
@@ -382,6 +395,7 @@
   font-size: 32px;
   font-weight: 700;
   margin-top: 29px;
+  text-align: left;
 }
 
 @media (max-width: 991px) {
@@ -391,6 +405,7 @@
 }
 
 .dishDescription {
+  width: 100%;
   color: #666;
   font-family:
     Inter,
@@ -402,6 +417,7 @@
   font-weight: 400;
   letter-spacing: 0.6px;
   margin-top: 29px;
+  text-align: left;
 }
 
 @media (max-width: 991px) {
