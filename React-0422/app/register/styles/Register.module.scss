@@ -120,23 +120,20 @@
   position: relative;
   width: 100%;
 
-  &::after {
-    content: '';
+  select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding-right: 30px;
+  }
+
+  .selectIcon {
     position: absolute;
     right: 10px;
     top: 50%;
     transform: translateY(-50%);
-    width: 18px;
-    height: 18px;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23a5a5a5"><path d="M7 10l5 5 5-5z"/></svg>');
-    background-repeat: no-repeat;
-    background-position: center;
     pointer-events: none;
-  }
-
-  select {
-    appearance: none;
-    padding-right: 30px;
+    color: #666;
   }
 }
 
@@ -144,6 +141,33 @@
   position: relative;
   display: flex;
   align-items: center;
+}
+
+.dateInput {
+  position: relative;
+  width: 100%;
+
+  input[type='date'] {
+    // 移除預設的日曆圖示
+    &::-webkit-calendar-picker-indicator {
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      cursor: pointer;
+    }
+  }
+
+  .calendarIcon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+    pointer-events: none;
+  }
 }
 
 .eyeIcon {
@@ -234,30 +258,6 @@
   &:focus {
     outline: none;
     box-shadow: 0 0 0 2px rgba(223, 108, 45, 0.3);
-  }
-}
-
-.dateInput {
-  position: relative;
-  width: 100%;
-
-  input[type='date']::-webkit-calendar-picker-indicator {
-    opacity: 0;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    cursor: pointer;
-  }
-
-  .calendarIcon {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #666;
-    pointer-events: none;
   }
 }
 

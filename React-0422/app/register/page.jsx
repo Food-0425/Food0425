@@ -26,13 +26,13 @@ export default function RegisterPage() {
   })
 
   const [errors, setErrors] = useState({
-    email: '此信箱已經註冊或格式錯誤',
-    phone: '手機號碼格式錯誤',
-    password: '密碼不符合規則',
-    confirmPassword: '輸入的密碼不一致',
-    name: '必須填寫姓名',
-    username: '必須填寫使用者名稱',
-    birthday: '必須選擇生日',
+    email: '',
+    phone: '',
+    password: '',
+    confirmPassword: '',
+    name: '',
+    username: '',
+    birthday: '',
   })
 
   // 驗證電子郵件格式
@@ -162,6 +162,9 @@ export default function RegisterPage() {
       'birthday',
     ]
     let isValid = true
+
+    // 清空所有錯誤訊息
+    setErrors({})
 
     requiredFields.forEach((field) => {
       if (!validateField(field, formData[field])) {
@@ -355,10 +358,10 @@ export default function RegisterPage() {
                 id="birthday"
                 name="birthday"
                 className={`${styles.input} ${errors.birthday ? styles.errorInput : ''}`}
-                placeholder="註冊資格需年滿18歲 (YYYY-MM-DD)"
                 value={formData.birthday}
                 onChange={handleChange}
                 onBlur={(e) => validateField('birthday', e.target.value)}
+                required
               />
               <FaCalendarAlt className={styles.calendarIcon} />
             </div>
@@ -382,7 +385,6 @@ export default function RegisterPage() {
                 <option value="">請選擇</option>
                 <option value="male">男</option>
                 <option value="female">女</option>
-                <option value="other">其他</option>
               </select>
               <FaChevronDown className={styles.selectIcon} />
             </div>
