@@ -15,21 +15,97 @@ export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
-  const [error, setError] = useState('')
+  const [errors, setErrors] = useState({
+    email: '',
+    password: '',
+  })
+
+  // 新增驗證函數
+  const validateField = (name, value) => {
+    if (name === 'email') {
+      if (!value) {
+        setErrors((prev) => ({
+          ...prev,
+          email: '請輸入電子信箱',
+        }))
+      } else if (!validateEmail(value)) {
+        setErrors((prev) => ({
+          ...prev,
+          email: '帳號格式錯誤或此帳號尚未註冊',
+        }))
+      } else {
+        setErrors((prev) => ({
+          ...prev,
+          email: '',
+        }))
+      }
+    }
+
+    if (name === 'password') {
+      if (!value) {
+        setErrors((prev) => ({
+          ...prev,
+          password: '請輸入密碼',
+        }))
+      } else {
+        setErrors((prev) => ({
+          ...prev,
+          password: '',
+        }))
+      }
+    }
+  }
+
+  // 驗證電子郵件格式
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return emailRegex.test(email)
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    setError('')
+    setErrors({ email: '', password: '' })
+
+    let hasError = false
+    let newErrors = {
+      email: '',
+      password: '',
+    }
+
+    // 同時檢查 email 和密碼
+    if (!email) {
+      newErrors.email = '請輸入電子信箱'
+      hasError = true
+    } else if (!validateEmail(email)) {
+      newErrors.email = '帳號格式錯誤或此帳號尚未註冊'
+      hasError = true
+    }
+
+    if (!password) {
+      newErrors.password = '請輸入密碼'
+      hasError = true
+    }
+
+    if (hasError) {
+      setErrors(newErrors)
+      return
+    }
 
     try {
       const success = await login(email, password)
       if (success) {
         router.push('/member-center')
       } else {
-        setError('登入失敗，請檢查帳號密碼是否正確')
+        setErrors({
+          email: '帳號格式錯誤或此帳號尚未註冊',
+          password: '密碼錯誤',
+        })
       }
     } catch (err) {
-      setError('登入時發生錯誤，請稍後再試')
+      setErrors({
+        email: '登入時發生錯誤，請稍後再試',
+        password: '',
+      })
     }
   }
 
@@ -48,20 +124,23 @@ export default function LoginPage() {
 
         <h1 className={styles.title}>會員登入</h1>
 
-        <form onSubmit={handleSubmit} className={styles.form}>
+        <form onSubmit={handleSubmit} className={styles.form} noValidate>
           <div className={styles.formGroup}>
             <label htmlFor="email" className={styles.label}>
               帳號 (電子信箱)
             </label>
             <input
-              type="email"
+              type="text"
               id="email"
-              className={styles.input}
+              className={`${styles.input} ${errors.email ? styles.inputError : ''}`}
               placeholder="Example@email.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              required
+              onBlur={(e) => validateField('email', e.target.value)}
             />
+            {errors.email && (
+              <div className={styles.errorMessage}>{errors.email}</div>
+            )}
           </div>
 
           <div className={styles.formGroup}>
@@ -72,23 +151,25 @@ export default function LoginPage() {
               <input
                 type={showPassword ? 'text' : 'password'}
                 id="password"
-                className={styles.input}
+                maxLength="20"
+                className={`${styles.input} ${errors.password ? styles.inputError : ''}`}
                 placeholder="*************"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                required
+                onBlur={(e) => validateField('password', e.target.value)}
               />
               <button
                 type="button"
                 className={styles.eyeIcon}
                 onClick={() => setShowPassword(!showPassword)}
               >
-                <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                <FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} />
               </button>
             </div>
+            {errors.password && (
+              <div className={styles.errorMessage}>{errors.password}</div>
+            )}
           </div>
-
-          {error && <div className={styles.error}>{error}</div>}
 
           <Link href="/forgot-password" className={styles.forgotPassword}>
             忘記密碼
