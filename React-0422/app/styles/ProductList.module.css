@@ -14,11 +14,11 @@
   background-color: #fff;
   display: flex;
   min-height: 116px;
-  padding-left: 134px;
-  padding-right: 134px;
+  padding: 0 134px;
+  margin-top: 80px; /* 增加上方間距 */
   align-items: center;
   gap: 40px 82px;
-  justify-content: center;
+  justify-content: space-between; /* 改為 space-between 讓元素分散對齊 */
   flex-wrap: wrap;
 }
 
@@ -115,6 +115,23 @@
   }
 }
 
+/* 新增搜尋欄樣式 */
+.searchBar {
+  flex: 1;
+  max-width: 300px;
+  height: 40px;
+  border: 2px solid #ff5a00;
+  border-radius: 20px;
+  padding: 0 15px;
+  font-size: 16px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.searchBar:focus {
+  box-shadow: 0 0 5px rgba(255, 90, 0, 0.3);
+}
+
 /* Product Grid Section */
 .productSection {
   justify-content: center;
@@ -136,17 +153,14 @@
 }
 
 .productGrid {
-  align-self: stretch;
-  display: flex;
-  min-width: 240px;
-  margin: auto 0;
-  width: 1280px;
-  max-width: 1280px;
-  align-items: start;
-  gap: 40px;
-  justify-content: center;
-  flex-wrap: wrap;
-  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* 5列 */
+  grid-template-rows: repeat(3, auto); /* 3行 */
+  gap: 20px;
+  padding: 20px;
+  max-width: 1600px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 @media (max-width: 991px) {
@@ -161,7 +175,8 @@
   box-shadow: 2px 3px 8px 0px rgba(0, 0, 0, 0.25);
   background-color: #fff;
   position: relative;
-  min-width: 240px;
+  min-width: 200px;
+  max-width: 300px;
   overflow: hidden;
   font-family:
     'Noto Sans TC',
@@ -173,7 +188,9 @@
   text-align: center;
   flex-grow: 1;
   flex-shrink: 1;
-  width: 320px;
+  width: 100%;
+  margin: 0;
+  justify-self: center;
 }
 
 .productImageContainer {
@@ -352,5 +369,40 @@
 @media (max-width: 991px) {
   .paginationButton {
     white-space: initial;
+  }
+}
+
+/* 響應式設計 */
+@media (max-width: 1600px) {
+  .productGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 1200px) {
+  .productGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .productGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .filterSection {
+    padding: 0 20px;
+    margin-top: 60px;
+  }
+  
+  .searchBar {
+    max-width: 100%;
+    margin: 10px 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .productGrid {
+    grid-template-columns: 1fr;
   }
 }
