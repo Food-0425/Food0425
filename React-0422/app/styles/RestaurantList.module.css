@@ -5,7 +5,7 @@
   display: flex;
   flex-direction: column;
   justify-content: start;
-  background-color: #FFFAF0;
+  background-color: #fffaf0;
 }
 
 .heroSection {
@@ -51,7 +51,12 @@
 }
 
 .heroTitle {
-  font-family: "Noto Sans TC", -apple-system, Roboto, Helvetica, sans-serif;
+  font-family:
+    'Noto Sans TC',
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
   font-size: 48px;
   font-weight: 700;
 }
@@ -64,7 +69,12 @@
 }
 
 .heroDescription {
-  font-family: Inter, -apple-system, Roboto, Helvetica, sans-serif;
+  font-family:
+    Inter,
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
   font-size: 20px;
   font-weight: 400;
   letter-spacing: 0.6px;
@@ -81,13 +91,13 @@
   min-width: 200px;
   max-width: 100%;
   border-radius: 200px;
-  border: 2px solid #DF6C2D;
+  border: 2px solid #df6c2d;
   display: flex;
   min-height: 49px;
   margin-top: 24px;
   width: 273px;
   gap: 10px;
-  background-color: #FAF8F9;
+  background-color: #faf8f9;
 }
 
 .heroImageContainer {
@@ -158,7 +168,12 @@
   flex-direction: column;
   overflow: hidden;
   align-items: stretch;
-  font-family: "Noto Sans TC", -apple-system, Roboto, Helvetica, sans-serif;
+  font-family:
+    'Noto Sans TC',
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
   justify-content: center;
 }
 
@@ -188,10 +203,11 @@
 
 .restaurantList {
   display: flex;
-  margin-top: 60px;
+  /* margin-top: 60px; */
+  margin: 60px auto;
   width: 100%;
   flex-direction: column;
-  align-items: stretch;
+  align-items: center;
   white-space: nowrap;
   justify-content: center;
 }
@@ -201,19 +217,22 @@
     max-width: 100%;
     margin-top: 40px;
     white-space: initial;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 
 .restaurantCard {
   background-color: rgba(236, 236, 236, 1);
   display: flex;
-  min-height: 419px;
-  width: 100%;
+  height: 360px; /* 固定高度 */
+  width: 75%;
   align-items: stretch;
   overflow: hidden;
   justify-content: start;
-  flex-wrap: wrap;
   cursor: pointer;
+  flex-wrap: nowrap; /* 防止內容換行 */
 }
 
 .restaurantCard:not(:first-child) {
@@ -229,13 +248,11 @@
 
 .restaurantImage {
   aspect-ratio: 1.29;
-  object-fit: contain;
-  object-position: center;
-  width: 100%;
+  object-fit: cover; /* 改為 cover 確保圖片填滿容器 */
+  height: 100%; /* 設定高度為 100% */
+  width: 40%; /* 固定寬度比例 */
   min-width: 240px;
-  flex: 1;
-  flex-shrink: 1;
-  flex-basis: 140px;
+  flex: none; /* 防止 flex 影響大小 */
 }
 
 @media (max-width: 991px) {
@@ -246,14 +263,15 @@
 
 .cardContent {
   display: flex;
-  min-width: 240px;
-  padding: 50px 70px;
+  width: 60%; /* 固定寬度比例 */
+  padding: 40px;
   flex-direction: column;
   align-items: stretch;
   justify-content: center;
-  flex: 1;
-  flex-shrink: 1;
-  flex-basis: 0%;
+  flex: none; /* 防止 flex 影響大小 */
+  overflow: hidden;
+  word-wrap: break-word;
+  white-space: normal;
 }
 
 @media (max-width: 991px) {
@@ -265,18 +283,17 @@
 }
 
 .cardBadge {
-  leading-trim: both;
-  text-edge: cap;
   text-shadow: 2px 3px 8px rgba(0, 0, 0, 0.25);
   width: 60px;
   font-size: 24px;
-  color: #FFF;
+  color: #fff;
   font-weight: 700;
 }
 
 @media (max-width: 991px) {
   .cardBadge {
     white-space: initial;
+    word-wrap: normal;
   }
 }
 
@@ -292,21 +309,44 @@
 }
 
 .cardTitle {
-  color: #423C3A;
-  leading-trim: both;
-  text-edge: cap;
+  color: #423c3a;
+  /* leading-trim: both;
+  text-edge: cap; */
+  word-wrap: break-word; /* 修改為 break-word */
   font-size: 36px;
   font-weight: 700;
+  margin-bottom: 15px; /* 添加底部間距 */
+  line-height: 1.2; /* 控制行高 */
+  /* 移除這些可能導致標題隱藏的屬性 */
+  /* overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical; */
+  /* 添加這些屬性 */
+  display: block;
+  white-space: normal;
+  max-width: 100%;
 }
 
 .cardDescription {
-  color: #7A7A7A;
+  color: #7a7a7a;
   font-size: 16px;
   font-weight: 400;
   letter-spacing: 0.48px;
   margin-top: 25px;
+  word-wrap: break-word;
   width: auto;
   align-self: stretch;
+  /* 添加以下屬性 */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 4; /* 最多顯示三行 */
+  -webkit-box-orient: vertical;
+  white-space: normal;
+  line-height: 1.5; /* 控制行高 */
+  max-height: 120px; /* 控制最大高度 */
 }
 
 .pagination {
@@ -315,13 +355,19 @@
   padding: 20px 0;
   align-items: center;
   gap: 25px;
-  font-family: "Noto Sans TC", -apple-system, Roboto, Helvetica, sans-serif;
+  font-family:
+    'Noto Sans TC',
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
   font-size: 20px;
-  color: #FAF8F9;
+  color: #faf8f9;
   font-weight: 700;
   white-space: nowrap;
   text-align: center;
   justify-content: start;
+  border-radius: 100%;
 }
 
 @media (max-width: 991px) {
@@ -332,15 +378,20 @@
 }
 
 .paginationArrow {
-  aspect-ratio: 0.69;
+  aspect-ratio: 1; /* 改為 1，確保是正方形 */
   object-fit: contain;
   object-position: center;
-  width: 11px;
+  width: 80px;
+  height: 80px; /* 添加固定高度 */
   stroke-width: 5px;
-  stroke: #DF6C2D;
+  stroke: #df6c2d;
   align-self: stretch;
   margin: auto 0;
   flex-shrink: 0;
+  border-radius: 50%; /* 使用 50% 製造圓形效果 */
+  padding: 12px; /* 添加內邊距讓圖示不會太貼近邊緣 */
+  cursor: pointer; /* 添加指標樣式 */
+  transition: background-color 0.3s ease; /* 添加過渡效果 */
 }
 
 .pageNumberContainer {
@@ -360,7 +411,7 @@
 }
 
 .pageNumber {
-  color: #FAF8F9;
+  color: #faf8f9;
   leading-trim: both;
   text-edge: cap;
   border-radius: 100px;
@@ -373,12 +424,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #EEB392;
+  background-color: #eeb392;
 }
 
 .pageNumberActive {
-  background-color: #FF5A00;
-  color: #FFF;
+  background-color: #ff5a00;
+  color: #fff;
   box-shadow: 0px 0px 0px 10px rgba(0, 0, 0, 0.05);
 }
 
