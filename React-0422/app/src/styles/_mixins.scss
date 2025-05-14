@@ -18,7 +18,7 @@
   transition: background-color 0.3s;
 
   &:hover {
-    background-color: #c55a24;
+    background-color: $color-special;
   }
 }
 
@@ -26,8 +26,6 @@
 @mixin button-text {
   background-color: $color-background;
   color: $color-primary;
-  font-size: $font-size-h2;
-  font-weight: $font-weight-title;
   border-radius: 9rem;
   margin: auto 0;
   padding: 8px 20px;
