@@ -16,7 +16,7 @@
     "@fortawesome/free-regular-svg-icons": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
-    "bootstrap": "^5.3.5",
+    "bootstrap": "^5.3.6",
     "immer": "^10.1.1",
     "mysql2": "^3.14.0",
     "next": "15.2.4",
