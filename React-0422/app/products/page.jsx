@@ -17,6 +17,7 @@ export default function ProductListPage() {
   const [activeCategory, setActiveCategory] = useState('本周熱銷') // 目前分類
   const [sortByPrice, setSortByPrice] = useState(false) // 是否以價格排序
   const [searchTerm, setSearchTerm] = useState('') // 新增：搜尋關鍵字狀態
+  const [searchInput, setSearchInput] = useState('') // 新增：搜尋輸入值狀態
 
   //  當頁碼、分類、排序條件、搜尋關鍵字改變時，重新取得產品資料
   useEffect(() => {
@@ -75,10 +76,22 @@ export default function ProductListPage() {
     }
   }
 
-  // 新增：處理搜尋輸入框變化的函式
+  // 修改：處理搜尋輸入
   const handleSearchInputChange = (event) => {
-    setSearchTerm(event.target.value)
-    setCurrentPage(1) //  當使用者輸入搜尋條件時，重置到第一頁
+    setSearchInput(event.target.value)
+  }
+
+  // 新增：處理搜尋按鈕點擊
+  const handleSearch = () => {
+    setSearchTerm(searchInput)
+    setCurrentPage(1)
+  }
+
+  // 新增：處理按下 Enter 鍵搜尋
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleSearch()
+    }
   }
 
   //  用於產生分頁按鈕的輔助函數 (可選，讓分頁更動態)
@@ -125,14 +138,20 @@ export default function ProductListPage() {
     <div className={styles.container}>
       {/* 篩選區塊：分類 + 價格排序 + 搜尋 */}
       <div className={styles.filterSection}>
-        {/* 新增：搜尋輸入框 */}
-        <input
-          type="text"
-          placeholder="搜尋商品名稱..."
-          value={searchTerm}
-          onChange={handleSearchInputChange}
-          className={styles.searchInput} //  您可能需要在 ProductList.module.css 中添加此樣式
-        />
+        {/* 修改：搜尋區塊 */}
+        <div className={styles.searchContainer}>
+          <input
+            type="text"
+            placeholder="搜尋商品..."
+            value={searchInput}
+            onChange={handleSearchInputChange}
+            onKeyPress={handleKeyPress}
+            className={styles.searchBar}
+          />
+          <button onClick={handleSearch} className={styles.searchButton}>
+            搜尋
+          </button>
+        </div>
 
         {/* 分類篩選按鈕（動態 active 樣式） */}
         <button
