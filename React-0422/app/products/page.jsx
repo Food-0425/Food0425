@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react'
 import styles from '../styles/ProductList.module.css'
 import { ProductCard } from '../components/ProductCard'
-import { ShopCard } from '../components/ShopCard'
 
 //  每頁顯示商品數量
 const PRODUCTS_PER_PAGE = 15 // 雖然定義了，但目前 API 回傳中已包含分頁邏輯
