@@ -1,4 +1,12 @@
-import { FaSearch, FaFacebook, FaInstagram, FaYoutube } from 'react-icons/fa'
+import {
+  FaSearch,
+  FaFacebook,
+  FaInstagram,
+  FaYoutube,
+  FaGoogle,
+  FaEye,
+  FaEyeSlash,
+} from 'react-icons/fa'
 import {
   FaCakeCandles,
   FaFishFins,
@@ -31,7 +39,10 @@ export {
   FaCartShopping,
   FaUser,
   FaFacebook,
+  FaGoogle,
   FaInstagram,
   FaYoutube,
   FaXTwitter,
+  FaEye,
+  FaEyeSlash,
 }

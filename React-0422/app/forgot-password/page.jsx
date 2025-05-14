@@ -89,7 +89,7 @@ export default function ForgotPasswordPage() {
       // 目前僅模擬成功
       setSuccess(true)
       setErrors({ email: '' })
-      setCooldown(5) // 設定 120 秒冷卻時間
+      setCooldown(5) // 設定冷卻時間
     } catch (err) {
       setError('發送重設密碼郵件時發生錯誤，請稍後再試')
     } finally {
@@ -109,6 +109,7 @@ export default function ForgotPasswordPage() {
             alt="Logo"
             width={45}
             height={68}
+            style={{ width: 'auto', height: '100%' }}
             priority
           />
         </div>

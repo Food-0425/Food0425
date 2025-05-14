@@ -1,13 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { useAuth } from '@/hooks/auth-context'
 import { useRouter } from 'next/navigation'
 import styles from './styles/Login.module.scss'
 import Image from 'next/image'
 import Link from 'next/link'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
+import { FaGoogle, FaFacebook, FaEye, FaEyeSlash } from '../icons/icons'
 
 export default function LoginPage() {
   const { login, auth } = useAuth()
@@ -118,6 +117,7 @@ export default function LoginPage() {
             alt="Logo"
             width={45}
             height={68}
+            style={{ width: 'auto', height: '100%' }}
             priority
           />
         </div>
@@ -163,7 +163,7 @@ export default function LoginPage() {
                 className={styles.eyeIcon}
                 onClick={() => setShowPassword(!showPassword)}
               >
-                <FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} />
+                {showPassword ? <FaEye /> : <FaEyeSlash />}
               </button>
             </div>
             {errors.password && (
@@ -188,21 +188,11 @@ export default function LoginPage() {
 
         <div className={styles.socialButtons}>
           <button className={styles.socialButton}>
-            <Image
-              src="/images/icons/google.svg"
-              alt="Google"
-              width={24}
-              height={24}
-            />
+            <FaGoogle />
             <span>Google</span>
           </button>
           <button className={styles.socialButton}>
-            <Image
-              src="/images/icons/facebook.svg"
-              alt="Facebook"
-              width={24}
-              height={24}
-            />
+            <FaFacebook />
             <span>Facebook</span>
           </button>
         </div>

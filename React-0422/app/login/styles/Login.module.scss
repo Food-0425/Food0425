@@ -1,9 +1,9 @@
 .loginContainer {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   min-height: 100vh;
-  padding: 20px;
+  padding: 120px 20px;
   background-color: #faf8f9;
 }
 
@@ -22,9 +22,16 @@
 
 .logoContainer {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   margin-bottom: 24px;
+  height: 60px;
+
+  img {
+    width: auto;
+    height: 100%;
+    object-fit: contain;
+  }
 }
 
 .title {
