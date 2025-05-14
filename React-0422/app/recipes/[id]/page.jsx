@@ -5,10 +5,12 @@ import Link from 'next/link'
 import styles from '../../src/styles/page-styles/RecipeDetail.module.scss'
 import {
   TbBowlSpoon,
-  GiKitchenScale,
   PiJarLabelBold,
+  FaCartShopping,
   FaCartPlus,
   BiLike,
+  IoIosAddCircle,
+  TbHandFinger,
 } from '../../icons/icons'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
@@ -128,7 +130,7 @@ export default function RecipeDetailPage() {
       </div>
       {/* 版頭 End */}
 
-      {/* Ingredients Section */}
+      {/* 材料選單 Start */}
       <div className={styles.ingredientsSection}>
         <div className={styles.ingredientCard}>
           <div className={styles.cardBody}>
@@ -137,16 +139,22 @@ export default function RecipeDetailPage() {
               {recipe.ingredients ? (
                 recipe.ingredients.map((ingredient, index) => (
                   <React.Fragment key={index}>
-                    {/* •{ingredient} */}• {ingredient.name} -{' '}
-                    {ingredient.quantity} {ingredient.unit}
-                    <FaCartPlus />
-                    <br />
+                    <div>
+                      {/* •{ingredient} */}• {ingredient.name}{' '}
+                      {ingredient.quantity} {ingredient.unit}
+                      {/* <button className={styles.cartIconBefore}>
+                        <IoIosAddCircle className={styles.cartIconAdd} />
+                      </button> */}
+                      <button className={styles.cartIconAfter}>
+                        <FaCartShopping className={styles.cartIcon} />
+                      </button>
+                    </div>
                   </React.Fragment>
                 ))
               ) : (
                 <>
                   <li>
-                    短米 300 克 <FaCartPlus />
+                    短米 300 克 <IoIosAddCircle />
                   </li>
 
                   <li>海鮮 500 克 (蝦、魷魚、貽貝)</li>
@@ -156,55 +164,66 @@ export default function RecipeDetailPage() {
               )}
             </div>
           </div>
+          <button className={styles.cardCheck}>
+            <h2>
+              <TbHandFinger />
+              &nbsp;確認
+            </h2>
+          </button>
           <div className={styles.cardIcon}>
             <TbBowlSpoon />
           </div>
         </div>
-        {/* 這區是調味料。 但資料庫裡面的食材和調味料寫在一起了。所以暫時註解掉 */}
         <div className={styles.ingredientCard}>
           <div className={styles.cardBody}>
-            <div className={styles.cardContent}>
-              <div className={styles.cardTitle}>調味料</div>
-              <div className={styles.cardList}>
-                {recipe.condiments ? (
-                  recipe.condiments.map((seasoning, index) => (
-                    <React.Fragment key={index}>
-                      {/* •{seasoning} */}• {seasoning.name} -{' '}
+            <h2>調味料</h2>
+            <div className={styles.cardList}>
+              {recipe.ingredients ? (
+                recipe.condiments.map((seasoning, index) => (
+                  <React.Fragment key={index}>
+                    <div>
+                      {/* •{seasoning} */}• {seasoning.name}{' '}
                       {seasoning.quantity} {seasoning.unit}
-                      <br />
-                    </React.Fragment>
-                  ))
-                ) : (
-                  <>
-                    •魚高湯 600 毫升
-                    <br />
-                    •白酒 100 毫升 <br />
-                    •奶油 40 克<br />
-                    <span className={styles.seasoningHighlight}>
-                      •帕馬森起司 50克 (磨碎)
-                    </span>
-                  </>
-                )}
-              </div>
+                      <button className={styles.cartIconBefore}>
+                        <IoIosAddCircle className={styles.cartIconAdd} />
+                      </button>
+                      {/* <button className={styles.cartIconAfter}>
+                        <FaCartShopping className={styles.cartIcon} />
+                      </button> */}
+                    </div>
+                  </React.Fragment>
+                ))
+              ) : (
+                <>
+                  •魚高湯 600 毫升
+                  <br />
+                  •白酒 100 毫升 <br />
+                  •奶油 40 克<br />
+                  <span className={styles.seasoningHighlight}>
+                    •帕馬森起司 50克 (磨碎)
+                  </span>
+                </>
+              )}
             </div>
           </div>
-          <img
-            src="/images/recipes/seasoning-icon.png"
-            className={styles.cardIcon}
-            alt="Seasoning icon"
-          />
+          <button className={styles.cardCheck}>
+            <h2>
+              <TbHandFinger />
+              &nbsp;確認
+            </h2>
+          </button>
+          <div className={styles.cardIcon}>
+            <PiJarLabelBold />
+          </div>
         </div>
       </div>
+      {/* 材料選單 End */}
 
       {/* Steps Section - 動態生成步驟 */}
       <div className={styles.stepsSection}>
-        <img
-          src="/images/recipes/steps-header.png"
-          className={styles.stepsHeader}
-          alt="Steps header"
-        />
+        <img src="/images/design/paper-top.svg" alt="Steps header" />
         <div className={styles.stepsContainer}>
-          <div className={styles.stepsList}>
+          <div>
             {isLoading ? (
               <div>正在載入步驟...</div>
             ) : error ? (
@@ -220,13 +239,13 @@ export default function RecipeDetailPage() {
                     }
                   >
                     <div className={styles.stepNumberText}>
-                      <div>步</div>
-                      <div>驟</div>
+                      <h3>步</h3>
+                      <h3>驟</h3>
                     </div>
-                    <div className={styles.stepNumberValue}>{index + 1}</div>
+                    <h3 className={styles.stepNumberValue}>{index + 1}</h3>
                   </div>
                   <div className={styles.stepDescription}>
-                    {step.description || step}
+                    {step.description || step}。
                   </div>
                 </div>
               ))
@@ -340,22 +359,20 @@ export default function RecipeDetailPage() {
             )}
           </div>
 
-          <button
+          {/* <button
             className={styles.addToCartButton}
             onClick={() => handleAddToCart(recipe.ingredients)}
           >
-            <img
-              src="/images/recipes/cart-icon-large.png"
-              className={styles.cartIconLarge}
-              alt="Cart icon"
-            />
             <div className={styles.addToCartContent}>
-              <div className={styles.addToCartTitle}>添加食材至購物車</div>
-              <div className={styles.addToCartNote}>
+              <h2 className={styles.addToCartTitle}>
+                <TbHandFinger className={styles.cartIconLarge} />
+                添加食材至購物車
+              </h2>
+              <h3 className={styles.addToCartNote}>
                 （ 食材分量依商品標示為準 ）
-              </div>
+              </h3>
             </div>
-          </button>
+          </button> */}
         </div>
       </div>
 
@@ -682,71 +699,25 @@ export default function RecipeDetailPage() {
           )}
         </div>
       </div>
-
-      {/* Footer */}
-      {/* <footer className={styles.footer}>
-        <div className={styles.footerContent}>
-          <div className={styles.footerLeft}>
-            <div className={styles.footerThankYou}>
-              謝謝您來逛逛我們的網站！有您的瀏覽，我們超開心 🎉
-            </div>
-            <div className={styles.footerFeedback}>
-              <div className={styles.feedbackText}>
-                如果您願意也歡迎留下回饋，讓我們變得更棒、更貼近您的期待！
-              </div>
-              <div className={styles.feedbackInput}>
-                <div className={styles.feedbackPlaceholder}>
-                  請留下您寶貴的意見，讓我們變得更好唷~
-                </div>
-                <img
-                  src="/images/recipes/send-icon.png"
-                  className={styles.sendIcon}
-                  alt="Send"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className={styles.footerRight}>
-            <div className={styles.faqButton}>常見問題</div>
-            <div className={styles.socialIcons}>
-              <img
-                src="/images/recipes/social1.png"
-                className={styles.socialIcon}
-                alt="Social media"
-              />
-              <img
-                src="/images/recipes/social2.png"
-                className={styles.socialIcon}
-                alt="Social media"
-              />
-              <div className={styles.socialIconPlaceholder}>
-                <div className={styles.socialIconCircle} />
-              </div>
-              <img
-                src="/images/recipes/social3.png"
-                className={styles.socialIcon}
-                alt="Social media"
-              />
-            </div>
-          </div>
-        </div>
-      </footer> */}
-
       {/* Decorative Elements */}
       <img
-        src="/images/recipes/decoration-left.png"
-        className={styles.decorationLeft}
+        src="/images/design/sticker-3.svg"
+        className={styles.sticker3}
         alt="Decoration"
       />
       <img
-        src="/images/recipes/decoration-right.png"
-        className={styles.decorationRight}
+        src="/images/design/sticker-5.svg"
+        className={styles.sticker5}
         alt="Decoration"
       />
       <img
-        src="/images/recipes/decoration-sticker.png"
-        className={styles.decorationSticker}
+        src="/images/design/sticker-1.svg"
+        className={styles.sticker1}
+        alt="Decoration"
+      />
+      <img
+        src="/images/design/sticker-2.svg"
+        className={styles.sticker2}
         alt="Decoration"
       />
     </div>
