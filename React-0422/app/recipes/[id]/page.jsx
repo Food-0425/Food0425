@@ -24,6 +24,10 @@ export default function RecipeDetailPage() {
   const [currentPage, setCurrentPage] = useState(0) // 當前頁數
   const commentsPerPage = 2 // 每頁顯示的評論數量
   const { auth } = useAuth() || {} // 使用 useAuth 鉤子獲取用戶信息
+  // 這個狀態用來控制食材是否被選中
+  const [selectedItems, setSelectedItems] = useState({})
+  // 這個狀態用來控制調味料是否被選中
+  const [selectedSeasonings, setSelectedSeasonings] = useState({})
 
   const params = useParams()
   const id = params.id
@@ -83,6 +87,7 @@ export default function RecipeDetailPage() {
   // 假設購物車資料存儲在 localStorage 或透過 API 傳送
   // 這裡的 ingredients 是從 recipe.ingredients 中取得的
 
+  // 舊的將食材加入購物車的函數
   const handleAddToCart = async (ingredients) => {
     if (!ingredients || ingredients.length === 0) {
       alert('沒有可添加的食材！')
@@ -106,6 +111,56 @@ export default function RecipeDetailPage() {
 
       if (response.ok) {
         alert('已成功將食材添加至購物車！')
+      } else {
+        const errorData = await response.json()
+        alert(`添加失敗：${errorData.message || '未知錯誤'}`)
+      }
+    } catch (error) {
+      alert(`添加失敗：${error.message}`)
+    }
+  }
+  // 點擊按鈕添加食材至購物車(新的)
+  const handleConfirmCart = async () => {
+    if (!auth || !auth.token) {
+      alert('請先登入才能加入購物車！')
+      return
+    }
+
+    // 取得所有被選中的食材
+    const selectedIngredientItems = recipe.ingredients.filter(
+      (_, index) => selectedItems[`condiment-${index}`]
+    )
+
+    // 取得所有被選中的調味料
+    const selectedSeasoningItems = recipe.condiments.filter(
+      (_, index) => selectedSeasonings[`condiment-${index}`]
+    )
+
+    // 如果都沒有選擇任何項目
+    if (
+      selectedIngredientItems.length === 0 &&
+      selectedSeasoningItems.length === 0
+    ) {
+      alert('請先選擇要加入購物車的食材或調味料！')
+      return
+    }
+
+    try {
+      const response = await fetch('http://localhost:3001/recipes/api/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${auth.token}`, // 假設需要用戶的 token
+        },
+        body: JSON.stringify({
+          ingredients: selectedIngredientItems,
+          seasonings: selectedSeasoningItems,
+          recipeId: id,
+        }),
+      })
+
+      if (response.ok) {
+        alert('已成功添加至購物車！')
       } else {
         const errorData = await response.json()
         alert(`添加失敗：${errorData.message || '未知錯誤'}`)
@@ -145,8 +200,24 @@ export default function RecipeDetailPage() {
                       {/* <button className={styles.cartIconBefore}>
                         <IoIosAddCircle className={styles.cartIconAdd} />
                       </button> */}
-                      <button className={styles.cartIconAfter}>
-                        <FaCartShopping className={styles.cartIcon} />
+                      <button
+                        className={
+                          selectedItems[`condiment-${index}`]
+                            ? styles.cartIconAfter
+                            : styles.cartIconBefore
+                        }
+                        onClick={() => {
+                          setSelectedItems((prev) => ({
+                            ...prev,
+                            [`condiment-${index}`]: !prev[`condiment-${index}`],
+                          }))
+                        }}
+                      >
+                        {selectedItems[`condiment-${index}`] ? (
+                          <FaCartShopping className={styles.cartIcon} />
+                        ) : (
+                          <IoIosAddCircle className={styles.cartIconAdd} />
+                        )}
                       </button>
                     </div>
                   </React.Fragment>
@@ -182,14 +253,26 @@ export default function RecipeDetailPage() {
                 recipe.condiments.map((seasoning, index) => (
                   <React.Fragment key={index}>
                     <div>
-                      {/* •{seasoning} */}• {seasoning.name}{' '}
-                      {seasoning.quantity} {seasoning.unit}
-                      <button className={styles.cartIconBefore}>
-                        <IoIosAddCircle className={styles.cartIconAdd} />
+                      • {seasoning.name} {seasoning.quantity} {seasoning.unit}
+                      <button
+                        className={
+                          selectedSeasonings[`condiment-${index}`]
+                            ? styles.cartIconAfter
+                            : styles.cartIconBefore
+                        }
+                        onClick={() => {
+                          setSelectedSeasonings((prev) => ({
+                            ...prev,
+                            [`condiment-${index}`]: !prev[`condiment-${index}`],
+                          }))
+                        }}
+                      >
+                        {selectedSeasonings[`condiment-${index}`] ? (
+                          <FaCartShopping className={styles.cartIcon} />
+                        ) : (
+                          <IoIosAddCircle className={styles.cartIconAdd} />
+                        )}
                       </button>
-                      {/* <button className={styles.cartIconAfter}>
-                        <FaCartShopping className={styles.cartIcon} />
-                      </button> */}
                     </div>
                   </React.Fragment>
                 ))
@@ -206,7 +289,7 @@ export default function RecipeDetailPage() {
               )}
             </div>
           </div>
-          <button className={styles.cardCheck}>
+          <button className={styles.cardCheck} onClick={handleConfirmCart}>
             <h2>
               <TbHandFinger />
               &nbsp;確認
