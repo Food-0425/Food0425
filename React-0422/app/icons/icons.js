@@ -6,6 +6,8 @@ import {
   FaGoogle,
   FaEye,
   FaEyeSlash,
+  FaChevronDown,
+  FaCalendarAlt,
 } from 'react-icons/fa'
 import {
   FaCakeCandles,
@@ -45,4 +47,6 @@ export {
   FaXTwitter,
   FaEye,
   FaEyeSlash,
+  FaChevronDown,
+  FaCalendarAlt,
 }
