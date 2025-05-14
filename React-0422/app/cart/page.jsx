@@ -13,6 +13,10 @@ export default function CartPage() {
   const [loading, setLoading] = useState(true)
   //錯誤訊息
   const [error, setError] = useState(null)
+  // 一開始顯示折扣金額0
+  const [discountAmount, setDiscountAmount] = useState(0)
+  // 儲存輸入的折扣碼
+  const [couponCode, setCouponCode] = useState('')
 
   const { auth } = useAuth()
   const currentUserId = auth?.id
@@ -187,8 +191,60 @@ export default function CartPage() {
   }, [cartItems]) // 當 cartItems 改變時，重新計算
 
   const subtotal = calculateSubtotal()
-  const shippingFee = 0 // 假設運費暫時是 0，之後可以再調整
-  const grandTotal = subtotal + shippingFee
+  const shippingFee = 0 // 假設運費暫時是 0
+  const grandTotal = subtotal + shippingFee - discountAmount // 總金額 = 小計 + 運費 - 折扣金額
+
+  // 處理優惠券
+  const handleApplyCoupon = useCallback(async () => {
+    if (!couponCode.trim()) {
+      alert('請輸入優惠券代碼')
+      setError(null)
+      return
+    }
+
+    console.log(`🧾 準備驗證優惠券：${couponCode}`)
+    setError(null) //清除錯誤提示
+    // setLoading(true) //loading 效果
+
+    // 模擬前端判斷，真實情境應由後端處理
+    let actualDiscount = 0
+    const upperCaseCoupon = couponCode.toUpperCase()
+    const currentTimestamp = new Date() // 用於比較日期
+
+    if (upperCaseCoupon === 'SUMMERFUN150') {
+      // 根據您的資料庫資料模擬判斷
+      const startDate = new Date('2025-05-01 00:00:00')
+      const endDate = new Date('2025-07-31 23:59:59')
+      const isActive = true // 資料 is_active = TRUE
+      const minPurchase = 1000 // "消費滿千折 NT$150"
+
+      if (!isActive) {
+        alert(`Oops！優惠券 "${couponCode}" 目前沒有啟用喔～`)
+      } else if (currentTimestamp < startDate) {
+        alert(
+          `優惠券 "${couponCode}" 還沒開始喔，生效日期是 ${startDate.toLocaleDateString()}！`
+        )
+      } else if (currentTimestamp > endDate) {
+        alert(
+          `哎呀！優惠券 "${couponCode}" 已經在 ${endDate.toLocaleDateString()} 過期囉～哭哭`
+        )
+      } else if (subtotal < minPurchase) {
+        alert(
+          `差一點點！使用 "${couponCode}" 需要消費滿 NT$${minPurchase}，您目前小計 NT$${subtotal.toFixed(2)}。`
+        )
+      } else {
+        actualDiscount = 150.0 //  discount_value 是 150.00
+        alert(
+          `🎉 優惠券 "${couponCode}" 套用成功！折抵 NT$${actualDiscount.toFixed(2)}！`
+        )
+      }
+    } else {
+      alert(
+        `Oops！優惠券 "${couponCode}" 好像不太對勁喔，找不到這張好康耶～再檢查一下？🤔`
+      )
+    }
+    setDiscountAmount(actualDiscount) // 更新折扣金額
+  },[couponCode, subtotal]) // 當 couponCode 或 subtotal 改變時，重新計算
 
   // --- JSX 渲染邏輯 ---
   if (loading && cartItems.length === 0) {
@@ -373,8 +429,10 @@ export default function CartPage() {
                 ))}
                 {cartItems.length > 0 && ( // 只有購物車有東西才顯示優惠券
                   <div className="coupon-code">
-                    <input type="text" placeholder="輸入優惠券代碼" />
-                    <button>使用優惠券</button>
+                    <input type="text" placeholder="輸入優惠券代碼"value={couponCode} onChange={(e) => setCouponCode(e.target.value)}
+                    disabled={loading}/>
+                    
+                    <button onClick={handleApplyCoupon} disabled={loading}>使用優惠券</button>
                   </div>
                 )}
               </section>
@@ -436,6 +494,12 @@ export default function CartPage() {
                 <div className="summary-item">
                   <span>運費</span>
                   <span>NT ${shippingFee.toFixed(2)}</span>
+                </div>
+                <div class="summary-item discount">
+                  <span>優惠折扣</span>
+                  <span>{discountAmount > 0 ? '- NT $' : 'NT $'}
+                  {discountAmount.toFixed(2)}
+                  </span>
                 </div>
                 <hr />
                 <div className="summary-item total">
