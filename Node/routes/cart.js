@@ -43,7 +43,7 @@ router.get('/api/:userId', async (req, res) => {
 
       const [cartProductRows] = await db.query(
         `SELECT
-          c.id AS cart_item_id,   -- 購物車項目本身的 ID (假設 carts 表主鍵是 id)
+          c.cart_id AS cart_item_id,   -- 購物車項目本身的 ID (假設 carts 表主鍵是 id)
           u.user_id,
           p.id AS product_id,
           p.name AS product_name,
@@ -54,7 +54,7 @@ router.get('/api/:userId', async (req, res) => {
         JOIN users u ON c.user_id = u.user_id
         JOIN food_products p ON c.product_id = p.id
         WHERE u.user_id = ?
-        ORDER BY c.created_at DESC;`, // 假設 carts 表有 created_at 用來排序
+        ORDER BY c.added_time DESC;`, // 假設 carts 表有 added_time 用來排序
         [userId]
       );
 
@@ -139,7 +139,7 @@ router.post('/api/:userId/items', async (req, res) => {
         const existingItem = existingItemRows[0];
         const newQuantity = existingItem.quantity + validQuantity;
         await db.query(
-          "UPDATE carts SET quantity = ?, updated_at = NOW() WHERE id = ?", // 假設 carts 表有 updated_at
+          "UPDATE carts SET quantity = ?, expiration_time = NOW() WHERE id = ?", // 假設 carts 表有 expiration_time
           [newQuantity, existingItem.id]
         );
         cartItemId = existingItem.id;
@@ -148,7 +148,7 @@ router.post('/api/:userId/items', async (req, res) => {
       } else {
         // 商品不在購物車中，新增一筆新的項目
         const [result] = await db.query(
-          "INSERT INTO carts (user_id, product_id, quantity, created_at, updated_at) VALUES (?, ?, ?, NOW(), NOW())", // 假設 carts 表有 created_at, updated_at
+          "INSERT INTO carts (user_id, product_id, quantity, added_time, expiration_time) VALUES (?, ?, ?, NOW(), NOW())", // 假設 carts 表有 added_time, expiration_time
           [userId, validProductId, validQuantity]
         );
         cartItemId = result.insertId; // 取得新增項目的 ID
@@ -192,7 +192,7 @@ router.put('/api/items/:cartItemId', async (req, res) => {
 
       // --- 檢查購物車項目是否存在，並取得商品名稱方便回傳訊息 ---
       const [cartItemRows] = await db.query(
-        "SELECT c.id, p.name AS product_name FROM carts c JOIN food_products p ON c.product_id = p.id WHERE c.id = ?",
+        "SELECT c.cart_id, p.name AS product_name FROM carts c JOIN food_products p ON c.product_id = p.id WHERE c.cart_id = ?",
         [cartItemId]
       );
       if (cartItemRows.length === 0) {
@@ -202,7 +202,7 @@ router.put('/api/items/:cartItemId', async (req, res) => {
 
       // --- 更新購物車項目的數量 ---
       const [result] = await db.query(
-        "UPDATE carts SET quantity = ?, updated_at = NOW() WHERE id = ?",
+        "UPDATE carts SET quantity = ?, expiration_time = NOW() WHERE cart_id = ?",
         [newQuantity, cartItemId]
       );
 
