@@ -13,8 +13,10 @@ import { TbMeat } from 'react-icons/tb'
 import { CiBowlNoodles } from 'react-icons/ci'
 import { MdFavorite, MdFavoriteBorder } from 'react-icons/md'
 import { BsBookmarkPlus, BsBookmarkStarFill } from 'react-icons/bs'
+import { GrPrevious } from 'react-icons/gr'
 
 export {
+  GrPrevious,
   FaSearch,
   FaCakeCandles,
   FaFishFins,

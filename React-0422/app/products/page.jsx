@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import styles from '../styles/ProductList.module.css'
 import { ProductCard } from '../components/ProductCard'
+import { GrPrevious } from '../icons/icons' // 使用 react-icons 套件
 
 //  每頁顯示商品數量
 const PRODUCTS_PER_PAGE = 15 // 雖然定義了，但目前 API 回傳中已包含分頁邏輯
@@ -34,6 +35,7 @@ export default function ProductListPage() {
         const response = await fetch(
           `http://localhost:3001/products?${queryParams.toString()}`
         )
+        //在 URL 中，?是「查詢字串（Query String）」的起始符號。它的用途是將一組 非必要參數 附加到 URL 中，通常用於前端與後端之間傳遞過濾、搜尋、排序等條件
         if (!response.ok) {
           throw new Error('後端 API 回傳錯誤')
         }
@@ -204,11 +206,7 @@ export default function ProductListPage() {
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1} // 新增：第一頁時禁用
               >
-                <img
-                  src="https://via.placeholder.com/11x16" // 建議替換為實際圖示路徑或 SVG
-                  className={styles.paginationArrow}
-                  alt="Previous page"
-                />
+                <GrPrevious />
               </button>
 
               {/* 動態頁碼按鈕 (使用輔助函數) */}
