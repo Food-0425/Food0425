@@ -164,6 +164,12 @@ export default function RecipeDetailPage() {
               )}
             </div>
           </div>
+          <button className={styles.cardCheck}>
+            <h2>
+              <TbHandFinger />
+              &nbsp;確認
+            </h2>
+          </button>
           <div className={styles.cardIcon}>
             <TbBowlSpoon />
           </div>
@@ -200,6 +206,12 @@ export default function RecipeDetailPage() {
               )}
             </div>
           </div>
+          <button className={styles.cardCheck}>
+            <h2>
+              <TbHandFinger />
+              &nbsp;確認
+            </h2>
+          </button>
           <div className={styles.cardIcon}>
             <PiJarLabelBold />
           </div>
@@ -347,7 +359,7 @@ export default function RecipeDetailPage() {
             )}
           </div>
 
-          <button
+          {/* <button
             className={styles.addToCartButton}
             onClick={() => handleAddToCart(recipe.ingredients)}
           >
@@ -360,7 +372,7 @@ export default function RecipeDetailPage() {
                 （ 食材分量依商品標示為準 ）
               </h3>
             </div>
-          </button>
+          </button> */}
         </div>
       </div>
 
@@ -689,18 +701,23 @@ export default function RecipeDetailPage() {
       </div>
       {/* Decorative Elements */}
       <img
-        src="/images/recipes/decoration-left.png"
-        className={styles.decorationLeft}
+        src="/images/design/sticker-3.svg"
+        className={styles.sticker3}
         alt="Decoration"
       />
       <img
-        src="/images/recipes/decoration-right.png"
-        className={styles.decorationRight}
+        src="/images/design/sticker-5.svg"
+        className={styles.sticker5}
         alt="Decoration"
       />
       <img
-        src="/images/recipes/decoration-sticker.png"
-        className={styles.decorationSticker}
+        src="/images/design/sticker-1.svg"
+        className={styles.sticker1}
+        alt="Decoration"
+      />
+      <img
+        src="/images/design/sticker-2.svg"
+        className={styles.sticker2}
         alt="Decoration"
       />
     </div>
