@@ -298,6 +298,15 @@ main .container > h1 {
   font-weight: bold;
 }
 
+/* 優惠折扣樣式*/
+.summary-item.discount span:first-child {
+  color: #28a745; /* 折扣顏色 */
+}
+
+.summary-item.discount span:last-child {
+  color: #28a745; /* 折扣數字顏色 */
+}
+
 .order-summary hr {
   border: none;
   border-top: 1px dashed #ccc;

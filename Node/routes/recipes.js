@@ -329,7 +329,7 @@ router.post('/api/add', async (req, res) => {
 
     if (
   !ingredients ||
-  !Array.isArray(ingredients) ||
+  // !Array.isArray(ingredients) ||
   ingredients.length === 0
 ) {
   return res.status(400).json({

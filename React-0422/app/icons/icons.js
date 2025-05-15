@@ -1,4 +1,14 @@
-import { FaSearch, FaFacebook, FaInstagram, FaYoutube } from 'react-icons/fa'
+import {
+  FaSearch,
+  FaFacebook,
+  FaInstagram,
+  FaYoutube,
+  FaGoogle,
+  FaEye,
+  FaEyeSlash,
+  FaChevronDown,
+  FaCalendarAlt,
+} from 'react-icons/fa'
 import {
   FaCakeCandles,
   FaFishFins,
@@ -45,5 +55,13 @@ export {
   TbBowlSpoon,
   IoIosAddCircle,
   TbHandFinger,
+
   IoIosArrowBack,
+
+  FaGoogle,
+  FaEye,
+  FaEyeSlash,
+  FaChevronDown,
+  FaCalendarAlt,
+
 }

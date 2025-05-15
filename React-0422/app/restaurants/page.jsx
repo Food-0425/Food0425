@@ -21,6 +21,8 @@ export default function RestaurantsPage() {
 
   const [activePage, setActivePage] = useState(1) // 當前頁碼
   const itemsPerPage = 5 // 每頁顯示的餐廳數量
+  // 添加搜尋狀態
+  const [searchTerm, setSearchTerm] = useState('')
   // 使用 useEffect 確保客戶端渲染
   useEffect(() => {
     setIsLoading(false)
@@ -36,6 +38,18 @@ export default function RestaurantsPage() {
   // 獲取數據
   const restaurants = data?.rows || []
   const totalPages = data?.totalPages || 1
+
+  // 過濾餐廳數據
+  const filteredRestaurants = restaurants.filter(
+    (restaurant) =>
+      restaurant.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      restaurant.description.toLowerCase().includes(searchTerm.toLowerCase())
+  )
+
+  // 計算篩選後的總頁數
+  const filteredTotalPages = Math.ceil(
+    filteredRestaurants.length / itemsPerPage
+  )
 
   // 計算當前頁面的餐廳資料 (目前沒用到)
   // const startIndex = (activePage - 1) * itemsPerPage
@@ -59,13 +73,33 @@ export default function RestaurantsPage() {
     <div className={styles.pageContainer}>
       {/* <div>{JSON.stringify(data)}</div> */}
       <div className={styles.heroSection}>
-        <div className={styles.heroContent}>
-          <div className={styles.heroTitle}>精選餐廳推薦</div>
-          <div className={styles.heroDescription}>
-            探索台北最具特色的美食餐廳，從傳統小吃到高級料理，滿足您的味蕾享受
+        <div className={styles.heroContentWrapper}>
+          <div className={styles.heroContent}>
+            <div className={styles.heroTitle}>精選餐廳推薦</div>
+            <div className={styles.heroDescription}>
+              探索台北最具特色的美食餐廳，從傳統小吃到高級料理，滿足您的味蕾享受
+            </div>
           </div>
-          <div className={styles.searchBar} />
+          <div className={styles.searchBar}>
+            <input
+              type="text"
+              placeholder="搜尋餐廳名稱或描述..."
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value)
+                setActivePage(1)
+              }}
+              className={styles.searchInput}
+            />
+            <button
+              className={styles.searchButton}
+              onClick={() => setSearchTerm(searchTerm)}
+            >
+              搜尋
+            </button>
+          </div>
         </div>
+
         <div className={styles.heroImageContainer}>
           <img
             src="/images/restaurant/r01.jpg"
@@ -73,26 +107,26 @@ export default function RestaurantsPage() {
             alt="餐廳美食"
           />
         </div>
-        <img
-          src="https://via.placeholder.com/1280x10"
-          className={styles.decorativeImage}
-          alt="裝飾圖案"
-        />
       </div>
 
       <div className={styles.restaurantListSection}>
         <div className={styles.sectionTitle}>精選餐廳推薦</div>
+        {/* // 將原本的 restaurants.map 改為 filteredRestaurants.map */}
         <div className={styles.restaurantList}>
-          {restaurants.map((restaurant) => (
-            <RestaurantCard
-              key={restaurant.id}
-              id={restaurant.id}
-              image={restaurant.image}
-              name={restaurant.name}
-              description={restaurant.description}
-              badge={restaurant.badge}
-            />
-          ))}
+          {filteredRestaurants.length > 0 ? (
+            filteredRestaurants.map((restaurant) => (
+              <RestaurantCard
+                key={restaurant.id}
+                id={restaurant.id}
+                image={restaurant.image}
+                name={restaurant.name}
+                description={restaurant.description}
+                badge={restaurant.badge}
+              />
+            ))
+          ) : (
+            <div className={styles.noResults}>沒有找到符合條件的餐廳</div>
+          )}
         </div>
       </div>
 
@@ -104,7 +138,7 @@ export default function RestaurantsPage() {
           onClick={() => handlePageChange(Math.max(activePage - 1, 1))}
         />
 
-        {Array.from({ length: totalPages }, (_, index) => (
+        {Array.from({ length: filteredTotalPages }, (_, index) => (
           <div key={index + 1} className={styles.pageNumberContainer}>
             <div
               className={`${styles.pageNumber} ${activePage === index + 1 ? styles.pageNumberActive : ''}`}
@@ -119,7 +153,9 @@ export default function RestaurantsPage() {
           src="https://cdn.builder.io/api/v1/image/assets/TEMP/48cafdb4ef4bb734d63a486bf58abbe94c28b5d3?placeholderIfAbsent=true"
           className={styles.paginationArrow}
           alt="下一頁"
-          onClick={() => handlePageChange(Math.min(activePage + 1, totalPages))}
+          onClick={() =>
+            handlePageChange(Math.min(activePage + 1, filteredTotalPages))
+          }
         />
       </div>
     </div>
