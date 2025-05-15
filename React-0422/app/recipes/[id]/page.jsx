@@ -2,6 +2,8 @@
 
 import React from 'react'
 import Link from 'next/link'
+import { Modal, Button } from 'react-bootstrap'
+
 import styles from '../../src/styles/page-styles/RecipeDetail.module.scss'
 import {
   TbBowlSpoon,
@@ -18,6 +20,7 @@ import { useEffect } from 'react'
 // 特別注意，這個useAuth的鉤子一定要選auth-context.js的
 import { useAuth } from '@/hooks/auth-context'
 import useSWR from 'swr'
+import { useRouter } from 'next/navigation'
 import FoodFeeBack from '../../components/FoodFeeBack'
 
 export default function RecipeDetailPage() {
@@ -28,6 +31,8 @@ export default function RecipeDetailPage() {
   const [selectedItems, setSelectedItems] = useState({})
   // 這個狀態用來控制調味料是否被選中
   const [selectedSeasonings, setSelectedSeasonings] = useState({})
+  // 2. 在組件內部宣告 router
+  const router = useRouter()
 
   const params = useParams()
   const id = params.id
@@ -72,6 +77,18 @@ export default function RecipeDetailPage() {
   // 狀態：控制 FoodFeeBack 是否顯示
   const [isFeedbackVisible, setIsFeedbackVisible] = useState(false)
 
+  // 3. 修改原本的 handleShowFeedbackModal 函數
+  const handleShowFeedbackModal = () => {
+    if (!auth || !auth.token) {
+      handleShowLoginModal()
+      return
+    }
+    setIsFeedbackVisible(true)
+  }
+  const handleCloseFeedbackModal = () => setIsFeedbackVisible(false)
+  // 跟未登入點選流言按鈕有關的狀態
+  const [showLoginModal, setShowLoginModal] = useState(false)
+
   // 點擊按鈕顯示 FoodFeeBack
   const handleShowFeedback = () => {
     if (isFeedbackVisible) {
@@ -81,6 +98,12 @@ export default function RecipeDetailPage() {
     // 如果已經顯示，則隱藏
     // 否則顯示 FoodFeeBack
     setIsFeedbackVisible(true)
+  }
+
+  const handleShowLoginModal = () => setShowLoginModal(true)
+  const handleCloseLoginModal = () => setShowLoginModal(false)
+  const handleGoToLogin = () => {
+    router.push('/login') // 使用 router.push 進行導航
   }
 
   // 點擊按鈕添加食材至購物車
@@ -483,7 +506,8 @@ export default function RecipeDetailPage() {
 
       {/* Comments Section - 動態生成評論 */}
       <div className={styles.commentsSection}>
-        <button
+        {/* 舊的打開留言表單 */}
+        {/* <button
           className={styles.addCommentButton} // 使用樣式
           onClick={handleShowFeedback} // 點擊事件
         >
@@ -493,7 +517,71 @@ export default function RecipeDetailPage() {
             alt="Comment icon"
           />
           <div className={styles.addCommentText}>添加留言</div>
-        </button>
+        </button> */}
+        {/* // 在您的 JSX 中，例如原本添加留言的按鈕 */}
+        <Button
+          variant="primary"
+          onClick={handleShowFeedbackModal}
+          className={styles.addCommentButton}
+        >
+          <img
+            src="/images/recipes/comment-icon.png"
+            className={styles.commentIcon}
+            alt="Comment icon"
+          />
+          <div className={styles.addCommentText}>添加留言</div>
+        </Button>
+
+        {/* 5. React Bootstrap Modal  這裡是食譜評論的彈出視窗
+         。然後可以在SCSS當中自訂CSS樣式 。目前應該需調整*/}
+        <Modal
+          show={isFeedbackVisible}
+          onHide={handleCloseFeedbackModal}
+          centered
+          size="lg" // 可設定 'sm', 'lg', 'xl'
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>撰寫食譜評論</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {/* 6. 放入您的 FoodFeeBack 元件 */}
+            <FoodFeeBack />
+            {/* 您可能需要傳遞一些 props 給 FoodFeeBack，例如關閉 modal 的函數 */}
+            <FoodFeeBack onFormSubmit={handleCloseFeedbackModal} />
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseFeedbackModal}>
+              關閉
+            </Button>
+            {/* 如果 FoodFeeBack 內部有自己的提交按鈕，這裡可能不需要額外的儲存按鈕 */}
+            {/* <Button variant="primary" onClick={() => { /* 觸發表單提交邏輯 *\/; handleCloseFeedbackModal(); }}>
+            提交評論
+          </Button> */}
+          </Modal.Footer>
+        </Modal>
+
+        {/* 登入提示 Modal */}
+        <Modal
+          show={showLoginModal}
+          onHide={handleCloseLoginModal}
+          centered
+          size="lg" // 可設定 'sm', 'lg', 'xl'
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>請先登入</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>需要登入才能撰寫評論喔！</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseLoginModal}>
+              關閉
+            </Button>
+            <Button variant="primary" onClick={handleGoToLogin}>
+              前往登入
+            </Button>
+          </Modal.Footer>
+        </Modal>
 
         <div className={styles.commentsList}>
           {/* 左箭頭按鈕 */}

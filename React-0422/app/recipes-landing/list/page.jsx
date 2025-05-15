@@ -33,6 +33,7 @@ export default function RecipeListPage() {
   // 收藏功能
   const [favorites, setFavorites] = useState({})
   const [favoritesLoaded, setFavoritesLoaded] = useState(false)
+  console.log(favoritesLoaded)
 
   useEffect(() => {
     if (data?.totalPages) {
@@ -56,7 +57,7 @@ export default function RecipeListPage() {
           },
         })
         const data = await response.json()
-        // console.log('Fetched Favorites:', data.favorites)
+        console.log('Fetched Favorites:', data.favorites)
         // 確認 favorites 資料
 
         setFavorites(data.favorites || {}) // 假設後端返回的格式是 { recipeId: true/false }
@@ -153,7 +154,7 @@ export default function RecipeListPage() {
 
         {/* Recipe Cards Section 列表頁的食物卡片區塊 */}
         <div className={styles.recipeSection}>
-          {isLoading || !favoritesLoaded ? ( // 確保 favorites 已加載
+          {isLoading && !favoritesLoaded ? ( // 確保 favorites 已加載
             <div className={styles.loading}>載入中...</div>
           ) : (
             <div className={styles.recipeGrid}>
