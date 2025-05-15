@@ -8,6 +8,7 @@ import {
   FaEyeSlash,
   FaChevronDown,
   FaCalendarAlt,
+  FaLock,
 } from 'react-icons/fa'
 import {
   FaCakeCandles,
@@ -26,7 +27,7 @@ import { MdFavorite, MdFavoriteBorder } from 'react-icons/md'
 import { BsBookmarkPlus, BsBookmarkStarFill } from 'react-icons/bs'
 import { GiKitchenScale } from 'react-icons/gi'
 import { PiJarLabelBold } from 'react-icons/pi'
-import { IoIosAddCircle } from 'react-icons/io'
+import { IoIosAddCircle, IoIosListBox } from 'react-icons/io'
 
 export {
   FaSearch,
@@ -60,4 +61,6 @@ export {
   FaEyeSlash,
   FaChevronDown,
   FaCalendarAlt,
+  FaLock,
+  IoIosListBox,
 }

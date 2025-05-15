@@ -1,5 +1,5 @@
-@use '../../src/styles/variables' ;
-@use '../../src/styles/mixins' ;
+@use '../../src/styles/variables';
+@use '../../src/styles/mixins';
 
 .pageContent {
   display: flex;
@@ -44,8 +44,15 @@
 
   &.active {
     background-color: #df6c2d;
+
     .buttonText {
       color: #fff;
+    }
+
+    .buttonIcon {
+      img {
+        filter: brightness(0) invert(1); // 將圖標變成白色
+      }
     }
   }
 }
