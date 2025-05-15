@@ -11,7 +11,8 @@ const Sidebar = ({ activeContent, setActiveContent }) => {
   const menuItems = [
     {
       key: 'profile', // 用於和 activeContent 比較
-      icon: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96c90fdb2fd7169341f851c57f561cb320cfb422?placeholderIfAbsent=true&apiKey=137a18afd6bf49c9985266999785670f', // Todo: icon 要改為ReactIcon
+      // Todo: icon 要改為ReactIcon
+      icon: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96c90fdb2fd7169341f851c57f561cb320cfb422?placeholderIfAbsent=true&apiKey=137a18afd6bf49c9985266999785670f',
       text: '會員資料',
       path: '/member-center/profile',
     },
@@ -39,15 +40,14 @@ const Sidebar = ({ activeContent, setActiveContent }) => {
     <div className={styles.sidebar}>
       {menuItems.map((item, index) => (
         // 將 <Link> 改為 <div> 或 <button>，並添加 onClick 事件
-        <div // 或者使用 <button> 標籤，語義上更適合點擊操作
+        <div
           key={item.key} // 使用 item.key 作為 React 的 key
-          // href={item.path} // 移除 href，因為我們不再透過 URL 導航
           className={`${styles.sidebarButton} ${
             // 判斷 active 狀態的條件改為比較 item.key 和 activeContent
             activeContent === item.key ? styles.active : ''
           }`}
           onClick={() => setActiveContent(item.key)} // 點擊時呼叫 setActiveContent 並傳入 item.key
-          // 為了無障礙和 SEO，可以考慮加上 role="button" 和 tabIndex="0" 如果使用 div
+          // 為了無障礙和 SEO，可以考慮加上 role="button" 和 tabIndex="0"
           role="button"
           tabIndex={0}
           onKeyDown={(e) => {
