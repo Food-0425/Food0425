@@ -73,31 +73,33 @@ export default function RestaurantsPage() {
     <div className={styles.pageContainer}>
       {/* <div>{JSON.stringify(data)}</div> */}
       <div className={styles.heroSection}>
-        <div className={styles.heroContent}>
-          <div className={styles.heroTitle}>精選餐廳推薦</div>
-          <div className={styles.heroDescription}>
-            探索台北最具特色的美食餐廳，從傳統小吃到高級料理，滿足您的味蕾享受
+        <div className={styles.heroContentWrapper}>
+          <div className={styles.heroContent}>
+            <div className={styles.heroTitle}>精選餐廳推薦</div>
+            <div className={styles.heroDescription}>
+              探索台北最具特色的美食餐廳，從傳統小吃到高級料理，滿足您的味蕾享受
+            </div>
+          </div>
+          <div className={styles.searchBar}>
+            <input
+              type="text"
+              placeholder="搜尋餐廳名稱或描述..."
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value)
+                setActivePage(1)
+              }}
+              className={styles.searchInput}
+            />
+            <button
+              className={styles.searchButton}
+              onClick={() => setSearchTerm(searchTerm)}
+            >
+              搜尋
+            </button>
           </div>
         </div>
-        {/* 替換原本的 searchBar div */}
-        <div className={styles.searchBar}>
-          <input
-            type="text"
-            placeholder="搜尋餐廳名稱或描述..."
-            value={searchTerm}
-            onChange={(e) => {
-              setSearchTerm(e.target.value)
-              setActivePage(1) // 重置到第一頁
-            }}
-            className={styles.searchInput}
-          />
-          <button
-            className={styles.searchButton}
-            onClick={() => setSearchTerm(searchTerm)}
-          >
-            搜尋
-          </button>
-        </div>
+
         <div className={styles.heroImageContainer}>
           <img
             src="/images/restaurant/r01.jpg"
@@ -105,11 +107,6 @@ export default function RestaurantsPage() {
             alt="餐廳美食"
           />
         </div>
-        <img
-          src="https://via.placeholder.com/1280x10"
-          className={styles.decorativeImage}
-          alt="裝飾圖案"
-        />
       </div>
 
       <div className={styles.restaurantListSection}>
