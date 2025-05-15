@@ -26,7 +26,7 @@ import { MdFavorite, MdFavoriteBorder } from 'react-icons/md'
 import { BsBookmarkPlus, BsBookmarkStarFill } from 'react-icons/bs'
 import { GiKitchenScale } from 'react-icons/gi'
 import { PiJarLabelBold } from 'react-icons/pi'
-import { IoIosAddCircle } from 'react-icons/io'
+import { IoIosAddCircle, IoIosArrowBack } from 'react-icons/io'
 
 export {
   FaSearch,
@@ -55,9 +55,13 @@ export {
   TbBowlSpoon,
   IoIosAddCircle,
   TbHandFinger,
+
+  IoIosArrowBack,
+
   FaGoogle,
   FaEye,
   FaEyeSlash,
   FaChevronDown,
   FaCalendarAlt,
+
 }

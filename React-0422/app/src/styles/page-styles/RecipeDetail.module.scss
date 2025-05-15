@@ -1,5 +1,5 @@
 @use '../variables' as *;
-@use '../mixins';
+@use '../mixins.scss' as *;
 
 .container {
   min-width: 320px;
@@ -178,7 +178,7 @@
   width: 1280px;
   box-shadow: $card-shadow;
   overflow: hidden;
-  margin-bottom: 50px;
+  margin-bottom: 100px;
 }
 
 .stepsContainer {
@@ -240,136 +240,49 @@
   flex: 1;
 }
 
-.addToCartButton {
-  justify-content: center;
-  align-items: stretch;
-  border-radius: 100px;
-  box-shadow: 0px 0px 0px 15px rgba(0, 0, 0, 0.05);
-  align-self: center;
-  display: flex;
-  margin-top: 80px;
-  padding: 25px 40px 25px 25px;
-  gap: 20px;
-  overflow: hidden;
-  color: #faf8f9;
-  text-align: center;
-  flex-wrap: wrap;
-  background-color: #df6c2d;
-}
-
-// .cartIconLarge {
-//   font-size: $font-size-icon;
-//   aspect-ratio: 1;
-//   object-fit: contain;
-//   object-position: center;
-//   width: 111px;
-//   margin: auto 0;
-//   flex-shrink: 0;
-// }
-
-.addToCartContent {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-content: center;
-}
-
-.addToCartTitle {
-  color: #faf8f9;
-}
-
-.addToCartNote {
-  color: #faf8f9;
-  letter-spacing: 0.72px;
-  align-self: center;
-  margin-top: 10px;
-}
-
-/* Chef Section */
-.chefSection {
-  z-index: 0;
+/* 美食笑尖兵 */
+.chefContainer {
   width: 100%;
-  padding-bottom: 150px;
-  white-space: nowrap;
+  background-color: $color-background-error;
+
+  .chefCard {
+    max-width: 1280px;
+    // height: 30rem;
+    display: flex;
+    margin: 0 auto;
+
+    img {
+      width: 50%;
+      object-fit: cover;
+      object-position: center top;
+    }
+    div {
+      padding: 50px;
+      h2 {
+        color: $color-primary;
+      }
+      p {
+        font-size: $font-size-p1;
+        color: $color-primary;
+        letter-spacing: 0.6px;
+        margin-top: 20px;
+      }
+    }
+  }
 }
 
-.chefCard {
-  background-color: rgba(236, 236, 236, 1);
-  display: flex;
-  width: 100%;
-  align-items: stretch;
-  gap: 85px;
-  overflow: hidden;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.chefBackground {
-  aspect-ratio: 1.4;
-  object-fit: contain;
-  object-position: center;
-  width: 100%;
-  min-width: 240px;
-  flex: 1;
-  flex-shrink: 1;
-  flex-basis: 320px;
-}
-
-.chefContent {
-  justify-content: center;
-  align-items: stretch;
-  display: flex;
-  min-width: 240px;
-  flex-direction: column;
-  flex: 1;
-  flex-shrink: 1;
-  flex-basis: 0%;
-  padding: 85px 320px 287px 0px;
-}
-
-.chefTitle {
-  color: #423c3a;
-  font-family:
-    Noto Sans TC,
-    -apple-system,
-    Roboto,
-    Helvetica,
-    sans-serif;
-  font-size: 36px;
-  font-weight: 700;
-}
-
-.chefDescription {
-  color: #7a7a7a;
-  font-family:
-    Inter,
-    -apple-system,
-    Roboto,
-    Helvetica,
-    sans-serif;
-  font-size: 20px;
-  font-weight: 400;
-  letter-spacing: 0.6px;
-  margin-top: 25px;
-}
-
-/* Comments Section */
+/* user_feedbacks */
 .commentsSection {
-  max-width: 1280px;
-  padding-bottom: 150px;
-  justify-content: center;
-  align-items: stretch;
-  align-self: center;
-  z-index: 0;
-  display: flex;
-  width: 1280px;
-  flex-direction: column;
-  font-family:
-    Noto Sans TC,
-    -apple-system,
-    Roboto,
-    Helvetica,
-    sans-serif;
+  padding-bottom: 100px;
+  margin: 0 auto;
+
+  .commentsContainer {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    width: 1280px;
+    max-width: 1280px;
+  }
 }
 
 .addCommentButton {
@@ -406,177 +319,124 @@
   z-index: 0;
   margin: auto 0;
 }
+.commentsList01 {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+  align-items: center;
 
+  button:nth-of-type(1) {
+    z-index: 10;
+    margin-right: 25px;
+    @include button-arrow;
+  }
+  button:nth-of-type(2) {
+    z-index: 10;
+    margin-left: 25px;
+    @include button-arrow;
+    transform: scaleX(-1);
+  }
+}
 .commentsList {
   display: flex;
-  margin-top: 30px;
-  width: 100%;
-  align-items: stretch; /* 讓卡片高度一致 */
-  gap: 30px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.userAvatarLeft,
-.userAvatarRight {
-  aspect-ratio: 0.74;
-  object-fit: contain;
-  object-position: center;
-  width: 86px;
-  border-radius: 100px;
-  align-self: stretch;
-  margin: auto 0;
-  flex-shrink: 0;
-  padding: 24px 0;
-  gap: 10px;
-  overflow: hidden;
-}
-
-.arrowButton {
-  position: absolute; /* 絕對定位 */
-  top: 75%; /* 垂直居中 */
-  transform: translateY(-50%); /* 修正垂直居中的偏移 */
-  background-color: transparent;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  padding: 10px;
-  z-index: 10; /* 確保按鈕在其他元素之上 */
-}
-
-.arrowButton.left {
-  left: 50px; /* 左箭頭距離容器左邊的距離 */
-}
-
-.arrowButton.right {
-  right: 50px; /* 右箭頭距離容器右邊的距離 */
+  gap: 15px;
 }
 
 .commentCard {
-  justify-content: center;
-  align-items: stretch;
   border-radius: 30px;
-  box-shadow: 2px 3px 8px 0px rgba(0, 0, 0, 0.25);
+  box-shadow: $card-shadow;
   background-color: #fff;
-  align-self: stretch;
+  width: 365px;
+  height: 287px;
+  // width: 100%;
+  padding: 30px 40px 0;
   display: flex;
-  min-width: 520px;
-  margin: auto 0;
-  flex-direction: column;
-  /* flex: 1; */
-  /* width: 300px;  */
-  width: 50%; /* 每行顯示兩個卡片 *
-  margin: 0 auto; /* 卡片居中 */
-  max-width: 400px; /* 可選：限制卡片最大寬度 */
-  flex-shrink: 0; /* 防止卡片縮小 */
-  box-sizing: border-box; /* 包含 padding 和 border */
+  flex-direction: column; /* 整體從上至下排列 */
 
-  /* flex-basis: 0%; */
-}
+  div:nth-of-type(1) {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 
-.commentUser {
-  justify-content: center;
-  align-items: center;
-  display: flex;
-  width: 100%;
-  gap: 30px;
-  flex-wrap: wrap;
-  padding: 45px 40px 0;
-}
+    img {
+      width: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
 
-.userAvatar {
-  /* aspect-ratio: 1.19; */
-  object-fit: contain;
-  object-position: center;
-  width: 120px;
-  border-radius: 50%; /* 圓形圖片 */
-  object-fit: cover; /* 確保圖片不變形 */
-  flex-shrink: 0;
-  gap: -35px;
-}
+    .userInfo {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-self: flex-start;
+      margin-left: 25px;
+      color: $color-accent;
 
-.userInfo {
-  display: flex;
-  position: relative;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: center;
-  flex: 1;
-  flex-shrink: 1;
-  flex-basis: 0%;
-}
+      .buttonBiLike01 {
+        all: unset; /* 重置所有樣式 */
+        align-self: flex-end;
+        border: none;
+        color: $color-background-error;
+        font-size: $font-size-icon;
 
-.userRating {
-  aspect-ratio: 1.92;
-  object-fit: contain;
-  object-position: center;
-  width: 100px;
-  align-self: flex-end;
-  max-width: 100%;
-}
+        &:hover {
+          color: $color-content; /* 滑鼠懸停時改變顏色 */
+        }
+      }
+      .buttonBiLike02 {
+        all: unset; /* 重置所有樣式 */
+        align-self: flex-end;
+        border: none;
+        color: $color-special;
+        font-size: $font-size-icon;
+      }
+      h3 {
+        font-size: $font-size-h3;
+        margin: 0;
+        align-self: flex-start;
+      }
 
-.userLike {
-  width: 0px;
-  /* align-self: flex-end; */
-  position: absolute;
-  right: 30px;
-}
-
-.userContent {
-  margin-top: 25px;
-  width: 100%;
-}
-
-.userName {
-  color: #423c3a;
-  font-size: 20px;
-  font-weight: 700;
-}
-
-.commentDate {
-  color: #7a7a7a;
-  font-size: 16px;
-  font-weight: 400;
-  letter-spacing: 0.48px;
-  margin-top: 15px;
+      p {
+        align-self: flex-start;
+        font-size: $font-size-p1;
+        color: $color-content;
+        letter-spacing: 0.48px;
+        margin-top: 5px; /* 上下間距 */
+      }
+    }
+  }
 }
 
 .commentContent {
   justify-content: center;
   align-items: stretch;
   display: flex;
-  margin-top: 45px;
-  width: 100%;
   flex-direction: column;
+  margin-top: 20px;
+  width: 100%;
   white-space: normal; /* 允許文字換行 */
-  padding: 0 40px 45px;
+  padding: 0 0 30px;
   word-wrap: normal;
   overflow: hidden; /* 隱藏超出區塊的內容 */
-}
+  h2 {
+    display: -webkit-box; /* 必須搭配 line-clamp 使用 */
+    -webkit-line-clamp: 1; /* 限制顯示的行數，例如 2 行 */
+    -webkit-box-orient: vertical; /* 設定為垂直方向 */
+    overflow: hidden; /* 隱藏超出區塊的內容 */
+    text-overflow: ellipsis; /* 使用省略號表示超出的文字 */
+  }
 
-.commentTitle,
-.commentText {
-  line-clamp: 3; /* 限制顯示的行數，例如 2 行 */
-  display: -webkit-box; /* 必須搭配 line-clamp 使用 */
-  -webkit-line-clamp: 3; /* 限制顯示的行數，例如 2 行 */
-  -webkit-box-orient: vertical; /* 設定為垂直方向 */
-  overflow: hidden; /* 隱藏超出區塊的內容 */
-  text-overflow: ellipsis; /* 使用省略號表示超出的文字 */
-}
-
-.commentTitle {
-  color: #423c3a;
-  font-size: 20px;
-  font-weight: 700;
-}
-
-.commentText {
-  color: #7a7a7a;
-  font-size: 16px;
-  font-weight: 400;
-  letter-spacing: 0.48px;
-  margin-top: 25px;
-  word-wrap: break-word;
+  p {
+    color: $color-content;
+    font-size: $font-size-p1;
+    letter-spacing: 0.48px;
+    margin-top: 10px;
+    display: -webkit-box; /* 必須搭配 line-clamp 使用 */
+    -webkit-line-clamp: 3; /* 限制顯示的行數，例如 2 行 */
+    -webkit-box-orient: vertical; /* 設定為垂直方向 */
+    overflow: hidden; /* 隱藏超出區塊的內容 */
+    text-overflow: ellipsis; /* 使用省略號表示超出的文字 */
+  }
 }
 
 /* Related Recipes Section */
@@ -589,12 +449,6 @@
   padding: 80px 0;
   flex-direction: column;
   overflow: hidden;
-  font-family:
-    Noto Sans TC,
-    -apple-system,
-    Roboto,
-    Helvetica,
-    sans-serif;
   font-weight: 700;
   white-space: nowrap;
   text-align: center;
@@ -938,41 +792,36 @@
   flex-shrink: 0;
 }
 
-/* Decorative Elements */
+/* sticker */
+.sticker1 {
+  z-index: 1;
+  width: 200px;
+  position: absolute;
+  right: 290px;
+  top: 1000px;
+  transform: rotate(250deg);
+}
+
 .sticker2 {
-  width: 370px;
+  width: 300px;
   position: absolute;
   left: 41px;
   top: 700px;
 }
 
 .sticker3 {
-  width: 250px;
+  width: 200px;
   position: absolute;
-  left: 1000px;
-  top: 500px;
+  right: 150px;
+  top: 720px;
   transform: scaleX(-1);
 }
 
 .sticker5 {
-  aspect-ratio: 1.06;
-  object-fit: contain;
-  object-position: center;
-  width: 415px;
+  width: 300px;
   position: absolute;
-  z-index: 0;
-  max-width: 100%;
-  right: 84px;
-  top: 1463px;
-  height: 391px;
-}
-
-.sticker1 {
-  width: 315px;
-  position: absolute;
-  left: 1110px;
-  top: 1000px;
-  transform: rotate(250deg);
+  right: 160px;
+  top: 1100px;
 }
 
 /* Media Queries */
@@ -1057,12 +906,6 @@
 
   .addToCartTitle {
     font-size: 40px;
-  }
-
-  .chefSection {
-    max-width: 100%;
-    padding-bottom: 100px;
-    white-space: initial;
   }
 
   .chefCard {

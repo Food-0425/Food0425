@@ -13,6 +13,7 @@ import {
   BiLike,
   IoIosAddCircle,
   TbHandFinger,
+  IoIosArrowBack,
 } from '../../icons/icons'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
@@ -25,7 +26,7 @@ import FoodFeeBack from '../../components/FoodFeeBack'
 
 export default function RecipeDetailPage() {
   const [currentPage, setCurrentPage] = useState(0) // 當前頁數
-  const commentsPerPage = 2 // 每頁顯示的評論數量
+  const commentsPerPage = 3 // 每頁顯示的評論數量
   const { auth } = useAuth() || {} // 使用 useAuth 鉤子獲取用戶信息
   // 這個狀態用來控制食材是否被選中
   const [selectedItems, setSelectedItems] = useState({})
@@ -464,48 +465,31 @@ export default function RecipeDetailPage() {
               </>
             )}
           </div>
-
-          {/* <button
-            className={styles.addToCartButton}
-            onClick={() => handleAddToCart(recipe.ingredients)}
-          >
-            <div className={styles.addToCartContent}>
-              <h2 className={styles.addToCartTitle}>
-                <TbHandFinger className={styles.cartIconLarge} />
-                添加食材至購物車
-              </h2>
-              <h3 className={styles.addToCartNote}>
-                （ 食材分量依商品標示為準 ）
-              </h3>
-            </div>
-          </button> */}
         </div>
       </div>
 
-      {/* Chef Section */}
-      <div className={styles.chefSection}>
+      {/* 美食笑尖兵 */}
+      <div className={styles.chefContainer}>
         <div className={styles.chefCard}>
-          <img
-            src="/images/recipes/chef-background.jpg"
-            className={styles.chefBackground}
-            alt="Chef background"
-          />
-          <div className={styles.chefContent}>
-            <div className={styles.chefTitle}>美食笑尖兵</div>
-            <div className={styles.chefDescription}>
-              在很長的一段時間裡，孤寂像是一隻看不見的巨手，壓迫著我，很快把我壓到別人看不見的落去了。
-              <br />
-              你出生的時候，你哭著，周圍的人笑著；你逝去的時候，你笑著，而周圍的人在哭！
-              <br />
-              <br />
-              聞言，我當即清楚，這是小黑的聲音。
-            </div>
+          <img src="/images/recipes-img/chef.jpg" alt="美食笑尖兵" />
+          <div className={styles.chefText}>
+            <h2>🦸美食笑尖兵</h2>
+            <p>歡迎來到「美食笑尖兵」的美味世界！🎉🎉🎉</p>
+            <p>
+              我們是一群由熱愛料理的夥伴組成的團隊，以「笑」為調味，用創意烹製各式各樣的美食饗宴。我們的目標很簡單：透過輕鬆有趣的方式，分享多元豐富的料理內容，讓每一位熱愛生活、享受美食的朋友，都能在這裡找到屬於自己的味蕾驚喜。
+            </p>
+            <p>
+              「🦸美食笑尖兵」的特色在於對異國料理的熱情探索、對充滿人情味的手尾菜的溫暖傳承，以及對精緻甜點的甜蜜創造。我們相信，料理不
+              只是滿足口腹之慾，更是一種文化交流、情感連結和療癒心靈的方式。
+            </p>
+            <p>🔥🔥🔥趕快加入我們的行列，讓每一餐都充滿驚喜與歡樂吧！🔥🔥🔥</p>
           </div>
         </div>
       </div>
 
-      {/* Comments Section - 動態生成評論 */}
+      {/* user_feedbacks - 動態生成評論 */}
       <div className={styles.commentsSection}>
+
         {/* 舊的打開留言表單 */}
         {/* <button
           className={styles.addCommentButton} // 使用樣式
@@ -585,79 +569,72 @@ export default function RecipeDetailPage() {
 
         <div className={styles.commentsList}>
           {/* 左箭頭按鈕 */}
+
           <button
-            className={`${styles.arrowButton} ${styles.left}`}
-            onClick={handlePrevPage}
-            disabled={currentPage === 0} // 第一頁禁用
+            className={styles.addCommentButton} // 使用樣式
+            onClick={handleShowFeedback} // 點擊事件
           >
-            ←
+            <img
+              src="/images/recipes/comment-icon.png"
+              className={styles.commentIcon}
+              alt="Comment icon"
+            />
+            <div className={styles.addCommentText}>添加留言</div>
           </button>
-          {/* 下面這是原本預設要放入的箭頭，先註解後用其他的替代 */}
-          {/* <img
-            src="/images/recipes/user-avatar-left.png"
-            className={styles.userAvatarLeft}
-            alt="User avatar"
-          /> */}
 
-          {isLoading ? (
-            <div>正在載入評論...</div>
-          ) : error ? (
-            <div>載入評論時發生錯誤</div>
-          ) : currentComments && currentComments.length > 0 ? (
-            currentComments.map((comment, index) => (
-              <div className={styles.commentCard} key={index}>
-                <div className={styles.commentUser}>
-                  {/* 先註解掉，不然會一直去跟後端拿資料(無限讀取) {目前已解決} */}
-                  <img
-                    src={comment.userAvatar || `/images/user/default.jpg`}
-                    className={styles.userAvatar}
-                    alt="User avatar"
-                    onError={(e) => {
-                      if (!e.target.dataset.fallback) {
-                        e.target.dataset.fallback = true // 標記已經使用過 fallback
-                        e.target.src = `/images/recipes/user${(index % 2) + 1}.png`
-                      }
-                    }}
-                  />
-                  <div className={styles.userInfo}>
-                    {/* 下面這個註解掉的是用戶等級(目前暫時沒有要做) */}
-                    {/* <img
-                      src="/images/recipes/rating.png"
-                      className={styles.userRating}
-                      alt="User rating"
-                    /> */}
-                    <div className={styles.userLike}>
-                      <BiLike size={30} />
-                    </div>
-
-                    <div className={styles.userContent}>
-                      <div className={styles.userName}>
-                        {comment.username || '匿名用戶'}
-                      </div>
-                      <div className={styles.commentDate}>
-                        {comment.created_at || '未知日期'}
+          <div className={styles.commentsList01}>
+            {/* 左箭頭按鈕 */}
+            <button
+              className={styles.arrowButton}
+              onClick={handlePrevPage}
+              // 第一頁禁用：disabled={currentPage === 0}
+              disabled={currentPage === 0}
+            >
+              <IoIosArrowBack />
+            </button>
+            <div className={styles.commentsList}>
+              {isLoading ? (
+                <div>正在載入評論...</div>
+              ) : error ? (
+                <div>載入評論時發生錯誤</div>
+              ) : currentComments && currentComments.length > 0 ? (
+                currentComments.map((comment, index) => (
+                  <div className={styles.commentCard} key={index}>
+                    <div>
+                      <img
+                        src={comment.userAvatar || `/images/user/default.jpg`}
+                        alt="User avatar"
+                        onError={(e) => {
+                          if (!e.target.dataset.fallback) {
+                            e.target.dataset.fallback = true // 標記已經使用過 fallback
+                            e.target.src = `/images/recipes/user${(index % 2) + 1}.png`
+                          }
+                        }}
+                      />
+                      <div className={styles.userInfo}>
+                        <button className={styles.buttonBiLike01}>
+                          <BiLike />
+                        </button>
+                        {/* <button className={styles.buttonBiLike02}>
+                          <BiLike />
+                        </button> */}
+                        <h3>{comment.username || '匿名用戶'}</h3>
+                        <p>{comment.created_at || '未知日期'}</p>
                       </div>
                     </div>
+                    <div className={styles.commentContent}>
+                      <h2>{comment.title || '無標題'}</h2>
+                      <p>{comment.context || comment.text || '無評論內容'}</p>
+                    </div>
                   </div>
-                </div>
-                <div className={styles.commentContent}>
-                  {/* 這個標題我不太確定要放什麼，之後考慮拿掉或替換成別的顯示內容 */}
-                  <div className={styles.commentTitle}>
-                    {comment.title || '無標題'}
-                  </div>
-                  <div className={styles.commentText}>
-                    {comment.context || comment.text || '無評論內容'}
-                  </div>
-                </div>
-              </div>
-            ))
-          ) : (
-            // 備用的靜態評論，當API沒有返回評論時顯示
-            <>
-              <div className={styles.commentCard}>
-                <div className={styles.commentUser}>
-                  {/* 因為這一塊是假設沒人留言的情況下，所以先註解掉 */}
-                  {/* <img
+                ))
+              ) : (
+                // 備用的靜態評論，當API沒有返回評論時顯示
+                <>
+                  <div className={styles.commentCard}>
+                    <div className={styles.commentUser}>
+                      {/* 因為這一塊是假設沒人留言的情況下，所以先註解掉 */}
+                      {/* <img
                     src={`/images/user/default.jpg`}
                     className={styles.userAvatar}
                     alt="User avatar"
@@ -668,33 +645,22 @@ export default function RecipeDetailPage() {
                       }
                     }}
                   /> */}
-                  <div className={styles.userInfo}>
-                    {/* 下面這個註解掉的是用戶等級(目前暫時沒有要做) */}
-                    {/* <img
-                      src="/images/recipes/rating.png"
-                      className={styles.userRating}
-                      alt="User rating"
-                    /> */}
-                    {/* <div className={styles.userLike}>
-                      <BiLike size={30} />
-                    </div> */}
-
-                    <div className={styles.userContent}>
-                      <div className={styles.userName}>
-                        {'目前這個食譜尚未有人留言'}
+                      <div className={styles.userInfo}>
+                        <div className={styles.userContent}>
+                          <div className={styles.userName}>
+                            <h2>{'目前這個食譜尚未有人留言'}</h2>
+                          </div>
+                        </div>
                       </div>
-                      {/* <div className={styles.commentDate}>{'日期'}</div> */}
+                    </div>
+                    <div className={styles.commentContent}>
+                      {/* 這個標題我不太確定要放什麼，之後考慮拿掉或替換成別的顯示內容 */}
+                      {/* <div className={styles.commentTitle}>{'無標題'}</div> */}
+                      <div className={styles.commentText}>{'無評論內容'}</div>
                     </div>
                   </div>
-                </div>
-                <div className={styles.commentContent}>
-                  {/* 這個標題我不太確定要放什麼，之後考慮拿掉或替換成別的顯示內容 */}
-                  {/* <div className={styles.commentTitle}>{'無標題'}</div> */}
-                  <div className={styles.commentText}>{'無評論內容'}</div>
-                </div>
-              </div>
-              {/* 下面是原本的預設食譜評論卡片樣式 */}
-              {/* <div className={styles.commentCard}>
+                  {/* 下面是原本的預設食譜評論卡片樣式 */}
+                  {/* <div className={styles.commentCard}>
                 <div className={styles.commentUser}>
                   <img
                     src="/images/recipes/user1.png"
@@ -702,11 +668,7 @@ export default function RecipeDetailPage() {
                     alt="User avatar"
                   />
                   <div className={styles.userInfo}>
-                    <img
-                      src="/images/recipes/rating.png"
-                      className={styles.userRating}
-                      alt="User rating"
-                    />
+                    
                     <div className={styles.userContent}>
                       <div className={styles.userName}>李淑芬</div>
                       <div className={styles.commentDate}>2025-02-24 10:15</div>
@@ -731,11 +693,7 @@ export default function RecipeDetailPage() {
                     alt="User avatar"
                   />
                   <div className={styles.userInfo}>
-                    <img
-                      src="/images/recipes/rating.png"
-                      className={styles.userRating}
-                      alt="User rating"
-                    />
+                    
                     <div className={styles.userContent}>
                       <div className={styles.userName}>陳志明</div>
                       <div className={styles.commentDate}>2025-02-17 12:45</div>
@@ -751,23 +709,24 @@ export default function RecipeDetailPage() {
                   </div>
                 </div>
               </div> */}
-            </>
-          )}
-
-          {/* 右箭頭按鈕 */}
-          <button
-            className={`${styles.arrowButton} ${styles.right}`}
-            onClick={handleNextPage}
-            disabled={endIndex >= comments.length} // 最後一頁禁用
-          >
-            →
-          </button>
-          {/* 這邊是原本預計要放的右箭頭，也先註解掉用別的替代 */}
-          {/* <img
+                </>
+              )}
+            </div>
+            {/* 右箭頭按鈕 */}
+            <button
+              className={styles.arrowButton}
+              onClick={handleNextPage}
+              disabled={endIndex >= comments.length} // 最後一頁禁用
+            >
+              <IoIosArrowBack />
+            </button>
+            {/* 這邊是原本預計要放的右箭頭，也先註解掉用別的替代 */}
+            {/* <img
             src="/images/recipes/user-avatar-right.png"
             className={styles.userAvatarRight}
             alt="User avatar"
           /> */}
+          </div>
         </div>
       </div>
       {/* FoodFeeBack 區塊 */}
@@ -870,26 +829,26 @@ export default function RecipeDetailPage() {
           )}
         </div>
       </div>
-      {/* Decorative Elements */}
-      <img
-        src="/images/design/sticker-3.svg"
-        className={styles.sticker3}
-        alt="Decoration"
-      />
-      <img
-        src="/images/design/sticker-5.svg"
-        className={styles.sticker5}
-        alt="Decoration"
-      />
+      {/* sticker */}
       <img
         src="/images/design/sticker-1.svg"
         className={styles.sticker1}
-        alt="Decoration"
+        alt="蔬菜"
       />
       <img
         src="/images/design/sticker-2.svg"
         className={styles.sticker2}
-        alt="Decoration"
+        alt="橄欖油"
+      />
+      <img
+        src="/images/design/sticker-3.svg"
+        className={styles.sticker3}
+        alt="調味罐"
+      />
+      <img
+        src="/images/design/sticker-5.svg"
+        className={styles.sticker5}
+        alt="砧板"
       />
     </div>
   )
