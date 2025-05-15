@@ -489,7 +489,6 @@ export default function RecipeDetailPage() {
 
       {/* user_feedbacks - 動態生成評論 */}
       <div className={styles.commentsSection}>
-
         {/* 舊的打開留言表單 */}
         {/* <button
           className={styles.addCommentButton} // 使用樣式
@@ -570,7 +569,8 @@ export default function RecipeDetailPage() {
         <div className={styles.commentsList}>
           {/* 左箭頭按鈕 */}
 
-          <button
+          {/* 原本的添加留言表單的按鈕 */}
+          {/* <button
             className={styles.addCommentButton} // 使用樣式
             onClick={handleShowFeedback} // 點擊事件
           >
@@ -580,7 +580,7 @@ export default function RecipeDetailPage() {
               alt="Comment icon"
             />
             <div className={styles.addCommentText}>添加留言</div>
-          </button>
+          </button> */}
 
           <div className={styles.commentsList01}>
             {/* 左箭頭按鈕 */}
