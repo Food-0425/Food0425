@@ -19,6 +19,8 @@ export default function LoginPage() {
     password: '',
   })
 
+  console.log('auth', auth)
+
   // 新增驗證函數
   const validateField = (name, value) => {
     if (name === 'email') {

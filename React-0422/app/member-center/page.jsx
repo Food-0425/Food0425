@@ -8,19 +8,19 @@ import { useAuth } from '@/hooks/auth-context'
 import { useRouter } from 'next/navigation'
 
 export default function MemberCenter() {
-  const { isAuth } = useAuth()
+  const { auth } = useAuth()
   const router = useRouter()
 
   React.useEffect(() => {
     // 如果沒有登入，導向到登入頁面
-    // 這裡的 isAuth 是從 AuthContextProvider 中取得的
-    if (!isAuth) {
+    // 這裡的 auth 是從 AuthContextProvider 中取得的
+    if (!auth) {
       router.push('/login')
     }
-  }, [isAuth, router])
+  }, [auth, router])
 
   // 如果還在載入中
-  if (!isAuth) {
+  if (!auth) {
     return <div>Loading...</div>
   }
 

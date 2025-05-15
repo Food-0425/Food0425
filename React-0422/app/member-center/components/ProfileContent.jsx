@@ -2,10 +2,24 @@
 
 import React from 'react'
 import styles from '../styles/member-center.module.scss'
-import { useAuth } from '@/hooks/use-auth'
+import { useAuth } from '@/hooks/auth-context'
+import useSWR from 'swr'
+import { useParams } from 'next/navigation'
 
 const ProfileContent = () => {
-  const { user } = useAuth()
+  // const { user } = useAuth()
+  const params = useParams()
+  const id = params.id
+
+  const fetcher = (url) => fetch(url).then((res) => res.json())
+
+  const { data, error } = useSWR(
+    id ? `http://localhost:3001/users/api/${id}` : null,
+    fetcher
+  )
+
+  const isLoading = !data && !error
+  const user = data?.rows || {}
 
   const profileFields = [
     { label: '電子信箱', value: user.email },
