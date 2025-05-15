@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation'
 export default function MemberCenter() {
   const { auth } = useAuth()
   const router = useRouter()
+  // 測試
 
   React.useEffect(() => {
     // 如果沒有登入，導向到登入頁面
