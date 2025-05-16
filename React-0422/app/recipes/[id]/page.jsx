@@ -635,9 +635,8 @@ export default function RecipeDetailPage() {
                         </div>
                       </div>
                       <div className={styles.commentContent}>
-                        {/* 這個標題我不太確定要放什麼，之後考慮拿掉或替換成別的顯示內容 */}
-                        {/* <div className={styles.commentTitle}>{'無標題'}</div> */}
-                        <div className={styles.commentText}>{'無評論內容'}</div>
+                        
+                        <div className={styles.commentText}>{'目前這個食譜尚未有人留言'}</div>
                       </div>
                     </div>
                     {/* 下面是原本的預設食譜評論卡片樣式 */}
@@ -717,7 +716,7 @@ export default function RecipeDetailPage() {
       {/* Related Recipes Section - 動態生成相關食譜 */}
       <div className={styles.relatedRecipesSection}>
         <div>
-          <h2>相關食譜推薦</h2>
+          <h2>你可能會喜歡</h2>
           <div className={styles.relatedRecipesGrid}>
             {isLoading ? (
               <h3>正在載入相關食譜...</h3>

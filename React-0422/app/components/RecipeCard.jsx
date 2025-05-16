@@ -48,7 +48,6 @@ export default function RecipeCard({
       onClick={handleCardClick}
       style={{ cursor: clickable ? 'pointer' : 'default' }}
     >
-
       <Link key={id} href={`/recipes/${id}`} passHref>
         <div>
           <img src={image} alt={title} />

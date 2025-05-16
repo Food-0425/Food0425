@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import styles from '../styles/RecipeLanding.module.css'
+import styles from '../src/styles/page-styles/RecipeLanding.module.scss'
 import Link from 'next/link'
 import RecipeCard from '@/app/components/RecipeCard'
 
@@ -21,7 +21,7 @@ import {
   LuDessert,
   LuSalad,
   TbMeat,
-  CiBowlNoodles,
+  MdOutlineRamenDining,
 } from '../icons/icons'
 //dynamic import
 // 這邊是為了讓RecipeCarousel這個元件不會在伺服器端渲染，因為它裡面有使用useState和useEffect等hook
@@ -123,7 +123,7 @@ export default function RecipesLandingPage() {
     })
   }
 
-  const [visibleRange, setVisibleRange] = useState([0, 6]) // 初始顯示範圍
+  const [visibleRange, setVisibleRange] = useState([0, 7]) // 初始顯示範圍
 
   // 右邊箭頭
   const handleNext = () => {
@@ -147,7 +147,7 @@ export default function RecipesLandingPage() {
     { name: '異國', icon: <FaEarthAmericas /> },
     { name: '生鮮', icon: <FaFishFins /> },
     { name: '糕點', icon: <FaCakeCandles /> },
-    { name: '麵食', icon: <FaCakeCandles /> },
+    { name: '麵食', icon: <MdOutlineRamenDining /> },
   ]
 
   return (
@@ -203,15 +203,14 @@ export default function RecipesLandingPage() {
               <div className={styles.recipeCategory}>
                 <img
                   src="https://cdn.builder.io/api/v1/image/assets/TEMP/342df7d551f513a8966757cc07c7a877c1abf5eb?placeholderIfAbsent=true"
-                  className={styles.categoryBackground}
                   alt="Desserts background"
                 />
-                <div className={styles.categoryTitle}>麵食</div>
+                <h2 className={styles.categoryTitle}>麵食</h2>
                 <button
                   onClick={() => handleSearch('麵食')}
                   className={styles.viewMoreButton}
                 >
-                  <h3 className={styles.viewMoreText}>看更多</h3>
+                  <h2 className={styles.viewMoreText}>看更多</h2>
                 </button>
               </div>
               <div className={styles.recipeCardsContainer}>
@@ -249,25 +248,27 @@ export default function RecipesLandingPage() {
                   onClick={() => handleSearch('肉食')}
                   className={styles.viewMoreButton}
                 >
-                  <h3 className={styles.viewMoreText}>看更多</h3>
+                  <h2>看更多</h2>
                 </button>
               </div>
-              <div className={styles.recipeCardsContainer}>
-                {data?.rows
-                  .filter((recipe) => recipe.categories?.includes('肉食'))
-                  .sort((a, b) => a.id - b.id) // 按ID穩定排序
-                  .slice(0, 6) // 過濾出分類為「肉食」的資料，取前6筆
-                  .map((recipe) => (
-                    <RecipeCard
-                      key={recipe.id}
-                      id={recipe.id}
-                      image={recipe.image}
-                      title={recipe.recipe_title}
-                      description={recipe.recipe_description}
-                      initialFavorite={favorites[recipe.id] || false}
-                      onFavoriteToggle={toggleFavorite}
-                    />
-                  ))}
+              <div className={styles.recipeCardsSection}>
+                <div className={styles.recipeCardsContainer}>
+                  {data?.rows
+                    .filter((recipe) => recipe.categories?.includes('肉食'))
+                    .sort((a, b) => a.id - b.id) // 按ID穩定排序
+                    .slice(0, 6) // 過濾出分類為「肉食」的資料，取前6筆
+                    .map((recipe) => (
+                      <RecipeCard
+                        key={recipe.id}
+                        id={recipe.id}
+                        image={recipe.image}
+                        title={recipe.recipe_title}
+                        description={recipe.recipe_description}
+                        initialFavorite={favorites[recipe.id] || false}
+                        onFavoriteToggle={toggleFavorite}
+                      />
+                    ))}
+                </div>
               </div>
             </div>
           </div>
@@ -287,25 +288,27 @@ export default function RecipesLandingPage() {
                   onClick={() => handleSearch('蔬食')}
                   className={styles.viewMoreButton}
                 >
-                  <h3 className={styles.viewMoreText}>看更多</h3>
+                  <h2 className={styles.viewMoreText}>看更多</h2>
                 </button>
               </div>
-              <div className={styles.recipeCardsContainer}>
-                {data?.rows
-                  .filter((recipe) => recipe.categories?.includes('蔬食'))
-                  .sort((a, b) => a.id - b.id) // 按ID穩定排序
-                  .slice(0, 6) // 過濾出分類為「蔬食」的資料，取前6筆
-                  .map((recipe) => (
-                    <RecipeCard
-                      key={recipe.id}
-                      id={recipe.id}
-                      image={recipe.image}
-                      title={recipe.recipe_title}
-                      description={recipe.recipe_description}
-                      initialFavorite={favorites[recipe.id] || false}
-                      onFavoriteToggle={toggleFavorite}
-                    />
-                  ))}
+              <div className={styles.recipeCardsSection}>
+                <div className={styles.recipeCardsContainer}>
+                  {data?.rows
+                    .filter((recipe) => recipe.categories?.includes('蔬食'))
+                    .sort((a, b) => a.id - b.id) // 按ID穩定排序
+                    .slice(0, 6) // 過濾出分類為「蔬食」的資料，取前6筆
+                    .map((recipe) => (
+                      <RecipeCard
+                        key={recipe.id}
+                        id={recipe.id}
+                        image={recipe.image}
+                        title={recipe.recipe_title}
+                        description={recipe.recipe_description}
+                        initialFavorite={favorites[recipe.id] || false}
+                        onFavoriteToggle={toggleFavorite}
+                      />
+                    ))}
+                </div>
               </div>
             </div>
           </div>
@@ -326,25 +329,27 @@ export default function RecipesLandingPage() {
                   onClick={() => handleSearch('甜點')}
                   className={styles.viewMoreButton}
                 >
-                  <h3 className={styles.viewMoreText}>看更多</h3>
+                  <h2 className={styles.viewMoreText}>看更多</h2>
                 </button>
               </div>
-              <div className={styles.recipeCardsContainer}>
-                {data?.rows
-                  .filter((recipe) => recipe.categories?.includes('甜點'))
-                  .sort((a, b) => a.id - b.id) // 按ID穩定排序
-                  .slice(0, 6) // 過濾出分類為「甜點」的資料，取前6筆
-                  .map((recipe) => (
-                    <RecipeCard
-                      key={recipe.id}
-                      id={recipe.id}
-                      image={recipe.image}
-                      title={recipe.recipe_title}
-                      description={recipe.recipe_description}
-                      initialFavorite={favorites[recipe.id] || false}
-                      onFavoriteToggle={toggleFavorite}
-                    />
-                  ))}
+              <div className={styles.recipeCardsSection}>
+                <div className={styles.recipeCardsContainer}>
+                  {data?.rows
+                    .filter((recipe) => recipe.categories?.includes('甜點'))
+                    .sort((a, b) => a.id - b.id) // 按ID穩定排序
+                    .slice(0, 6) // 過濾出分類為「甜點」的資料，取前6筆
+                    .map((recipe) => (
+                      <RecipeCard
+                        key={recipe.id}
+                        id={recipe.id}
+                        image={recipe.image}
+                        title={recipe.recipe_title}
+                        description={recipe.recipe_description}
+                        initialFavorite={favorites[recipe.id] || false}
+                        onFavoriteToggle={toggleFavorite}
+                      />
+                    ))}
+                </div>
               </div>
             </div>
           </div>
@@ -364,25 +369,27 @@ export default function RecipesLandingPage() {
                   onClick={() => handleSearch('飯食')}
                   className={styles.viewMoreButton}
                 >
-                  <h3 className={styles.viewMoreText}>看更多</h3>
+                  <h2 className={styles.viewMoreText}>看更多</h2>
                 </button>
               </div>
-              <div className={styles.recipeCardsContainer}>
-                {data?.rows
-                  .filter((recipe) => recipe.categories?.includes('飯食'))
-                  .sort((a, b) => a.id - b.id) // 按ID穩定排序
-                  .slice(0, 6) // 過濾出分類為「飯食」的資料，取前6筆
-                  .map((recipe) => (
-                    <RecipeCard
-                      key={recipe.id}
-                      id={recipe.id}
-                      image={recipe.image}
-                      title={recipe.recipe_title}
-                      description={recipe.recipe_description}
-                      initialFavorite={favorites[recipe.id] || false}
-                      onFavoriteToggle={toggleFavorite}
-                    />
-                  ))}
+              <div className={styles.recipeCardsSection}>
+                <div className={styles.recipeCardsContainer}>
+                  {data?.rows
+                    .filter((recipe) => recipe.categories?.includes('飯食'))
+                    .sort((a, b) => a.id - b.id) // 按ID穩定排序
+                    .slice(0, 6) // 過濾出分類為「飯食」的資料，取前6筆
+                    .map((recipe) => (
+                      <RecipeCard
+                        key={recipe.id}
+                        id={recipe.id}
+                        image={recipe.image}
+                        title={recipe.recipe_title}
+                        description={recipe.recipe_description}
+                        initialFavorite={favorites[recipe.id] || false}
+                        onFavoriteToggle={toggleFavorite}
+                      />
+                    ))}
+                </div>
               </div>
             </div>
           </div>
@@ -402,25 +409,27 @@ export default function RecipesLandingPage() {
                   onClick={() => handleSearch('異國')}
                   className={styles.viewMoreButton}
                 >
-                  <h3 className={styles.viewMoreText}>看更多</h3>
+                  <h2 className={styles.viewMoreText}>看更多</h2>
                 </button>
               </div>
-              <div className={styles.recipeCardsContainer}>
-                {data?.rows
-                  .filter((recipe) => recipe.categories?.includes('異國'))
-                  .sort((a, b) => a.id - b.id) // 按ID穩定排序
-                  .slice(0, 6) // 過濾出分類為「異國」的資料，取前6筆
-                  .map((recipe) => (
-                    <RecipeCard
-                      key={recipe.id}
-                      id={recipe.id}
-                      image={recipe.image}
-                      title={recipe.recipe_title}
-                      description={recipe.recipe_description}
-                      initialFavorite={favorites[recipe.id] || false}
-                      onFavoriteToggle={toggleFavorite}
-                    />
-                  ))}
+              <div className={styles.recipeCardsSection}>
+                <div className={styles.recipeCardsContainer}>
+                  {data?.rows
+                    .filter((recipe) => recipe.categories?.includes('異國'))
+                    .sort((a, b) => a.id - b.id) // 按ID穩定排序
+                    .slice(0, 6) // 過濾出分類為「異國」的資料，取前6筆
+                    .map((recipe) => (
+                      <RecipeCard
+                        key={recipe.id}
+                        id={recipe.id}
+                        image={recipe.image}
+                        title={recipe.recipe_title}
+                        description={recipe.recipe_description}
+                        initialFavorite={favorites[recipe.id] || false}
+                        onFavoriteToggle={toggleFavorite}
+                      />
+                    ))}
+                </div>
               </div>
             </div>
           </div>
@@ -440,25 +449,27 @@ export default function RecipesLandingPage() {
                   onClick={() => handleSearch('生鮮')}
                   className={styles.viewMoreButton}
                 >
-                  <h3 className={styles.viewMoreText}>看更多</h3>
+                  <h2 className={styles.viewMoreText}>看更多</h2>
                 </button>
               </div>
-              <div className={styles.recipeCardsContainer}>
-                {data?.rows
-                  .filter((recipe) => recipe.categories?.includes('生鮮'))
-                  .sort((a, b) => a.id - b.id) // 按ID穩定排序
-                  .slice(0, 6) // 過濾出分類為「生鮮」的資料，取前6筆
-                  .map((recipe) => (
-                    <RecipeCard
-                      key={recipe.id}
-                      id={recipe.id}
-                      image={recipe.image}
-                      title={recipe.recipe_title}
-                      description={recipe.recipe_description}
-                      initialFavorite={favorites[recipe.id] || false}
-                      onFavoriteToggle={toggleFavorite}
-                    />
-                  ))}
+              <div className={styles.recipeCardsSection}>
+                <div className={styles.recipeCardsContainer}>
+                  {data?.rows
+                    .filter((recipe) => recipe.categories?.includes('生鮮'))
+                    .sort((a, b) => a.id - b.id) // 按ID穩定排序
+                    .slice(0, 6) // 過濾出分類為「生鮮」的資料，取前6筆
+                    .map((recipe) => (
+                      <RecipeCard
+                        key={recipe.id}
+                        id={recipe.id}
+                        image={recipe.image}
+                        title={recipe.recipe_title}
+                        description={recipe.recipe_description}
+                        initialFavorite={favorites[recipe.id] || false}
+                        onFavoriteToggle={toggleFavorite}
+                      />
+                    ))}
+                </div>
               </div>
             </div>
           </div>
@@ -478,25 +489,27 @@ export default function RecipesLandingPage() {
                   onClick={() => handleSearch('糕點')}
                   className={styles.viewMoreButton}
                 >
-                  <h3 className={styles.viewMoreText}>看更多</h3>
+                  <h2 className={styles.viewMoreText}>看更多</h2>
                 </button>
               </div>
-              <div className={styles.recipeCardsContainer}>
-                {data?.rows
-                  .filter((recipe) => recipe.categories?.includes('糕點'))
-                  .sort((a, b) => a.id - b.id) // 按ID穩定排序
-                  .slice(0, 6) // 過濾出分類為「糕點」的資料，取前6筆
-                  .map((recipe) => (
-                    <RecipeCard
-                      key={recipe.id}
-                      id={recipe.id}
-                      image={recipe.image}
-                      title={recipe.recipe_title}
-                      description={recipe.recipe_description}
-                      initialFavorite={favorites[recipe.id] || false}
-                      onFavoriteToggle={toggleFavorite}
-                    />
-                  ))}
+              <div className={styles.recipeCardsSection}>
+                <div className={styles.recipeCardsContainer}>
+                  {data?.rows
+                    .filter((recipe) => recipe.categories?.includes('糕點'))
+                    .sort((a, b) => a.id - b.id) // 按ID穩定排序
+                    .slice(0, 6) // 過濾出分類為「糕點」的資料，取前6筆
+                    .map((recipe) => (
+                      <RecipeCard
+                        key={recipe.id}
+                        id={recipe.id}
+                        image={recipe.image}
+                        title={recipe.recipe_title}
+                        description={recipe.recipe_description}
+                        initialFavorite={favorites[recipe.id] || false}
+                        onFavoriteToggle={toggleFavorite}
+                      />
+                    ))}
+                </div>
               </div>
             </div>
           </div>
@@ -505,76 +518,25 @@ export default function RecipesLandingPage() {
 
       {/* 你可能會喜歡 Start */}
       <div className={styles.featuredSection}>
-        <h3>你可能會喜歡</h3>
-        <div className={styles.featuredContainer}>
-          {data?.rows
-            /* 減去 0.5，就會得到一個介於 -0.5 到 0.5 之間的值。
-          這個值正負隨機，所以 .sort() 的比較結果也就隨機，從而讓陣列被隨機打亂。 */
-            .sort(() => Math.random() - 0.5) // 隨機打亂陣列
-            .slice(0, 5) // 取出前 6 筆資料
-            .map((recipe) => (
-              <div key={recipe.id} className={styles.featuredCard}>
-                <Link key={recipe.id} href={`/recipes/${recipe.id}`} passHref>
-                  <img
-                    src={recipe.image}
-                    className={styles.featuredCardImage}
-                    alt="Featured recipe"
-                  />
-
-                  <div className={styles.featuredCardTitle}>
-                    {recipe.recipe_title}
-                  </div>
-                </Link>
-              </div>
-            ))}
-          {/* <div className={styles.featuredCard}>
-            <img
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/5d1dcaf58bd677b48b45cc3cdf88969626ba1b3e?placeholderIfAbsent=true"
-              className={styles.featuredCardImage}
-              alt="Featured recipe"
-            />
-            <div className={styles.featuredCardTitle}>希臘沙拉</div>
+        <div>
+          <h2>你可能會喜歡</h2>
+          <div className={styles.featuredContainer}>
+            {data?.rows
+              /* 減去 0.5，就會得到一個介於 -0.5 到 0.5 之間的值。
+              這個值正負隨機，所以 .sort() 的比較結果也就隨機，從而讓陣列被隨機打亂。 */
+              .sort(() => Math.random() - 0.5) // 隨機打亂陣列
+              .slice(0, 5) // 取出前 6 筆資料
+              .map((recipe) => (
+                <div key={recipe.id} className={styles.featuredCard}>
+                  <Link key={recipe.id} href={`/recipes/${recipe.id}`} passHref>
+                    <div className={styles.featuredCardImage}>
+                      <img src={recipe.image} alt="Featured recipe" />
+                    </div>
+                    <h2>{recipe.recipe_title}</h2>
+                  </Link>
+                </div>
+              ))}
           </div>
-          <div className={styles.featuredCard}>
-            <img
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/524bb2f7a404cb7f14d3391152a06164ca585549?placeholderIfAbsent=true"
-              className={styles.featuredCardImage}
-              alt="Featured recipe"
-            />
-            <div className={styles.featuredCardTitle}>墨西哥玉米餅沙拉</div>
-          </div>
-          <div className={styles.featuredCard}>
-            <img
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/66805a412f7bde992b6608585e95af8e97e2ba55?placeholderIfAbsent=true"
-              className={styles.featuredCardImage}
-              alt="Featured recipe"
-            />
-            <div className={styles.featuredCardTitle}>義式焗烤千層麵</div>
-          </div>
-          <div className={styles.featuredCard}>
-            <img
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/5f1f50e3bc5ae6d3da77423eb0478c9ef1c7c5bb?placeholderIfAbsent=true"
-              className={styles.featuredCardImage}
-              alt="Featured recipe"
-            />
-            <div className={styles.featuredCardTitle}>巧克力熔岩蛋糕</div>
-          </div>
-          <div className={styles.featuredCard}>
-            <img
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/6d55d204accc4206d3ac81a9ee095171dc343a70?placeholderIfAbsent=true"
-              className={styles.featuredCardImage}
-              alt="Featured recipe"
-            />
-            <div className={styles.featuredCardTitle}>台式滷肉飯</div>
-          </div>
-          <div className={styles.featuredCard}>
-            <img
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/38be65be6bdd471bd2341befa9825ccb01cfa1a5?placeholderIfAbsent=true"
-              className={styles.featuredCardImage}
-              alt="Featured recipe"
-            />
-            <div className={styles.featuredCardTitle}>泰式綠咖哩雞</div>
-          </div> */}
         </div>
       </div>
       {/* 你可能會喜歡 End */}

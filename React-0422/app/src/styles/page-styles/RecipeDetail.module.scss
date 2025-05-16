@@ -88,7 +88,6 @@
         align-items: center;
         justify-content: center;
         margin-left: 10px;
-        border: none;
         transition: background-color 0.3s;
 
         &:hover {
@@ -109,7 +108,6 @@
         align-items: center;
         justify-content: center;
         margin-left: 10px;
-        border: none;
         transition: background-color 0.3s;
 
         &:hover {
@@ -131,7 +129,6 @@
   background-color: $color-primary;
   color: #fff;
   border-radius: 9rem;
-  border: none;
   padding: 8px 20px;
   transition: background-color 0.3s;
   h2 {
@@ -151,7 +148,6 @@
   top: 20px;
   color: #fff;
   background: $color-accent;
-  border: none;
   border-radius: 9rem;
   font-size: $font-size-icon;
   display: flex;
@@ -351,7 +347,6 @@
       .buttonBiLike01 {
         all: unset; /* 重置所有樣式 */
         align-self: flex-end;
-        border: none;
         color: $color-background-error;
         font-size: $font-size-icon;
 
@@ -362,7 +357,6 @@
       .buttonBiLike02 {
         all: unset; /* 重置所有樣式 */
         align-self: flex-end;
-        border: none;
         color: $color-special;
         font-size: $font-size-icon;
       }

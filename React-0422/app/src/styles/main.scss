@@ -44,6 +44,10 @@ a {
   text-decoration: none;
   color: inherit; // 保持與周圍文字一致
 }
+button {
+  border: none !important;
+  background: none;
+}
 
 // 確保 Modal 開啟時頁面不會偏移
 .modal-open {
