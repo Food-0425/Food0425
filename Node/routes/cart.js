@@ -17,7 +17,7 @@ const router = express.Router();
 async function getProductDetails(productId) {
   // 這裡的 SQL 查詢可以根據你的需求調整，例如是否需要檢查庫存等
   const [productRows] = await db.query(
-    "SELECT id, name, price FROM food_products WHERE id = ?",
+    "SELECT p.id, p.name, p.price, p.image_url FROM food_products p WHERE p.id = ?",
     [productId]
   );
   return productRows.length > 0 ? productRows[0] : null;
@@ -104,7 +104,9 @@ router.post('/api/:userId/items', async (req, res) => {
     try {
       const userIdString = req.params.userId;
       const userId = parseInt(userIdString, 10);
-      const { productId, quantity } = req.body; // 從 request body 獲取 productId 和 quantity
+      // ✨✨✨ 把 quantity 重新命名成 quantityToAdd 更清楚 ✨✨✨
+      const { productId, quantityToAdd } = req.body; // ... (productId 驗證) ...
+      const validProductId = parseInt(productId, 10);
 
       // --- 基本輸入驗證 ---
       if (isNaN(userId) || userId <= 0) {
@@ -113,11 +115,13 @@ router.post('/api/:userId/items', async (req, res) => {
       if (!productId || isNaN(parseInt(productId, 10)) || parseInt(productId, 10) <= 0) {
         return res.status(400).json({ success: false, message: '商品 ID (productId) 要給喔，而且要是正整數！😉' });
       }
-      const validProductId = parseInt(productId, 10);
-      if (!quantity || isNaN(parseInt(quantity, 10)) || parseInt(quantity, 10) <= 0) {
+
+      // ✨✨✨ 這裡用 quantityToAdd 做判斷 ✨✨✨
+      const validQuantityToAddParsed = parseInt(quantityToAdd, 10);
+      if (!quantityToAdd || isNaN(validQuantityToAddParsed) || validQuantityToAddParsed <= 0) {
         return res.status(400).json({ success: false, message: '數量 (quantity) 至少要1個啦，不然是要買幽靈商品喔～👻' });
       }
-      const validQuantity = parseInt(quantity, 10);
+      
 
       // --- 檢查商品是否存在 (使用 helper function) ---
       const product = await getProductDetails(validProductId);
@@ -127,38 +131,65 @@ router.post('/api/:userId/items', async (req, res) => {
 
       // --- 檢查購物車是否已存在此商品，若有則更新數量，若無則新增 ---
       const [existingItemRows] = await db.query(
-        "SELECT id, quantity FROM carts WHERE user_id = ? AND product_id = ?",
+        "SELECT cart_id, quantity FROM carts WHERE user_id = ? AND product_id = ?",
         [userId, validProductId]
       );
 
-      let cartItemId;
+      let cartItemIdToReturn; // 用來記錄最終操作的是哪個 cart_item_id
       let successMessage;
+      let finalQuantity; // 最終的數量
+      let httpStatusCode = 200; // 預設是更新成功
 
       if (existingItemRows.length > 0) {
         // 商品已在購物車中，更新其數量 (疊加)
         const existingItem = existingItemRows[0];
-        const newQuantity = existingItem.quantity + validQuantity;
-        await db.query(
-          "UPDATE carts SET quantity = ?, expiration_time = NOW() WHERE id = ?", // 假設 carts 表有 expiration_time
-          [newQuantity, existingItem.id]
+        finalQuantity = existingItem.quantity + validQuantityToAddParsed; // 數量累加！
+        // const newQuantity = existingItem.quantity + validQuantity;
+        cartItemIdToReturn = existingItem.cart_id; // 使用已存在的 cart_id
+
+        console.log(`[POST UPDATE] 商品已存在 (cart_id: ${cartItemIdToReturn})。舊數量: ${existingItem.quantity}, 要加: ${validQuantityToAddParsed}, 新數量: ${finalQuantity}`);
+
+        const [updateResult] = await db.query(
+          // ✨✨✨ added_time 改成 updated_at 或你實際的更新時間欄位 ✨✨✨
+          "UPDATE carts SET quantity = ?, updated_at = NOW() WHERE cart_id = ?", // 假設 carts 表有 expiration_time
+          [finalQuantity, cartItemIdToReturn]
         );
-        cartItemId = existingItem.id;
-        successMessage = `太棒了！購物車裡的【${product.name}】數量已更新為 ${newQuantity} 個！🛒💨 買買買！`;
-        console.log(`ℹ️ 使用者 ${userId}: 更新購物車商品 ${validProductId} 數量 -> ${newQuantity}`);
+
+        console.log('[POST UPDATE] UPDATE 結果:', updateResult);
+
+        successMessage = `太棒了！購物車裡的【${product.name}】數量已更新為 ${finalQuantity} 個！🛒💨 買買買！`;
+        console.log(`ℹ️ 使用者 ${userId}: 更新購物車商品 ${validProductId} (cart_id: ${cartItemIdToReturn})數量更新為 -> ${finalQuantity}`);
+        httpStatusCode = 200;
+
       } else {
+        // ----- 商品不在購物車中，執行 INSERT -----
+        finalQuantity = validQuantityToAddParsed; // 第一次加入，數量就是這次要加的
+
+        console.log(`[POST INSERT] 商品不存在，準備新增。數量: ${finalQuantity}`);
+
         // 商品不在購物車中，新增一筆新的項目
-        const [result] = await db.query(
-          "INSERT INTO carts (user_id, product_id, quantity, added_time, expiration_time) VALUES (?, ?, ?, NOW(), NOW())", // 假設 carts 表有 added_time, expiration_time
-          [userId, validProductId, validQuantity]
+        const [insertResult] = await db.query(
+          "INSERT INTO carts (user_id, product_id, quantity, unit_price, is_selected) VALUES (?, ?, ?, ?, ?)",
+          [userId, validProductId, finalQuantity, product.price, true] // product.price 對應 unit_price
         );
-        cartItemId = result.insertId; // 取得新增項目的 ID
-        successMessage = `灑花！【${product.name}】已成功加入你的購物車！🎉 準備好剁手了嗎？`;
-        console.log(`ℹ️ 使用者 ${userId}: 新增商品 ${validProductId} (數量 ${validQuantity}) 到購物車，新項目ID ${cartItemId}`);
+        cartItemIdToReturn = insertResult.insertId;
+        successMessage = `灑花！購物車裡的【${product.name}】數量已增加到 ${finalQuantity} 個！🛒💨 繼續買！`;
+        console.log(`ℹ️ 使用者 ${userId}: 新增商品 ${validProductId} (cart_id: ${cartItemIdToReturn}) 數量更新為 ${finalQuantity}`);
+        httpStatusCode = 201;
       }
 
       // 實際應用中，這裡可能還需要處理庫存扣減等邏輯
 
-      res.status(201).json({ success: true, message: successMessage, cartItemId });
+      res.status(httpStatusCode).json({ success: true, message: successMessage, cartItem: { // 把更新後或新增的項目完整資訊回傳
+        cartItemId: cartItemIdToReturn,
+        productId: validProductId,
+        name: product.name,
+        price: parseFloat(product.price) || 0,
+        imageUrl: product.image_url || '/images/default_product.png',
+        quantity: finalQuantity,
+        isSelected: true // 新增或更新後，預設該項目是勾選的 (方便前端直接用)
+      }
+    });
 
     } catch (error) {
       console.error(`🔴 新增商品到購物車 (使用者 ${req.params.userId}) 時發生錯誤：`, error);
@@ -202,7 +233,7 @@ router.put('/api/items/:cartItemId', async (req, res) => {
 
       // --- 更新購物車項目的數量 ---
       const [result] = await db.query(
-        "UPDATE carts SET quantity = ?, expiration_time = NOW() WHERE cart_id = ?",
+        "UPDATE carts SET quantity = ?, added_time = NOW() WHERE cart_id = ?",
         [newQuantity, cartItemId]
       );
 
@@ -233,14 +264,17 @@ router.delete('/api/items/:cartItemId', async (req, res) => {
       const cartItemIdString = req.params.cartItemId;
       const cartItemId = parseInt(cartItemIdString, 10);
 
+      console.log(`[後端 DELETE] 收到刪除請求，準備刪除購物車項目 ID: ${cartItemId} (原始 params: ${cartItemIdString})`);
+
       // --- 基本輸入驗證 ---
       if (isNaN(cartItemId) || cartItemId <= 0) {
+        console.warn(`[後端 DELETE] 無效的 cartItemId: ${cartItemIdString}`);
         return res.status(400).json({ success: false, message: '購物車項目 ID (cartItemId) 請給個正常的正整數啦～ 🙏' });
       }
 
       // 執行刪除操作
       const [result] = await db.query(
-        "DELETE FROM carts WHERE id = ?", // 假設 carts 表主鍵是 id
+        "DELETE FROM carts WHERE cart_id=? ", 
         [cartItemId]
       );
 

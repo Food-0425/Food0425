@@ -5,8 +5,10 @@ import React, { useState, useEffect, useCallback } from 'react'
 // useEffect 在特定時間做事
 import { useAuth } from '@/hooks/auth-context'
 import './style.css' // style.css 在同一資料夾或正確路徑
+import { useRouter } from 'next/navigation'
 
 export default function CartPage() {
+  //--- 狀態 ---
   //箱子
   const [cartItems, setCartItems] = useState([])
   //狀態指示燈
@@ -17,10 +19,21 @@ export default function CartPage() {
   const [discountAmount, setDiscountAmount] = useState(0)
   // 儲存輸入的折扣碼
   const [couponCode, setCouponCode] = useState('')
+  // 紀錄已套用的折扣碼
+  const [appliedCoupon, setAppliedCoupon] = useState(null)
+  // 檢查（沒過跳紅字）
+  const handleProceedToContact = () => {
+    console.log('🚀 準備前往 /cart/contact 頁面！')
+    router.push('/cart/contact') // 執行跳轉
+  }
+  // 購物車
+  const [isAllSelected, setIsAllSelected] = useState(true) // 全選狀態
 
+  //--- Hooks 和常數宣告區 ---
+  // 使用router頁面跳轉
+  const router = useRouter()
   const { auth } = useAuth()
   const currentUserId = auth?.id
-
   // 後端api port
   const API_BASE_URL = 'http://localhost:3001'
 
@@ -55,12 +68,26 @@ export default function CartPage() {
             `🎉 成功從後端拿到使用者 ${currentUserId} 的購物車資料：`,
             dataFromApi
           )
-          setCartItems(dataFromApi)
+          // cartItems 時加上 isSelected 屬性
+          const itemsWithSelection = dataFromApi.map((item) => ({
+            ...item,
+            isSelected: true, // 預設全部勾選
+          }))
+          setCartItems(itemsWithSelection)
+          // 根據載入的資料，判斷是否要維持全選狀態
+          if (itemsWithSelection.length > 0) {
+            setIsAllSelected(
+              itemsWithSelection.every((item) => item.isSelected)
+            )
+          } else {
+            setIsAllSelected(false) // 如果購物車是空的，全選自然是 false
+          }
         })
         .catch((err) => {
           console.error('😭 撈取購物車資料時發生悲劇：', err)
           setError(err.message || '發生未知的錯誤，請稍後再試。')
           setCartItems([])
+          setIsAllSelected(false) // 出錯時也取消全選
         })
         .finally(() => {
           setLoading(false)
@@ -79,22 +106,93 @@ export default function CartPage() {
       }
       setError(userMessage)
       setCartItems([])
+      setIsAllSelected(false) // 如果沒有登入，購物車也不會有東西
       setLoading(false)
     }
   }, [currentUserId, auth]) // 依賴 currentUserId 和 auth
 
+  // 全選/取消全選
+  const handleSelectAll = useCallback((event) => {
+    const newIsAllSelected = event.target.checked
+    setIsAllSelected(newIsAllSelected)
+    setCartItems((prevItems) =>
+      prevItems.map((item) => ({ ...item, isSelected: newIsAllSelected }))
+    )
+  }, [])
+
+  // 單一商品勾選/取消勾選
+  const handleSelectItem = useCallback(
+    (cartItemIdToToggle, event) => {
+      const newIsItemSelected = event.target.checked
+      const updatedItems = cartItems.map((item) =>
+        item.cartItemId === cartItemIdToToggle
+          ? { ...item, isSelected: newIsItemSelected }
+          : item
+      )
+      setCartItems(updatedItems)
+      setIsAllSelected(
+        updatedItems.length > 0 && updatedItems.every((item) => item.isSelected)
+      )
+    },
+    [cartItems]
+  )
+  const handleDeleteItem = useCallback(
+    async (cartItemIdPassed) => {
+      if (!cartItemIdPassed) return
+      // setLoading(true); // 如果需要更細緻的 loading
+      // setError(null);
+      try {
+        const response = await fetch(
+          `${API_BASE_URL}/cart/api/items/${cartItemIdPassed}`,
+          { method: 'DELETE' }
+        )
+        if (!response.ok) {
+          const errorData = await response.json()
+          throw new Error(errorData.message || `刪除商品失敗`)
+        }
+        const updatedItems = cartItems.filter(
+          (item) => item.cartItemId !== cartItemIdPassed
+        )
+        setCartItems(updatedItems)
+        // ✨✨✨ 新增5: 刪除後也要更新全選狀態 ✨✨✨
+        setIsAllSelected(
+          updatedItems.length > 0 &&
+            updatedItems.every((item) => item.isSelected)
+        )
+        setError(null)
+      } catch (err) {
+        setError(err.message || '刪除商品時發生錯誤')
+      } finally {
+        // setLoading(false);
+      }
+    },
+    [API_BASE_URL, cartItems]
+  ) // 依賴 cartItems
+
   // --- 更新購物車項目數量的函式 ---
   const handleUpdateQuantity = useCallback(
     async (cartItemId, currentQuantity, change) => {
-      const newQuantity = currentQuantity + change
+      const itemToUpdate = cartItems.find(
+        (item) => item.cartItemId === cartItemId
+      ) // ✨✨✨ 先找到它！ ✨✨✨
+      if (!itemToUpdate) {
+        // ✨✨✨ 如果找不到，就不要玩了！ ✨✨✨
+        console.error(
+          `更新數量錯誤：在 cartItems 中找不到 cartItemId 為 ${cartItemId} 的商品`
+        )
+        setError(`哎呀！你想更新的商品好像消失了耶～🤔`)
+        return
+      }
 
+      const newQuantity = currentQuantity + change
       if (newQuantity < 1) {
         if (
           window.confirm(
-            `確定要從購物車移除這個商品嗎？再按下去就莎呦娜拉囉～👋`
+            `確定要從購物車移除【${itemToUpdate.name}】嗎？它會哭哭喔～😢`
           )
         ) {
-          await handleDeleteItem(cartItemId) // 直接呼叫刪除函式
+          // 現在可以安全使用 itemToUpdate.name
+          await handleDeleteItem(cartItemId)
         }
         return // 不往下執行更新數量
       }
@@ -140,11 +238,11 @@ export default function CartPage() {
         // setLoading(false); // 如果前面有打開 loading
       }
     },
-    [API_BASE_URL]
-  ) // useCallback 的依賴，如果 API_BASE_URL 會變的話
+    [API_BASE_URL, cartItems, handleDeleteItem]
+  ) // handleDeleteItem 加入依賴
 
   // --- 從購物車移除商品的函式 ---
-  const handleDeleteItem = useCallback(
+  const handleDeleteClick = useCallback(
     async (cartItemId) => {
       // 暫時先不實作刪除的 loading
       // setLoading(true);
@@ -176,29 +274,50 @@ export default function CartPage() {
         // setLoading(false);
       }
     },
-    [API_BASE_URL]
-  ) // useCallback 的依賴
+    [API_BASE_URL, cartItems, handleDeleteItem]
+  ) // handleDeleteItem 加入依賴
 
-  // --- 計算訂單金額 ---
-  const calculateSubtotal = useCallback(() => {
+  // ✨✨✨ 新增6: 處理商品列表「移除」按鈕的函式 (使用 window.confirm) ✨✨✨
+  const handleDirectDeleteClick = (cartItemId, itemName) => {
+    if (window.confirm(`你確定要把【${itemName}】從購物車中丟掉嗎？`)) {
+      handleDeleteItem(cartItemId)
+    }
+  }
+  // calculateSelectedSubtotal 函式
+  const calculateSelectedSubtotal = useCallback(() => {
     if (!cartItems || cartItems.length === 0) {
       return 0
     }
-    return cartItems.reduce(
-      (total, item) => total + item.price * item.quantity,
-      0
-    )
-  }, [cartItems]) // 當 cartItems 改變時，重新計算
+    return cartItems
+      .filter((item) => item.isSelected) // 只計算 isSelected: true 的
+      .reduce((total, item) => {
+        const price = parseFloat(item.price) || 0
+        const quantity = parseInt(item.quantity, 10) || 0
+        return total + price * quantity
+      }, 0)
+  }, [cartItems]) // 依賴 cartItems，因為勾選狀態或數量改變時，小計要重算
+  // 呼叫selectedSubtotal
+  const selectedSubtotal = calculateSelectedSubtotal()
+  // --- 計算訂單金額 ---
+  const calculateSubtotal = useCallback(() => {
+    if (!cartItems || cartItems.length === 0) return 0
+    return cartItems
+      .filter((item) => item.isSelected) // 只計算 isSelected: true 的
+      .reduce((total, item) => total + item.price * item.quantity, 0)
+  }, [cartItems])
 
   const subtotal = calculateSubtotal()
   const shippingFee = 0 // 假設運費暫時是 0
-  const grandTotal = subtotal + shippingFee - discountAmount // 總金額 = 小計 + 運費 - 折扣金額
+  const grandTotal = selectedSubtotal + shippingFee - discountAmount // 總金額 = 小計 + 運費 - 折扣金額
+  console.log(cartItems)
+
+  //取得已勾選的商品列表
+  const selectedItems = cartItems.filter((item) => item.isSelected)
 
   // 處理優惠券
   const handleApplyCoupon = useCallback(async () => {
     if (!couponCode.trim()) {
-      alert('請輸入優惠券代碼')
-      setError(null)
+      setError('請先輸入優惠券代碼啦～不然怎麼折給你！😜')
       return
     }
 
@@ -219,32 +338,32 @@ export default function CartPage() {
       const minPurchase = 1000 // "消費滿千折 NT$150"
 
       if (!isActive) {
-        alert(`Oops！優惠券 "${couponCode}" 目前沒有啟用喔～`)
+        setError(`Oops！優惠券 "${couponCode}" 目前沒有啟用喔～`)
       } else if (currentTimestamp < startDate) {
-        alert(
+        setError(
           `優惠券 "${couponCode}" 還沒開始喔，生效日期是 ${startDate.toLocaleDateString()}！`
         )
       } else if (currentTimestamp > endDate) {
-        alert(
+        setError(
           `哎呀！優惠券 "${couponCode}" 已經在 ${endDate.toLocaleDateString()} 過期囉～哭哭`
         )
       } else if (subtotal < minPurchase) {
-        alert(
+        setError(
           `差一點點！使用 "${couponCode}" 需要消費滿 NT$${minPurchase}，您目前小計 NT$${subtotal.toFixed(2)}。`
         )
       } else {
         actualDiscount = 150.0 //  discount_value 是 150.00
-        alert(
+        setError(
           `🎉 優惠券 "${couponCode}" 套用成功！折抵 NT$${actualDiscount.toFixed(2)}！`
         )
       }
     } else {
-      alert(
+      setError(
         `Oops！優惠券 "${couponCode}" 好像不太對勁喔，找不到這張好康耶～再檢查一下？🤔`
       )
     }
     setDiscountAmount(actualDiscount) // 更新折扣金額
-  },[couponCode, subtotal]) // 當 couponCode 或 subtotal 改變時，重新計算
+  }, [couponCode, subtotal]) // 當 couponCode 或 subtotal 改變時，重新計算
 
   // --- JSX 渲染邏輯 ---
   if (loading && cartItems.length === 0) {
@@ -310,195 +429,220 @@ export default function CartPage() {
       <main>
         <div className="container">
           <h1>
-            購物清單 (
-            {cartItems.length > 0
-              ? `${cartItems.length} 件好物！`
-              : '快來裝滿我吧！'}
-            )
+            購物清單 {/* ✨✨✨ 新增8: 顯示已選/總數 ✨✨✨ */}
+            {cartItems.length > 0 && (
+              <span
+                style={{ fontSize: '0.7em', marginLeft: '10px', color: '#555' }}
+              >
+                (已選 {selectedItems.length} / 共 {cartItems.length} 件)
+              </span>
+            )}
           </h1>
-          {error && (
+          {error && cartItems.length > 0 /* 有商品時，錯誤訊息放上面 */ && (
             <p
               style={{
                 color: 'orange',
                 textAlign: 'center',
                 marginBottom: '15px',
+                background: '#fff3cd',
+                padding: '10px',
+                borderRadius: '5px',
+                border: '1px solid #ffeeba',
               }}
             >
-              小小提示：{error}
+              {error}
             </p>
-          )}
-
+          )}{' '}
+          {/*優惠券套用成功顯示文字*/}
           <div className="checkout-layout">
             <div className="checkout-left">
               <section className="shopping-list">
-                {cartItems.map((item) => (
+                {/* ✨✨✨ 新增9: 全選 Checkbox ✨✨✨ */}
+                {cartItems.length > 0 && (
                   <div
-                    className="cart-item"
-                    key={item.cartItemId || item.productId} // 優先使用 cartItemId
+                    className="cart-select-all"
+                    style={{
+                      /* ...你的樣式... */ display: 'flex',
+                      alignItems: 'center',
+                      marginBottom: '15px',
+                      paddingBottom: '10px',
+                      borderBottom: '1px solid #eee',
+                    }}
                   >
-                    <img
-                      src={item.imageUrl || '/images/default_product.png'}
-                      alt={item.name}
+                    <input
+                      type="checkbox"
+                      id="selectAllCheckbox"
+                      checked={isAllSelected}
+                      onChange={handleSelectAll}
+                      disabled={loading || cartItems.length === 0}
                       style={{
-                        width: '80px',
-                        height: '80px',
-                        objectFit: 'cover',
-                        marginRight: '15px',
-                        borderRadius: '4px',
-                        border: '1px solid #eee',
+                        marginRight: '10px',
+                        transform: 'scale(1.2)',
+                        cursor: 'pointer',
                       }}
                     />
-                    <div className="item-details">
-                      <p style={{ fontWeight: 'bold', marginBottom: '5px' }}>
-                        {item.name}
-                      </p>
-                      <p style={{ fontSize: '0.9em', color: '#777' }}>
-                        商品ID: {item.productId}
-                      </p>
-                    </div>
-                    <div className="item-quantity">
-                      <button
-                        onClick={() =>
-                          handleUpdateQuantity(
-                            item.cartItemId,
-                            item.quantity,
-                            -1
-                          )
-                        }
-                        disabled={loading}
-                      >
-                        -
-                      </button>
+                    <label
+                      htmlFor="selectAllCheckbox"
+                      style={{
+                        fontWeight: 'bold',
+                        cursor: 'pointer',
+                        userSelect: 'none',
+                      }}
+                    >
+                      {isAllSelected
+                        ? '取消全選'
+                        : `全選 (${cartItems.length}件)`}
+                    </label>
+                  </div>
+                )}
+                {cartItems.map((item) => (
+                  //顯示出item的資料
+                  <>
+                    <div
+                      className="cart-item"
+                      key={item.cartItemId || item.productId} // 優先使用 cartItemId
+                      style={{
+                        opacity: loading ? 0.7 : 1,
+                        display: 'flex',
+                        alignItems: 'center',
+                        padding: '10px 0',
+                        borderBottom: '1px solid #f0f0f0',
+                      }}
+                    >
+                      {/* ✨✨✨ 新增10: 單一商品 Checkbox ✨✨✨ */}
                       <input
-                        type="text"
-                        value={item.quantity}
-                        readOnly
+                        type="checkbox"
+                        className="cart-item__checkbox" // 建議給個 class 加樣式
+                        checked={item.isSelected || false}
+                        onChange={(e) => handleSelectItem(item.cartItemId, e)}
+                        disabled={loading}
                         style={{
-                          width: '40px',
-                          textAlign: 'center',
-                          margin: '0 5px',
-                          padding: '5px',
-                          border: '1px solid #ccc',
-                          borderRadius: '4px',
+                          marginRight: '15px',
+                          transform: 'scale(1.2)',
+                          cursor: 'pointer',
                         }}
                       />
+                      <img
+                        src={item.imageUrl || '/images/default_product.png'}
+                        alt={item.name}
+                        style={{
+                          width: '80px',
+                          height: '80px',
+                          objectFit: 'cover',
+                          marginRight: '15px',
+                          borderRadius: '4px',
+                          border: '1px solid #eee',
+                        }}
+                      />
+                      <div className="item-details">
+                        <p style={{ fontWeight: 'bold', marginBottom: '5px' }}>
+                          {item.name}
+                        </p>
+                        <p style={{ fontSize: '0.9em', color: '#777' }}>
+                          商品ID: {item.productId}
+                        </p>
+                      </div>
+                      <div className="item-quantity">
+                        <button
+                          onClick={() =>
+                            handleUpdateQuantity(
+                              item.cartItemId,
+                              item.quantity,
+                              -1
+                            )
+                          }
+                          disabled={loading}
+                        >
+                          -
+                        </button>
+                        <input
+                          type="text"
+                          value={item.quantity}
+                          readOnly
+                          style={{
+                            width: '40px',
+                            textAlign: 'center',
+                            margin: '0 5px',
+                            padding: '5px',
+                            border: '1px solid #ccc',
+                            borderRadius: '4px',
+                          }}
+                        />
+                        <button
+                          onClick={() =>
+                            handleUpdateQuantity(
+                              item.cartItemId,
+                              item.quantity,
+                              1
+                            )
+                          }
+                          disabled={loading}
+                        >
+                          +
+                        </button>
+                      </div>
+                      <div
+                        className="item-price"
+                        style={{
+                          minWidth: '80px',
+                          textAlign: 'right',
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        $
+                        {item.price
+                          ? (item.price * item.quantity).toFixed(2)
+                          : 'N/A'}{' '}
+                        {/* 顯示該項目總價 */}
+                      </div>
                       <button
                         onClick={() =>
-                          handleUpdateQuantity(
-                            item.cartItemId,
-                            item.quantity,
-                            1
-                          )
+                          handleDeleteClick(item.cartItemId, item.name)
                         }
                         disabled={loading}
+                        title="移除商品"
+                        style={{
+                          marginLeft: '15px',
+                          background: 'transparent',
+                          border: 'none',
+                          color: '#e74c3c',
+                          cursor: 'pointer',
+                          fontSize: '1.2em',
+                        }}
                       >
-                        +
+                        <i className="bi bi-trash3-fill"></i>{' '}
+                        {/* 使用 Bootstrap Icon */}
                       </button>
                     </div>
-                    <div
-                      className="item-price"
-                      style={{
-                        minWidth: '80px',
-                        textAlign: 'right',
-                        fontWeight: 'bold',
-                      }}
-                    >
-                      $
-                      {item.price
-                        ? (item.price * item.quantity).toFixed(2)
-                        : 'N/A'}{' '}
-                      {/* 顯示該項目總價 */}
-                    </div>
-                    <button
-                      onClick={() => handleDeleteItem(item.cartItemId)}
-                      disabled={loading}
-                      title="移除商品"
-                      style={{
-                        marginLeft: '15px',
-                        background: 'transparent',
-                        border: 'none',
-                        color: '#e74c3c',
-                        cursor: 'pointer',
-                        fontSize: '1.2em',
-                      }}
-                    >
-                      <i className="bi bi-trash3-fill"></i>{' '}
-                      {/* 使用 Bootstrap Icon */}
-                    </button>
-                  </div>
+                  </>
                 ))}
-                {cartItems.length > 0 && ( // 只有購物車有東西才顯示優惠券
+                {/*{cartItems.length > 0 && ( // 只有購物車有東西才顯示優惠券
                   <div className="coupon-code">
                     <input type="text" placeholder="輸入優惠券代碼"value={couponCode} onChange={(e) => setCouponCode(e.target.value)}
                     disabled={loading}/>
                     
                     <button onClick={handleApplyCoupon} disabled={loading}>使用優惠券</button>
                   </div>
-                )}
-              </section>
-
-              {/* --- 其他 section (收件人資料、訂單備註等) --- */}
-              <section className="recipient-info">
-                <h2>收件人資料</h2>
-                <form>
-                  <div className="form-group">
-                    <label htmlFor="name">姓名</label>
-                    <input type="text" id="name" name="name" />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="phone">手機號碼</label>
-                    <input type="tel" id="phone" name="phone" />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="email">Email</label>
-                    <input type="email" id="email" name="email" />
-                  </div>
-                  <div className="form-group address-group">
-                    <label>收件地址</label>
-                    <input type="text" placeholder="縣市" />
-                    <input type="text" placeholder="鄉鎮市區" />
-                    <input type="text" placeholder="地址" />
-                  </div>
-                </form>
-              </section>
-              <section className="order-notes">
-                <h2>訂單備註</h2>
-                <textarea
-                  placeholder="有什麼想跟我們說的嗎？寫在這裡吧！"
-                  defaultValue={''}
-                />
-              </section>
-              <section className="important-notes">
-                <h3>注意事項</h3>
-                <ul>
-                  <li>訂單成立後，將以Email通知您訂單成立。</li>
-                  <li>付款完成後約1-3個工作日內出貨，如遇例假日則順延。</li>
-                  <li>
-                    目前暫不提供離島寄送服務，金門馬祖澎湖的朋友們搜哩啦！
-                  </li>
-                  <li>
-                    為保障彼此之權益，收到您的訂單後仍保有決定是否接受訂單及出貨與否之權利。(老闆有時候會任性一下
-                    XD)
-                  </li>
-                </ul>
+                )}*/}
               </section>
             </div>
-
+            {/* 右邊訂單總計 */}
             <aside className="checkout-right">
               <div className="order-summary">
                 <h2>訂單總計</h2>
                 <div className="summary-item">
                   <span>商品小計</span>
-                  <span>NT ${subtotal.toFixed(2)}</span>
+                  <span>NT ${selectedSubtotal.toFixed(2)}</span>
                 </div>
                 <div className="summary-item">
                   <span>運費</span>
                   <span>NT ${shippingFee.toFixed(2)}</span>
                 </div>
-                <div class="summary-item discount">
+                <div className="summary-item discount">
                   <span>優惠折扣</span>
-                  <span>{discountAmount > 0 ? '- NT $' : 'NT $'}
-                  {discountAmount.toFixed(2)}
+                  <span>
+                    {discountAmount > 0 ? '- NT $' : 'NT $'}
+                    {discountAmount.toFixed(2)}
                   </span>
                 </div>
                 <hr />
@@ -506,9 +650,35 @@ export default function CartPage() {
                   <span>總金額</span>
                   <span>NT ${grandTotal.toFixed(2)}</span>
                 </div>
+                {/* 優惠券輸入 */}
+                {cartItems.length > 0 && ( // 只有購物車有東西才顯示優惠券
+                  <div className="coupon-code">
+                    <input
+                      type="text"
+                      placeholder="輸入優惠券代碼"
+                      value={couponCode}
+                      onChange={(e) => setCouponCode(e.target.value)}
+                      disabled={loading}
+                      // 給優惠卷input的class
+                      className="coupon-code__input"
+                    />
+
+                    <button
+                      onClick={handleApplyCoupon}
+                      disabled={loading}
+                      // 使用優惠卷按鍵
+                      className="coupon-code__button"
+                    >
+                      使用優惠券
+                    </button>
+                  </div>
+                )}
+
                 <button
                   className="btn-proceed-payment"
-                  disabled={cartItems.length === 0 || loading}
+                  disabled={selectedItems.length === 0 || loading}
+                  // onClick執行跳轉
+                  onClick={handleProceedToContact}
                 >
                   {' '}
                   {/* 沒商品或載入中不能按 */}
@@ -519,7 +689,6 @@ export default function CartPage() {
           </div>
         </div>
       </main>
-      {/* 你的 Footer 元件可以放在這裡 */}
     </div>
   )
 }
