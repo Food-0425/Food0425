@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react'
 import useSWR from 'swr'
 import { useParams, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import styles from '../styles/RestaurantList.module.css'
+import styles from '@/app/src/styles/page-styles/RestaurantList.module.scss'
 import RestaurantCard from '../components/RestaurantCard'
 import { API_SERVER } from '@/config/api-path'
 
@@ -75,10 +75,10 @@ export default function RestaurantsPage() {
       <div className={styles.heroSection}>
         <div className={styles.heroContentWrapper}>
           <div className={styles.heroContent}>
-            <div className={styles.heroTitle}>精選餐廳推薦</div>
-            <div className={styles.heroDescription}>
+            <h1 className={styles.heroTitle}>精選餐廳推薦</h1>
+            <p className={styles.heroDescription}>
               探索台北最具特色的美食餐廳，從傳統小吃到高級料理，滿足您的味蕾享受
-            </div>
+            </p>
           </div>
           <div className={styles.searchBar}>
             <input

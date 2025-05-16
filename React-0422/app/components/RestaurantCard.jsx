@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { useRouter } from 'next/navigation'
-import styles from '../styles/RestaurantList.module.css'
+import styles from '@/app/src/styles/page-styles/RestaurantList.module.scss'
 
 export default function RestaurantCard({
   id,
