@@ -5,15 +5,14 @@
   display: flex;
   min-height: 100vh;
   width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  box-sizing: border-box;
   gap: 20px;
-  padding: 20px;
+  padding: 24px;
   align-items: start;
   justify-content: center;
   flex-wrap: wrap;
-
-  @media (max-width: 991px) {
-    padding: 20px;
-  }
 
   @media (max-width: 640px) {
     flex-direction: column; // 在小螢幕上改為垂直排列
@@ -24,7 +23,7 @@
 
   // Sidebar 容器樣式
   :global(.sidebar) {
-    flex: 0 0 250px; // 固定寬度 250px，不會縮放
+    flex: 0 0 250px; // 固定寬度
     height: 100%;
   }
 
@@ -39,7 +38,7 @@
 
     @media (max-width: 640px) {
       width: 100%; // 確保在小螢幕時佔滿寬度
-      padding: 16px; // 減少內邊距
+      padding: 24px; // 減少內邊距
       flex-basis: 100%; // 確保在 flex 容器中佔滿寬度
     }
   }
