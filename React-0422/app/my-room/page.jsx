@@ -31,7 +31,7 @@ export default function MyRoomPage() {
     price: 350,
     original_price: 390,
   }
-  
+
   const [currentPage, setCurrentPage] = useState(1) // 從第1頁開始，與原本靜態頁面一致
   const [totalPages, setTotalPages] = useState(6)
   const fetcher = (url) => fetch(url).then((res) => res.json())
@@ -51,34 +51,10 @@ export default function MyRoomPage() {
   // 測試取得單筆網頁內容
   const router = useRouter()
 
-  // 檢查路由是否已經準備好
-  if (!router.isReady) {
-    return <div>Loading...</div> // 在路由還沒準備好時顯示 Loading
-  }
-
-  // 確保在路由準備好後再獲取 id
-  const { id } = router.query
-
   // 使用 useSWR 來抓取資料
   // const { data, error } = useSWR(id ? `/api/posts/${id}` : null, fetcher)
 
-  // 判斷是否正在加載資料
-  // const isLoading = !post && !error
-
-  // 如果正在加載資料
-  if (isLoading) return <div>Loading...</div>
-
-  // 如果發生錯誤
-  if (error) return <div>Failed to load post</div>
-
-  useEffect(() => {
-    if (data?.totalPages) {
-      setTotalPages(data.totalPages)
-    }
-  }, [data])
-
   const prouduct = data?.rows || []
-
 
   return (
     <>
@@ -112,7 +88,6 @@ export default function MyRoomPage() {
         food={mockRecipe} // 傳遞整個 food 物件
       /> */}
       {/* </div> */}
-
     </>
   )
 }

@@ -62,22 +62,24 @@ export default function FoodFeeBack() {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            recipeId: id, // 傳送 recipeId
+            recipeId: id,
             userId: auth.id,
-            title,
-            context,
-            is_like: isLike, // 傳送 is_like
+            title: title.trim(),
+            context: context.trim(),
+            is_like: isLike, // 確保 isLike 會是 0 或 1
           }), // 傳送 recipeId 和 userId
         }
       )
+
+      const result = await response.json() // 新增這行來獲取回應內容
 
       if (response.ok) {
         alert('感謝您的評論！')
         setTitle('')
         setComment('')
-        setIsLike(0) // 重置為預設值
+        setIsLike(0)
       } else {
-        alert('提交失敗，請稍後再試！')
+        alert(`提交失敗：${result.error}`) // 顯示具體的錯誤訊息
       }
     } catch (error) {
       console.error('提交表單時發生錯誤：', error)

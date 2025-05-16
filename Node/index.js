@@ -113,7 +113,7 @@ app.use('/products-review', reviewRouter);
 // 連到餐廳詳細頁面的
 app.use('/restaurants', restaurantsRouter);
 // 連到購物車
- app.use('/cart', cartRouter);
+app.use('/cart', cartRouter);
 // 連到聯絡我們的
 app.use('/contact', contactRouter);
 

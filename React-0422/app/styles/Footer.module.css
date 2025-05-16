@@ -1,0 +1,172 @@
+.footer {
+  justify-content: space-between;
+  align-items: center;
+  background-color: #423c3a;
+  display: flex;
+  min-height: 400px;
+  width: 100%;
+  padding: 0 320px;
+}
+
+.footerContent {
+  max-width: 1280px;
+  justify-content: space-between;
+  align-items: stretch;
+  align-self: stretch;
+  display: flex;
+  min-width: 240px;
+  margin: auto;
+  min-height: 348px;
+  width: 1280px;
+  gap: 40px 100px;
+  overflow: hidden;
+  flex-wrap: wrap;
+}
+
+.leftSection {
+  display: flex;
+  min-width: 240px;
+  padding: 45px 0;
+  flex-direction: column;
+  align-items: stretch;
+  font-family:
+    'Noto Sans TC',
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
+  justify-content: center;
+  width: 457px;
+}
+
+.thankYouMessage {
+  color: #fff5ee;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.formFeedback {
+  margin-top: 20px;
+  min-height: 191px;
+  width: 100%;
+  font-size: 16px;
+  font-weight: 400;
+  white-space: nowrap;
+  letter-spacing: 0.48px;
+}
+
+.feedbackText {
+  color: #fff5ee;
+}
+
+.feedbackInput {
+  flex: 1;
+  flex-shrink: 1;
+  flex-basis: 0%;
+  border-radius: 15px;
+  background-color: rgba(250, 248, 249, 0.45);
+  margin-top: 15px;
+  width: 100%;
+  padding: 10px 15px;
+  gap: 20px;
+  overflow: hidden;
+  color: #faf8f9;
+  height: 100%;
+}
+
+.rightSection {
+  display: flex;
+  min-width: 240px;
+  padding: 45px 0;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.faqButton {
+  align-self: stretch;
+  border-radius: 71.97px;
+  box-shadow: 0px 0px 0px 15px rgba(0, 0, 0, 0.05);
+  background-color: #df6c2d;
+  overflow: hidden;
+  font-family:
+    'Noto Sans TC',
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
+  font-size: 36px;
+  color: #faf8f9;
+  font-weight: 700;
+  white-space: nowrap;
+  text-align: center;
+  padding: 25px 60px;
+  cursor: pointer;
+}
+
+.socialIcons {
+  display: flex;
+  margin-top: 40px;
+  align-items: flex-end;
+  gap: 12px;
+  justify-content: start;
+}
+
+.socialIcon {
+  aspect-ratio: 1;
+  object-fit: contain;
+  object-position: center;
+  width: 79px;
+  box-shadow: 2px 3px 8px 0px rgba(0, 0, 0, 0.25);
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.socialIconPlaceholder {
+  box-shadow: 2px 3px 8px 0px rgba(0, 0, 0, 0.25);
+  width: 79px;
+}
+
+.placeholderCircle {
+  background-color: #ececec;
+  border-radius: 50%;
+  display: flex;
+  width: 79px;
+  flex-shrink: 0;
+  height: 79px;
+  fill: #ececec;
+}
+
+@media (max-width: 991px) {
+  .footer {
+    max-width: 100%;
+    padding: 0 20px;
+  }
+
+  .leftSection {
+    max-width: 100%;
+  }
+
+  .thankYouMessage {
+    max-width: 100%;
+  }
+
+  .formFeedback {
+    max-width: 100%;
+    white-space: initial;
+  }
+
+  .feedbackText {
+    max-width: 100%;
+  }
+
+  .feedbackInput {
+    max-width: 100%;
+    white-space: initial;
+  }
+
+  .faqButton {
+    padding: 25px 20px;
+    white-space: initial;
+  }
+}
