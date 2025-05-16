@@ -233,14 +233,17 @@ router.delete('/api/items/:cartItemId', async (req, res) => {
       const cartItemIdString = req.params.cartItemId;
       const cartItemId = parseInt(cartItemIdString, 10);
 
+      console.log(`[後端 DELETE] 收到刪除請求，準備刪除購物車項目 ID: ${cartItemId} (原始 params: ${cartItemIdString})`);
+
       // --- 基本輸入驗證 ---
       if (isNaN(cartItemId) || cartItemId <= 0) {
+        console.warn(`[後端 DELETE] 無效的 cartItemId: ${cartItemIdString}`);
         return res.status(400).json({ success: false, message: '購物車項目 ID (cartItemId) 請給個正常的正整數啦～ 🙏' });
       }
 
       // 執行刪除操作
       const [result] = await db.query(
-        "DELETE FROM carts WHERE id = ?", // 假設 carts 表主鍵是 id
+        "DELETE FROM carts WHERE cart_id=? ", 
         [cartItemId]
       );
 
