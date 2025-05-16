@@ -252,7 +252,7 @@ export default function RegisterPage() {
                 id="password"
                 name="password"
                 className={`${styles.input} ${errors.password ? styles.errorInput : ''}`}
-                placeholder="長度8-20碼，需包含大寫、小寫英文字母及數字"
+                placeholder="需包含大小寫英文字母及數字，長度8-20碼"
                 value={formData.password}
                 onChange={handleChange}
                 onBlur={(e) => validateField('password', e.target.value)}
@@ -285,7 +285,7 @@ export default function RegisterPage() {
                 id="confirmPassword"
                 name="confirmPassword"
                 className={`${styles.input} ${errors.confirmPassword ? styles.errorInput : ''}`}
-                placeholder="再次輸入與上面相同的密碼"
+                placeholder="再次輸入密碼"
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 onBlur={(e) => validateField('confirmPassword', e.target.value)}
