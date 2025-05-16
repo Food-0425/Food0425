@@ -24,11 +24,16 @@ import { TbMeat, TbBowlSpoon, TbHandFinger } from 'react-icons/tb'
 import { CiBowlNoodles } from 'react-icons/ci'
 import { MdFavorite, MdFavoriteBorder } from 'react-icons/md'
 import { BsBookmarkPlus, BsBookmarkStarFill } from 'react-icons/bs'
+
+import { GrPrevious } from 'react-icons/gr'
+
 import { GiKitchenScale } from 'react-icons/gi'
 import { PiJarLabelBold } from 'react-icons/pi'
 import { IoIosAddCircle, IoIosArrowBack } from 'react-icons/io'
 
+
 export {
+  GrPrevious,
   FaSearch,
   FaCakeCandles,
   FaFishFins,
