@@ -15,10 +15,10 @@
   display: flex;
   min-height: 116px;
   padding: 0 134px;
-  margin-top: 80px; /* 增加上方間距 */
+  margin-top: 80px;
   align-items: center;
   gap: 40px 82px;
-  justify-content: space-between; /* 改為 space-between 讓元素分散對齊 */
+  justify-content: space-between;
   flex-wrap: wrap;
 }
 
@@ -37,12 +37,7 @@
   margin: auto 0;
   min-height: 88px;
   gap: 10px;
-  font-family:
-    'Noto Sans TC',
-    -apple-system,
-    Roboto,
-    Helvetica,
-    sans-serif;
+  font-family: 'Noto Sans TC', -apple-system, Roboto, Helvetica, sans-serif;
   font-size: 32px;
   color: #000;
   font-weight: 700;
@@ -96,12 +91,7 @@
   margin: auto 0;
   padding: 10px 0;
   gap: 10px;
-  font-family:
-    'Noto Sans TC',
-    -apple-system,
-    Roboto,
-    Helvetica,
-    sans-serif;
+  font-family: 'Noto Sans TC', -apple-system, Roboto, Helvetica, sans-serif;
   font-size: 32px;
   color: #000;
   font-weight: 700;
@@ -115,34 +105,17 @@
   }
 }
 
-/* 新增搜尋欄樣式 */
-.searchBar {
-  flex: 1;
-  max-width: 300px;
-  height: 40px;
-  border: 2px solid #ff5a00;
-  border-radius: 20px;
-  padding: 0 15px;
-  font-size: 16px;
-  outline: none;
-  transition: all 0.3s ease;
-}
-
-.searchBar:focus {
-  box-shadow: 0 0 5px rgba(255, 90, 0, 0.3);
-}
-
-/* 搜尋區塊樣式 */
 .searchContainer {
   display: flex;
   align-items: center;
   gap: 10px;
   margin-right: 20px;
+  flex: 1;
+  max-width: 400px;
 }
 
 .searchBar {
   flex: 1;
-  width: 300px;
   height: 40px;
   border: 2px solid #ff5a00;
   border-radius: 20px;
@@ -151,6 +124,10 @@
   outline: none;
   transition: all 0.3s ease;
   background-color: white;
+}
+
+.searchBar:focus {
+  box-shadow: 0 0 5px rgba(255, 90, 0, 0.3);
 }
 
 .searchButton {
@@ -169,7 +146,6 @@
   background-color: #e65100;
 }
 
-/* Product Grid Section */
 .productSection {
   justify-content: center;
   align-items: center;
@@ -191,8 +167,8 @@
 
 .productGrid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr); /* 5列 */
-  grid-template-rows: repeat(3, auto); /* 3行 */
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(3, auto);
   gap: 20px;
   padding: 20px;
   max-width: 1600px;
@@ -200,13 +176,38 @@
   width: 100%;
 }
 
-@media (max-width: 991px) {
+@media (max-width: 1600px) {
   .productGrid {
-    max-width: 100%;
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 
-/* Product Card */
+@media (max-width: 1200px) {
+  .productGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .productGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .filterSection {
+    padding: 0 20px;
+    margin-top: 60px;
+  }
+  .searchBar {
+    max-width: 100%;
+    margin: 10px 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .productGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .productCard {
   border-radius: 30px;
   box-shadow: 2px 3px 8px 0px rgba(0, 0, 0, 0.25);
@@ -215,12 +216,7 @@
   min-width: 200px;
   max-width: 300px;
   overflow: hidden;
-  font-family:
-    'Noto Sans TC',
-    -apple-system,
-    Roboto,
-    Helvetica,
-    sans-serif;
+  font-family: 'Noto Sans TC', -apple-system, Roboto, Helvetica, sans-serif;
   font-weight: 700;
   text-align: center;
   flex-grow: 1;
@@ -271,12 +267,7 @@
 }
 
 .productDescription {
-  font-family:
-    Inter,
-    -apple-system,
-    Roboto,
-    Helvetica,
-    sans-serif;
+  font-family: Inter, -apple-system, Roboto, Helvetica, sans-serif;
   font-weight: 400;
   line-height: 24px;
   letter-spacing: 0.6px;
@@ -306,7 +297,6 @@
   cursor: pointer;
 }
 
-/* Pagination Section */
 .paginationSection {
   background-color: #fffaf0;
   display: flex;
@@ -316,12 +306,7 @@
   padding-bottom: 82px;
   flex-direction: column;
   align-items: center;
-  font-family:
-    'Noto Sans TC',
-    -apple-system,
-    Roboto,
-    Helvetica,
-    sans-serif;
+  font-family: 'Noto Sans TC', -apple-system, Roboto, Helvetica, sans-serif;
   font-size: 20px;
   color: #faf8f9;
   font-weight: 700;
@@ -403,43 +388,52 @@
   background-color: #ff5a00;
 }
 
-@media (max-width: 991px) {
-  .paginationButton {
-    white-space: initial;
-  }
+.priceFilterContainer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 20px;
+  padding: 0 15px;
+  background-color: white;
+  border-radius: 20px;
+  border: 2px solid #ff5a00;
 }
 
-/* 響應式設計 */
-@media (max-width: 1600px) {
-  .productGrid {
-    grid-template-columns: repeat(4, 1fr);
-  }
+.priceInput {
+  width: 80px;
+  height: 36px;
+  border: none;
+  outline: none;
+  text-align: center;
+  font-size: 14px;
 }
 
-@media (max-width: 1200px) {
-  .productGrid {
-    grid-template-columns: repeat(3, 1fr);
-  }
+.priceSearchButton {
+  background-color: #ff5a00;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  padding: 8px 15px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
 }
 
-@media (max-width: 900px) {
-  .productGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  .filterSection {
-    padding: 0 20px;
-    margin-top: 60px;
-  }
-  
-  .searchBar {
-    max-width: 100%;
-    margin: 10px 0;
-  }
+.priceSearchButton:hover {
+  background-color: #e65100;
 }
 
-@media (max-width: 600px) {
-  .productGrid {
-    grid-template-columns: 1fr;
-  }
+.applyPriceButton {
+  padding: 8px 16px;
+  background-color: #ff5a00;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.applyPriceButton:hover {
+  background-color: #e65100;
 }
