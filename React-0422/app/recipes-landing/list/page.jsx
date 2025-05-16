@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
-import styles from '../../styles/RecipeList.module.css'
+import styles from '../../src/styles/page-styles/RecipeList.module.scss'
 import useSWR from 'swr'
 import { useSearchParams } from 'next/navigation'
 import { useAuth } from '@/hooks/auth-context'
@@ -10,7 +10,7 @@ import RecipeCard from '@/app/components/RecipeCard'
 
 import { API_SERVER } from '../../../config/api-path'
 
-const RECIPES_PER_PAGE = 15
+const RECIPES_PER_PAGE = 12
 
 export default function RecipeListPage() {
   const { auth } = useAuth() || {} // 使用 useAuth 鉤子獲取用戶信息
@@ -131,8 +131,9 @@ export default function RecipeListPage() {
     <div className={styles.container}>
       <div className={styles.content}>
         {/* <div>{JSON.stringify(user)}</div> */}
-        {/* Hero Section */}
-        <div className={styles.heroSection}>
+
+        {/* 版頭 */}
+        {/* <div className={styles.heroSection}>
           <div className={styles.heroContent}>
             <div className={styles.heroBackground}>
               <img
@@ -148,9 +149,7 @@ export default function RecipeListPage() {
               </p>
             </div>
           </div>
-        </div>
-
-        {/* Category Section */}
+        </div> */}
 
         {/* Recipe Cards Section 列表頁的食物卡片區塊 */}
         <div className={styles.recipeSection}>
