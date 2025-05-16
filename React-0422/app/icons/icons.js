@@ -22,7 +22,11 @@ import { BiSolidBowlRice, BiLike } from 'react-icons/bi'
 import { LuDessert, LuSalad } from 'react-icons/lu'
 import { TbMeat, TbBowlSpoon, TbHandFinger } from 'react-icons/tb'
 import { CiBowlNoodles } from 'react-icons/ci'
-import { MdFavorite, MdFavoriteBorder } from 'react-icons/md'
+import {
+  MdFavorite,
+  MdFavoriteBorder,
+  MdOutlineRamenDining,
+} from 'react-icons/md'
 import { BsBookmarkPlus, BsBookmarkStarFill } from 'react-icons/bs'
 
 import { GrPrevious } from 'react-icons/gr'
@@ -41,6 +45,7 @@ export {
   BiSolidBowlRice,
   LuDessert,
   LuSalad,
+  MdOutlineRamenDining,
   TbMeat,
   CiBowlNoodles,
   MdFavorite,
@@ -60,13 +65,10 @@ export {
   TbBowlSpoon,
   IoIosAddCircle,
   TbHandFinger,
-
   IoIosArrowBack,
-
   FaGoogle,
   FaEye,
   FaEyeSlash,
   FaChevronDown,
   FaCalendarAlt,
-
 }

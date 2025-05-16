@@ -5,7 +5,6 @@ import RecipeCard from '../components/RecipeCard'
 
 import ShopCard from '../components/ShopCard'
 import FoodCard from '../components/FoodCard'
-import styles from '../styles/RecipeLanding.module.css'
 import { useRouter } from 'next/navigation'
 import useSWR from 'swr'
 
@@ -58,11 +57,6 @@ export default function MyRoomPage() {
 
   return (
     <>
-      <br />
-      <br />
-      <br />
-      <br />
-
       {/* <div className={styles.container}> */}
       <RecipeCard
         id={mockRecipe.id}

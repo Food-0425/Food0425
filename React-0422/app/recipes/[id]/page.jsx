@@ -23,6 +23,7 @@ import { useAuth } from '@/hooks/auth-context'
 import useSWR from 'swr'
 import { useRouter } from 'next/navigation'
 import FoodFeeBack from '../../components/FoodFeeBack'
+import { LazyLoadImage } from 'react-lazy-load-image-component'
 
 export default function RecipeDetailPage() {
   const [currentPage, setCurrentPage] = useState(0) // 當前頁數
@@ -474,167 +475,147 @@ export default function RecipeDetailPage() {
           <img src="/images/recipes-img/chef.jpg" alt="美食笑尖兵" />
           <div className={styles.chefText}>
             <h2>🦸美食笑尖兵</h2>
-            <p>歡迎來到「美食笑尖兵」的美味世界！🎉🎉🎉</p>
+
             <p>
-              我們是一群由熱愛料理的夥伴組成的團隊，以「笑」為調味，用創意烹製各式各樣的美食饗宴。我們的目標很簡單：透過輕鬆有趣的方式，分享多元豐富的料理內容，讓每一位熱愛生活、享受美食的朋友，都能在這裡找到屬於自己的味蕾驚喜。
+              歡迎來到<b> FOOD ┃今仔日食飽未 </b>的美味世界！🎉🎉🎉
             </p>
             <p>
-              「🦸美食笑尖兵」的特色在於對異國料理的熱情探索、對充滿人情味的手尾菜的溫暖傳承，以及對精緻甜點的甜蜜創造。我們相信，料理不
-              只是滿足口腹之慾，更是一種文化交流、情感連結和療癒心靈的方式。
+              我們是一群由熱愛料理的夥伴組成的團隊，以「笑」為調味，用創意烹製各式各樣的美食饗宴。
+              <b>
+                我們的目標很簡單：透過輕鬆有趣的方式，分享多元豐富的料理內容
+              </b>
+              ，讓每一位熱愛生活、享受美食的朋友，都能在這裡找到屬於自己的味蕾驚喜。
             </p>
-            <p>🔥🔥🔥趕快加入我們的行列，讓每一餐都充滿驚喜與歡樂吧！🔥🔥🔥</p>
+            <p>
+              <b>🦸美食笑尖兵</b>
+              的特色在於對異國料理的熱情探索、對充滿人情味的手尾菜的溫暖傳承，以及對精緻甜點的甜蜜創造。我們相信，料理不只是滿足口腹之慾，更是一種文化交流、情感連結和療癒心靈的方式。
+            </p>
+            <p>
+              🔥🔥🔥<b>趕快加入我們的行列，讓每一餐都充滿驚喜與歡樂吧！</b>
+              🔥🔥🔥
+            </p>
           </div>
         </div>
       </div>
 
       {/* user_feedbacks - 動態生成評論 */}
       <div className={styles.commentsSection}>
-        {/* 舊的打開留言表單 */}
-        {/* <button
-          className={styles.addCommentButton} // 使用樣式
-          onClick={handleShowFeedback} // 點擊事件
-        >
-          <img
-            src="/images/recipes/comment-icon.png"
-            className={styles.commentIcon}
-            alt="Comment icon"
-          />
-          <div className={styles.addCommentText}>添加留言</div>
-        </button> */}
-        {/* // 在您的 JSX 中，例如原本添加留言的按鈕 */}
-        <Button
-          variant="primary"
-          onClick={handleShowFeedbackModal}
-          className={styles.addCommentButton}
-        >
-          <img
-            src="/images/recipes/comment-icon.png"
-            className={styles.commentIcon}
-            alt="Comment icon"
-          />
-          <div className={styles.addCommentText}>添加留言</div>
-        </Button>
+        <div className={styles.commentsContainer}>
+          <Button
+            variant="primary"
+            onClick={handleShowFeedbackModal}
+            className={styles.addCommentButton}
+          >
+            <h2>添加留言</h2>
+          </Button>
 
-        {/* 5. React Bootstrap Modal  這裡是食譜評論的彈出視窗
-         。然後可以在SCSS當中自訂CSS樣式 。目前應該需調整*/}
-        <Modal
-          show={isFeedbackVisible}
-          onHide={handleCloseFeedbackModal}
-          centered
-          size="lg" // 可設定 'sm', 'lg', 'xl'
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>撰寫食譜評論</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            {/* 6. 放入您的 FoodFeeBack 元件 */}
-            <FoodFeeBack />
-            {/* 您可能需要傳遞一些 props 給 FoodFeeBack，例如關閉 modal 的函數 */}
-            <FoodFeeBack onFormSubmit={handleCloseFeedbackModal} />
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseFeedbackModal}>
-              關閉
-            </Button>
-            {/* 如果 FoodFeeBack 內部有自己的提交按鈕，這裡可能不需要額外的儲存按鈕 */}
-            {/* <Button variant="primary" onClick={() => { /* 觸發表單提交邏輯 *\/; handleCloseFeedbackModal(); }}>
+          {/* 5. React Bootstrap Modal  這裡是食譜評論的彈出視窗
+        。然後可以在SCSS當中自訂CSS樣式 。目前應該需調整*/}
+          <Modal
+            show={isFeedbackVisible}
+            onHide={handleCloseFeedbackModal}
+            centered
+            size="lg" // 可設定 'sm', 'lg', 'xl'
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>撰寫食譜評論</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              {/* 6. 放入您的 FoodFeeBack 元件 */}
+              <FoodFeeBack />
+              {/* 您可能需要傳遞一些 props 給 FoodFeeBack，例如關閉 modal 的函數 */}
+              <FoodFeeBack onFormSubmit={handleCloseFeedbackModal} />
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleCloseFeedbackModal}>
+                關閉
+              </Button>
+              {/* 如果 FoodFeeBack 內部有自己的提交按鈕，這裡可能不需要額外的儲存按鈕 */}
+              {/* <Button variant="primary" onClick={() => { /* 觸發表單提交邏輯 *\/; handleCloseFeedbackModal(); }}>
             提交評論
           </Button> */}
-          </Modal.Footer>
-        </Modal>
+            </Modal.Footer>
+          </Modal>
 
-        {/* 登入提示 Modal */}
-        <Modal
-          show={showLoginModal}
-          onHide={handleCloseLoginModal}
-          centered
-          size="lg" // 可設定 'sm', 'lg', 'xl'
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>請先登入</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <p>需要登入才能撰寫評論喔！</p>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseLoginModal}>
-              關閉
-            </Button>
-            <Button variant="primary" onClick={handleGoToLogin}>
-              前往登入
-            </Button>
-          </Modal.Footer>
-        </Modal>
-
-        <div className={styles.commentsList}>
-          {/* 左箭頭按鈕 */}
-
-          {/* 原本的添加留言表單的按鈕 */}
-          {/* <button
-            className={styles.addCommentButton} // 使用樣式
-            onClick={handleShowFeedback} // 點擊事件
+          {/* 登入提示 Modal */}
+          <Modal
+            show={showLoginModal}
+            onHide={handleCloseLoginModal}
+            centered
+            size="lg" // 可設定 'sm', 'lg', 'xl'
           >
-            <img
-              src="/images/recipes/comment-icon.png"
-              className={styles.commentIcon}
-              alt="Comment icon"
-            />
-            <div className={styles.addCommentText}>添加留言</div>
-          </button> */}
+            <Modal.Header closeButton>
+              <Modal.Title>請先登入</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <p>需要登入才能撰寫評論喔！</p>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleCloseLoginModal}>
+                關閉
+              </Button>
+              <Button variant="primary" onClick={handleGoToLogin}>
+                前往登入
+              </Button>
+            </Modal.Footer>
+          </Modal>
 
-          <div className={styles.commentsList01}>
+          <div>
             {/* 左箭頭按鈕 */}
-            <button
-              className={styles.arrowButton}
-              onClick={handlePrevPage}
-              // 第一頁禁用：disabled={currentPage === 0}
-              disabled={currentPage === 0}
-            >
-              <IoIosArrowBack />
-            </button>
-            <div className={styles.commentsList}>
-              {isLoading ? (
-                <div>正在載入評論...</div>
-              ) : error ? (
-                <div>載入評論時發生錯誤</div>
-              ) : currentComments && currentComments.length > 0 ? (
-                currentComments.map((comment, index) => (
-                  <div className={styles.commentCard} key={index}>
-                    <div>
-                      <img
-                        src={comment.userAvatar || `/images/user/default.jpg`}
-                        alt="User avatar"
-                        onError={(e) => {
-                          if (!e.target.dataset.fallback) {
-                            e.target.dataset.fallback = true // 標記已經使用過 fallback
-                            e.target.src = `/images/recipes/user${(index % 2) + 1}.png`
-                          }
-                        }}
-                      />
-                      <div className={styles.userInfo}>
-                        <button className={styles.buttonBiLike01}>
-                          <BiLike />
-                        </button>
-                        {/* <button className={styles.buttonBiLike02}>
+
+            <div className={styles.commentsList01}>
+              {/* 左箭頭按鈕 */}
+              <button
+                className={styles.arrowButton}
+                onClick={handlePrevPage}
+                // 第一頁禁用：disabled={currentPage === 0}
+                disabled={currentPage === 0}
+              >
+                <IoIosArrowBack />
+              </button>
+              <div className={styles.commentsList}>
+                {isLoading ? (
+                  <div>正在載入評論...</div>
+                ) : error ? (
+                  <div>載入評論時發生錯誤</div>
+                ) : currentComments && currentComments.length > 0 ? (
+                  currentComments.map((comment, index) => (
+                    <div className={styles.commentCard} key={index}>
+                      <div>
+                        <img
+                          src={comment.userAvatar || `/images/user/default.jpg`}
+                          alt="User avatar"
+                          onError={(e) => {
+                            if (!e.target.dataset.fallback) {
+                              e.target.dataset.fallback = true // 標記已經使用過 fallback
+                              e.target.src = `/images/recipes/user${(index % 2) + 1}.png`
+                            }
+                          }}
+                        />
+                        <div className={styles.userInfo}>
+                          <button className={styles.buttonBiLike01}>
+                            <BiLike />
+                          </button>
+                          {/* <button className={styles.buttonBiLike02}>
                           <BiLike />
                         </button> */}
-                        <h3>{comment.username || '匿名用戶'}</h3>
-                        <p>{comment.created_at || '未知日期'}</p>
+                          <h3>{comment.username || '匿名用戶'}</h3>
+                          <p>{comment.created_at || '未知日期'}</p>
+                        </div>
+                      </div>
+                      <div className={styles.commentContent}>
+                        <h2>{comment.title || '無標題'}</h2>
+                        <p>{comment.context || comment.text || '無評論內容'}</p>
                       </div>
                     </div>
-                    <div className={styles.commentContent}>
-                      <h2>{comment.title || '無標題'}</h2>
-                      <p>{comment.context || comment.text || '無評論內容'}</p>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                // 備用的靜態評論，當API沒有返回評論時顯示
-                <>
-                  <div className={styles.commentCard}>
-                    <div className={styles.commentUser}>
-                      {/* 因為這一塊是假設沒人留言的情況下，所以先註解掉 */}
-                      {/* <img
+                  ))
+                ) : (
+                  // 備用的靜態評論，當API沒有返回評論時顯示
+                  <>
+                    <div className={styles.commentCard}>
+                      <div className={styles.commentUser}>
+                        {/* 因為這一塊是假設沒人留言的情況下，所以先註解掉 */}
+                        {/* <img
                     src={`/images/user/default.jpg`}
                     className={styles.userAvatar}
                     alt="User avatar"
@@ -645,22 +626,21 @@ export default function RecipeDetailPage() {
                       }
                     }}
                   /> */}
-                      <div className={styles.userInfo}>
-                        <div className={styles.userContent}>
-                          <div className={styles.userName}>
-                            <h2>{'目前這個食譜尚未有人留言'}</h2>
+                        <div className={styles.userInfo}>
+                          <div className={styles.userContent}>
+                            <div className={styles.userName}>
+                              <h2>{'目前這個食譜尚未有人留言'}</h2>
+                            </div>
                           </div>
                         </div>
                       </div>
+                      <div className={styles.commentContent}>
+                        
+                        <div className={styles.commentText}>{'目前這個食譜尚未有人留言'}</div>
+                      </div>
                     </div>
-                    <div className={styles.commentContent}>
-                      {/* 這個標題我不太確定要放什麼，之後考慮拿掉或替換成別的顯示內容 */}
-                      {/* <div className={styles.commentTitle}>{'無標題'}</div> */}
-                      <div className={styles.commentText}>{'無評論內容'}</div>
-                    </div>
-                  </div>
-                  {/* 下面是原本的預設食譜評論卡片樣式 */}
-                  {/* <div className={styles.commentCard}>
+                    {/* 下面是原本的預設食譜評論卡片樣式 */}
+                    {/* <div className={styles.commentCard}>
                 <div className={styles.commentUser}>
                   <img
                     src="/images/recipes/user1.png"
@@ -709,23 +689,24 @@ export default function RecipeDetailPage() {
                   </div>
                 </div>
               </div> */}
-                </>
-              )}
-            </div>
-            {/* 右箭頭按鈕 */}
-            <button
-              className={styles.arrowButton}
-              onClick={handleNextPage}
-              disabled={endIndex >= comments.length} // 最後一頁禁用
-            >
-              <IoIosArrowBack />
-            </button>
-            {/* 這邊是原本預計要放的右箭頭，也先註解掉用別的替代 */}
-            {/* <img
+                  </>
+                )}
+              </div>
+              {/* 右箭頭按鈕 */}
+              <button
+                className={styles.arrowButton}
+                onClick={handleNextPage}
+                disabled={endIndex >= comments.length} // 最後一頁禁用
+              >
+                <IoIosArrowBack />
+              </button>
+              {/* 這邊是原本預計要放的右箭頭，也先註解掉用別的替代 */}
+              {/* <img
             src="/images/recipes/user-avatar-right.png"
             className={styles.userAvatarRight}
             alt="User avatar"
           /> */}
+            </div>
           </div>
         </div>
       </div>
@@ -734,119 +715,128 @@ export default function RecipeDetailPage() {
 
       {/* Related Recipes Section - 動態生成相關食譜 */}
       <div className={styles.relatedRecipesSection}>
-        <div className={styles.relatedRecipesTitle}>相關食譜推薦</div>
-        <div className={styles.relatedRecipesGrid}>
-          {isLoading ? (
-            <div>正在載入相關食譜...</div>
-          ) : error ? (
-            <div>載入相關食譜時發生錯誤</div>
-          ) : relatedRecipes && relatedRecipes.length > 0 ? (
-            relatedRecipes.map((relatedRecipe, index) => (
-              <Link
-                href={`/recipes/${relatedRecipe.related_recipe_id}`}
-                key={relatedRecipe.related_recipe_id || index}
-                className={styles.relatedRecipeCard}
-              >
-                {/* img先註解掉，不然會一直無限跟後端發API請求 */}
-                <img
-                  src={
-                    relatedRecipe.image ||
-                    `/images/recipes/related${(index % 6) + 1}.jpg`
-                  }
-                  className={styles.relatedRecipeImage}
-                  alt={relatedRecipe.title || '相關食譜'}
-                  onError={(e) => {
-                    if (!e.target.dataset.fallback) {
-                      e.target.dataset.fallback = true // 標記已經使用過 fallback
-                      e.target.src = `/images/recipes/related${(index % 6) + 1}.jpg`
-                    }
-                  }}
-                />
-                <div className={styles.relatedRecipeTitle}>
-                  {relatedRecipe.title || '未命名食譜'}
+        <div>
+          <h2>你可能會喜歡</h2>
+          <div className={styles.relatedRecipesGrid}>
+            {isLoading ? (
+              <h3>正在載入相關食譜...</h3>
+            ) : error ? (
+              <h3>載入相關食譜時發生錯誤</h3>
+            ) : relatedRecipes && relatedRecipes.length > 0 ? (
+              relatedRecipes.map((relatedRecipe, index) => (
+                <Link
+                  href={`/recipes/${relatedRecipe.related_recipe_id}`}
+                  key={relatedRecipe.related_recipe_id || index}
+                  className={styles.relatedRecipeCard}
+                >
+                  {/* img先註解掉，不然會一直無限跟後端發API請求 */}
+                  <div className={styles.relatedRecipeImage}>
+                    <img
+                      src={
+                        relatedRecipe.image ||
+                        `/images/recipes/related${(index % 6) + 1}.jpg`
+                      }
+                      alt={relatedRecipe.title || '相關食譜'}
+                      onError={(e) => {
+                        if (!e.target.dataset.fallback) {
+                          e.target.dataset.fallback = true // 標記已經使用過 fallback
+                          e.target.src = `/images/recipes/related${(index % 6) + 1}.jpg`
+                        }
+                      }}
+                    />
+                  </div>
+                  <h2>{relatedRecipe.title || '未命名食譜'}</h2>
+                </Link>
+              ))
+            ) : (
+              // 備用的靜態相關食譜，當API沒有返回數據時顯示
+              <>
+                <div className={styles.relatedRecipeCard}>
+                  <img
+                    src="/images/recipes/related1.jpg"
+                    className={styles.relatedRecipeImage}
+                    alt="Related recipe"
+                  />
+                  <div className={styles.relatedRecipeTitle}>希臘沙拉</div>
                 </div>
-              </Link>
-            ))
-          ) : (
-            // 備用的靜態相關食譜，當API沒有返回數據時顯示
-            <>
-              <div className={styles.relatedRecipeCard}>
-                <img
-                  src="/images/recipes/related1.jpg"
-                  className={styles.relatedRecipeImage}
-                  alt="Related recipe"
-                />
-                <div className={styles.relatedRecipeTitle}>希臘沙拉</div>
-              </div>
 
-              <div className={styles.relatedRecipeCard}>
-                <img
-                  src="/images/recipes/related2.jpg"
-                  className={styles.relatedRecipeImage}
-                  alt="Related recipe"
-                />
-                <div className={styles.relatedRecipeTitle}>
-                  墨西哥玉米餅沙拉
+                <div className={styles.relatedRecipeCard}>
+                  <img
+                    src="/images/recipes/related2.jpg"
+                    className={styles.relatedRecipeImage}
+                    alt="Related recipe"
+                  />
+                  <div className={styles.relatedRecipeTitle}>
+                    墨西哥玉沙拉米餅
+                  </div>
                 </div>
-              </div>
 
-              <div className={styles.relatedRecipeCard}>
-                <img
-                  src="/images/recipes/related3.jpg"
-                  className={styles.relatedRecipeImage}
-                  alt="Related recipe"
-                />
-                <div className={styles.relatedRecipeTitle}>義式焗烤千層麵</div>
-              </div>
+                <div className={styles.relatedRecipeCard}>
+                  <img
+                    src="/images/recipes/related3.jpg"
+                    className={styles.relatedRecipeImage}
+                    alt="Related recipe"
+                  />
+                  <div className={styles.relatedRecipeTitle}>
+                    義式焗烤千層麵
+                  </div>
+                </div>
 
-              <div className={styles.relatedRecipeCard}>
-                <img
-                  src="/images/recipes/related4.jpg"
-                  className={styles.relatedRecipeImage}
-                  alt="Related recipe"
-                />
-                <div className={styles.relatedRecipeTitle}>巧克力熔岩蛋糕</div>
-              </div>
+                <div className={styles.relatedRecipeCard}>
+                  <img
+                    src="/images/recipes/related4.jpg"
+                    className={styles.relatedRecipeImage}
+                    alt="Related recipe"
+                  />
+                  <div className={styles.relatedRecipeTitle}>
+                    巧克力熔岩蛋糕
+                  </div>
+                </div>
 
-              <div className={styles.relatedRecipeCard}>
-                <img
-                  src="/images/recipes/related5.jpg"
-                  className={styles.relatedRecipeImage}
-                  alt="Related recipe"
-                />
-                <div className={styles.relatedRecipeTitle}>台式滷肉飯</div>
-              </div>
+                <div className={styles.relatedRecipeCard}>
+                  <img
+                    src="/images/recipes/related5.jpg"
+                    className={styles.relatedRecipeImage}
+                    alt="Related recipe"
+                  />
+                  <div className={styles.relatedRecipeTitle}>台式滷肉飯</div>
+                </div>
 
-              <div className={styles.relatedRecipeCard}>
-                <img
-                  src="/images/recipes/related6.jpg"
-                  className={styles.relatedRecipeImage}
-                  alt="Related recipe"
-                />
-                <div className={styles.relatedRecipeTitle}>泰式綠咖哩雞</div>
-              </div>
-            </>
-          )}
+                <div className={styles.relatedRecipeCard}>
+                  <img
+                    src="/images/recipes/related6.jpg"
+                    className={styles.relatedRecipeImage}
+                    alt="Related recipe"
+                  />
+                  <div className={styles.relatedRecipeTitle}>泰式綠咖哩雞</div>
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </div>
       {/* sticker */}
-      <img
+      <LazyLoadImage
         src="/images/design/sticker-1.svg"
+        delayTime={300}
         className={styles.sticker1}
         alt="蔬菜"
       />
-      <img
+      <LazyLoadImage
         src="/images/design/sticker-2.svg"
+        delayTime={300}
         className={styles.sticker2}
         alt="橄欖油"
       />
-      <img
+      <LazyLoadImage
         src="/images/design/sticker-3.svg"
+        delayTime={300}
         className={styles.sticker3}
         alt="調味罐"
       />
-      <img
+      <LazyLoadImage
         src="/images/design/sticker-5.svg"
+        delayTime={300}
         className={styles.sticker5}
         alt="砧板"
       />

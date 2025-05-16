@@ -88,7 +88,6 @@
         align-items: center;
         justify-content: center;
         margin-left: 10px;
-        border: none;
         transition: background-color 0.3s;
 
         &:hover {
@@ -109,7 +108,6 @@
         align-items: center;
         justify-content: center;
         margin-left: 10px;
-        border: none;
         transition: background-color 0.3s;
 
         &:hover {
@@ -131,7 +129,6 @@
   background-color: $color-primary;
   color: #fff;
   border-radius: 9rem;
-  border: none;
   padding: 8px 20px;
   transition: background-color 0.3s;
   h2 {
@@ -151,7 +148,6 @@
   top: 20px;
   color: #fff;
   background: $color-accent;
-  border: none;
   border-radius: 9rem;
   font-size: $font-size-icon;
   display: flex;
@@ -176,7 +172,7 @@
   max-width: 1280px;
   align-self: center;
   width: 1280px;
-  box-shadow: $card-shadow;
+  // box-shadow: $card-shadow;
   overflow: hidden;
   margin-bottom: 100px;
 }
@@ -187,7 +183,6 @@
   background-color: #fff;
   padding: 25px 150px;
   border-radius: 0 0 30px 30px;
-  box-shadow: 15px 29px 35px 0px rgba(0, 0, 0, 0.1);
 }
 
 .stepItem {
@@ -273,8 +268,8 @@
 
 /* user_feedbacks */
 .commentsSection {
-  padding-bottom: 100px;
-  margin: 0 auto;
+  // padding-bottom: 100px;
+  margin: 50px auto;
 
   .commentsContainer {
     display: flex;
@@ -286,43 +281,20 @@
 }
 
 .addCommentButton {
-  justify-content: center;
   align-items: center;
   align-self: flex-end;
-  position: relative;
-  display: flex;
-  min-height: 75px;
-  padding: 11px 23px;
-  gap: 10px;
-  font-size: 32px;
-  color: #faf8f9;
-  font-weight: 700;
-  white-space: nowrap;
-  background-color: #df6c2d;
-  border-radius: 37.5px;
+  @include button-text;
+  color: #fff;
+  background-color: $color-primary;
+  &:hover {
+    background-color: $color-special;
+  }
 }
 
-.commentIcon {
-  aspect-ratio: 1;
-  object-fit: contain;
-  object-position: center;
-  width: 54px;
-  align-self: stretch;
-  z-index: 0;
-  margin: auto 0;
-  flex-shrink: 0;
-}
-
-.addCommentText {
-  color: #faf8f9;
-  align-self: stretch;
-  z-index: 0;
-  margin: auto 0;
-}
 .commentsList01 {
   display: flex;
   justify-content: space-between;
-  margin-top: 30px;
+  margin-top: 20px;
   align-items: center;
 
   button:nth-of-type(1) {
@@ -375,7 +347,6 @@
       .buttonBiLike01 {
         all: unset; /* 重置所有樣式 */
         align-self: flex-end;
-        border: none;
         color: $color-background-error;
         font-size: $font-size-icon;
 
@@ -386,7 +357,6 @@
       .buttonBiLike02 {
         all: unset; /* 重置所有樣式 */
         align-self: flex-end;
-        border: none;
         color: $color-special;
         font-size: $font-size-icon;
       }
@@ -441,355 +411,50 @@
 
 /* Related Recipes Section */
 .relatedRecipesSection {
-  justify-content: center;
-  align-items: stretch;
-  z-index: 0;
-  display: flex;
   width: 100%;
-  padding: 80px 0;
-  flex-direction: column;
-  overflow: hidden;
-  font-weight: 700;
-  white-space: nowrap;
+  padding: 50px 0 70px 0;
   text-align: center;
-  background-color: #df6c2d;
-}
+  background-color: $color-accent;
+  div {
+    margin: 0 auto;
+    width: 100%;
+    max-width: 1280px;
 
-.relatedRecipesTitle {
-  color: #fff;
-  font-size: 48px;
-}
-
-.relatedRecipesGrid {
-  align-self: center;
-  display: flex;
-  margin-top: 50px;
-  align-items: center;
-  gap: 54px;
-  font-size: 20px;
-  color: #423c3a;
-  justify-content: start;
-  flex-wrap: wrap;
-}
-
-.relatedRecipeCard {
-  justify-content: center;
-  align-items: stretch;
-  border-radius: 30px;
-  background-color: #fff;
-  align-self: stretch;
-  display: flex;
-  min-width: 240px;
-  margin: auto 0;
-  flex-direction: column;
-  overflow: hidden;
-  width: 259px;
-}
-
-.relatedRecipeImage {
-  aspect-ratio: 1.3;
-  object-fit: contain;
-  object-position: center;
-  width: 100%;
-  min-height: 200px;
-  gap: 10px;
-}
-
-.relatedRecipeTitle {
-  color: #423c3a;
-  align-self: stretch;
-  flex: 1;
-  flex-shrink: 1;
-  flex-basis: 0%;
-  margin-top: 25px;
-  width: 100%;
-  padding: 0 25px 25px;
-}
-
-/* Footer */
-.footer {
-  justify-content: space-between;
-  align-items: center;
-  z-index: 0;
-  display: flex;
-  min-height: 400px;
-  width: 100%;
-  padding: 0 320px;
-  background-color: #423c3a;
-}
-
-.footerContent {
-  max-width: 1280px;
-  justify-content: space-between;
-  align-items: stretch;
-  align-self: stretch;
-  display: flex;
-  min-width: 240px;
-  margin: auto 0;
-  min-height: 348px;
-  width: 100%;
-  gap: 100px;
-  overflow: hidden;
-  flex-wrap: wrap;
-  flex: 1;
-  flex-shrink: 1;
-  flex-basis: 0%;
-}
-
-.footerLeft {
-  display: flex;
-  min-width: 240px;
-  padding: 45px 0;
-  flex-direction: column;
-  align-items: stretch;
-  font-family:
-    Noto Sans TC,
-    -apple-system,
-    Roboto,
-    Helvetica,
-    sans-serif;
-  justify-content: center;
-  width: 457px;
-}
-
-.footerThankYou {
-  color: #fff5ee;
-  font-size: 20px;
-  font-weight: 700;
-}
-
-.footerFeedback {
-  margin-top: 20px;
-  min-height: 191px;
-  width: 100%;
-  font-size: 16px;
-  font-weight: 400;
-  white-space: nowrap;
-  letter-spacing: 0.48px;
-}
-
-.feedbackText {
-  color: #fff5ee;
-}
-
-.feedbackInput {
-  justify-content: flex-end;
-  align-items: stretch;
-  border-radius: 15px;
-  border: 3px solid #faf8f9;
-  background-color: rgba(250, 248, 249, 0.45);
-  display: flex;
-  margin-top: 15px;
-  width: 100%;
-  padding: 10px 17px 15px 15px;
-  gap: 20px;
-  overflow: hidden;
-  color: #faf8f9;
-  flex: 1;
-  height: 100%;
-}
-
-.feedbackPlaceholder {
-  color: #faf8f9;
-  flex: 1;
-  flex-shrink: 1;
-  flex-basis: 0%;
-}
-
-.sendIcon {
-  aspect-ratio: 1;
-  object-fit: contain;
-  object-position: center;
-  width: 32px;
-  align-self: flex-end;
-  flex-shrink: 0;
-}
-
-.footerRight {
-  display: flex;
-  min-width: 240px;
-  padding: 45px 0;
-  flex-direction: column;
-  align-items: flex-end;
-  justify-content: center;
-}
-
-.faqButton {
-  color: #faf8f9;
-  align-self: stretch;
-  border-radius: 71.97px;
-  box-shadow: 0px 0px 0px 10.795px rgba(0, 0, 0, 0.05);
-  overflow: hidden;
-  font-family:
-    Noto Sans TC,
-    -apple-system,
-    Roboto,
-    Helvetica,
-    sans-serif;
-  font-size: 26px;
-  font-weight: 700;
-  white-space: nowrap;
-  text-align: center;
-  padding: 25px 60px;
-  background-color: #df6c2d;
-}
-
-.socialIcons {
-  display: flex;
-  margin-top: 40px;
-  align-items: flex-end;
-  gap: 12px;
-  justify-content: start;
-}
-
-.socialIcon {
-  aspect-ratio: 1;
-  object-fit: contain;
-  object-position: center;
-  width: 79px;
-  box-shadow: 2px 3px 8px 0px rgba(0, 0, 0, 0.25);
-  flex-shrink: 0;
-}
-
-.socialIconPlaceholder {
-  box-shadow: 2px 3px 8px 0px rgba(0, 0, 0, 0.25);
-  width: 79px;
-}
-
-.socialIconCircle {
-  background-color: #ececec;
-  border-radius: 50%;
-  display: flex;
-  width: 79px;
-  flex-shrink: 0;
-  height: 79px;
-}
-
-/* Navbar */
-.navbar {
-  position: absolute;
-  z-index: 0;
-  width: 100%;
-  right: 0;
-  top: 0;
-}
-
-.navbarInner {
-  justify-content: center;
-  align-items: center;
-  box-shadow: 2px 3px 8px 0px rgba(0, 0, 0, 0.25);
-  background-color: #fff;
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.navLeftGroup {
-  display: flex;
-  min-width: 240px;
-  align-items: stretch;
-  gap: 40px;
-  font-family:
-    Noto Sans TC,
-    -apple-system,
-    Roboto,
-    Helvetica,
-    sans-serif;
-  font-size: 20px;
-  color: #423c3a;
-  font-weight: 700;
-  white-space: nowrap;
-  text-align: center;
-  justify-content: start;
-  flex-wrap: wrap;
-  height: 100%;
-  flex: 1;
-  flex-shrink: 1;
-  flex-basis: 0%;
-}
-
-.logoImage {
-  aspect-ratio: 0.67;
-  object-fit: contain;
-  object-position: center;
-  width: 38px;
-  margin: auto 0;
-  flex-shrink: 0;
-}
-
-.navBtnGroup {
-  display: flex;
-  min-width: 240px;
-  align-items: center;
-  gap: 18px;
-  justify-content: start;
-  height: 100%;
-  flex: 1;
-  flex-shrink: 1;
-  flex-basis: 0%;
-}
-
-.navBtn {
-  color: #423c3a;
-  align-self: stretch;
-  border-radius: 100px;
-  background-color: rgba(223, 108, 45, 0);
-  margin: auto 0;
-  padding: 8px 14px;
-  cursor: pointer;
-}
-
-.navRightGroup {
-  display: flex;
-  min-width: 240px;
-  align-items: center;
-  gap: 15px;
-  justify-content: flex-end;
-  flex-wrap: wrap;
-  height: 100%;
-  flex: 1;
-  flex-shrink: 1;
-  flex-basis: 0%;
-}
-
-.searchBar {
-  min-width: 200px;
-  max-width: 300px;
-  border-radius: 200px;
-  border: 2px solid #df6c2d;
-  align-self: stretch;
-  display: flex;
-  margin: auto 0;
-  width: 300px;
-  flex-shrink: 1;
-  height: 49px;
-  padding: 12px 0;
-  gap: 10px;
-  flex: 1;
-  flex-basis: 0%;
-  background-color: #faf8f9;
-}
-
-.cartIcon {
-  aspect-ratio: 1.07;
-  object-fit: contain;
-  object-position: center;
-  width: 45px;
-  align-self: stretch;
-  margin: auto 0;
-  flex-shrink: 0;
-}
-
-.userIcon {
-  aspect-ratio: 1.18;
-  object-fit: contain;
-  object-position: center;
-  width: 33px;
-  fill: #df6c2d;
-  align-self: stretch;
-  margin: auto 0;
-  flex-shrink: 0;
+    h2 {
+      color: $color-background;
+      font-size: 32px;
+      padding: 0 0 30px 0;
+    }
+    .relatedRecipesGrid {
+      display: flex;
+      gap: 15px;
+      color: $color-primary;
+      h3 {
+        color: $color-primary;
+      }
+      .relatedRecipeCard {
+        border-radius: 30px;
+        background-color: #fff;
+        width: 100%;
+        overflow: hidden;
+        .relatedRecipeImage {
+          background-color: $color-background-error;
+          height: 200px;
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+        }
+        h2 {
+          padding: 20px 0;
+          color: $color-primary;
+          font-size: $font-size-h2;
+          align-self: stretch;
+        }
+      }
+    }
+  }
 }
 
 /* sticker */
