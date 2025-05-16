@@ -348,6 +348,7 @@ export default function RegisterPage() {
             )}
           </div>
 
+          {/* TODO:給日期選擇器樣式(https://mui.com/) */}
           <div className={styles.formGroup}>
             <label htmlFor="birthday" className={styles.label}>
               生日 *
