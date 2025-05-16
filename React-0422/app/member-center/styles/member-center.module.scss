@@ -33,13 +33,28 @@
   border-radius: 10px;
   display: flex;
   width: 100%;
-  padding: 4px 13px;
+  padding: 4px 12px;
   gap: 4px;
   background-color: #fff;
   margin-top: 12px;
+  transition: background-color 0.3s ease; // 添加過渡效果
+  cursor: pointer; // 添加手指游標
 
   &:first-child {
     margin-top: 0;
+  }
+
+  &:hover {
+    background-color: rgba(223, 108, 45, 0.1); // 使用主色調的半透明版本
+
+    .buttonIcon svg {
+      color: #df6c2d;
+      fill: #df6c2d;
+    }
+
+    .buttonText {
+      color: #df6c2d;
+    }
   }
 
   &.active {
@@ -50,9 +65,14 @@
     }
 
     .buttonIcon {
-      img {
-        filter: brightness(0) invert(1); // 將圖標變成白色
+      svg {
+        color: #fff;
+        fill: #fff;
       }
+    }
+
+    &:hover {
+      background-color: darken(#df6c2d, 5%); // active 狀態下的 hover 效果
     }
   }
 }
@@ -67,11 +87,14 @@
   justify-content: center;
   width: 40px;
 
-  img {
-    width: 24px;
-    height: 24px;
-    object-fit: contain;
-    object-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    height: 20px;
+    width: auto;
+    color: #423c3a;
   }
 }
 
