@@ -3,9 +3,31 @@
 import React, { useState, useEffect } from 'react'
 import styles from '../styles/ProductList.module.css'
 import { ProductCard } from '../components/ProductCard'
+import { GrPrevious } from '../icons/icons' // 使用 react-icons 套件
 
 //  每頁顯示商品數量
 const PRODUCTS_PER_PAGE = 15 // 雖然定義了，但目前 API 回傳中已包含分頁邏輯
+
+// 在檔案開頭加入 API 基礎網址常數
+// 這個很棒
+const API_BASE_URL = 'http://localhost:3001/products' // 根據實際情況修改
+
+// 新增: API 請求函數
+const fetchAllProducts = async (page, limit = 15) => {
+  const response = await fetch(
+    `${API_BASE_URL}/api/products?page=${page}&limit=${limit}`
+  )
+  if (!response.ok) throw new Error('取得商品列表失敗')
+  return response.json()
+}
+
+const fetchFilteredProducts = async (params) => {
+  const response = await fetch(
+    `${API_BASE_URL}/api/products/filter?${params.toString()}`
+  )
+  if (!response.ok) throw new Error('篩選商品失敗')
+  return response.json()
+}
 
 export default function ProductListPage() {
   //  State 狀態管理
@@ -16,48 +38,63 @@ export default function ProductListPage() {
   const [activeCategory, setActiveCategory] = useState('本周熱銷') // 目前分類
   const [sortByPrice, setSortByPrice] = useState(false) // 是否以價格排序
   const [searchTerm, setSearchTerm] = useState('') // 新增：搜尋關鍵字狀態
+  const [searchInput, setSearchInput] = useState('') // 新增：搜尋輸入值狀態
+  const [minPrice, setMinPrice] = useState('')
+  const [maxPrice, setMaxPrice] = useState('')
 
   //  當頁碼、分類、排序條件、搜尋關鍵字改變時，重新取得產品資料
   useEffect(() => {
-    const fetchProducts = async () => {
+    const getProducts = async () => {
       setLoading(true)
       try {
-        const queryParams = new URLSearchParams({
-          page: currentPage.toString(),
-          category: activeCategory,
-          sort: sortByPrice ? 'price' : '',
-          search: searchTerm, // 新增：將搜尋關鍵字加入查詢參數
-        })
+        // 判斷是否需要篩選
+        const hasFilters =
+          activeCategory !== '本周熱銷' ||
+          searchTerm ||
+          minPrice ||
+          maxPrice ||
+          sortByPrice
 
-        // 注意：原 API URL 為 http://localhost:3001/products (可能有拼寫錯誤，應為 product)
-        // 這裡保持原樣，但請確認後端 API 端點是否正確
-        const response = await fetch(
-          `http://localhost:3001/products?${queryParams.toString()}`
-        )
-        if (!response.ok) {
-          throw new Error('後端 API 回傳錯誤')
+        let result
+        if (hasFilters) {
+          const params = new URLSearchParams({
+            page: currentPage.toString(),
+            limit: '15',
+            category: activeCategory !== '本周熱銷' ? activeCategory : '',
+            search: searchTerm,
+            sort: sortByPrice ? 'price_desc' : 'price_asc',
+            minPrice,
+            maxPrice,
+          })
+          result = await fetchFilteredProducts(params)
+        } else {
+          result = await fetchAllProducts(currentPage)
         }
 
-        const data = await response.json()
-        setProducts(data.rows || []) // 確保 data.rows 存在，否則給予空陣列
-        setTotalPages(data.totalPages || 1) // 確保 data.totalPages 存在，否則給予 1
+        if (result.success) {
+          setProducts(result.rows)
+          setTotalPages(result.totalPages)
+        }
       } catch (error) {
-        console.error('Error fetching products:', error)
-        setProducts([]) // 發生錯誤時，清空產品列表
-        setTotalPages(1) // 發生錯誤時，重置總頁數
+        console.error('取得商品失敗:', error)
+        setProducts([])
+        setTotalPages(1)
       } finally {
         setLoading(false)
       }
     }
 
-    fetchProducts()
-  }, [currentPage, activeCategory, sortByPrice, searchTerm]) // 新增：searchTerm 加入依賴項
+    getProducts()
+  }, [currentPage, activeCategory, sortByPrice, searchTerm, minPrice, maxPrice]) // 新增：searchTerm 加入依賴項
 
-  //  點選分類按鈕
+  // 修改處理函數，清除其他篩選條件
   const handleCategoryChange = (category) => {
     setActiveCategory(category)
-    setCurrentPage(1) //  切換分類時，重置到第一頁
-    setSearchTerm('') // 新增：切換分類時，清空搜尋關鍵字 (可選行為)
+    setCurrentPage(1)
+    setSearchTerm('')
+    setSearchInput('')
+    setMinPrice('')
+    setMaxPrice('')
   }
 
   //  切換價格排序
@@ -73,10 +110,43 @@ export default function ProductListPage() {
     }
   }
 
-  // 新增：處理搜尋輸入框變化的函式
+  // 修改：處理搜尋輸入
   const handleSearchInputChange = (event) => {
-    setSearchTerm(event.target.value)
-    setCurrentPage(1) //  當使用者輸入搜尋條件時，重置到第一頁
+    setSearchInput(event.target.value)
+  }
+
+  // 新增：處理搜尋按鈕點擊
+  const handleSearch = () => {
+    setSearchTerm(searchInput)
+    setCurrentPage(1)
+    setActiveCategory('本周熱銷')
+    setMinPrice('')
+    setMaxPrice('')
+  }
+
+  // 新增：處理按下 Enter 鍵搜尋
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleSearch()
+    }
+  }
+
+  // 新增處理價格輸入的函數
+  const handlePriceInput = (type, value) => {
+    // 確保輸入為數字
+    const numberValue = value.replace(/[^0-9]/g, '')
+    if (type === 'min') {
+      setMinPrice(numberValue)
+    } else {
+      setMaxPrice(numberValue)
+    }
+  }
+
+  // 新增價格查詢函數
+  const handlePriceSearch = () => {
+    setCurrentPage(1)
+    setSearchTerm('')
+    setSearchInput('')
   }
 
   //  用於產生分頁按鈕的輔助函數 (可選，讓分頁更動態)
@@ -123,14 +193,44 @@ export default function ProductListPage() {
     <div className={styles.container}>
       {/* 篩選區塊：分類 + 價格排序 + 搜尋 */}
       <div className={styles.filterSection}>
-        {/* 新增：搜尋輸入框 */}
-        <input
-          type="text"
-          placeholder="搜尋商品名稱..."
-          value={searchTerm}
-          onChange={handleSearchInputChange}
-          className={styles.searchInput} //  您可能需要在 ProductList.module.css 中添加此樣式
-        />
+        {/* 修改：搜尋區塊 */}
+        <div className={styles.searchContainer}>
+          <input
+            type="text"
+            placeholder="搜尋商品..."
+            value={searchInput}
+            onChange={handleSearchInputChange}
+            onKeyPress={handleKeyPress}
+            className={styles.searchBar}
+          />
+          <button onClick={handleSearch} className={styles.searchButton}>
+            搜尋
+          </button>
+        </div>
+
+        {/* 新增：價格區間查詢 */}
+        <div className={styles.priceFilterContainer}>
+          <input
+            type="text"
+            placeholder="最低價格"
+            value={minPrice}
+            onChange={(e) => handlePriceInput('min', e.target.value)}
+            className={styles.priceInput}
+          />
+          <input
+            type="text"
+            placeholder="最高價格"
+            value={maxPrice}
+            onChange={(e) => handlePriceInput('max', e.target.value)}
+            className={styles.priceInput}
+          />
+          <button
+            onClick={handlePriceSearch}
+            className={styles.priceSearchButton}
+          >
+            查詢
+          </button>
+        </div>
 
         {/* 分類篩選按鈕（動態 active 樣式） */}
         <button
@@ -185,7 +285,7 @@ export default function ProductListPage() {
             <div>載入中...</div> //  載入狀態
           ) : products && products.length > 0 ? ( // 修改：檢查 products 是否有內容
             products.map((product) => (
-              <ProductCard key={product.id} product={product} /> //  商品卡片元件
+              <ProductCard key={product.id} product={product} />
             ))
           ) : (
             <div>沒有找到符合條件的商品。</div> // 新增：無商品時的提示
@@ -204,11 +304,7 @@ export default function ProductListPage() {
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1} // 新增：第一頁時禁用
               >
-                <img
-                  src="https://via.placeholder.com/11x16" // 建議替換為實際圖示路徑或 SVG
-                  className={styles.paginationArrow}
-                  alt="Previous page"
-                />
+                <GrPrevious />
               </button>
 
               {/* 動態頁碼按鈕 (使用輔助函數) */}
