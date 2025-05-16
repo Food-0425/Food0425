@@ -59,3 +59,4 @@ const API_BASE_URL = 'http://localhost:3001/products'
 
 設定function之前，宣告const,let,{}包裹物件,[]包裹陣列
 {}參數可以設定物件回傳形式
+要偵測錯誤的話不可以把console.log放在return function裡面
