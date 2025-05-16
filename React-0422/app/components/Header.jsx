@@ -27,12 +27,19 @@ const Header = () => {
                 <h3>美味食譜</h3>
               </button>
             </Link>
-            <button>
-              <h3>食材商城</h3>
-            </button>
+            <Link href="/products">
+              <button>
+                <h3>食材商城</h3>
+              </button>
+            </Link>
             <Link href="/quick-login">
               <button>
                 <h3>快速登入測試</h3>
+              </button>
+            </Link>
+            <Link href="/restaurants">
+              <button>
+                <h3>精選文章</h3>
               </button>
             </Link>
             <Link href="/contact">
