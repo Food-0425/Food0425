@@ -53,7 +53,7 @@ const Sidebar = ({ activeContent, setActiveContent }) => {
           }}
         >
           <div className={styles.buttonIcon}>
-            {item.icon} {/* 直接渲染 React Icon */}
+            {item.icon} 
           </div>
           <div className={styles.buttonText}>{item.text}</div>
         </div>

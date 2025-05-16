@@ -3,14 +3,32 @@
 
 .pageContent {
   display: flex;
-  padding: 24px;
+  min-height: 100vh;
+  width: 100%;
+  gap: 20px;
+  padding: 20px;
   align-items: start;
-  gap: 12px;
   justify-content: center;
   flex-wrap: wrap;
 
   @media (max-width: 991px) {
     padding: 20px;
+  }
+
+  // Sidebar 容器樣式
+  :global(.sidebar) {
+    flex: 0 0 250px; // 固定寬度 250px，不會縮放
+    height: 100%;
+  }
+
+  // 內容區域樣式
+  .contentArea {
+    flex: 1; // 自動填滿剩餘空間
+    min-width: 0; // 防止內容溢出
+    padding: 24px;
+    border-radius: 16px;
+    border: 1px solid var(--Color5, #ececec);
+    background-color: #fff;
   }
 }
 
@@ -37,8 +55,8 @@
   gap: 4px;
   background-color: #fff;
   margin-top: 12px;
-  transition: background-color 0.3s ease; // 添加過渡效果
-  cursor: pointer; // 添加手指游標
+  transition: background-color 0.3s ease;
+  cursor: pointer;
 
   &:first-child {
     margin-top: 0;
@@ -114,11 +132,7 @@
 }
 
 .profileContainer {
-  border-radius: 20px;
-  border: 1px solid var(--Color5, #ececec);
-  background-color: #fff;
   min-width: 240px;
-  padding: 24px;
   overflow: hidden;
   flex: 1;
   flex-shrink: 1;
@@ -126,7 +140,6 @@
 
   @media (max-width: 991px) {
     max-width: 100%;
-    padding: 20px;
   }
 }
 
