@@ -284,9 +284,12 @@ export default function ProductListPage() {
           {loading ? (
             <div>載入中...</div> //  載入狀態
           ) : products && products.length > 0 ? ( // 修改：檢查 products 是否有內容
-            products.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))
+            products.map(
+              (product) => (
+                console.log('Product:', product), //  偵錯用
+                (<ProductCard key={product.id} product={product} />)
+              )
+            )
           ) : (
             <div>沒有找到符合條件的商品。</div> // 新增：無商品時的提示
           )}
