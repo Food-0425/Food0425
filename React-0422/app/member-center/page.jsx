@@ -4,8 +4,7 @@ import React, { useState, useEffect } from 'react' // 引入 useState
 import styles from './styles/member-center.module.scss'
 import Sidebar from './components/Sidebar'
 import ProfileContent from './components/ProfileContent'
-// 假設你之後會建立這些元件
-// import PasswordContent from './components/PasswordContent';
+import PasswordContent from './components/PasswordContent';
 // import FavoritesContent from './components/FavoritesContent';
 // import OrdersContent from './components/OrdersContent';
 import { useAuth } from '@/hooks/auth-context'
