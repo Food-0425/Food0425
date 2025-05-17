@@ -36,7 +36,7 @@ export default function ProductListPage() {
   const [currentPage, setCurrentPage] = useState(1) // 目前頁碼 (初始值改為 1，因為有分類和搜尋時通常從第一頁開始)
   const [totalPages, setTotalPages] = useState(1) // 總頁數（預設改為 1）
   const [activeCategory, setActiveCategory] = useState('本周熱銷') // 目前分類
-  const [sortByPrice, setSortByPrice] = useState(false) // 是否以價格排序
+  const [sortByPrice, setSortByPrice] = useState(null) // 是否以價格排序，null 表示不排序
   const [searchTerm, setSearchTerm] = useState('') // 新增：搜尋關鍵字狀態
   const [searchInput, setSearchInput] = useState('') // 新增：搜尋輸入值狀態
   const [minPrice, setMinPrice] = useState('')
@@ -53,7 +53,7 @@ export default function ProductListPage() {
           searchTerm ||
           minPrice ||
           maxPrice ||
-          sortByPrice
+          sortByPrice !== null
 
         let result
         if (hasFilters) {
@@ -95,6 +95,12 @@ export default function ProductListPage() {
     setSearchInput('')
     setMinPrice('')
     setMaxPrice('')
+  }
+
+  const getArrowIcon = () => {
+    if (sortByPrice === null) return '⭥'
+    if (sortByPrice === true) return '⭣'
+    if (sortByPrice === false) return '⭡'
   }
 
   //  切換價格排序
@@ -240,22 +246,22 @@ export default function ProductListPage() {
           本周熱銷
         </button>
         <button
-          className={`${styles.filterItem} ${styles.filterCategory} ${activeCategory === '蔬菜' ? styles.active : ''}`}
-          onClick={() => handleCategoryChange('蔬菜')}
+          className={`${styles.filterItem} ${styles.filterCategory} ${activeCategory === '蔬菜類' ? styles.active : ''}`}
+          onClick={() => handleCategoryChange('蔬菜類')}
         >
-          蔬菜
+          蔬菜類
         </button>
         <button
-          className={`${styles.filterItem} ${styles.filterCategory} ${activeCategory === '肉品' ? styles.active : ''}`}
-          onClick={() => handleCategoryChange('肉品')}
+          className={`${styles.filterItem} ${styles.filterCategory} ${activeCategory === '肉類' ? styles.active : ''}`}
+          onClick={() => handleCategoryChange('肉類')}
         >
-          肉品
+          肉類
         </button>
         <button
-          className={`${styles.filterItem} ${styles.filterCategory} ${activeCategory === '乾貨' ? styles.active : ''}`}
-          onClick={() => handleCategoryChange('乾貨')}
+          className={`${styles.filterItem} ${styles.filterCategory} ${activeCategory === '海鮮類' ? styles.active : ''}`}
+          onClick={() => handleCategoryChange('海鮮類')}
         >
-          乾貨
+          海鮮類
         </button>
         <button
           className={`${styles.filterItem} ${activeCategory === '調味品' ? styles.active : ''}`}
@@ -273,7 +279,7 @@ export default function ProductListPage() {
               alt="Sort by price"
             />
           </div>
-          <div className={styles.priceText}>價格 {sortByPrice ? '↑' : '↓'}</div>{' '}
+          <div className={styles.priceText}>價格 {getArrowIcon()}</div>{' '}
           {/* 新增：排序指示 */}
         </button>
       </div>
