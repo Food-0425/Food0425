@@ -41,7 +41,7 @@ export default function ProductListPage() {
   const [searchInput, setSearchInput] = useState('') // 新增：搜尋輸入值狀態
   const [minPrice, setMinPrice] = useState('')
   const [maxPrice, setMaxPrice] = useState('')
-
+  const [priceFilter, setPriceFilter] = useState({ min: null, max: null })
   //  當頁碼、分類、排序條件、搜尋關鍵字改變時，重新取得產品資料
   useEffect(() => {
     const getProducts = async () => {
@@ -206,7 +206,7 @@ export default function ProductListPage() {
             placeholder="搜尋商品..."
             value={searchInput}
             onChange={handleSearchInputChange}
-            onKeyPress={handleKeyPress}
+            // onKeyPress={handleKeyPress} --> 這行被淘汰
             className={styles.searchBar}
           />
           <button onClick={handleSearch} className={styles.searchButton}>
