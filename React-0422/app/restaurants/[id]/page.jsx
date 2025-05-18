@@ -15,6 +15,7 @@ import { IoMdShare } from 'react-icons/io'
 import { FaMapMarkerAlt } from 'react-icons/fa'
 import { FaPhoneAlt } from 'react-icons/fa'
 import { FaRegClock } from 'react-icons/fa6'
+import { Modal, Button } from 'react-bootstrap'
 // import MapComponent from '../app/restaurants/components/MapComponent.jsx'
 import MapComponent from '../components/MapComponent.jsx'
 
@@ -27,6 +28,7 @@ export default function RestaurantDetailPage() {
   // 動態引入 Leaflet 相關組件，避免 SSR 問題
   const MapComponent = dynamic(() => import('../components/MapComponent'), {
     ssr: false,
+    loading: () => <p>載入地圖中...</p>,
   })
   // 地圖開啟與否
   const [showMap, setShowMap] = useState(false)
@@ -67,6 +69,9 @@ export default function RestaurantDetailPage() {
   const restaurant = data?.data || []
 
   // const restaurant = getRestaurantData(id)
+  // 處理彈出視窗的開關
+  const handleClose = () => setShowMap(false)
+  const handleShow = () => setShowMap(true)
 
   return (
     <>
@@ -198,57 +203,76 @@ export default function RestaurantDetailPage() {
                         </div>
                         <div
                           className={styles.infoLink}
-                          onClick={() => setShowMap(!showMap)}
+                          onClick={handleShow}
                           style={{ cursor: 'pointer' }}
                         >
-                          {showMap ? '關閉地圖' : '在地圖開啟'}
+                          在地圖開啟
                         </div>
-                        <div
-                          className={`${styles.mapContainer} ${showMap ? styles.active : ''}`}
-                        >
-                          {showMap &&
-                          restaurant.latitude &&
-                          restaurant.longitude ? (
-                            <MapComponent
-                              address={restaurant.address}
-                              latitude={parseFloat(restaurant.latitude)}
-                              longitude={parseFloat(restaurant.longitude)}
-                              name={restaurant.name}
-                            />
-                          ) : (
-                            <div className={styles.noMapData}>
-                              地圖資料載入中...
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className={styles.infoItemSimple}>
-                      {/* <img
-                      src="/images/restaurant/phone-icon.png"
-                      className={styles.infoIcon}
-                      alt="電話"
-                    /> */}
-                      <FaPhoneAlt />
-
-                      <div>{restaurant.phone}</div>
-                    </div>
-
-                    <div className={styles.infoItemHours}>
-                      {/* <img
-                      src="/images/restaurant/time-icon.png"
-                      className={styles.infoIconSmall}
-                      alt="營業時間"
-                    /> */}
-                      <FaRegClock />
-
-                      <div className={styles.infoTextFull}>
-                        {restaurant.hours}
+                        {/* 新增 Modal 組件 */}
+                        <Modal show={showMap} onHide={handleClose} size="lg">
+                          <Modal.Header closeButton>
+                            <Modal.Title>
+                              {restaurant.name} - 位置資訊
+                            </Modal.Title>
+                          </Modal.Header>
+                          <Modal.Body>
+                            {restaurant.latitude && restaurant.longitude ? (
+                              <div style={{ height: '400px', width: '100%' }}>
+                                <MapComponent
+                                  address={restaurant.address}
+                                  latitude={parseFloat(restaurant.latitude)}
+                                  longitude={parseFloat(restaurant.longitude)}
+                                  name={restaurant.name}
+                                />
+                              </div>
+                            ) : (
+                              <div className={styles.noMapData}>
+                                地圖資料載入中...
+                              </div>
+                            )}
+                          </Modal.Body>
+                          <Modal.Footer>
+                            <Button variant="secondary" onClick={handleClose}>
+                              關閉
+                            </Button>
+                            <Button
+                              variant="primary"
+                              as="a"
+                              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(restaurant.address)}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              在 Google Maps 開啟
+                            </Button>
+                          </Modal.Footer>
+                        </Modal>
                       </div>
                     </div>
                   </div>
 
+                  <div className={styles.infoItemSimple}>
+                    {/* <img
+                      src="/images/restaurant/phone-icon.png"
+                      className={styles.infoIcon}
+                      alt="電話"
+                    /> */}
+                    <FaPhoneAlt />
+
+                    <div>{restaurant.phone}</div>
+                  </div>
+
+                  <div className={styles.infoItemHours}>
+                    {/* <img
+                      src="/images/restaurant/time-icon.png"
+                      className={styles.infoIconSmall}
+                      alt="營業時間"
+                    /> */}
+                    <FaRegClock />
+
+                    <div className={styles.infoTextFull}>
+                      {restaurant.hours}
+                    </div>
+                  </div>
                   <div className={styles.infoSubtitle}>消費資訊</div>
                   <div className={styles.infoList}>
                     {/* 假設 consumption 現在在 restaurant 的第一層 */}
@@ -277,7 +301,6 @@ export default function RestaurantDetailPage() {
                   ))} */}
                   </div>
                 </div>
-
                 {/* 資料庫忘了寫相關餐廳的資訊。所以下面這個先關掉(註解掉) */}
                 <div className={styles.infoCard}>
                   <div className={styles.infoCardTitle}>相關餐廳</div>
