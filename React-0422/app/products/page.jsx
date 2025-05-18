@@ -39,9 +39,12 @@ export default function ProductListPage() {
   const [sortByPrice, setSortByPrice] = useState(null) // 是否以價格排序，null 表示不排序
   const [searchTerm, setSearchTerm] = useState('') // 新增：搜尋關鍵字狀態
   const [searchInput, setSearchInput] = useState('') // 新增：搜尋輸入值狀態
-  const [minPrice, setMinPrice] = useState('')
-  const [maxPrice, setMaxPrice] = useState('')
+  const [minPriceInput, setMinPriceInput] = useState('') // 新增：價格輸入暫存
+  const [maxPriceInput, setMaxPriceInput] = useState('') // 新增：價格輸入暫存
+  const [minPrice, setMinPrice] = useState('') // 實際用於查詢的價格
+  const [maxPrice, setMaxPrice] = useState('') // 實際用於查詢的價格
   const [priceFilter, setPriceFilter] = useState({ min: null, max: null })
+  const [error, setError] = useState(null) // 新增：錯誤狀態
   //  當頁碼、分類、排序條件、搜尋關鍵字改變時，重新取得產品資料
   useEffect(() => {
     const getProducts = async () => {
@@ -79,15 +82,16 @@ export default function ProductListPage() {
         console.error('取得商品失敗:', error)
         setProducts([])
         setTotalPages(1)
+        setError('取得商品失敗，請稍後再試')
       } finally {
         setLoading(false)
       }
     }
 
     getProducts()
-  }, [currentPage, activeCategory, sortByPrice, searchTerm, minPrice, maxPrice]) // 新增：searchTerm 加入依賴項
+  }, [currentPage, activeCategory, sortByPrice, searchTerm, minPrice, maxPrice]) // 使用實際查詢價格，而不是輸入值
 
-  // 修改處理函數，清除其他篩選條件
+  // 修改分類切換函數，清除價格查詢
   const handleCategoryChange = (category) => {
     setActiveCategory(category)
     setCurrentPage(1)
@@ -95,6 +99,8 @@ export default function ProductListPage() {
     setSearchInput('')
     setMinPrice('')
     setMaxPrice('')
+    setMinPriceInput('')
+    setMaxPriceInput('')
   }
 
   const getArrowIcon = () => {
@@ -137,22 +143,25 @@ export default function ProductListPage() {
     }
   }
 
-  // 新增處理價格輸入的函數
+  // 修改處理價格輸入的函數
   const handlePriceInput = (type, value) => {
     // 確保輸入為數字
     const numberValue = value.replace(/[^0-9]/g, '')
     if (type === 'min') {
-      setMinPrice(numberValue)
+      setMinPriceInput(numberValue)
     } else {
-      setMaxPrice(numberValue)
+      setMaxPriceInput(numberValue)
     }
   }
 
-  // 新增價格查詢函數
+  // 修改價格查詢函數
   const handlePriceSearch = () => {
+    setMinPrice(minPriceInput) // 設定實際查詢用的價格
+    setMaxPrice(maxPriceInput)
     setCurrentPage(1)
     setSearchTerm('')
     setSearchInput('')
+    setActiveCategory('本周熱銷')
   }
 
   //  用於產生分頁按鈕的輔助函數 (可選，讓分頁更動態)
@@ -214,19 +223,19 @@ export default function ProductListPage() {
           </button>
         </div>
 
-        {/* 新增：價格區間查詢 */}
+        {/* 價格區間查詢 */}
         <div className={styles.priceFilterContainer}>
           <input
             type="text"
             placeholder="最低價格"
-            value={minPrice}
+            value={minPriceInput}
             onChange={(e) => handlePriceInput('min', e.target.value)}
             className={styles.priceInput}
           />
           <input
             type="text"
             placeholder="最高價格"
-            value={maxPrice}
+            value={maxPriceInput}
             onChange={(e) => handlePriceInput('max', e.target.value)}
             className={styles.priceInput}
           />
@@ -234,7 +243,7 @@ export default function ProductListPage() {
             onClick={handlePriceSearch}
             className={styles.priceSearchButton}
           >
-            查詢
+            價格查詢
           </button>
         </div>
 
@@ -288,8 +297,20 @@ export default function ProductListPage() {
       <div className={styles.productSection}>
         <div className={styles.productGrid}>
           {loading ? (
-            <div>載入中...</div> //  載入狀態
-          ) : products && products.length > 0 ? ( // 修改：檢查 products 是否有內容
+            <div className={styles.loadingContainer}>
+              <div className={styles.spinner}></div>
+              <p>載入商品中...</p>
+            </div>
+          ) : error ? (
+            <div className={styles.errorContainer}>
+              <p>{error}</p>
+              <button onClick={() => window.location.reload()}>重新整理</button>
+            </div>
+          ) : products.length === 0 ? (
+            <div className={styles.emptyContainer}>
+              <p>沒有符合條件的商品</p>
+            </div>
+          ) : (
             products.map((product) => (
               <ProductCard
                 key={product.id}
@@ -302,8 +323,6 @@ export default function ProductListPage() {
                 initialFavorite={false}
               />
             ))
-          ) : (
-            <div>沒有找到符合條件的商品。</div> // 新增：無商品時的提示
           )}
         </div>
       </div>
