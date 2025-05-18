@@ -15,43 +15,39 @@
     min-height: 60px;
     width: 1280px;
     max-width: 1280px;
+    gap: 40px;
 
-    div:nth-of-type(1) {
+    img {
+      width: 60px;
+    }
+
+    .navList {
       display: flex;
       align-items: center;
-      gap: 40px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      height: 100%;
 
-      img {
-        width: 60px;
-      }
+      button {
+        h3 {
+          color: $color-primary;
+          font-size: $font-size-h3;
+          font-weight: $font-weight-title;
+          border-radius: 9rem;
+          margin: auto 0;
+          padding: 8px 14px;
+          transition: background-color 0.3s;
 
-      div {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        height: 100%;
-
-        button {
-
-          h3 {
-            color: $color-primary;
-            font-size: $font-size-h3;
-            font-weight: $font-weight-title;
-            border-radius: 9rem;
-            margin: auto 0;
-            padding: 8px 14px;
-            transition: background-color 0.3s;
-
-            &:hover {
-              background-color: rgba(223, 108, 45, 1);
-              color: $color-background;
-            }
+          &:hover {
+            background-color: rgba(223, 108, 45, 1);
+            color: $color-background;
           }
         }
       }
     }
 
-    div:nth-of-type(2) {
+    .navFunction {
       display: flex;
       gap: 15px;
       justify-content: flex-end;
@@ -110,4 +106,11 @@
 }
 
 @media (max-width: 991px) {
+  .navbar span {
+    padding: 0 15px;
+
+    .navList {
+      display: none;
+    }
+  }
 }

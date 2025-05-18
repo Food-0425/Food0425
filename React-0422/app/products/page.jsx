@@ -1,19 +1,16 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import styles from '../styles/ProductList.module.css'
+import styles from '../src/styles/page-styles/ProductList.module.scss'
 import { ProductCard } from '../components/ProductCard'
-import { GrPrevious } from '../icons/icons' // 使用 react-icons 套件
-
-//  每頁顯示商品數量
-const PRODUCTS_PER_PAGE = 15 // 雖然定義了，但目前 API 回傳中已包含分頁邏輯
+import { GrPrevious, IoIosArrowBack } from '../icons/icons' // 使用 react-icons 套件
 
 // 在檔案開頭加入 API 基礎網址常數
 // 這個很棒
 const API_BASE_URL = 'http://localhost:3001/products' // 根據實際情況修改
 
 // 新增: API 請求函數
-const fetchAllProducts = async (page, limit = 15) => {
+const fetchAllProducts = async (page, limit = 12) => {
   const response = await fetch(
     `${API_BASE_URL}/api/products?page=${page}&limit=${limit}`
   )
@@ -103,13 +100,6 @@ export default function ProductListPage() {
     setCurrentPage(1) //  切換排序時，重置到第一頁
   }
 
-  //  分頁控制：前後頁或指定頁碼
-  const handlePageChange = (newPage) => {
-    if (newPage >= 1 && newPage <= totalPages) {
-      setCurrentPage(newPage)
-    }
-  }
-
   // 修改：處理搜尋輸入
   const handleSearchInputChange = (event) => {
     setSearchInput(event.target.value)
@@ -147,6 +137,13 @@ export default function ProductListPage() {
     setCurrentPage(1)
     setSearchTerm('')
     setSearchInput('')
+  }
+
+  //  分頁控制：前後頁或指定頁碼
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setCurrentPage(newPage)
+    }
   }
 
   //  用於產生分頁按鈕的輔助函數 (可選，讓分頁更動態)
@@ -191,109 +188,104 @@ export default function ProductListPage() {
 
   return (
     <div className={styles.container}>
-      {/* 篩選區塊：分類 + 價格排序 + 搜尋 */}
+      {/* 篩選區塊 */}
       <div className={styles.filterSection}>
-        {/* 修改：搜尋區塊 */}
-        <div className={styles.searchContainer}>
-          <input
-            type="text"
-            placeholder="搜尋商品..."
-            value={searchInput}
-            onChange={handleSearchInputChange}
-            onKeyPress={handleKeyPress}
-            className={styles.searchBar}
-          />
-          <button onClick={handleSearch} className={styles.searchButton}>
-            搜尋
-          </button>
-        </div>
-
-        {/* 新增：價格區間查詢 */}
-        <div className={styles.priceFilterContainer}>
-          <input
-            type="text"
-            placeholder="最低價格"
-            value={minPrice}
-            onChange={(e) => handlePriceInput('min', e.target.value)}
-            className={styles.priceInput}
-          />
-          <input
-            type="text"
-            placeholder="最高價格"
-            value={maxPrice}
-            onChange={(e) => handlePriceInput('max', e.target.value)}
-            className={styles.priceInput}
-          />
-          <button
-            onClick={handlePriceSearch}
-            className={styles.priceSearchButton}
-          >
-            查詢
-          </button>
-        </div>
-
-        {/* 分類篩選按鈕（動態 active 樣式） */}
-        <button
-          className={`${styles.filterItem} ${activeCategory === '本周熱銷' ? styles.active : ''}`}
-          onClick={() => handleCategoryChange('本周熱銷')}
-        >
-          本周熱銷
-        </button>
-        <button
-          className={`${styles.filterItem} ${styles.filterCategory} ${activeCategory === '蔬菜' ? styles.active : ''}`}
-          onClick={() => handleCategoryChange('蔬菜')}
-        >
-          蔬菜
-        </button>
-        <button
-          className={`${styles.filterItem} ${styles.filterCategory} ${activeCategory === '肉品' ? styles.active : ''}`}
-          onClick={() => handleCategoryChange('肉品')}
-        >
-          肉品
-        </button>
-        <button
-          className={`${styles.filterItem} ${styles.filterCategory} ${activeCategory === '乾貨' ? styles.active : ''}`}
-          onClick={() => handleCategoryChange('乾貨')}
-        >
-          乾貨
-        </button>
-        <button
-          className={`${styles.filterItem} ${activeCategory === '調味品' ? styles.active : ''}`}
-          onClick={() => handleCategoryChange('調味品')}
-        >
-          調味品
-        </button>
-
-        {/* 價格排序按鈕 */}
-        <button className={styles.priceFilter} onClick={togglePriceSorting}>
-          <div className={styles.sortIcon}>
-            <img
-              src="https://via.placeholder.com/37x34" // 建議替換為實際圖示路徑或 SVG
-              className={styles.sortIconImage}
-              alt="Sort by price"
+        <div className={styles.priceSearchContainer}>
+          {/* 搜尋商品 */}
+          <div className={styles.searchContainer}>
+            <input
+              type="text"
+              placeholder="搜尋商品..."
+              value={searchInput}
+              onChange={handleSearchInputChange}
+              onKeyPress={handleKeyPress}
+              className={styles.searchBar}
             />
+            <button onClick={handleSearch} className={styles.searchButton}>
+              <h3>搜尋</h3>
+            </button>
           </div>
-          <div className={styles.priceText}>價格 {sortByPrice ? '↑' : '↓'}</div>{' '}
-          {/* 新增：排序指示 */}
+
+          {/* 最低價最高價 */}
+          <div className={styles.priceFilterContainer}>
+            <input
+              type="text"
+              placeholder="最低價"
+              value={minPrice}
+              onChange={(e) => handlePriceInput('min', e.target.value)}
+              className={styles.priceInput}
+            />
+            〜
+            <input
+              type="text"
+              placeholder="最高價"
+              value={maxPrice}
+              onChange={(e) => handlePriceInput('max', e.target.value)}
+              className={styles.priceInput}
+            />
+            <button
+              onClick={handlePriceSearch}
+              className={styles.priceSearchButton}
+            >
+              <h3>價格查詢</h3>
+            </button>
+          </div>
+        </div>
+        {/* 分類按鈕（動態 active 樣式） */}
+        <div className={styles.filterContainer}>
+          <button
+            className={`${activeCategory === '本周熱銷' ? styles.active : ''}`}
+            onClick={() => handleCategoryChange('本周熱銷')}
+          >
+            <h3>本周熱銷</h3>
+          </button>
+          <button
+            className={` ${activeCategory === '蔬菜' ? styles.active : ''}`}
+            onClick={() => handleCategoryChange('蔬菜')}
+          >
+            <h3>蔬菜</h3>
+          </button>
+          <button
+            className={` ${activeCategory === '肉品' ? styles.active : ''}`}
+            onClick={() => handleCategoryChange('肉品')}
+          >
+            <h3>肉品</h3>
+          </button>
+          <button
+            className={` ${activeCategory === '乾貨' ? styles.active : ''}`}
+            onClick={() => handleCategoryChange('乾貨')}
+          >
+            <h3>乾貨</h3>
+          </button>
+          <button
+            className={`${activeCategory === '調味品' ? styles.active : ''}`}
+            onClick={() => handleCategoryChange('調味品')}
+          >
+            <h3>調味品</h3>
+          </button>
+        </div>
+
+        {/* 價格排序 */}
+        <button className={styles.priceFilter} onClick={togglePriceSorting}>
+          <h3>價格 {sortByPrice ? '↑' : '↓'}</h3> {/* 新增：排序指示 */}
         </button>
       </div>
 
       {/* 商品區塊 */}
-      <div className={styles.productSection}>
-        <div className={styles.productGrid}>
-          {loading ? (
-            <div>載入中...</div> //  載入狀態
-          ) : products && products.length > 0 ? ( // 修改：檢查 products 是否有內容
-            products.map(
-              (product) => (
-                console.log('Product:', product), //  偵錯用
-                (<ProductCard key={product.id} product={product} />)
-              )
+
+      <div className={styles.productGrid}>
+        {loading ? (
+          <div>載入中...</div> //  載入狀態
+        ) : products && products.length > 0 ? ( // 修改：檢查 products 是否有內容
+          products.map(
+            (product) => (
+              console.log('Product:', product), //  偵錯用
+              (<ProductCard key={product.id} product={product} />)
             )
-          ) : (
-            <div>沒有找到符合條件的商品。</div> // 新增：無商品時的提示
-          )}
-        </div>
+          )
+        ) : (
+          <div>沒有找到符合條件的商品。</div> // 新增：無商品時的提示
+        )}
       </div>
 
       {/* 分頁區塊 */}
@@ -303,27 +295,25 @@ export default function ProductListPage() {
           <div className={styles.paginationSection}>
             <div className={styles.pagination}>
               {/* 上一頁 */}
-              <button
+              <h2
                 onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1} // 新增：第一頁時禁用
+                style={{ cursor: currentPage > 1 ? 'pointer' : 'not-allowed' }}
               >
-                <GrPrevious />
-              </button>
+                <IoIosArrowBack />
+              </h2>
 
               {/* 動態頁碼按鈕 (使用輔助函數) */}
               {renderPageNumbers()}
 
               {/* 下一頁 */}
-              <button
+              <h2
                 onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === totalPages} // 新增：最後一頁時禁用
+                style={{
+                  cursor: currentPage < totalPages ? 'pointer' : 'not-allowed',
+                }}
               >
-                <img
-                  src="https://via.placeholder.com/11x16" // 建議替換為實際圖示路徑或 SVG
-                  className={styles.paginationArrow}
-                  alt="Next page"
-                />
-              </button>
+                <IoIosArrowBack />
+              </h2>
             </div>
           </div>
         )}

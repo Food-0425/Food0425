@@ -130,27 +130,6 @@ export default function RecipeListPage() {
   return (
     <div className={styles.container}>
       <div className={styles.content}>
-        {/* <div>{JSON.stringify(user)}</div> */}
-
-        {/* 版頭 */}
-        {/* <div className={styles.heroSection}>
-          <div className={styles.heroContent}>
-            <div className={styles.heroBackground}>
-              <img
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/25474f8c77fa37bdec47687719cc06595f43d1ba?placeholderIfAbsent=true"
-                className={styles.heroImage}
-                alt="Desserts and sweets background"
-              />
-            </div>
-            <div className={styles.heroTextContainer}>
-              <h1 className={styles.heroTitle}>糕點甜食</h1>
-              <p className={styles.heroSubtitle}>
-                每一口都是甜蜜的優雅相遇，讓我們邂逅彼此吧！
-              </p>
-            </div>
-          </div>
-        </div> */}
-
         {/* Recipe Cards Section */}
         <div className={styles.recipeSection}>
           {isLoading && !favoritesLoaded ? ( // 確保 favorites 已加載
@@ -199,41 +178,6 @@ export default function RecipeListPage() {
   )
 }
 
-// 改進的Recipe Card組件，添加了可交互功能
-// function RecipeCard({
-//   id,
-//   image,
-//   title,
-//   description,
-//   isFavorite,
-//   onFavoriteToggle,
-// }) {
-//   return (
-//     <div className={styles.recipeCard}>
-//       <Link key={id} href={`/recipes/${id}`} passHref>
-//         <div className={styles.recipeImageContainer}>
-//           <img src={`/${image}`} className={styles.recipeImage} alt={title} />
-//         </div>
-//         <div className={styles.recipeContent}>
-//           <h3 className={styles.recipeTitle}>{title}</h3>
-//           <p className={styles.recipeDescription}>{description}</p>
-//         </div>
-//       </Link>
-//       <img
-//         src={
-//           isFavorite
-//             ? '/images/like/like.png' // 收藏的圖示
-//             : '/images/like/unlike.png' // 未收藏的圖示
-//         }
-//         className={styles.favoriteIcon}
-//         alt={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-//         onClick={onFavoriteToggle}
-//         style={{ cursor: 'pointer' }}
-//       />
-//     </div>
-//   )
-// }
-
 // 改進的分頁按鈕，添加了點擊事件
 function PaginationButton({ number, active, onClick }) {
   return (
@@ -247,7 +191,7 @@ function PaginationButton({ number, active, onClick }) {
   )
 }
 
-// 特色菜譜組件，作為獨立組件抽出
+// 你可能會喜歡組件，作為獨立組件抽出
 function FeaturedRecipes() {
   const fetcher = (url) => fetch(url).then((res) => res.json())
 
