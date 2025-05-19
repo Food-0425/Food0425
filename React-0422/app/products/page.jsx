@@ -237,7 +237,7 @@ export default function ProductListPage() {
             className={`${activeCategory === '本周熱銷' ? styles.active : ''}`}
             onClick={() => handleCategoryChange('本周熱銷')}
           >
-            <h3>本周熱銷</h3>
+            <h3>熱門商品</h3>
           </button>
           <button
             className={` ${activeCategory === '蔬菜' ? styles.active : ''}`}
