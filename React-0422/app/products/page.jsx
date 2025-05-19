@@ -9,7 +9,7 @@ import { GrPrevious, IoIosArrowBack } from '../icons/icons' // 使用 react-icon
 // 這個很棒
 const API_BASE_URL = 'http://localhost:3001/products' // 根據實際情況修改
 
-// 新增: API 請求函數
+//API 請求函數
 const fetchAllProducts = async (page, limit = 12) => {
   const response = await fetch(
     `${API_BASE_URL}/api/products?page=${page}&limit=${limit}`
