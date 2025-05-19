@@ -1,42 +1,26 @@
 'use client'
 
 import React, { useState } from 'react'
-import styles from '../src/styles/ShopList.module.scss' // 使用相對路徑
+import styles from '../src/styles/ShopList.module.scss'
 import { MdFavorite, MdFavoriteBorder } from '../icons/icons'
+import { useRouter } from 'next/navigation' // ✅ 引入 useRouter
 
 export const ProductCard = ({
-  product = {
-    id: 1,
-    name: 'Product Name',
-    image: '/placeholder.jpg',
-    title: 'Product Title',
-    description: 'Product Description',
-    price: 'price',
-    isFavorite: false,
-    brand: '',
-    original_price: '',
-    initialFavorite: false,
-    clickable: true,
-    showViewButton: false,
-  },
+  id = 0,
+  name = 'Product Name',
+  image = '/placeholder.jpg',
+  brand = '',
+  price = '',
+  original_price = '',
+  clickable = true,
+  initialFavorite = false,
+  onFavoriteToggle,
 }) => {
-  const {
-    id,
-    name,
-    image,
-    brand,
-    price,
-    original_price,
-    isFavorite: initialFavorite,
-    clickable = true,
-    onFavoriteToggle,
-  } = product
-
-  const [isFavorite, setIsFavorite] = useState(initialFavorite || false)
-  console.log('product:', product)
+  const [isFavorite, setIsFavorite] = useState(initialFavorite)
+  const router = useRouter() //  初始化 Router
 
   const handleFavoriteClick = (e) => {
-    e.stopPropagation() // 防止點擊收藏圖標時觸發卡片點擊
+    e.stopPropagation()
     setIsFavorite(!isFavorite)
     if (onFavoriteToggle) {
       onFavoriteToggle(id, !isFavorite)
@@ -45,50 +29,37 @@ export const ProductCard = ({
 
   const handleCardClick = () => {
     if (clickable) {
-      // 跳轉到菜譜詳情頁
-      window.location.href = `/shop/${id}`
-      // 或使用Next.js的路由: router.push(`/shop/${id}`);
+      router.push(`/products/${id}`) //  改用 router.push
     }
   }
 
   return (
-    <>
-      {/* ShopCard */}
-      <div>
-        <div
-          className={`${styles.shopCard}`}
-          onClick={handleCardClick}
-          style={{ cursor: clickable ? 'pointer' : 'default' }}
-        >
-          <div className={styles.shopCardImg}>
-            <img
-              src={image} // 從 public 資料夾的根目錄開始
-              alt={name}
-            />
-          </div>
-          <span>
-            <div>
-              <p> {brand}</p>
-              <h3>{name}</h3>
-            </div>
-            <div>
-              <p>${original_price}</p>
-              <h2>${price}</h2>
-            </div>
-          </span>
-
-          {/* 收藏按鈕 Start */}
-          <button
-            alt={isFavorite ? '已收藏' : '加入收藏'}
-            onClick={handleFavoriteClick}
-            style={{ cursor: 'pointer' }}
-          >
-            {isFavorite ? <MdFavorite /> : <MdFavoriteBorder />}
-          </button>
-          {/* 收藏按鈕 End */}
-        </div>
+    <div
+      className={styles.shopCard}
+      onClick={handleCardClick}
+      style={{ cursor: clickable ? 'pointer' : 'default' }}
+    >
+      <div className={styles.shopCardImg}>
+        <img src={image} alt={name} />
       </div>
-    </>
+      <span>
+        <div>
+          <p>{brand}</p>
+          <h3>{name}</h3>
+        </div>
+        <div>
+          <p>${original_price}</p>
+          <h2>${price}</h2>
+        </div>
+      </span>
+      <button
+        alt={isFavorite ? '已收藏' : '加入收藏'}
+        onClick={handleFavoriteClick}
+        style={{ cursor: 'pointer' }}
+      >
+        {isFavorite ? <MdFavorite /> : <MdFavoriteBorder />}
+      </button>
+    </div>
   )
 }
 
