@@ -3,6 +3,7 @@
 import React, { useState } from 'react'
 import styles from '../src/styles/ShopList.module.scss'
 import { MdFavorite, MdFavoriteBorder } from '../icons/icons'
+import { useRouter } from 'next/navigation' // ✅ 引入 useRouter
 
 export const ProductCard = ({
   id = 0,
@@ -16,6 +17,7 @@ export const ProductCard = ({
   onFavoriteToggle,
 }) => {
   const [isFavorite, setIsFavorite] = useState(initialFavorite)
+  const router = useRouter() //  初始化 Router
 
   const handleFavoriteClick = (e) => {
     e.stopPropagation()
@@ -27,17 +29,9 @@ export const ProductCard = ({
 
   const handleCardClick = () => {
     if (clickable) {
-      window.location.href = `/shop/${id}`
+      router.push(`/products/${id}`) //  改用 router.push
     }
   }
-  console.log('ProductCard props:', {
-    id,
-    name,
-    image,
-    brand,
-    price,
-    original_price,
-  })
 
   return (
     <div
@@ -70,4 +64,3 @@ export const ProductCard = ({
 }
 
 export default ProductCard
-// 這個組件是用來顯示商品卡片的，包含商品圖片、名稱、品牌、價格和收藏按鈕。
