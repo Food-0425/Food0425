@@ -58,7 +58,8 @@
 }
 
 .addToCartButton,
-.wishlistButton {
+.wishlistButton,.buyNowButton
+ {
   padding: 12px 24px;
   border-radius: 8px;
   font-size: 16px;
@@ -66,18 +67,58 @@
   cursor: pointer;
   transition: all 0.3s;
 }
+.actionButtons {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
 
+  button {
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+}
+.buyNowButton {
+  background-color: #e65100; // 較深的橘色
+  color: white;
+  border: none;
+  flex: 2;
+
+  &:hover {
+    background-color: #bf360c;
+  }
+}
 .addToCartButton {
   background-color: #ff5a00;
   color: white;
   border: none;
 }
+.addToCartButton {
+  background-color: #ff5a00;
+  color: white;
+  border: none;
+  flex: 2;
+
+  &:hover {
+    background-color: #e65100;
+  }
+}
 
 .wishlistButton {
-  background-color: white;
-  color: #ff5a00;
+  background-color: #ff5a00;
+  color: #fff3e0;
   border: 2px solid #ff5a00;
+  flex: 1;
+
+  &:hover {
+    background-color: #e65100;
+  }
 }
+
+
 
 /* 載入與錯誤狀態 */
 .loadingContainer,
@@ -302,6 +343,7 @@
     max-width: 100%;
   }
 }
+
 
 .productPrice {
   color: #ff5a00;

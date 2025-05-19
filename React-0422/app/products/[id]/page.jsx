@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import styles from '../../src/styles/page-styles/ProductContent.module.scss'
 import Link from 'next/link'
 import { toast, ToastContainer } from 'react-toastify'
@@ -10,6 +11,7 @@ import 'react-toastify/dist/ReactToastify.css'
 //使用API
 export default function ProductDetailPage() {
   const params = useParams()
+  const router = useRouter()
   const [cart, setCart] = useState([])
   const [wishlist, setWishlist] = useState([])
   const [quantity, setQuantity] = useState(1)
@@ -18,6 +20,7 @@ export default function ProductDetailPage() {
   const [error, setError] = useState(null)
   const [recommendedProducts, setRecommendedProducts] = useState([])
   const [reviews, setReviews] = useState([])
+  const [isFavorite, setIsFavorite] = useState(false)
 
   // 取得商品資料
   useEffect(() => {
@@ -89,11 +92,46 @@ export default function ProductDetailPage() {
   // 處理收藏
   const handleAddToWishlist = async () => {
     try {
-      console.log('Added to wishlist:', product.id)
-      toast.info('已加入收藏')
+      setIsFavorite((prev) => !prev)
+
+      if (!isFavorite) {
+        // 加入收藏
+        toast.success('已加入收藏')
+        console.log('Added to wishlist:', product.id)
+      } else {
+        // 取消收藏
+        toast.info('已取消收藏')
+        console.log('Removed from wishlist:', product.id)
+      }
     } catch (err) {
-      console.error('加入收藏失敗:', err)
-      toast.error('加入收藏失敗')
+      console.error('收藏操作失敗:', err)
+      setIsFavorite((prev) => !prev) // 發生錯誤時恢復原狀態
+      toast.error('操作失敗，請稍後再試')
+    }
+  }
+
+  // 新增直接購買函數
+  const handleBuyNow = async () => {
+    try {
+      if (!product || quantity < 1) return
+
+      // 準備購物車項目
+      const cartItem = {
+        product_id: product.id,
+        name: product.name,
+        price: product.price,
+        quantity: quantity,
+        image: product.image,
+      }
+
+      // 這裡可以加入儲存購物車項目的邏輯
+      console.log('直接購買:', cartItem)
+
+      // 導向購物車頁面
+      router.push('/cart')
+    } catch (err) {
+      console.error('購買失敗:', err)
+      toast.error('購買失敗，請稍後再試')
     }
   }
 
@@ -189,6 +227,9 @@ export default function ProductDetailPage() {
           </div>
 
           <div className={styles.actionButtons}>
+            <button onClick={handleBuyNow} className={styles.buyNowButton}>
+              立即購買
+            </button>
             <button
               onClick={handleAddToCart}
               className={styles.addToCartButton}
@@ -197,9 +238,9 @@ export default function ProductDetailPage() {
             </button>
             <button
               onClick={handleAddToWishlist}
-              className={styles.wishlistButton}
+              className={`${styles.wishlistButton} ${isFavorite ? styles.active : ''}`}
             >
-              加入收藏
+              {isFavorite ? '取消收藏' : '加入收藏'}
             </button>
           </div>
         </div>
