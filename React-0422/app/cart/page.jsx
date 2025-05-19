@@ -23,8 +23,11 @@ export default function CartPage() {
   const [appliedCoupon, setAppliedCoupon] = useState(null)
   // 檢查（沒過跳紅字）
   const handleProceedToContact = () => {
-    console.log('🚀 準備前往 /cart/contact 頁面！')
-    router.push('/cart/contact') // 執行跳轉
+    console.log('🛒 準備跳轉，攜帶的 selectedSubtotal:', selectedSubtotal);
+    console.log('🛒 準備跳轉，攜帶的 shippingFee:', shippingFee);
+    console.log('🛒 準備跳轉，攜帶的 discountAmount:', discountAmount);
+    console.log('🚀 準備前往 /cart/contact 頁面，並攜帶總金額！！')
+    router.push(`/cart/contact?totalAmount=${grandTotal}&subtotal=${selectedSubtotal}&shipping=${shippingFee}&discount=${discountAmount}`) // 執行跳轉
   }
   // 購物車
   const [isAllSelected, setIsAllSelected] = useState(true) // 全選狀態
