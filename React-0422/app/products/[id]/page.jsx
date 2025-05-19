@@ -55,11 +55,31 @@ export default function ProductDetailPage() {
     }
   }, [params.id])
 
+  // 新增數量控制函數
+  const handleQuantityChange = (action) => {
+    if (action === 'increase') {
+      setQuantity((prev) => prev + 1)
+    } else if (action === 'decrease' && quantity > 1) {
+      setQuantity((prev) => prev - 1)
+    }
+  }
+
   // 處理購物車
   const handleAddToCart = async () => {
     try {
-      console.log('Added to cart:', product.id)
-      toast.success('成功加入購物車！')
+      if (!product || quantity < 1) return
+
+      // 準備要傳送的資料
+      const cartItem = {
+        product_id: product.id,
+        name: product.name,
+        price: product.price,
+        quantity: quantity,
+        image: product.image,
+      }
+
+      console.log('加入購物車:', cartItem)
+      toast.success(`成功加入 ${quantity} 件商品`)
     } catch (err) {
       console.error('加入購物車失敗:', err)
       toast.error('加入購物車失敗')
@@ -129,7 +149,7 @@ export default function ProductDetailPage() {
           alt={product.title}
         />
         <div className={styles.productInfoContainer}>
-          <h1 className={styles.productTitle}>{product.title}</h1>
+          <h1 className={styles.productTitle}>{product.name}</h1>
           <div className={styles.ratingContainer}>
             <div className={styles.starsContainer}>
               {[...Array(5)].map((_, i) => (
@@ -146,12 +166,34 @@ export default function ProductDetailPage() {
           <div className={styles.productPrice}>
             NT$ {product.price.toLocaleString()}
           </div>
+
+          {/* 新增數量控制區塊 */}
+          <div className={styles.quantityContainer}>
+            <span className={styles.quantityLabel}>數量</span>
+            <div className={styles.quantityControls}>
+              <button
+                className={styles.quantityButton}
+                onClick={() => handleQuantityChange('decrease')}
+                disabled={quantity <= 1}
+              >
+                -
+              </button>
+              <span className={styles.quantityValue}>{quantity}</span>
+              <button
+                className={styles.quantityButton}
+                onClick={() => handleQuantityChange('increase')}
+              >
+                +
+              </button>
+            </div>
+          </div>
+
           <div className={styles.actionButtons}>
             <button
               onClick={handleAddToCart}
               className={styles.addToCartButton}
             >
-              加入購物車
+              加入購物車 ({quantity})
             </button>
             <button
               onClick={handleAddToWishlist}
