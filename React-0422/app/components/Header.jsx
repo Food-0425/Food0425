@@ -17,41 +17,39 @@ const Header = () => {
   return (
     <div className={styles.navbar}>
       <span>
-        <div>
-          <a href="">
-            <img src="/images/logo/logo-onlyFont-02.png" alt="FOOD-logo" />
-          </a>
-          <div>
-            <Link href="/recipes-landing">
-              <button>
-                <h3>美味食譜</h3>
-              </button>
-            </Link>
-            <Link href="/products">
-              <button>
-                <h3>食材商城</h3>
-              </button>
-            </Link>
-            <Link href="/quick-login">
-              <button>
-                <h3>快速登入測試</h3>
-              </button>
-            </Link>
-            <Link href="/restaurants">
-              <button>
-                <h3>精選文章</h3>
-              </button>
-            </Link>
-            <Link href="/contact">
-              <button>
-                <h3>常見問題</h3>
-              </button>
-            </Link>
-          </div>
+        <a href="">
+          <img src="/images/logo/logo-onlyFont-02.svg" alt="FOOD-logo" />
+        </a>
+        <div className={styles.navList}>
+          <Link href="/recipes-landing">
+            <button>
+              <h3>美味食譜</h3>
+            </button>
+          </Link>
+          <Link href="/products">
+            <button>
+              <h3>食材商城</h3>
+            </button>
+          </Link>
+          <Link href="/quick-login">
+            <button>
+              <h3>快速登入測試</h3>
+            </button>
+          </Link>
+          <Link href="/restaurants">
+            <button>
+              <h3>精選文章</h3>
+            </button>
+          </Link>
+          <Link href="/contact">
+            <button>
+              <h3>常見問題</h3>
+            </button>
+          </Link>
         </div>
 
         {/* 👇會員下拉式選單 */}
-        <div>
+        <div className={styles.navFunction}>
           <div style={{ position: 'relative' }}>
             <button alt="User" onClick={toggleDropdown}>
               <div>

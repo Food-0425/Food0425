@@ -472,7 +472,7 @@ export default function RecipeDetailPage() {
       {/* 美食笑尖兵 */}
       <div className={styles.chefContainer}>
         <div className={styles.chefCard}>
-          <img src="/images/recipes-img/chef.jpg" alt="美食笑尖兵" />
+          <img src="/images/recipes-img/chef.webp" alt="美食笑尖兵" />
           <div className={styles.chefText}>
             <h2>🦸美食笑尖兵</h2>
 
@@ -635,8 +635,9 @@ export default function RecipeDetailPage() {
                         </div>
                       </div>
                       <div className={styles.commentContent}>
-                        
-                        <div className={styles.commentText}>{'目前這個食譜尚未有人留言'}</div>
+                        <div className={styles.commentText}>
+                          {'目前這個食譜尚未有人留言'}
+                        </div>
                       </div>
                     </div>
                     {/* 下面是原本的預設食譜評論卡片樣式 */}

@@ -29,12 +29,10 @@ import {
   MdOutlineRamenDining,
 } from 'react-icons/md'
 import { BsBookmarkPlus, BsBookmarkStarFill } from 'react-icons/bs'
-
 import { GrPrevious } from 'react-icons/gr'
-
 import { GiKitchenScale } from 'react-icons/gi'
 import { PiJarLabelBold } from 'react-icons/pi'
-
+import { HiViewGridAdd, HiOutlineViewGridAdd } from 'react-icons/hi'
 import { IoIosAddCircle, IoIosListBox } from 'react-icons/io'
 import { IoIosArrowBack } from 'react-icons/io'
 
@@ -72,7 +70,4 @@ export {
   FaEye,
   FaEyeSlash,
   FaChevronDown,
-  FaCalendarAlt,
-  FaLock,
-  IoIosListBox,
-}
+  FaCalendarAlt,}

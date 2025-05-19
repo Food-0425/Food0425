@@ -1,45 +1,15 @@
 'use client'
 
 import React from 'react'
-import styles from './styles/HomePage.module.css'
+import styles from './src/styles/page-styles/HomePage.module.scss'
 import Link from 'next/link'
 import Image from 'next/image'
-import { SlMagnifier } from 'react-icons/sl'
-import {
-  IoMdArrowDropleftCircle,
-  IoMdArrowDroprightCircle,
-} from 'react-icons/io'
-import {
-  MdOutlineArrowBackIosNew,
-  MdOutlineArrowForwardIos,
-} from 'react-icons/md'
-
+// import {  } from './icons/icons
+import SemicircleCarousel from './components/SemicircleCarousel'
 export default function HomePage() {
   return (
     <div className={styles.homePage}>
-      <div className={styles.heroSection}>
-        <Image
-          src="/images/hero-bg2.jpg"
-          alt="Hero background"
-          fill
-          className={styles.heroBgImage}
-          priority
-        />
-        <div className={styles.heroContent}>
-          <h1 className={styles.heroTitle}>移動盛宴 美味旅程</h1>
-          <h2 className={styles.heroSubtitle}>
-            當食材遇上有趣的靈魂，讓我們用美食對話吧！
-          </h2>
-        </div>
-        <div className={styles.heroSearch}>
-          <div className={styles.searchInputWrapper}>
-            <div className={styles.searchText}>HI~今天您想吃什麼？</div>
-
-            <SlMagnifier />
-          </div>
-        </div>
-      </div>
-
+      <SemicircleCarousel />
       <div className={styles.featuredSection}>
         <div className={styles.featuredGrid}>
           <div className={styles.featuredLarge}>
@@ -196,61 +166,6 @@ export default function HomePage() {
         </div>
       </div>
 
-      <div className={styles.categorySection}>
-        <button className={styles.categoryArrowLeft}>
-          {/* 左箭頭 */}
-          <IoMdArrowDropleftCircle />
-        </button>
-
-        <div className={styles.categoryContainer}>
-          <div className={styles.categoryItem}>
-            <div className={styles.categoryCircle}>燒烤</div>
-          </div>
-          <div className={styles.categoryItem}>
-            <div className={styles.categoryCircle}>蔬菜</div>
-          </div>
-          <div className={styles.categoryItem}>
-            <div className={styles.categoryCircle}>甜點</div>
-          </div>
-          <div className={styles.categoryItem}>
-            <div className={styles.categoryCircle}>海鮮</div>
-          </div>
-          <div className={styles.categoryItem}>
-            {/* 右箭頭 */}
-            <IoMdArrowDroprightCircle />
-          </div>
-          <div className={styles.categoryItem}>
-            <Image
-              src="/images/category-2.png"
-              alt="Category"
-              width={142}
-              height={142}
-              className={styles.categoryImage}
-            />
-          </div>
-          <div className={styles.categoryItem}>
-            <div className={styles.categoryCircleWithIcon}>
-              <Image
-                src="/images/drink-icon.png"
-                alt="Drinks"
-                width={82}
-                height={82}
-              />
-              <div className={styles.categoryText}>飲品</div>
-            </div>
-          </div>
-        </div>
-
-        <button className={styles.categoryArrowRight}>
-          <Image
-            src="/images/arrow-right.png"
-            alt="Next"
-            width={71}
-            height={71}
-          />
-        </button>
-      </div>
-
       <div className={styles.recipeCardsSection}>
         <div className={styles.sectionHeader}>
           <h2 className={styles.sectionTitle}>種類名稱</h2>
@@ -313,14 +228,6 @@ export default function HomePage() {
             height={400}
             className={styles.shopCarouselImage}
           />
-          <button className={styles.carouselArrowLeft}>
-            {/* 左箭頭 */}
-            <MdOutlineArrowBackIosNew />
-          </button>
-          <button className={styles.carouselArrowRight}>
-            {/* 右箭頭 */}
-            <MdOutlineArrowForwardIos />
-          </button>
         </div>
 
         <div className={styles.topProductsSection}>

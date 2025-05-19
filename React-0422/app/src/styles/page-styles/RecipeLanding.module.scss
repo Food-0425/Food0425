@@ -70,7 +70,7 @@
 }
 
 .carouselExampleFade {
-  height: 450px;
+  height: 400px;
 }
 .carouselInner {
   height: 100%; /* 讓內部容器撐滿輪播容器 */
@@ -159,6 +159,9 @@
   display: flex;
   width: 100%;
   flex-wrap: wrap;
+  @media (max-width: 991px) {
+    margin: 0 10px;
+  }
 }
 
 .recipeCategory {
@@ -172,6 +175,12 @@
   font-weight: $font-weight-title;
   text-align: center;
   flex: 1;
+  @media (max-width: 991px) {
+    padding: 20px 35px;
+    flex-direction: row;
+    align-items: center;
+    // gap: 10px;
+  }
 
   img {
     position: absolute;
@@ -190,6 +199,13 @@
   overflow: hidden;
 }
 
+.viewMoreText {
+  font-size: 32px;
+  @media (max-width: 991px) {
+    margin: 5px 15px;
+    font-size: 32px;
+  }
+}
 .viewMoreButton {
   justify-content: center;
   padding: 10px 0;
@@ -203,6 +219,15 @@
   position: relative;
   z-index: 1;
   overflow: hidden;
+  @media (max-width: 991px) {
+    padding: 5px 20px;
+    margin-top: 0px;
+  }
+  h2 {
+    @media (max-width: 991px) {
+      font-size: 30px;
+    }
+  }
 }
 .viewMoreButton:after {
   content: '';
@@ -241,9 +266,11 @@
 .recipeCardsContainer {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  min-width: 240px;
   gap: 15px;
   padding: 15px;
+  @media (max-width: 991px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 .featuredSection {
@@ -284,11 +311,28 @@
         h2 {
           padding: 20px 0;
           color: $color-primary;
-          font-size: $font-size-h2;
+          font-size: $font-size-h3;
           align-self: stretch;
         }
       }
     }
+  }
+}
+
+// 手機橫向滑動樣式
+@media (max-width: 1150px) {
+  .featuredSection .featuredContainer {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    gap: 12px;
+    padding: 0 20px 30px 20px;
+  }
+  .featuredSection .featuredCard {
+    flex: 0 0 45vw;
+    min-width: 45vw;
+    max-width: 50vw;
+    width: auto;
   }
 }
 
@@ -324,19 +368,9 @@
     max-width: 100%;
   }
 
-  .recipeCategory {
-    padding: 0 20px 100px;
-    white-space: initial;
-  }
-
   .categoryTitle {
     font-size: 40px;
     padding: 0 20px;
-    white-space: initial;
-  }
-
-  .viewMoreButton {
-    padding: 25px 20px;
     white-space: initial;
   }
 
@@ -351,20 +385,6 @@
 
   .recipeCardContent {
     padding: 25px 20px;
-  }
-
-  .featuredSection {
-    max-width: 100%;
-    white-space: initial;
-  }
-
-  .featuredContainer {
-    max-width: 100%;
-    white-space: initial;
-  }
-
-  .featuredCard {
-    white-space: initial;
   }
 
   .featuredCardTitle {

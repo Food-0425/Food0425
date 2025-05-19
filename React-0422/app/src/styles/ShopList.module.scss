@@ -5,10 +5,8 @@
   box-shadow: 2px 3px 5px 0 rgba(0, 0, 0, 0.1);
   background-color: #fff;
   position: relative;
-  min-width: 240px;
   overflow: hidden;
   flex-shrink: 1;
-  width: 320px;
   transition:
     transform 0.3s ease,
     box-shadow 0.3s ease; // 添加平滑過渡效果

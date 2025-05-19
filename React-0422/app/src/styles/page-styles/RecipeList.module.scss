@@ -4,6 +4,7 @@
 .container {
   width: 100%;
   display: flex;
+  flex-direction: column;
 
   .content {
     margin: 50px auto;
@@ -18,264 +19,29 @@
   }
 }
 
-/* Hero Section */
-.heroSection {
-  width: 100%;
-  padding-top: 80px;
-  font-family:
-    'Noto Sans TC',
-    -apple-system,
-    Roboto,
-    Helvetica,
-    sans-serif;
-  color: #faf8f9;
-  font-weight: 700;
-  white-space: nowrap;
-  text-align: center;
-}
-
-@media (max-width: 991px) {
-  .heroSection {
-    max-width: 100%;
-    white-space: initial;
-  }
-}
-
-.heroContent {
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  min-height: 320px;
-  width: 100%;
-  padding: 108px 0;
-  overflow: hidden;
-  align-items: center;
-  justify-content: center;
-}
-
-@media (max-width: 991px) {
-  .heroContent {
-    max-width: 100%;
-    padding: 100px 0;
-    white-space: initial;
-  }
-}
-
-.heroBackground {
-  position: absolute;
-  inset: 0;
-  height: 100%;
-  width: 100%;
-}
-
-.heroImage {
-  position: absolute;
-  inset: 0;
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
-  object-position: center;
-}
-
-.heroTextContainer {
-  position: relative;
-  max-width: 1280px;
-  justify-content: center;
-  align-items: stretch;
-  display: flex;
-  width: 1280px;
-  flex-direction: column;
-}
-
-@media (max-width: 991px) {
-  .heroTextContainer {
-    white-space: initial;
-  }
-}
-
-.heroTitle {
-  text-shadow: 0px 3px 10px rgba(0, 0, 0, 0.5);
-  font-size: 64px;
-  margin: 0;
-}
-
-@media (max-width: 991px) {
-  .heroTitle {
-    max-width: 100%;
-    font-size: 40px;
-  }
-}
-
-.heroSubtitle {
-  text-shadow: 0px 3px 10px rgba(0, 0, 0, 0.5);
-  font-size: 32px;
-  margin: 35px 0 0;
-}
-
-@media (max-width: 991px) {
-  .heroSubtitle {
-    max-width: 100%;
-  }
-}
-
-/* Category Section */
-.categorySection {
-  max-width: 1280px;
-  justify-content: center;
-  align-items: stretch;
-  align-self: center;
-  display: flex;
-  width: 1280px;
-  flex-direction: column;
-  overflow: hidden;
-  font-family:
-    'Noto Sans TC',
-    -apple-system,
-    Roboto,
-    Helvetica,
-    sans-serif;
-  font-size: 20px;
-  color: #faf8f9;
-  font-weight: 700;
-  white-space: nowrap;
-  text-align: center;
-  padding: 45px 0;
-}
-
-@media (max-width: 991px) {
-  .categorySection {
-    white-space: initial;
-  }
-}
-
-.categoryContainer {
-  display: flex;
-  width: 100%;
-  align-items: center;
-  gap: 20px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-@media (max-width: 991px) {
-  .categoryContainer {
-    max-width: 100%;
-    white-space: initial;
-  }
-}
-
-.arrowIcon {
-  aspect-ratio: 1.01;
-  object-fit: contain;
-  object-position: center;
-  width: 71px;
-  border-radius: 200px;
-  box-shadow: 0px 0px 0px 16px rgba(0, 0, 0, 0.05);
-  align-self: stretch;
-  margin: auto 0;
-  min-height: 71px;
-  flex-shrink: 0;
-}
-
-.categoryItems {
-  align-self: stretch;
-  display: flex;
-  min-width: 240px;
-  margin: auto 0;
-  align-items: center;
-  gap: 15px;
-  justify-content: start;
-  flex-wrap: wrap;
-}
-
-@media (max-width: 991px) {
-  .categoryItems {
-    max-width: 100%;
-    white-space: initial;
-  }
-}
-
-.categoryItem {
-  aspect-ratio: 1/1;
-  border-radius: 500px;
-  background-color: #df6c2d;
-  align-self: stretch;
-  margin: auto 0;
-  padding: 107px 31px 20px;
-  overflow: hidden;
-  width: 142px;
-  height: 142px;
-}
-
-.categoryItems .categoryItem:first-child,
-.categoryItems .categoryItem:last-child {
-  padding: 107px 51px 20px;
-}
-
-@media (max-width: 991px) {
-  .categoryItem {
-    padding: 100px 20px;
-    white-space: initial;
-  }
-}
-
-.categoryImage {
-  aspect-ratio: 1/1;
-  object-fit: contain;
-  object-position: center;
-  width: 142px;
-  align-self: stretch;
-  margin: auto 0;
-  flex-shrink: 0;
-}
-
-/* Recipe Section */
+/* Recipe Cards Section */
 .recipeSection {
-  max-width: 1280px;
-  padding-bottom: 45px;
-  justify-content: center;
-  align-items: stretch;
-  align-self: center;
-  display: flex;
-  width: 1280px;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.recipeGrid {
-  display: flex;
-  width: 100%;
-  gap: 40px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-@media (max-width: 991px) {
+  margin-bottom: 0px;
   .recipeGrid {
-    max-width: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+  }
+  @media (max-width: 991px) {
+    .recipeGrid {
+      grid-template-columns: repeat(2, 1fr);
+      padding: 0 15px;
+    }
   }
 }
 
 /* Pagination */
 .paginationSection {
   display: flex;
-  min-height: 173px;
-  width: 100%;
-  padding: 42px 0 81px;
-  flex-direction: column;
-  align-items: center;
-  font-family:
-    'Noto Sans TC',
-    -apple-system,
-    Roboto,
-    Helvetica,
-    sans-serif;
   font-size: 20px;
   color: #faf8f9;
-  font-weight: 700;
-  white-space: nowrap;
-  text-align: center;
   justify-content: center;
+  margin: 50px;
 }
 
 @media (max-width: 991px) {
@@ -287,157 +53,99 @@
 
 .pagination {
   display: flex;
-  align-items: center;
   gap: 25px;
-  justify-content: start;
-}
-
-@media (max-width: 991px) {
-  .pagination {
-    max-width: 100%;
-    white-space: initial;
+  h2 {
+    display: flex;
+    align-items: center;
+    z-index: 5;
+    color: $color-accent;
   }
-}
-
-.paginationArrow {
-  aspect-ratio: 0.69;
-  object-fit: contain;
-  object-position: center;
-  width: 11px;
-  stroke-width: 5px;
-  stroke: #df6c2d;
-  align-self: stretch;
-  margin: auto 0;
-  flex-shrink: 0;
-}
-
-.paginationItem {
-  align-self: stretch;
-  display: flex;
-  margin: auto 0;
-  align-items: center;
-  gap: 10px;
-  justify-content: center;
-  width: 50px;
-}
-
-@media (max-width: 991px) {
-  .paginationItem {
-    white-space: initial;
+  h2:nth-of-type(2) {
+    transform: scale(-1);
+  }
+  @media (max-width: 991px) {
+    .pagination {
+      max-width: 100%;
+      white-space: initial;
+    }
   }
 }
 
 .paginationButton {
   border-radius: 100px;
   background-color: #eeb392;
-  align-self: stretch;
-  margin: auto 0;
   width: 50px;
-  padding: 0 5px;
-  overflow: hidden;
   height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-@media (max-width: 991px) {
-  .paginationButton {
-    white-space: initial;
-  }
-}
-
 .paginationButtonActive {
-  border-radius: 100px;
   box-shadow: 0px 0px 0px 10px rgba(0, 0, 0, 0.05);
-  background-color: #ff5a00;
+  background-color: $color-bright;
   color: #fff;
 }
 
 /* Featured Section */
 .featuredSection {
-  justify-content: center;
-  align-items: center;
-  background-color: #df6c2d;
-  display: flex;
   width: 100%;
-  padding: 80px 0;
-  flex-direction: column;
-  overflow: hidden;
-  font-family:
-    'Noto Sans TC',
-    -apple-system,
-    Roboto,
-    Helvetica,
-    sans-serif;
-  font-size: 20px;
-  color: #423c3a;
-  font-weight: 700;
-  white-space: nowrap;
+  padding: 50px 0 70px 0;
   text-align: center;
-}
+  background-color: $color-accent;
+  div {
+    margin: 0 auto;
+    width: 100%;
+    max-width: 1280px;
 
-@media (max-width: 991px) {
-  .featuredSection {
-    max-width: 100%;
-    white-space: initial;
+    h2 {
+      color: $color-background;
+      font-size: 32px;
+      padding: 0 0 30px 0;
+    }
   }
 }
 
 .featuredGrid {
   display: flex;
-  align-items: center;
-  gap: 40px 54px;
-  justify-content: start;
-  flex-wrap: wrap;
+  gap: 15px;
+  color: $color-primary;
 }
-
-@media (max-width: 991px) {
-  .featuredGrid {
-    max-width: 100%;
-    white-space: initial;
-  }
-}
-
 .featuredCard {
-  justify-content: center;
-  align-items: stretch;
   border-radius: 30px;
   background-color: #fff;
-  align-self: stretch;
-  display: flex;
-  min-width: 240px;
-  margin: auto 0;
-  flex-direction: column;
+  width: 100%;
   overflow: hidden;
-  width: 259px;
-}
-
-@media (max-width: 991px) {
-  .featuredCard {
-    white-space: initial;
+  .featuredCardImage {
+    background-color: $color-background-error;
+    height: 200px;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+  .featuredTitle {
+    padding: 20px 0;
+    color: $color-primary;
+    font-size: $font-size-h3;
+    align-self: stretch;
   }
 }
 
-.featuredImage {
-  aspect-ratio: 1.3;
-  object-fit: contain;
-  object-position: center;
-  width: 100%;
-  min-height: 200px;
-}
-
-.featuredTitle {
-  align-self: stretch;
-  flex: 1;
-  margin-top: 25px;
-  width: 100%;
-  padding: 0 25px 25px;
-}
-
-@media (max-width: 991px) {
-  .featuredTitle {
-    padding: 0 20px 25px;
-    white-space: initial;
+// 手機橫向滑動樣式
+@media (max-width: 1150px) {
+  .featuredSection .featuredGrid {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    gap: 12px;
+    padding: 0 20px 30px 20px;
+  }
+  .featuredSection .featuredCard {
+    flex: 0 0 45vw;
+    min-width: 45vw;
+    max-width: 50vw;
+    width: auto;
   }
 }
