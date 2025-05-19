@@ -191,7 +191,7 @@ export default function RegisterPage() {
       <div className={styles.registerForm}>
         <div className={styles.logoContainer}>
           <Image
-            src="/images/logo/logo-onlyFont-02.png"
+            src="/images/logo/logo-onlyFont-02.svg"
             alt="Logo"
             width={45}
             height={68}
