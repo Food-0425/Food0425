@@ -4,10 +4,15 @@ import React, { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import styles from '../../src/styles/page-styles/ProductContent.module.scss'
 import Link from 'next/link'
+import { toast, ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 //使用API
 export default function ProductDetailPage() {
   const params = useParams()
+  const [cart, setCart] = useState([])
+  const [wishlist, setWishlist] = useState([])
+  const [quantity, setQuantity] = useState(1)
   const [product, setProduct] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -19,25 +24,26 @@ export default function ProductDetailPage() {
     const fetchProduct = async () => {
       try {
         setLoading(true)
-        // 確保使用完整的 API URL
-        const response = await fetch(`http://localhost:3001/products/api/products/${params.id}`)
-        
-        console.log('API 回應狀態:', response.status) // 除錯用
-        
+        const response = await fetch(
+          `http://localhost:3001/products/api/products/${params.id}`
+        )
+
+        console.log('API 回應狀態:', response.status)
+
         if (!response.ok) {
           throw new Error('商品資料載入失敗')
         }
-        
+
         const data = await response.json()
-        console.log('接收到的資料:', data) // 除錯用
-        
+        console.log('接收到的資料:', data)
+
         if (data.success) {
           setProduct(data.data)
         } else {
           throw new Error(data.error || '無法載入商品資料')
         }
       } catch (err) {
-        console.error('錯誤詳情:', err) // 除錯用
+        console.error('錯誤詳情:', err)
         setError(err.message)
       } finally {
         setLoading(false)
@@ -52,24 +58,25 @@ export default function ProductDetailPage() {
   // 處理購物車
   const handleAddToCart = async () => {
     try {
-      // 實作購物車邏輯
       console.log('Added to cart:', product.id)
+      toast.success('成功加入購物車！')
     } catch (err) {
       console.error('加入購物車失敗:', err)
+      toast.error('加入購物車失敗')
     }
   }
 
   // 處理收藏
   const handleAddToWishlist = async () => {
     try {
-      // 實作收藏邏輯
       console.log('Added to wishlist:', product.id)
+      toast.info('已加入收藏')
     } catch (err) {
       console.error('加入收藏失敗:', err)
+      toast.error('加入收藏失敗')
     }
   }
 
-  // 載入中狀態
   if (loading) {
     return (
       <div className={styles.loadingContainer}>
@@ -79,7 +86,6 @@ export default function ProductDetailPage() {
     )
   }
 
-  // 錯誤狀態
   if (error) {
     return (
       <div className={styles.errorContainer}>
@@ -89,7 +95,6 @@ export default function ProductDetailPage() {
     )
   }
 
-  // 找不到商品
   if (!product) {
     return (
       <div className={styles.errorContainer}>
@@ -101,6 +106,21 @@ export default function ProductDetailPage() {
 
   return (
     <div className={styles.productContainer}>
+      {/* Toast 通知，放在頂層比較不會出錯 */}
+      <ToastContainer
+        position="top-right"
+        autoClose={2500}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        style={{ zIndex: 9999 }} // 確保 Toast 在最上層
+      />
+
       {/* 主要商品資訊 */}
       <div className={styles.productWrapper}>
         <img
@@ -111,7 +131,6 @@ export default function ProductDetailPage() {
         <div className={styles.productInfoContainer}>
           <h1 className={styles.productTitle}>{product.title}</h1>
           <div className={styles.ratingContainer}>
-            {/* 評分星星 */}
             <div className={styles.starsContainer}>
               {[...Array(5)].map((_, i) => (
                 <img
@@ -127,7 +146,6 @@ export default function ProductDetailPage() {
           <div className={styles.productPrice}>
             NT$ {product.price.toLocaleString()}
           </div>
-          {/* 操作按鈕 */}
           <div className={styles.actionButtons}>
             <button
               onClick={handleAddToCart}
@@ -151,7 +169,7 @@ export default function ProductDetailPage() {
         <p className={styles.descriptionText}>{product.description}</p>
       </section>
 
-      {/* Recommended Products Section */}
+      {/* 推薦商品區塊 */}
       <div className={styles.recommendedSection}>
         <div className={styles.recommendedTitle}>推薦商品</div>
         <div className={styles.recommendedGrid}>
@@ -182,7 +200,7 @@ export default function ProductDetailPage() {
         </div>
       </div>
 
-      {/* Reviews Section */}
+      {/* 評論區 */}
       <div className={styles.reviewsSection}>
         <div className={styles.reviewsTitle}>精選留言</div>
         <div className={styles.reviewsGrid}>
@@ -197,7 +215,6 @@ export default function ProductDetailPage() {
                   />
                 </div>
                 <div className={styles.userInfo}>
-                  {/*這裡會放icon*/}
                   <img
                     src="/images/five-stars.png"
                     className={styles.userRating}
