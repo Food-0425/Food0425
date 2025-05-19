@@ -73,7 +73,9 @@ export default function RootLayout({ children }) {
               }} // 動畫持續 0.3 秒
               style={{ width: '100%', position: 'relative' }} // 確保 main 佔滿寬度，避免佈局問題
             >*/}
-          {children} {/* 這裡會渲染當前路由對應的 page.jsx 內容 */}
+          <main>
+            {children} {/* 這裡會渲染當前路由對應的 page.jsx 內容 */}
+          </main>
           {/* </motion.main>
           </AnimatePresence> */}
           <Footer />
