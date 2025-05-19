@@ -45,16 +45,15 @@ export default function RootLayout({ children }) {
         <Script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></Script>
         <Providers>
           <Header />
-          {/*  
-          加入 Loading 組件
+
+          {/* 加入 Loading 組件 */}
           {isLoading && <Loading />}
-          {/* AnimatePresence 包圍會隨 key 變化的 motion 元件 
+          {/* AnimatePresence 包圍會隨 key 變化的 motion 元件  */}
           <AnimatePresence mode="wait" initial={false}>
-            {/*
-              motion.main 將動畫應用到 <main> 標籤本身
+            {/* motion.main 將動畫應用到 <main> 標籤本身
               key={pathname} 告訴 AnimatePresence 這個元素代表的「頁面」變了
-              initial, animate, exit 定義動畫的開始、結束、退出狀態
-            
+              initial, animate, exit 定義動畫的開始、結束、退出狀態 */}
+
             <motion.main
               key={pathname} // 必須將 pathname 作為 key
               initial="initial"
@@ -72,10 +71,10 @@ export default function RootLayout({ children }) {
                 // duration: 0.3,
               }} // 動畫持續 0.3 秒
               style={{ width: '100%', position: 'relative' }} // 確保 main 佔滿寬度，避免佈局問題
-            >*/}
-          {children} {/* 這裡會渲染當前路由對應的 page.jsx 內容 */}
-          {/* </motion.main>
-          </AnimatePresence> */}
+            >
+              {children} {/* 這裡會渲染當前路由對應的 page.jsx 內容 */}
+            </motion.main>
+          </AnimatePresence>
           <Footer />
         </Providers>
       </body>
