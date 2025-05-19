@@ -19,13 +19,25 @@ export default function ProductDetailPage() {
     const fetchProduct = async () => {
       try {
         setLoading(true)
-        const response = await fetch(`/api/products/${params.id}`)
+        // 確保使用完整的 API URL
+        const response = await fetch(`http://localhost:3001/products/api/products/${params.id}`)
+        
+        console.log('API 回應狀態:', response.status) // 除錯用
+        
         if (!response.ok) {
           throw new Error('商品資料載入失敗')
         }
+        
         const data = await response.json()
-        setProduct(data.data)
+        console.log('接收到的資料:', data) // 除錯用
+        
+        if (data.success) {
+          setProduct(data.data)
+        } else {
+          throw new Error(data.error || '無法載入商品資料')
+        }
       } catch (err) {
+        console.error('錯誤詳情:', err) // 除錯用
         setError(err.message)
       } finally {
         setLoading(false)
