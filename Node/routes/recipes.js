@@ -222,7 +222,7 @@ router.post('/api/feedback', async (req, res) => {
   const { recipeId, userId, title, context,is_like } = req.body;
 
   // 驗證輸入
-  if (!recipeId || !userId || !title || !context || !is_like) {
+  if (!recipeId || !userId || !title || !context || is_like === undefined || is_like === null) {
       return res.status(400).json({ success: false, error: "RecipeId, UserId, Title, and Context are required" });
   }
 
@@ -329,7 +329,7 @@ router.post('/api/add', async (req, res) => {
 
     if (
   !ingredients ||
-  !Array.isArray(ingredients) ||
+  // !Array.isArray(ingredients) ||
   ingredients.length === 0
 ) {
   return res.status(400).json({

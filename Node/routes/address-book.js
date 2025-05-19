@@ -6,7 +6,6 @@ import db from "../utils/connect-mysql.js";
 import fs from "node:fs/promises";
 
 const dateFm = "YYYY-MM-DD";
-// 這邊的功能是輸入ZOD驗證的驗證規則
 const abItemSchema = z.object({
     name: z
         .string({ message: "姓名欄為必填欄位" })

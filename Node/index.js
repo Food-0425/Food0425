@@ -15,11 +15,11 @@ import jwt from "jsonwebtoken";
 // 設定連到食譜的路由
 import recipesRouter from "./routes/recipes.js";
 // 設定連到商城的路由
-import prouductRouter from "./routes/prouduct.js";
+import productsRouter from "./routes/products.js";
 // 設定連到使用者的路由 (目前還未使用到，所以先關掉)
 import usersRouter from "./routes/users.js";
 // 設定連到評價的路由
-import reviewRouter from "./routes/prouduct-review.js";
+import reviewRouter from "./routes/products-review.js";
 // 設定到餐廳詳細頁面的路由
 import restaurantsRouter from "./routes/restaurants.js";
 // 設定到購物車的路由
@@ -105,15 +105,15 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());  // <-- 處理 JSON 請求 body
 // 連到食譜
 app.use('/recipes', recipesRouter);
-app.use('/prouduct', prouductRouter);
+app.use('/products', productsRouter);
 // 連到use這個路由
 app.use('/users', usersRouter);
 // 連到評價的
-app.use('/prouduct-review', reviewRouter);
+app.use('/products-review', reviewRouter);
 // 連到餐廳詳細頁面的
 app.use('/restaurants', restaurantsRouter);
 // 連到購物車
- app.use('/cart', cartRouter);
+app.use('/cart', cartRouter);
 // 連到聯絡我們的
 app.use('/contact', contactRouter);
 

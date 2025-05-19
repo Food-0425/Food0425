@@ -1,7 +1,7 @@
 'use client'
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import styles from '../../styles/RecipeLanding.module.css'
+import styles from '../../src/styles/page-styles/RecipeLanding.module.scss'
 import { FaSearch } from 'react-icons/fa'
 
 export default function RecipeCarousel() {
@@ -24,45 +24,46 @@ export default function RecipeCarousel() {
     >
       <div className={styles.carouselOverlay}>
         <div className={styles.heroContent}>
-          <h2>移動盛宴 美味旅程</h2>
-          <h3>當食材遇上有趣的靈魂，讓我們用美食對話吧！</h3>
+          <h1>移動盛宴 美味旅程</h1>
+          <h2>當食材遇上有趣的靈魂，讓我們用美食對話吧！</h2>
         </div>
         <div className={styles.searchBarContainer}>
           <div className={styles.searchBarInner}>
             <input
               type="text"
-              className={styles.searchInput}
               placeholder="HI~今天您想吃什麼？"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)} // 更新關鍵字
             />
-            <button className={styles.searchButton} onClick={handleSearch}>
+            <button onClick={handleSearch}>
               <FaSearch className={styles.searchIcon} />
             </button>
           </div>
         </div>
       </div>
-      <div className="carousel-inner">
-        <div className="carousel-item active">
-          <img
-            src="/images/carousel/carousel-01.jpg"
-            className="d-block w-100"
-            alt="..."
-          />
-        </div>
-        <div className="carousel-item">
-          <img
-            src="/images/carousel/carousel-02.jpg"
-            className="d-block w-100"
-            alt="..."
-          />
-        </div>
-        <div className="carousel-item">
-          <img
-            src="/images/carousel/carousel-03.jpg"
-            className="d-block w-100"
-            alt="..."
-          />
+      <div className={styles.carouselExampleFade}>
+        <div className={`carousel-inner ${styles.carouselInner}`}>
+          <div className="carousel-item active">
+            <img
+              src="/images/carousel/carousel-01.jpg"
+              className="d-block w-100"
+              alt="..."
+            />
+          </div>
+          <div className="carousel-item">
+            <img
+              src="/images/carousel/carousel-02.jpg"
+              className="d-block w-100"
+              alt="..."
+            />
+          </div>
+          <div className="carousel-item">
+            <img
+              src="/images/carousel/carousel-03.jpg"
+              className="d-block w-100"
+              alt="..."
+            />
+          </div>
         </div>
       </div>
       <button

@@ -22,21 +22,35 @@ const Header = () => {
             <img src="/images/logo/logo-onlyFont-02.png" alt="FOOD-logo" />
           </a>
           <div>
-            <button>
-              <h3>美味食譜</h3>
-            </button>
-            <button>
-              <h3>食材商城</h3>
-            </button>
-            <button>
-              <h3>我的收藏</h3>
-            </button>
-            <button>
-              <h3>常見問題</h3>
-            </button>
+            <Link href="/recipes-landing">
+              <button>
+                <h3>美味食譜</h3>
+              </button>
+            </Link>
+            <Link href="/products">
+              <button>
+                <h3>食材商城</h3>
+              </button>
+            </Link>
+            <Link href="/quick-login">
+              <button>
+                <h3>快速登入測試</h3>
+              </button>
+            </Link>
+            <Link href="/restaurants">
+              <button>
+                <h3>精選文章</h3>
+              </button>
+            </Link>
+            <Link href="/contact">
+              <button>
+                <h3>常見問題</h3>
+              </button>
+            </Link>
           </div>
         </div>
 
+        {/* 👇會員下拉式選單 */}
         <div>
           <div style={{ position: 'relative' }}>
             <button alt="User" onClick={toggleDropdown}>
@@ -77,9 +91,6 @@ const Header = () => {
                   >
                     登出
                   </a>
-                </li>
-                <li>
-                  <a href="">登出</a>
                 </li>
               </ul>
             )}

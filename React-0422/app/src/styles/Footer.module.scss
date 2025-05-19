@@ -1,143 +1,76 @@
 @use '_variables' as *;
-@import './mixins.scss';
+@use './mixins.scss' as *;
 
 .footer {
   background-color: #423c3a;
-  min-height: 400px;
   width: 100%;
 }
 
 .footerContent {
-  font-family: $font-family-default;
   max-width: 1280px;
   justify-content: space-between;
   display: flex;
   margin: auto;
-}
 
-.leftSection {
-  display: flex;
-  padding: 45px 0;
-  flex-direction: column;
-  width: 457px;
-  h3 {
-    color: #fff5ee;
-    font-size: $font-size-h3;
-    font-weight: $font-weight-h3;
+  span:nth-of-type(1) {
+    display: flex;
+    padding: 50px 0 60px 0;
+    flex-direction: column;
+    h3 {
+      color: #fff5ee;
+      font-size: $font-size-h3;
+      font-weight: $font-weight-title;
+    }
+
+    div {
+      margin-top: 20px;
+      min-height: 190px;
+      font-size: $font-size-p;
+      textarea {
+        border: 2px solid $color-background-error;
+        border-radius: 15px;
+        background-color: rgba(250, 248, 249, 0.45);
+        width: 100%;
+        padding: 10px 15px;
+        height: 100%;
+        &:focus {
+          outline: none;
+          border: 3px solid $color-accent;
+          box-shadow: none; // 如有陰影也一併取消
+        }
+      }
+    }
   }
-}
+  span:nth-of-type(2) {
+    display: flex;
+    min-width: 240px;
+    padding: 45px 0;
+    flex-direction: column;
+    // align-items: flex-end;
+    justify-content: center;
 
-.formFeedback {
-  margin-top: 20px;
-  min-height: 191px;
-  width: 100%;
-  font-size: 16px;
-  font-weight: 400;
-  white-space: nowrap;
-  letter-spacing: 0.48px;
-}
-
-.feedbackInput {
-  flex: 1;
-  flex-shrink: 1;
-  flex-basis: 0%;
-  border-radius: 15px;
-  background-color: rgba(250, 248, 249, 0.45);
-  margin-top: 15px;
-  width: 100%;
-  padding: 10px 15px;
-  gap: 20px;
-  overflow: hidden;
-  color: #faf8f9;
-  height: 100%;
-}
-
-.rightSection {
-  display: flex;
-  min-width: 240px;
-  padding: 45px 0;
-  flex-direction: column;
-  align-items: flex-end;
-  justify-content: center;
-}
-
-.faqButton {
-  align-self: stretch;
-  border-radius: 71.97px;
-  box-shadow: 0px 0px 0px 15px rgba(0, 0, 0, 0.05);
-  background-color: #df6c2d;
-  overflow: hidden;
-  font-family:
-    'Noto Sans TC',
-    -apple-system,
-    Roboto,
-    Helvetica,
-    sans-serif;
-  font-size: 36px;
-  color: #faf8f9;
-  font-weight: 700;
-  white-space: nowrap;
-  text-align: center;
-  padding: 25px 60px;
-  cursor: pointer;
-}
-
-.socialIcons {
-  display: flex;
-  margin-top: 20px;
-  align-items: flex-end;
-  gap: 12px;
-  justify-content: start;
-  button {
-    @include button-icon;
+    div:nth-of-type(1) {
+      button {
+        background: none;
+      }
+      h3 {
+        @include button-text;
+      }
+    }
+    div:nth-of-type(2) {
+      display: flex;
+      margin-top: 20px;
+      gap: 15px;
+      button {
+        @include button-icon;
+      }
+    }
   }
-}
-
-.socialIconPlaceholder {
-  box-shadow: 2px 3px 8px 0px rgba(0, 0, 0, 0.25);
-  width: 79px;
-}
-
-.placeholderCircle {
-  background-color: #ececec;
-  border-radius: 50%;
-  display: flex;
-  width: 79px;
-  flex-shrink: 0;
-  height: 79px;
-  fill: #ececec;
 }
 
 @media (max-width: 991px) {
   .footer {
     max-width: 100%;
     padding: 0 20px;
-  }
-
-  .leftSection {
-    max-width: 100%;
-  }
-
-  .thankYouMessage {
-    max-width: 100%;
-  }
-
-  .formFeedback {
-    max-width: 100%;
-    white-space: initial;
-  }
-
-  .feedbackText {
-    max-width: 100%;
-  }
-
-  .feedbackInput {
-    max-width: 100%;
-    white-space: initial;
-  }
-
-  .faqButton {
-    padding: 25px 20px;
-    white-space: initial;
   }
 }

@@ -9,22 +9,26 @@ const Footer = () => {
   return (
     <div className={styles.footer}>
       <div className={styles.footerContent}>
-        <div className={styles.leftSection}>
+        <span>
           <h3>謝謝您來逛逛我們的網站！有您的瀏覽，我們超開心 🎉</h3>
           <h3>如果您願意也歡迎留下回饋，讓我們變得更棒、更貼近您的期待！</h3>
-          <div className={styles.formFeedback}>
-            <input
+          <div>
+            <textarea
               type="text"
-              className={styles.feedbackInput}
               placeholder="請留下您寶貴的意見，讓我們變得更好唷~"
             />
           </div>
-        </div>
-        <div className={styles.rightSection}>
-          <Link href="/faq">
-            <div className={styles.faqButton}>常見問題</div>
-          </Link>
-          <div className={styles.socialIcons}>
+        </span>
+        <span>
+          <div>
+            <button>
+              <Link href="/contact">
+                <h3>常見問題</h3>
+              </Link>
+            </button>
+          </div>
+
+          <div>
             <button>
               <FaFacebook />
             </button>
@@ -38,7 +42,7 @@ const Footer = () => {
               <FaYoutube />
             </button>
           </div>
-        </div>
+        </span>
       </div>
     </div>
   )

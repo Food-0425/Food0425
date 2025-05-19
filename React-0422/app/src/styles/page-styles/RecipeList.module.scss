@@ -1,0 +1,443 @@
+@use '../variables' as *;
+@use '../mixins.scss' as *;
+
+.container {
+  width: 100%;
+  display: flex;
+
+  .content {
+    margin: 50px auto;
+    width: 100%;
+    max-width: 1280px;
+  }
+}
+
+@media (max-width: 991px) {
+  .content {
+    max-width: 100%;
+  }
+}
+
+/* Hero Section */
+.heroSection {
+  width: 100%;
+  padding-top: 80px;
+  font-family:
+    'Noto Sans TC',
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
+  color: #faf8f9;
+  font-weight: 700;
+  white-space: nowrap;
+  text-align: center;
+}
+
+@media (max-width: 991px) {
+  .heroSection {
+    max-width: 100%;
+    white-space: initial;
+  }
+}
+
+.heroContent {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  min-height: 320px;
+  width: 100%;
+  padding: 108px 0;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 991px) {
+  .heroContent {
+    max-width: 100%;
+    padding: 100px 0;
+    white-space: initial;
+  }
+}
+
+.heroBackground {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.heroImage {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.heroTextContainer {
+  position: relative;
+  max-width: 1280px;
+  justify-content: center;
+  align-items: stretch;
+  display: flex;
+  width: 1280px;
+  flex-direction: column;
+}
+
+@media (max-width: 991px) {
+  .heroTextContainer {
+    white-space: initial;
+  }
+}
+
+.heroTitle {
+  text-shadow: 0px 3px 10px rgba(0, 0, 0, 0.5);
+  font-size: 64px;
+  margin: 0;
+}
+
+@media (max-width: 991px) {
+  .heroTitle {
+    max-width: 100%;
+    font-size: 40px;
+  }
+}
+
+.heroSubtitle {
+  text-shadow: 0px 3px 10px rgba(0, 0, 0, 0.5);
+  font-size: 32px;
+  margin: 35px 0 0;
+}
+
+@media (max-width: 991px) {
+  .heroSubtitle {
+    max-width: 100%;
+  }
+}
+
+/* Category Section */
+.categorySection {
+  max-width: 1280px;
+  justify-content: center;
+  align-items: stretch;
+  align-self: center;
+  display: flex;
+  width: 1280px;
+  flex-direction: column;
+  overflow: hidden;
+  font-family:
+    'Noto Sans TC',
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
+  font-size: 20px;
+  color: #faf8f9;
+  font-weight: 700;
+  white-space: nowrap;
+  text-align: center;
+  padding: 45px 0;
+}
+
+@media (max-width: 991px) {
+  .categorySection {
+    white-space: initial;
+  }
+}
+
+.categoryContainer {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 991px) {
+  .categoryContainer {
+    max-width: 100%;
+    white-space: initial;
+  }
+}
+
+.arrowIcon {
+  aspect-ratio: 1.01;
+  object-fit: contain;
+  object-position: center;
+  width: 71px;
+  border-radius: 200px;
+  box-shadow: 0px 0px 0px 16px rgba(0, 0, 0, 0.05);
+  align-self: stretch;
+  margin: auto 0;
+  min-height: 71px;
+  flex-shrink: 0;
+}
+
+.categoryItems {
+  align-self: stretch;
+  display: flex;
+  min-width: 240px;
+  margin: auto 0;
+  align-items: center;
+  gap: 15px;
+  justify-content: start;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 991px) {
+  .categoryItems {
+    max-width: 100%;
+    white-space: initial;
+  }
+}
+
+.categoryItem {
+  aspect-ratio: 1/1;
+  border-radius: 500px;
+  background-color: #df6c2d;
+  align-self: stretch;
+  margin: auto 0;
+  padding: 107px 31px 20px;
+  overflow: hidden;
+  width: 142px;
+  height: 142px;
+}
+
+.categoryItems .categoryItem:first-child,
+.categoryItems .categoryItem:last-child {
+  padding: 107px 51px 20px;
+}
+
+@media (max-width: 991px) {
+  .categoryItem {
+    padding: 100px 20px;
+    white-space: initial;
+  }
+}
+
+.categoryImage {
+  aspect-ratio: 1/1;
+  object-fit: contain;
+  object-position: center;
+  width: 142px;
+  align-self: stretch;
+  margin: auto 0;
+  flex-shrink: 0;
+}
+
+/* Recipe Section */
+.recipeSection {
+  max-width: 1280px;
+  padding-bottom: 45px;
+  justify-content: center;
+  align-items: stretch;
+  align-self: center;
+  display: flex;
+  width: 1280px;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.recipeGrid {
+  display: flex;
+  width: 100%;
+  gap: 40px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 991px) {
+  .recipeGrid {
+    max-width: 100%;
+  }
+}
+
+/* Pagination */
+.paginationSection {
+  display: flex;
+  min-height: 173px;
+  width: 100%;
+  padding: 42px 0 81px;
+  flex-direction: column;
+  align-items: center;
+  font-family:
+    'Noto Sans TC',
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
+  font-size: 20px;
+  color: #faf8f9;
+  font-weight: 700;
+  white-space: nowrap;
+  text-align: center;
+  justify-content: center;
+}
+
+@media (max-width: 991px) {
+  .paginationSection {
+    max-width: 100%;
+    white-space: initial;
+  }
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  justify-content: start;
+}
+
+@media (max-width: 991px) {
+  .pagination {
+    max-width: 100%;
+    white-space: initial;
+  }
+}
+
+.paginationArrow {
+  aspect-ratio: 0.69;
+  object-fit: contain;
+  object-position: center;
+  width: 11px;
+  stroke-width: 5px;
+  stroke: #df6c2d;
+  align-self: stretch;
+  margin: auto 0;
+  flex-shrink: 0;
+}
+
+.paginationItem {
+  align-self: stretch;
+  display: flex;
+  margin: auto 0;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  width: 50px;
+}
+
+@media (max-width: 991px) {
+  .paginationItem {
+    white-space: initial;
+  }
+}
+
+.paginationButton {
+  border-radius: 100px;
+  background-color: #eeb392;
+  align-self: stretch;
+  margin: auto 0;
+  width: 50px;
+  padding: 0 5px;
+  overflow: hidden;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 991px) {
+  .paginationButton {
+    white-space: initial;
+  }
+}
+
+.paginationButtonActive {
+  border-radius: 100px;
+  box-shadow: 0px 0px 0px 10px rgba(0, 0, 0, 0.05);
+  background-color: #ff5a00;
+  color: #fff;
+}
+
+/* Featured Section */
+.featuredSection {
+  justify-content: center;
+  align-items: center;
+  background-color: #df6c2d;
+  display: flex;
+  width: 100%;
+  padding: 80px 0;
+  flex-direction: column;
+  overflow: hidden;
+  font-family:
+    'Noto Sans TC',
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
+  font-size: 20px;
+  color: #423c3a;
+  font-weight: 700;
+  white-space: nowrap;
+  text-align: center;
+}
+
+@media (max-width: 991px) {
+  .featuredSection {
+    max-width: 100%;
+    white-space: initial;
+  }
+}
+
+.featuredGrid {
+  display: flex;
+  align-items: center;
+  gap: 40px 54px;
+  justify-content: start;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 991px) {
+  .featuredGrid {
+    max-width: 100%;
+    white-space: initial;
+  }
+}
+
+.featuredCard {
+  justify-content: center;
+  align-items: stretch;
+  border-radius: 30px;
+  background-color: #fff;
+  align-self: stretch;
+  display: flex;
+  min-width: 240px;
+  margin: auto 0;
+  flex-direction: column;
+  overflow: hidden;
+  width: 259px;
+}
+
+@media (max-width: 991px) {
+  .featuredCard {
+    white-space: initial;
+  }
+}
+
+.featuredImage {
+  aspect-ratio: 1.3;
+  object-fit: contain;
+  object-position: center;
+  width: 100%;
+  min-height: 200px;
+}
+
+.featuredTitle {
+  align-self: stretch;
+  flex: 1;
+  margin-top: 25px;
+  width: 100%;
+  padding: 0 25px 25px;
+}
+
+@media (max-width: 991px) {
+  .featuredTitle {
+    padding: 0 20px 25px;
+    white-space: initial;
+  }
+}
