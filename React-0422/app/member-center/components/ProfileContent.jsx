@@ -2,12 +2,10 @@
 
 import React from 'react'
 import styles from '../styles/member-center.module.scss'
-import { useAuth } from '@/hooks/auth-context'
 import useSWR from 'swr'
 import { useParams } from 'next/navigation'
 
 const ProfileContent = () => {
-  // const { user } = useAuth()
   const params = useParams()
   const id = params.id
 

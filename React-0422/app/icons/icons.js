@@ -8,6 +8,7 @@ import {
   FaEyeSlash,
   FaChevronDown,
   FaCalendarAlt,
+  FaLock,
 } from 'react-icons/fa'
 import {
   FaCakeCandles,
@@ -33,8 +34,8 @@ import { GrPrevious } from 'react-icons/gr'
 
 import { GiKitchenScale } from 'react-icons/gi'
 import { PiJarLabelBold } from 'react-icons/pi'
-import { IoIosAddCircle, IoIosArrowBack } from 'react-icons/io'
 
+import { IoIosAddCircle, IoIosArrowBack, IoIosListBox } from 'react-icons/io'
 
 export {
   GrPrevious,
@@ -71,4 +72,6 @@ export {
   FaEyeSlash,
   FaChevronDown,
   FaCalendarAlt,
+  FaLock,
+  IoIosListBox,
 }
