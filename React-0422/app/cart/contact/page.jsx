@@ -1,8 +1,10 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import '../style.css' 
+import { useCart } from '@/hooks/use-cart';
+// import { parse } from 'path';
 
 
 // 如果 CartPage 的 style.css 是在 src/app/cart/style.css
@@ -14,6 +16,17 @@ import '../style.css'
 
 export default function ContactPage() {
   const router = useRouter();
+  // 取得購物車資料
+  const searchParams = useSearchParams(); // 專門用來讀取 URL query parameters
+
+  const [orderTotal, setOrderTotal] = useState(0); // 儲存訂單總金額
+
+  const {
+    items: cartContextItems, // 從context 取得購物車商品列表
+    totalAmount:cartContextSubtotal, // 從context 取得購物車小計 （未含運費折扣）
+    totalQty:cartContextTotalQty, // 從context 取得購物車商品總數量
+  } = useCart();
+
   const [recipient, setRecipient] = useState({
     name: '',
     phone: '',
@@ -22,49 +35,136 @@ export default function ContactPage() {
     district: '',
     address: '',
   });
-  const [notes, setNotes] = useState('');
-  const [orderDetails, setOrderDetails] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [formErrors, setFormErrors] = useState({}); // 用來處理表單驗證錯誤
+  const [notes, setNotes] = useState(''); // 訂單備註
+  const [formErrors, setFormErrors] = useState({}); // 儲存表單驗證錯誤訊息
+  
+  const [orderDetails, setOrderDetails] = useState(null); // 儲存訂單摘要
+  const [loading, setLoading] = useState(true); // 控制載入狀態
 
   useEffect(() => {
-    // 從 localStorage 讀取訂單摘要
-    const storedDetails = localStorage.getItem('currentOrderDetails');
-    if (storedDetails) {
-      try {
-        const parsedDetails = JSON.parse(storedDetails);
-        setOrderDetails(parsedDetails);
-        console.log('📦 聯絡資訊頁面：成功載入訂單摘要', parsedDetails);
-      } catch (error) {
-        console.error('😭 解析 localStorage 中的訂單摘要失敗:', error);
-        // 開發階段，就算解析失敗也先不要跳轉，給個預設值方便看版型
-        // alert('糟糕，讀取訂單資訊失敗，請返回購物車重試 T_T');
-        // router.push('/cart'); // 導回購物車
+    console.log('🕵️‍♂️ ContactPage useEffect 開始！目前網址是:', window.location.href);
+    
+    setLoading(true); // 一開始先 loading
+  
+    let finalGrandTotal = 0; // 先準備一個變數來裝最終的 grandTotal
+    let initialSubtotal = 0; // 其他你可能需要的初始值
+    let initialShipping = 3; // 你的預設運費
+    let initialDiscount = 5; // 你的預設折扣
+    let initialCartItems = [];
+  
 
-        // 預覽使用
-        setOrderDetails({
-            subtotal: 0, shippingFee: 0, discountAmount: 0, grandTotal: 0, cartItems: [], userId: null, error: 'localStorage data corrupted'
-    });
+    // 1. 最優先處理從 URL 來的總金額
+    const totalFromCartString = searchParams.get('totalAmount');
+    console.log('📧 從URL拿到的 totalFromCartString 原始值是:', totalFromCartString); // <-- 這個超重要！看它是不是 null 或空字串
+    if (totalFromCartString) {
+      const parsedTotalFromCart = parseFloat(totalFromCartString)
+      console.log('🔢 parseFloat後的 parsedTotalFromCart 是:', parsedTotalFromCart); // 看 parse 完是不是 NaN
+
+    if (!isNaN(parsedTotalFromCart)) { // 確定是數字才用
+      setOrderTotal (parsedTotalFromCart); // 設定總金額
+      finalGrandTotal = parsedTotalFromCart; // URL 來的總金額優先度最高！
+      console.log('💰 URL總金額GET！設為優先總額:', finalGrandTotal);
+    } else {
+      console.error('😱 URL的 totalAmount 不是有效的數字字串:', totalFromCartString);
+  } 
+
+} else {
+  console.warn('🤷‍♂️ URL裡面找不到 totalAmount 參數，或者它是空的。');
+}
+  
+// ✨✨✨ 新增部分：處理商品小計、運費、折扣 ✨✨✨
+const subtotalString = searchParams.get('subtotal');
+const shippingString = searchParams.get('shipping');
+const discountString = searchParams.get('discount');
+
+if (subtotalString) {
+  const parsedSubtotal = parseFloat(subtotalString);
+  if (!isNaN(parsedSubtotal)) {
+    initialSubtotal = parsedSubtotal;
+    console.log('SUBTOTAL 從URL GET！:', initialSubtotal);
+  } else {
+    console.warn('🤷‍♀️ URL的 subtotal (' + subtotalString + ') 不是數字，使用預設小計:', initialSubtotal);
+  }
+} else {
+  console.warn('🤷‍♂️ URL裡面找不到 subtotal 參數，使用預設小計。');
+}
+
+if (shippingString) {
+  const parsedShipping = parseFloat(shippingString);
+  if (!isNaN(parsedShipping)) {
+    initialShipping = parsedShipping;
+    console.log('SHIPPING 從URL GET！:', initialShipping);
+  } else {
+    console.warn('🤷‍♀️ URL的 shipping (' + shippingString + ') 不是數字，使用預設運費:', initialShipping);
+  }
+} else {
+  console.warn('🤷‍♂️ URL裡面找不到 shipping 參數，使用預設運費。');
+}
+
+if (discountString) {
+  const parsedDiscount = parseFloat(discountString);
+  if (!isNaN(parsedDiscount)) {
+    initialDiscount = parsedDiscount;
+    console.log('DISCOUNT 從URL GET！:', initialDiscount);
+  } else {
+    console.warn('🤷‍♀️ URL的 discount (' + discountString + ') 不是數字，使用預設折扣:', initialDiscount);
+  }
+} else {
+  console.warn('🤷‍♂️ URL裡面找不到 discount 參數，使用預設折扣。');
+}
+// ✨✨✨ 新增部分結束 ✨✨✨
+
+    // 2. 處理 localStorage
+    const storedDetailsString = localStorage.getItem('currentOrderDetails');
+    if (storedDetailsString) {
+      try {
+        const parsedStoredDetails = JSON.parse(storedDetailsString);
+        console.log('📦 localStorage資料GET！', parsedStoredDetails);
+  
+        // 如果URL沒有提供總金額，
+        // URL > localStorage > 預設值
+        if (!totalFromCartString && parsedStoredDetails.grandTotal !== undefined) {
+          finalGrandTotal = parsedStoredDetails.grandTotal;
+        }
+        if (!subtotalString && parsedStoredDetails.subtotal !== undefined) { 
+          initialSubtotal = parsedStoredDetails.subtotal;
+        }
+        if (!shippingString && parsedStoredDetails.shippingFee !== undefined) { 
+          initialShipping = parsedStoredDetails.shippingFee;
+        }
+        if (!discountString && parsedStoredDetails.discountAmount !== undefined) { 
+          initialDiscount = parsedStoredDetails.discountAmount;
+        }
+        initialCartItems = parsedStoredDetails.cartItems || initialCartItems;
+  
+      } catch (error) {
+        console.error('😭 localStorage 解析GG:', error);
+        // 解析失敗，就當作沒撈到，繼續用預設值 + URL來的總金額 (如果有的話)
       }
     } else {
-        //預覽使用
-        console.warn('🤔 聯絡資訊頁面：找不到訂單摘要，開發模式下顯示預設內容。');
-        // 在開發時，如果 localStorage 沒有資料，也先不要跳轉，給一個預設的 orderDetails
-        // 這樣你才能看到頁面的基本結構
-        setOrderDetails({
-          subtotal: 100, // 給點假資料方便看樣式
-          shippingFee: 10,
-          discountAmount: 5,
-          grandTotal: 105,
-          cartItems: [{productId: 'p1', name: '測試商品', quantity: 1, price: 100, imageUrl: ''}],
-          userId: 'testUser',
-        });
-      // console.warn('🤔 聯絡資訊頁面：找不到訂單摘要，可能使用者不是從購物車來的喔！');
-      // alert('請先從購物車過來唷～不然我不知道你要買啥 XD');
-      // router.push('/cart'); // 導回購物車
+      console.warn('🤔 localStorage 空空如也，將使用預設值 (總金額可能來自URL)。');
+      // localStorage 是空的，不用特別做啥，因為我們的初始值已經是預設的了
+      // finalGrandTotal 在這裡，如果 URL 有值，就會是 URL 的值，不然就是初始的 0
     }
+  
+    // 3. 最後，一次性更新 orderDetails state
+    const detailsToSet = {
+      subtotal: initialSubtotal, // 這裡的 subtotal 邏輯可能還需要你根據情況調整
+      // 例如，如果 finalGrandTotal 是包含運費折扣的，那 subtotal 可能是 finalGrandTotal - initialShipping + initialDiscount
+      // 但如果 totalFromCartString 本身是 subtotal，那邏輯又不一樣。
+      // 為了簡單，我們先假設你有辦法處理好 subtotal。
+      // 最重要的 grandTotal 已經被 finalGrandTotal 控制了。
+      shippingFee: initialShipping,
+      discountAmount: initialDiscount,
+      grandTotal: finalGrandTotal, // 確保這裡用的是我們最優先處理過的 finalGrandTotal
+      cartItems: initialCartItems,
+      // 如果有 error 狀態，也記得放進來
+    };
+    console.log('🧐 最後要 setOrderDetails 的物件是:', detailsToSet);
+    setOrderDetails(detailsToSet); // 設定訂單摘要
+  
     setLoading(false);
-  }, [router]);
+  }, [searchParams]); // 依賴記得放 searchParams!
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -102,15 +202,32 @@ export default function ContactPage() {
       return;
     }
 
+    // 確保 orderDetails (至少運費和折扣部分) 已載入
     if (!orderDetails) {
-      alert("訂單資訊不完整，請返回購物車重試。");
+      alert("訂單資訊 (運費/折扣) 尚未準備好，請稍候或重試。");
       return;
     }
+
+    // 計算總金額
+    const subtotalForSubmit = typeof cartContextSubtotal === 'number' ? cartContextSubtotal : 0;
+    const shippingFeeForSubmit = orderDetails.shippingFee || 0;
+    const discountAmountForSubmit = orderDetails.discountAmount || 0;
+    const grandTotalForSubmit = subtotalForSubmit + shippingFeeForSubmit - discountAmountForSubmit;
 
     console.log('📦 準備提交的訂單資料：');
     console.log('收件人:', recipient);
     console.log('訂單備註:', notes);
     console.log('訂單摘要:', orderDetails);
+    // usecart 商品列表與小計
+    console.log('購物車商品:', cartContextItem);
+    console.log('購物車小計:', cartContextSubtotal);
+    console.log('運費:', finalShippingFee);
+    console.log('折扣:', finalDiscountAmount);
+    console.log('最終總金額:', finalGrandTotal);
+    console.log('會員 ID:', orderDetails.userId); // 假設你有訂單 ID
+    
+    
+    
 
     // --- 接下來是串接後端 API 的部分 ---
     // setLoading(true);
@@ -136,7 +253,7 @@ export default function ContactPage() {
     //   console.log('🎉 訂單成功提交！後端回應：', result);
     //   localStorage.removeItem('currentOrderDetails'); // 成功後清除 localStorage
     //   // router.push(`/thank-you-page?orderId=${result.orderId}`); // 跳轉到感謝頁面，並帶上訂單ID
-    //   alert('訂單資料看起來都OK！下一步就是把這些資料送去伺服器處理囉～（模擬成功）');
+    alert('訂單資料看起來都OK！下一步就是把這些資料送去伺服器處理囉～（模擬成功）');
        router.push('/cart/payment'); // 暫時先跳回首頁
     // } catch (error) {
     //   console.error('😭 訂單提交時發生錯誤:', error);
@@ -147,13 +264,18 @@ export default function ContactPage() {
     // alert('下一步：把這些資料送去後端處理！（這部分還沒串接喔～）'); //開發先註解 也可以打開
   };
 
-  if (loading || !orderDetails) {
+  if (loading) {
     return (
       <div className="cart-page-status">
         <p>正在準備您的訂單資訊... 🏇💨</p>
       </div>
     );
   }
+// 再次確認 orderDetails 存在，主要為了運費和折扣
+  const currentShippingFee = orderDetails?.shippingFee || 0; // 確保運費有值 
+  const currentDiscountAmount = orderDetails?.discountAmount || 0; // 確保折扣有值
+// 總金額計算
+  const currentGrandTotal = cartContextSubtotal + currentShippingFee - currentDiscountAmount;
 
   return (
     <div>
@@ -317,7 +439,7 @@ export default function ContactPage() {
                   <hr />
                   <div className="summary-item total">
                     <span>總金額</span>
-                    <span>NT ${orderDetails.grandTotal.toFixed(2)}</span>
+                    <span>NT ${orderTotal.toFixed(2)}</span>
                   </div>
                   <button
                     type="button" // 如果 form 在 checkout-left, 這個按鈕不在 form 內，所以用 type="button" 並在 onClick 呼叫 handleSubmit
