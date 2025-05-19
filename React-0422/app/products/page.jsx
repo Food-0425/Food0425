@@ -257,22 +257,22 @@ export default function ProductListPage() {
             <h3>熱門商品</h3>
           </button>
           <button
-            className={` ${activeCategory === '蔬菜' ? styles.active : ''}`}
-            onClick={() => handleCategoryChange('蔬菜')}
+            className={` ${activeCategory === '蔬菜類' ? styles.active : ''}`}
+            onClick={() => handleCategoryChange('蔬菜類')}
           >
-            <h3>蔬菜</h3>
+            <h3>蔬菜類</h3>
           </button>
           <button
-            className={` ${activeCategory === '肉品' ? styles.active : ''}`}
-            onClick={() => handleCategoryChange('肉品')}
+            className={` ${activeCategory === '肉類' ? styles.active : ''}`}
+            onClick={() => handleCategoryChange('肉類')}
           >
-            <h3>肉品</h3>
+            <h3>肉類</h3>
           </button>
           <button
-            className={` ${activeCategory === '乾貨' ? styles.active : ''}`}
-            onClick={() => handleCategoryChange('乾貨')}
+            className={` ${activeCategory === '海鮮類' ? styles.active : ''}`}
+            onClick={() => handleCategoryChange('海鮮類')}
           >
-            <h3>乾貨</h3>
+            <h3>海鮮類</h3>
           </button>
           <button
             className={`${activeCategory === '調味品' ? styles.active : ''}`}

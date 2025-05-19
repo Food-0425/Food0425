@@ -70,4 +70,9 @@ export {
   FaEye,
   FaEyeSlash,
   FaChevronDown,
-  FaCalendarAlt,}
+  FaCalendarAlt,
+  FaLock,
+  IoIosListBox,
+  HiViewGridAdd,
+  HiOutlineViewGridAdd,
+}
