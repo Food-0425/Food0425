@@ -34,7 +34,7 @@ export default function RootLayout({ children }) {
 
     const timer = setTimeout(() => {
       setIsLoading(false)
-    }, 2000) // 這裡的 2000 毫秒是為了讓動畫更明顯，實際上可以根據需要調整
+    }, 1000) // 這裡的 2000 毫秒是為了讓動畫更明顯，實際上可以根據需要調整
 
     return () => clearTimeout(timer)
   }, [pathname])
