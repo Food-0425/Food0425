@@ -30,9 +30,9 @@ export default function ProductListPage() {
   //  State 狀態管理
   const [products, setProducts] = useState([]) // 顯示中的產品資料
   const [loading, setLoading] = useState(true) // 是否在載入中
-  const [currentPage, setCurrentPage] = useState(1) // 目前頁碼 (初始值改為 1，因為有分類和搜尋時通常從第一頁開始)
+  const [currentPage, setCurrentPage] = useState(1) // 目前頁碼 (初ㄌ始值改為 1，因為有分類和搜尋時通常從第一頁開始)
   const [totalPages, setTotalPages] = useState(1) // 總頁數（預設改為 1）
-  const [activeCategory, setActiveCategory] = useState('導覽列') // 目前分類
+  const [activeCategory, setActiveCategory] = useState('全部') // 目前分類
   const [sortByPrice, setSortByPrice] = useState(null) // 是否以價格排序，null 表示不排序
   const [searchTerm, setSearchTerm] = useState('') // 新增：搜尋關鍵字狀態
   const [searchInput, setSearchInput] = useState('') // 新增：搜尋輸入值狀態
@@ -49,7 +49,7 @@ export default function ProductListPage() {
       try {
         // 判斷是否需要篩選
         const hasFilters =
-          activeCategory !== '導覽列' ||
+          activeCategory !== '全部' ||
           searchTerm ||
           minPrice ||
           maxPrice ||
@@ -60,7 +60,7 @@ export default function ProductListPage() {
           const params = new URLSearchParams({
             page: currentPage.toString(),
             limit: '15',
-            category: activeCategory !== '導覽列' ? activeCategory : '',
+            category: activeCategory !== '全部' ? activeCategory : '',
             search: searchTerm,
             sort: sortByPrice ? 'price_desc' : 'price_asc',
             minPrice,
@@ -90,13 +90,13 @@ export default function ProductListPage() {
 
   // 修改分類切換函數
   const handleCategoryChange = (category) => {
-    // 如果點擊當前分類且不是導覽列，不做任何事
-    if (category === activeCategory && category !== '導覽列') return
+    // 如果點擊當前分類且不是全部，不做任何事
+    if (category === activeCategory && category !== '全部') return
 
     setActiveCategory(category)
     setCurrentPage(1)
-    // 如果點擊導覽列，重置所有篩選條件
-    if (category === '導覽列') {
+    // 如果點擊全部，重置所有篩選條件
+    if (category === '全部') {
       setSearchTerm('')
       setSearchInput('')
       setMinPrice('')
@@ -128,7 +128,7 @@ export default function ProductListPage() {
   const handleSearch = () => {
     setSearchTerm(searchInput)
     setCurrentPage(1)
-    setActiveCategory('導覽列')
+    setActiveCategory('全部')
     setMinPrice('')
     setMaxPrice('')
   }
@@ -158,13 +158,14 @@ export default function ProductListPage() {
     setCurrentPage(1)
     setSearchTerm('')
     setSearchInput('')
-    setActiveCategory('導覽列')
+    setActiveCategory('全部')
   }
 
   //  分頁控制：前後頁或指定頁碼
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
       setCurrentPage(newPage)
+      window.scrollTo({ top: 0, behavior: 'smooth' })
     }
   }
 
@@ -257,7 +258,7 @@ export default function ProductListPage() {
         {/* 分類按鈕（動態 active 樣式） */}
         <div className={styles.filterContainer}>
           {[
-            { id: 'hot', name: '導覽列', isHome: true },
+            { id: 'hot', name: '全部', isHome: true },
             { id: 'vegetable', name: '蔬菜類' },
             { id: 'meat', name: '肉類' },
             { id: 'seafood', name: '海鮮類' },
