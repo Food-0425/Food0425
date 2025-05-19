@@ -35,7 +35,8 @@ import { GrPrevious } from 'react-icons/gr'
 import { GiKitchenScale } from 'react-icons/gi'
 import { PiJarLabelBold } from 'react-icons/pi'
 
-import { IoIosAddCircle, IoIosArrowBack, IoIosListBox } from 'react-icons/io'
+import { IoIosAddCircle, IoIosListBox } from 'react-icons/io'
+import { IoIosArrowBack } from 'react-icons/io'
 
 export {
   GrPrevious,
