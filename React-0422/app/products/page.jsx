@@ -101,6 +101,7 @@ export default function ProductListPage() {
     setMaxPrice('')
     setMinPriceInput('')
     setMaxPriceInput('')
+    setSortByPrice(null) // 清除價格排序
   }
 
   const getArrowIcon = () => {

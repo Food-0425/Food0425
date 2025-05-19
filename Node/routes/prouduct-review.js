@@ -41,6 +41,7 @@ router.get('/api', async (req, res) => {
     }
   })
 
+  // 取得特定產品的評論
   router.get('/api/:id', async (req, res) => {
     try {
       const productId = req.params.id; // 使用 product_id 作為查詢條件
