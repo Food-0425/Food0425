@@ -1,3 +1,114 @@
+/* 調整整體容器 */
+.productContainer {
+  padding: 40px 20px;
+  max-width: 1280px;
+  margin: 0 auto;
+  background-color: #fff;
+}
+
+/* 主要商品資訊區塊 */
+.productWrapper {
+  display: flex;
+  gap: 40px;
+  margin-bottom: 60px;
+}
+
+/* 商品圖片 */
+.productImage {
+  width: 50%;
+  max-width: 600px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* 商品資訊容器 */
+.productInfoContainer {
+  flex: 1;
+}
+
+/* 商品標題 */
+.productTitle {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  line-height: 1.4;
+}
+
+/* 評分區塊 */
+.ratingContainer {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+/* 價格 */
+.productPrice {
+  font-size: 36px;
+  font-weight: 700;
+  color: #ff5a00;
+  margin: 20px 0;
+}
+
+/* 操作按鈕 */
+.actionButtons {
+  display: flex;
+  gap: 15px;
+}
+
+.addToCartButton,
+.wishlistButton {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.addToCartButton {
+  background-color: #ff5a00;
+  color: white;
+  border: none;
+}
+
+.wishlistButton {
+  background-color: white;
+  color: #ff5a00;
+  border: 2px solid #ff5a00;
+}
+
+/* 載入與錯誤狀態 */
+.loadingContainer,
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  text-align: center;
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+  .productWrapper {
+    flex-direction: column;
+  }
+
+  .productImage {
+    width: 100%;
+  }
+  
+  .productTitle {
+    font-size: 24px;
+  }
+  
+  .productPrice {
+    font-size: 28px;
+  }
+}
+
 .productContainer {
   justify-content: center;
   align-items: center;
