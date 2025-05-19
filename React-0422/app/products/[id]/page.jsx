@@ -5,7 +5,7 @@ import { useParams } from 'next/navigation'
 import styles from '../../src/styles/page-styles/ProductContent.module.scss'
 import Link from 'next/link'
 
-// 移除 mock data, 改為使用 API
+//使用API
 export default function ProductDetailPage() {
   const params = useParams()
   const [product, setProduct] = useState(null)
