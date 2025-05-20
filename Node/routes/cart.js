@@ -99,11 +99,21 @@ router.get('/api', async (req, res) => {
 // ------------------------------------------------------------------------------------
 // POST - 新增商品到指定使用者的購物車
 // API 路徑: /cart/api/:userId/items
+// 05/20 這個API的路徑我改一下名稱，把/:userID先拿掉
 // ------------------------------------------------------------------------------------
-router.post('/api/:userId/items', async (req, res) => {
+router.post('/api/items', async (req, res) => {
     try {
-      const userIdString = req.params.userId;
-      const userId = parseInt(userIdString, 10);
+      // const userIdString = req.params.userId;
+      // const userId = parseInt(userIdString, 10);
+
+       // 驗證是否已通過 JWT 驗證
+    if (!req.my_jwt) {
+        return res.status(401).json({ success: false, error: "Unauthorized: Missing or invalid token" });
+    }
+
+    const uId = req.my_jwt.id; // 從解碼的 token 中取得 userId
+    const userId = parseInt(uId, 10);
+
       // ✨✨✨ 把 quantity 重新命名成 quantityToAdd 更清楚 ✨✨✨
       const { productId, quantityToAdd } = req.body; // ... (productId 驗證) ...
       const validProductId = parseInt(productId, 10);

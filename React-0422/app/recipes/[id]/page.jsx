@@ -112,7 +112,7 @@ export default function RecipeDetailPage() {
   // 假設購物車資料存儲在 localStorage 或透過 API 傳送
   // 這裡的 ingredients 是從 recipe.ingredients 中取得的
 
-  // 舊的將食材加入購物車的函數
+  // 舊的將食材加入購物車的函數(舊版)
   const handleAddToCart = async (ingredients) => {
     if (!ingredients || ingredients.length === 0) {
       alert('沒有可添加的食材！')
@@ -151,15 +151,15 @@ export default function RecipeDetailPage() {
       return
     }
 
-    // 取得所有被選中的食材
-    const selectedIngredientItems = recipe.ingredients.filter(
-      (_, index) => selectedItems[`condiment-${index}`]
-    )
+    // 取得所有被選中的食材的 product_id
+    const selectedIngredientItems = recipe.ingredients
+      .filter((_, index) => selectedItems[`condiment-${index}`])
+      .map((item) => item.product_id)
 
-    // 取得所有被選中的調味料
-    const selectedSeasoningItems = recipe.condiments.filter(
-      (_, index) => selectedSeasonings[`condiment-${index}`]
-    )
+    // 取得所有被選中的調味料的 product_id
+    const selectedSeasoningItems = recipe.condiments
+      .filter((_, index) => selectedSeasonings[`condiment-${index}`])
+      .map((item) => item.product_id)
 
     // 如果都沒有選擇任何項目
     if (
@@ -170,29 +170,77 @@ export default function RecipeDetailPage() {
       return
     }
 
-    try {
-      const response = await fetch('http://localhost:3001/recipes/api/add', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${auth.token}`, // 假設需要用戶的 token
-        },
-        body: JSON.stringify({
-          ingredients: selectedIngredientItems,
-          seasonings: selectedSeasoningItems,
-          recipeId: id,
-        }),
-      })
+    // 合併所有選中的產品ID
+    const allProductIds = [
+      ...selectedIngredientItems,
+      ...selectedSeasoningItems,
+    ]
 
-      if (response.ok) {
-        alert('已成功添加至購物車！')
+    // 新版的，產品ID一個一個給後端
+    try {
+      // 為每個產品發送個別的請求
+      const promises = allProductIds.map((productId) =>
+        fetch('http://localhost:3001/cart/api/items', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${auth.token}`,
+          },
+          body: JSON.stringify({
+            productId: productId,
+            quantityToAdd: 1,
+          }),
+        })
+      )
+
+      // 等待所有請求完成
+      const responses = await Promise.all(promises)
+
+      // 檢查所有請求是否都成功
+      const results = await Promise.all(responses.map((r) => r.json()))
+
+      // 如果所有請求都成功
+      if (results.every((r) => r.success)) {
+        alert('所有商品已成功加入購物車！')
       } else {
-        const errorData = await response.json()
-        alert(`添加失敗：${errorData.message || '未知錯誤'}`)
+        // 如果有部分失敗，顯示詳細訊息
+        const failedItems = results.filter((r) => !r.success)
+        alert(
+          `部分商品加入失敗：${failedItems.map((r) => r.message).join('\n')}`
+        )
       }
     } catch (error) {
-      alert(`添加失敗：${error.message}`)
+      alert(`加入購物車時發生錯誤：${error.message}`)
     }
+
+    //  舊版的，原本是寫成多個產品ID打包起來送給後端，但目前後端是寫成產品ID一個一個接收
+    // try {
+    //   // const response = await fetch('http://localhost:3001/recipes/api/add', {
+    //   const response = await fetch('http://localhost:3001/cart/api/items', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //       Authorization: `Bearer ${auth.token}`, // 假設需要用戶的 token
+    //     },
+    //     body: JSON.stringify({
+    //       ingredients: selectedIngredientItems,
+    //       seasonings: selectedSeasoningItems,
+    //       recipeId: id,
+    //       userId: auth.id,
+    //       productId: allProductIds,
+    //       quantityToAdd: 1, // 預設數量為1，您可以根據需求調整
+    //     }),
+    //   })
+
+    //   if (response.ok) {
+    //     alert('已成功添加至購物車！')
+    //   } else {
+    //     const errorData = await response.json()
+    //     alert(`添加失敗：${errorData.message || '未知錯誤'}`)
+    //   }
+    // } catch (error) {
+    //   alert(`添加失敗：${error.message}`)
+    // }
   }
 
   return (
