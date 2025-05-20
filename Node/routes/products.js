@@ -16,14 +16,15 @@ router.get('/api/products', async (req, res) => {
         const limit = parseInt(req.query.limit) || 15;
         const offset = (page - 1) * limit;
 
-        // 取得總筆數
+        // 取得總筆數 (這部分不變)
         const [countResult] = await db.query('SELECT COUNT(*) AS total FROM food_products');
         const totalItems = countResult[0].total;
         const totalPages = Math.ceil(totalItems / limit);
 
-        // 取得分頁資料
+        // 取得分頁資料，並使用隨機排序
+        // 這裡的關鍵就是把 ORDER BY id DESC 改成 ORDER BY RAND()
         const [rows] = await db.query(
-            'SELECT * FROM food_products ORDER BY id DESC LIMIT ? OFFSET ?',
+            'SELECT * FROM food_products ORDER BY RAND() LIMIT ? OFFSET ?',
             [limit, offset]
         );
 
