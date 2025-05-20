@@ -10,17 +10,17 @@ import 'react-toastify/dist/ReactToastify.css'
 
 //使用API
 export default function ProductDetailPage() {
-  const params = useParams()
-  const router = useRouter()
-  const [cart, setCart] = useState([])
-  const [wishlist, setWishlist] = useState([])
-  const [quantity, setQuantity] = useState(1)
-  const [product, setProduct] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-  const [recommendedProducts, setRecommendedProducts] = useState([])
-  const [reviews, setReviews] = useState([])
-  const [isFavorite, setIsFavorite] = useState(false)
+  const params = useParams() // 取得路由參數
+  const router = useRouter() //  初始化 Router
+  const [cart, setCart] = useState([]) //購物車
+  const [wishlist, setWishlist] = useState([]) //收藏清單
+  const [quantity, setQuantity] = useState(1) //數量
+  const [product, setProduct] = useState(null) //商品資料
+  const [loading, setLoading] = useState(true) //是否在載入
+  const [error, setError] = useState(null) //錯誤訊息
+  const [recommendedProducts, setRecommendedProducts] = useState([]) //推薦商品
+  const [reviews, setReviews] = useState([]) //評論
+  const [isFavorite, setIsFavorite] = useState(false) //是否收藏
 
   // 取得商品資料
   useEffect(() => {
