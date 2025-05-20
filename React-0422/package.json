@@ -53,6 +53,6 @@
     "eslint-plugin-react-hooks": "5.1.0",
     "globals": "^15.15.0",
     "prettier": "3.5.1",
-    "sass": "^1.77.6"
+    "sass": "^1.89.0"
   }
 }
