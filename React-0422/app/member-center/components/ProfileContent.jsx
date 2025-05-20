@@ -14,8 +14,8 @@ const ProfileContent = () => {
     console.log('🔎 authInit:', authInit)
     console.log('🔎 auth:', auth)
     if (authInit) {
-      if (auth?.user_id) {
-        console.log('✅ 用戶登入:', auth.user_id)
+      if (auth?.id) {
+        console.log('✅ 用戶登入:', auth.id)
       } else {
         console.warn('⛔️ 用戶未登入，auth 內容:', auth)
       }
@@ -23,7 +23,7 @@ const ProfileContent = () => {
       console.log('⌛ 等待 auth 初始化中...')
     }
 
-    if (authInit && !auth?.user_id) {
+    if (authInit && !auth?.id) {
       router.push('/login')
     }
   }, [authInit, auth])
@@ -54,10 +54,10 @@ const ProfileContent = () => {
     }
   }
 
-  const shouldFetch = authInit && auth?.user_id
+  const shouldFetch = authInit && auth?.id
   const { data, error } = useSWR(
     shouldFetch
-      ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/api/${auth.user_id}`
+      ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/api/${auth.id}`
       : null,
     fetcher
   )
