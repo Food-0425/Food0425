@@ -1,23 +1,75 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import styles from '../styles/member-center.module.scss'
 import useSWR from 'swr'
-import { useParams } from 'next/navigation'
+import { useAuth } from '@/hooks/auth-context'
+import { useRouter } from 'next/navigation'
 
 const ProfileContent = () => {
-  const params = useParams()
-  const id = params.id
+  const { auth, getAuthHeader, authInit } = useAuth()
+  const router = useRouter()
 
-  const fetcher = (url) => fetch(url).then((res) => res.json())
+  useEffect(() => {
+    console.log('🔎 authInit:', authInit)
+    console.log('🔎 auth:', auth)
+    if (authInit) {
+      if (auth?.user_id) {
+        console.log('✅ 用戶登入:', auth.user_id)
+      } else {
+        console.warn('⛔️ 用戶未登入，auth 內容:', auth)
+      }
+    } else {
+      console.log('⌛ 等待 auth 初始化中...')
+    }
 
+    if (authInit && !auth?.user_id) {
+      router.push('/login')
+    }
+  }, [authInit, auth])
+
+  const fetcher = async (url) => {
+    try {
+      const response = await fetch(url, {
+        headers: {
+          'Content-Type': 'application/json',
+          ...getAuthHeader(),
+        },
+      })
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+
+      const data = await response.json()
+
+      if (!data.success) {
+        throw new Error(data.error || '無法取得資料')
+      }
+
+      return data
+    } catch (error) {
+      console.error('API 錯誤:', error)
+      throw error
+    }
+  }
+
+  const shouldFetch = authInit && auth?.user_id
   const { data, error } = useSWR(
-    id ? `http://localhost:3001/users/api/${id}` : null,
+    shouldFetch
+      ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/api/${auth.user_id}`
+      : null,
     fetcher
   )
 
-  const isLoading = !data && !error
-  const user = data?.rows || {}
+  if (!authInit) return <div className={styles.loading}>登入狀態確認中...</div>
+  if (error)
+    return <div className={styles.error}>讀取資料失敗: {error.message}</div>
+  if (!data) return <div className={styles.loading}>讀取中...</div>
+  if (!data.success || !data.rows)
+    return <div className={styles.error}>資料格式錯誤</div>
+
+  const user = data.rows
 
   const profileFields = [
     { label: '電子信箱', value: user.email },
@@ -57,7 +109,9 @@ const ProfileContent = () => {
         {profileFields.map((field, index) => (
           <div key={index} className={styles.detailRow}>
             <div className={styles.detailTitle}>{field.label}</div>
-            <div className={styles.detailContent}>{field.value}</div>
+            <div className={styles.detailContent}>
+              {field.value || '尚未填寫'}
+            </div>
           </div>
         ))}
       </div>
