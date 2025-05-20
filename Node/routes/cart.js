@@ -54,7 +54,7 @@ router.get('/api/:userId', async (req, res) => {
         JOIN users u ON c.user_id = u.user_id
         JOIN food_products p ON c.product_id = p.id
         WHERE u.user_id = ?
-        ORDER BY c.added_time DESC;`, // 假設 carts 表有 added_time 用來排序
+        ORDER BY c.updated_at DESC;`, // 假設 carts 表有 updated_at 用來排序
         [userId]
       );
 
@@ -243,7 +243,7 @@ router.put('/api/items/:cartItemId', async (req, res) => {
 
       // --- 更新購物車項目的數量 ---
       const [result] = await db.query(
-        "UPDATE carts SET quantity = ?, added_time = NOW() WHERE cart_id = ?",
+        "UPDATE carts SET quantity = ?, updated_at = NOW() WHERE cart_id = ?",
         [newQuantity, cartItemId]
       );
 
