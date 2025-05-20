@@ -3,6 +3,8 @@
 import React from 'react'
 import Link from 'next/link'
 import { Modal, Button } from 'react-bootstrap'
+// 彈出視窗的卡片
+import CartModal from '@/app/components/CartModal'
 
 import styles from '../../src/styles/page-styles/RecipeDetail.module.scss'
 import {
@@ -33,6 +35,10 @@ export default function RecipeDetailPage() {
   const [selectedItems, setSelectedItems] = useState({})
   // 這個狀態用來控制調味料是否被選中
   const [selectedSeasonings, setSelectedSeasonings] = useState({})
+  // 加入購物車的彈出視窗
+  const [showCartModal, setShowCartModal] = useState(false)
+  const [cartModalMessage, setCartModalMessage] = useState('')
+
   // 2. 在組件內部宣告 router
   const router = useRouter()
 
@@ -145,12 +151,13 @@ export default function RecipeDetailPage() {
     }
   }
   // 點擊按鈕添加食材至購物車(新的)
+  // 修改 handleConfirmCart 函數
   const handleConfirmCart = async () => {
     if (!auth || !auth.token) {
-      alert('請先登入才能加入購物車！')
+      setCartModalMessage('請先登入才能加入購物車！')
+      setShowCartModal(true)
       return
     }
-
     // 取得所有被選中的食材的 product_id
     const selectedIngredientItems = recipe.ingredients
       .filter((_, index) => selectedItems[`condiment-${index}`])
@@ -162,11 +169,13 @@ export default function RecipeDetailPage() {
       .map((item) => item.product_id)
 
     // 如果都沒有選擇任何項目
+    // 將原本的 alert 改為使用 CartModal
     if (
       selectedIngredientItems.length === 0 &&
       selectedSeasoningItems.length === 0
     ) {
-      alert('請先選擇要加入購物車的食材或調味料！')
+      setCartModalMessage('請先選擇要加入購物車的食材或調味料！')
+      setShowCartModal(true)
       return
     }
 
@@ -201,16 +210,18 @@ export default function RecipeDetailPage() {
 
       // 如果所有請求都成功
       if (results.every((r) => r.success)) {
-        alert('所有商品已成功加入購物車！')
+        setCartModalMessage('所有商品已成功加入購物車！')
+        setShowCartModal(true)
       } else {
-        // 如果有部分失敗，顯示詳細訊息
         const failedItems = results.filter((r) => !r.success)
-        alert(
+        setCartModalMessage(
           `部分商品加入失敗：${failedItems.map((r) => r.message).join('\n')}`
         )
+        setShowCartModal(true)
       }
     } catch (error) {
-      alert(`加入購物車時發生錯誤：${error.message}`)
+      setCartModalMessage(`加入購物車時發生錯誤：${error.message}`)
+      setShowCartModal(true)
     }
 
     //  舊版的，原本是寫成多個產品ID打包起來送給後端，但目前後端是寫成產品ID一個一個接收
@@ -308,12 +319,12 @@ export default function RecipeDetailPage() {
               )}
             </div>
           </div>
-          <button className={styles.cardCheck}>
+          {/* <button className={styles.cardCheck}>
             <h2>
               <TbHandFinger />
               &nbsp;確認
             </h2>
-          </button>
+          </button> */}
           <div className={styles.cardIcon}>
             <TbBowlSpoon />
           </div>
@@ -368,6 +379,13 @@ export default function RecipeDetailPage() {
               &nbsp;確認
             </h2>
           </button>
+          {/* 加入 CartModal 組件 */}
+          <CartModal
+            show={showCartModal}
+            onHide={() => setShowCartModal(false)}
+            title="購物車訊息"
+            message={cartModalMessage}
+          />
           <div className={styles.cardIcon}>
             <PiJarLabelBold />
           </div>
@@ -760,7 +778,7 @@ export default function RecipeDetailPage() {
         </div>
       </div>
       {/* FoodFeeBack 區塊 */}
-      {isFeedbackVisible && <FoodFeeBack />}
+      {/* {isFeedbackVisible && <FoodFeeBack />} */}
 
       {/* Related Recipes Section - 動態生成相關食譜 */}
       <div className={styles.relatedRecipesSection}>

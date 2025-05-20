@@ -219,7 +219,7 @@ export default function RecipesLandingPage() {
                   onClick={() => handleSearch('麵食')}
                   className={styles.viewMoreButton}
                 >
-                  <h2 className={styles.viewMoreText}>看更多</h2>
+                  <h2>看更多</h2>
                 </button>
               </div>
               <div className={styles.recipeCardsSection}>
@@ -299,7 +299,7 @@ export default function RecipesLandingPage() {
                   onClick={() => handleSearch('蔬食')}
                   className={styles.viewMoreButton}
                 >
-                  <h2 className={styles.viewMoreText}>看更多</h2>
+                  <h2>看更多</h2>
                 </button>
               </div>
               <div className={styles.recipeCardsSection}>
@@ -339,7 +339,7 @@ export default function RecipesLandingPage() {
                   onClick={() => handleSearch('甜點')}
                   className={styles.viewMoreButton}
                 >
-                  <h2 className={styles.viewMoreText}>看更多</h2>
+                  <h2>看更多</h2>
                 </button>
               </div>
               <div className={styles.recipeCardsSection}>
@@ -379,7 +379,7 @@ export default function RecipesLandingPage() {
                   onClick={() => handleSearch('飯食')}
                   className={styles.viewMoreButton}
                 >
-                  <h2 className={styles.viewMoreText}>看更多</h2>
+                  <h2>看更多</h2>
                 </button>
               </div>
               <div className={styles.recipeCardsSection}>
@@ -419,7 +419,7 @@ export default function RecipesLandingPage() {
                   onClick={() => handleSearch('異國')}
                   className={styles.viewMoreButton}
                 >
-                  <h2 className={styles.viewMoreText}>看更多</h2>
+                  <h2>看更多</h2>
                 </button>
               </div>
               <div className={styles.recipeCardsSection}>
@@ -459,7 +459,7 @@ export default function RecipesLandingPage() {
                   onClick={() => handleSearch('生鮮')}
                   className={styles.viewMoreButton}
                 >
-                  <h2 className={styles.viewMoreText}>看更多</h2>
+                  <h2>看更多</h2>
                 </button>
               </div>
               <div className={styles.recipeCardsSection}>
@@ -499,7 +499,7 @@ export default function RecipesLandingPage() {
                   onClick={() => handleSearch('糕點')}
                   className={styles.viewMoreButton}
                 >
-                  <h2 className={styles.viewMoreText}>看更多</h2>
+                  <h2>看更多</h2>
                 </button>
               </div>
               <div className={styles.recipeCardsSection}>
