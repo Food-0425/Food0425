@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import { useRouter } from 'next/navigation'
-import styles from '../../src/styles/page-styles/ProductContent.module.scss'
+import styles from '../../src/styles/page-styles/RecipeDetail.module.scss'
 import Link from 'next/link'
 import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
