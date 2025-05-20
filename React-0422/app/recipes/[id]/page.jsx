@@ -588,7 +588,7 @@ export default function RecipeDetailPage() {
             </Modal.Header>
             <Modal.Body>
               {/* 6. 放入您的 FoodFeeBack 元件 */}
-              <FoodFeeBack />
+
               {/* 您可能需要傳遞一些 props 給 FoodFeeBack，例如關閉 modal 的函數 */}
               <FoodFeeBack onFormSubmit={handleCloseFeedbackModal} />
             </Modal.Body>
