@@ -157,6 +157,64 @@ router.get('/api/products/:id', async (req, res) => {
         });
     }
 });
+// 加入收藏ＡＰＩ
+// http://localhost:3001/api/products/favorite
+router.post('/api/products/favorite', async (req, res) => {
+  const { user_id, product_id } = req.body;
+
+  if (!user_id || !product_id) {
+    return res.status(400).json({ success: false, message: '缺少 user_id 或 product_id' });
+  }
+
+  try {
+    // 檢查是否已經收藏
+    const [existing] = await db.query(
+      'SELECT * FROM favorites WHERE user_id = ? AND product_id = ?', 
+      [user_id, product_id]
+    );
+
+    if (existing.length > 0) {
+      return res.status(409).json({ success: false, message: '已收藏此商品' });
+    }
+
+    // 寫入收藏
+    await db.query(
+      'INSERT INTO favorites (user_id, product_id) VALUES (?, ?)', 
+      [user_id, product_id]
+    );
+
+    res.json({ success: true, message: '已加入收藏' });
+  } catch (err) {
+    console.error('新增收藏錯誤:', err);
+    res.status(500).json({ success: false, message: '伺服器錯誤' });
+  }
+});
+
+// 取消收藏 API
+// http://localhost:3001/api/products/unfavorite
+router.delete('/api/products/unfavorite', async (req, res) => {
+  const { user_id, product_id } = req.body;
+
+  if (!user_id || !product_id) {
+    return res.status(400).json({ success: false, message: '缺少 user_id 或 product_id' });
+  }
+
+  try {
+    const [result] = await db.query(
+      'DELETE FROM favorites WHERE user_id = ? AND product_id = ?', 
+      [user_id, product_id]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ success: false, message: '找不到收藏紀錄' });
+    }
+
+    res.json({ success: true, message: '已取消收藏' });
+  } catch (err) {
+    console.error('取消收藏錯誤:', err);
+    res.status(500).json({ success: false, message: '伺服器錯誤' });
+  }
+});
 
 // 新增 API - 取得商品相關推薦 (隨機取得)
 router.get('/api/products/:id/recommendations', async (req, res) => {
