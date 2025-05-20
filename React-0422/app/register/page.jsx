@@ -5,12 +5,6 @@ import { useRouter } from 'next/navigation'
 import styles from './styles/Register.module.scss'
 import Image from 'next/image'
 import { FaEye, FaEyeSlash, FaCalendarAlt, FaChevronDown } from '../icons/icons'
-// MUI套件 datepicker (https://mui.com/x/react-date-pickers/quickstart/)
-import { DatePicker } from '@mui/x-date-pickers/DatePicker'
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
-// dayjs 套件 (https://day.js.org/)，處理日期格式
-import dayjs from 'dayjs'
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -375,43 +369,6 @@ export default function RegisterPage() {
               <div className={styles.errorMessage}>{errors.birthday}</div>
             )}
           </div>
-
-          {/* <div className={styles.formGroup}>
-            <label htmlFor="birthday" className={styles.label}>
-              生日 *
-            </label>
-            <div className={styles.dateInput}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  value={formData.birthday ? dayjs(formData.birthday) : null}
-                  onChange={(newValue) => {
-                    const formattedDate = newValue
-                      ? newValue.format('YYYY-MM-DD')
-                      : ''
-                    setFormData((prev) => ({
-                      ...prev,
-                      birthday: formattedDate,
-                    }))
-                    validateField('birthday', formattedDate)
-                  }}
-                  slotProps={{
-                    textField: {
-                      className: `${styles.input} ${errors.birthday ? styles.errorInput : ''}`,
-                      required: true,
-                      placeholder: '請選擇生日',
-                    },
-                  }}
-                  format="YYYY-MM-DD"
-                  slots={{
-                    openPickerIcon: FaCalendarAlt,
-                  }}
-                />
-              </LocalizationProvider>
-            </div>
-            {errors.birthday && (
-              <div className={styles.errorMessage}>{errors.birthday}</div>
-            )}
-          </div> */}
 
           <div className={styles.formGroup}>
             <label htmlFor="gender" className={styles.label}>
