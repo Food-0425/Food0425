@@ -27,7 +27,21 @@ import { LazyLoadImage } from 'react-lazy-load-image-component'
 
 export default function RecipeDetailPage() {
   const [currentPage, setCurrentPage] = useState(0) // 當前頁數
-  const commentsPerPage = 3 // 每頁顯示的評論數量
+  const [commentsPerPage, setCommentsPerPage] = useState(3) // 每頁顯示的評論數量
+  // 動態調整每頁評論數量
+  useEffect(() => {
+    function handleResize() {
+      if (window.innerWidth <= 991) {
+        setCommentsPerPage(1)
+      } else {
+        setCommentsPerPage(3)
+      }
+    }
+    handleResize() // 初始化時執行一次
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
   const { auth } = useAuth() || {} // 使用 useAuth 鉤子獲取用戶信息
   // 這個狀態用來控制食材是否被選中
   const [selectedItems, setSelectedItems] = useState({})
@@ -260,16 +274,17 @@ export default function RecipeDetailPage() {
               )}
             </div>
           </div>
-          <button className={styles.cardCheck}>
-            <h2>
-              <TbHandFinger />
-              &nbsp;確認
-            </h2>
-          </button>
+
           <div className={styles.cardIcon}>
             <TbBowlSpoon />
           </div>
         </div>
+        <button className={styles.cardCheck} onClick={handleConfirmCart}>
+          <h2>
+            <TbHandFinger />
+            &nbsp;確認
+          </h2>
+        </button>
         <div className={styles.ingredientCard}>
           <div className={styles.cardBody}>
             <h2>調味料</h2>
@@ -314,12 +329,7 @@ export default function RecipeDetailPage() {
               )}
             </div>
           </div>
-          <button className={styles.cardCheck} onClick={handleConfirmCart}>
-            <h2>
-              <TbHandFinger />
-              &nbsp;確認
-            </h2>
-          </button>
+
           <div className={styles.cardIcon}>
             <PiJarLabelBold />
           </div>
@@ -566,7 +576,6 @@ export default function RecipeDetailPage() {
             <div className={styles.commentsList01}>
               {/* 左箭頭按鈕 */}
               <button
-                className={styles.arrowButton}
                 onClick={handlePrevPage}
                 // 第一頁禁用：disabled={currentPage === 0}
                 disabled={currentPage === 0}
@@ -613,7 +622,7 @@ export default function RecipeDetailPage() {
                   // 備用的靜態評論，當API沒有返回評論時顯示
                   <>
                     <div className={styles.commentCard}>
-                      <div className={styles.commentUser}>
+                      <div>
                         {/* 因為這一塊是假設沒人留言的情況下，所以先註解掉 */}
                         {/* <img
                     src={`/images/user/default.jpg`}
@@ -627,8 +636,8 @@ export default function RecipeDetailPage() {
                     }}
                   /> */}
                         <div className={styles.userInfo}>
-                          <div className={styles.userContent}>
-                            <div className={styles.userName}>
+                          <div>
+                            <div>
                               <h2>{'目前這個食譜尚未有人留言'}</h2>
                             </div>
                           </div>
@@ -817,30 +826,32 @@ export default function RecipeDetailPage() {
         </div>
       </div>
       {/* sticker */}
-      <LazyLoadImage
-        src="/images/design/sticker-1.svg"
-        delayTime={300}
-        className={styles.sticker1}
-        alt="蔬菜"
-      />
-      <LazyLoadImage
-        src="/images/design/sticker-2.svg"
-        delayTime={300}
-        className={styles.sticker2}
-        alt="橄欖油"
-      />
-      <LazyLoadImage
-        src="/images/design/sticker-3.svg"
-        delayTime={300}
-        className={styles.sticker3}
-        alt="調味罐"
-      />
-      <LazyLoadImage
-        src="/images/design/sticker-5.svg"
-        delayTime={300}
-        className={styles.sticker5}
-        alt="砧板"
-      />
+      <div className={styles.sticker}>
+        <LazyLoadImage
+          src="/images/design/sticker-1.svg"
+          delayTime={300}
+          className={styles.sticker1}
+          alt="蔬菜"
+        />
+        <LazyLoadImage
+          src="/images/design/sticker-2.svg"
+          delayTime={300}
+          className={styles.sticker2}
+          alt="橄欖油"
+        />
+        <LazyLoadImage
+          src="/images/design/sticker-3.svg"
+          delayTime={300}
+          className={styles.sticker3}
+          alt="調味罐"
+        />
+        <LazyLoadImage
+          src="/images/design/sticker-5.svg"
+          delayTime={300}
+          className={styles.sticker5}
+          alt="砧板"
+        />
+      </div>
     </div>
   )
 }

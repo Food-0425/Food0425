@@ -17,9 +17,9 @@ const Header = () => {
   return (
     <div className={styles.navbar}>
       <span>
-        <a href="">
+        <Link href="http://localhost:3000/">
           <img src="/images/logo/logo-onlyFont-02.svg" alt="FOOD-logo" />
-        </a>
+        </Link>
         <div className={styles.navList}>
           <Link href="/recipes-landing">
             <button>

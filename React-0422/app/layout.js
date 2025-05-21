@@ -17,6 +17,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { usePathname } from 'next/navigation'
 
 import Loading from './loading'
+import 'animate.css'
 
 // 因為這段程式碼會在伺服器端執行，所以不能使用 usePathname
 // 也就是因為這段會擋到網頁轉場動畫，所以先註解調一下
@@ -73,7 +74,7 @@ export default function RootLayout({ children }) {
               }} // 動畫持續 0.3 秒
               style={{ width: '100%', position: 'relative' }} // 確保 main 佔滿寬度，避免佈局問題
             >*/}
-          {children} {/* 這裡會渲染當前路由對應的 page.jsx 內容 */}
+          <main>{children}</main> {/* 這裡會渲染當前路由對應的 page.jsx 內容 */}
           {/* </motion.main>
           </AnimatePresence> */}
           <Footer />

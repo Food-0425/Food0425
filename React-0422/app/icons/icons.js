@@ -9,6 +9,7 @@ import {
   FaChevronDown,
   FaCalendarAlt,
   FaLock,
+  FaRegHandPointUp,
 } from 'react-icons/fa'
 import {
   FaCakeCandles,
@@ -31,7 +32,7 @@ import {
 import { BsBookmarkPlus, BsBookmarkStarFill } from 'react-icons/bs'
 import { GrPrevious } from 'react-icons/gr'
 import { GiKitchenScale } from 'react-icons/gi'
-import { PiJarLabelBold } from 'react-icons/pi'
+import { PiJarLabelBold, PiHandTapBold } from 'react-icons/pi'
 import { HiViewGridAdd, HiOutlineViewGridAdd } from 'react-icons/hi'
 import { IoIosAddCircle, IoIosListBox } from 'react-icons/io'
 import { IoIosArrowBack } from 'react-icons/io'
@@ -65,6 +66,8 @@ export {
   TbBowlSpoon,
   IoIosAddCircle,
   TbHandFinger,
+  FaRegHandPointUp,
+  PiHandTapBold,
   IoIosArrowBack,
   FaGoogle,
   FaEye,
