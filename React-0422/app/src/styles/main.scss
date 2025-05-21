@@ -18,6 +18,10 @@ body {
   font-family: $font-family-default;
 }
 
+hr{
+  margin: 0;
+  color: $color-accent;
+}
 h1,
 h2,
 h3 {

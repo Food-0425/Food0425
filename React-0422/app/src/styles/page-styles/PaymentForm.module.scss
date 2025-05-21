@@ -1,3 +1,6 @@
+@use '../variables' as *;
+@use '../mixins.scss' as *;
+
 /* wrapper*/
 .paymentPageWrapper {
   padding: 20px 0;
@@ -8,17 +11,15 @@
   max-width: 500px;
   margin: 0 auto; /*頁面左右置中*/
   padding: 30px;
-  background-color: #f9f9f9;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  font-family: 'Helvetica Neue', Arial, sans-serif;
+  background-color: #fff;
+  border-radius: 30px;
+  box-shadow: $card-shadow;
 }
 
 /* h2 */
 .formHeaderTitle {
   text-align: center;
   color: #333;
-  font-size: 1.8em;
   margin-bottom: 25px;
 }
 
@@ -28,7 +29,6 @@
   justify-content: center;
   margin-bottom: 30px; /* 與表單欄位隔開 */
   gap: 15; /* 按鈕間距 */
-  
 }
 
 .methodButton {
@@ -38,15 +38,19 @@
   gap: 8px; /* icon 和文字的間距 */
   padding: 10px 15px;
   border: 1px solid #ccc; /* 邊框 */
-  border-radius: 6px;/* 圓角 */
+  border-radius: 6px; /* 圓角 */
   background-color: #fff; /* 背景色 */
   color: #555; /* 文字顏色 */
   box-shadow: 0 2px 4px rgba(136, 24, 24, 0.05); /* 陰影 */
   cursor: pointer;
-  font-size: 16px; 
+  font-size: 16px;
   font-weight: 500;
   text-align: center;
-  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease;
 
   /* icon set */
   display: flex; /* 讓 icon 和文字好對齊 */
@@ -58,12 +62,11 @@
 
 /* card icon */
 .paymentIcon {
-  font-size: 1.2em;
   width: 20px; /* icon 寬度 */
   height: 20px; /* icon 高度 */
   vertical-align: middle;
   /* color: currentColor; */ /* 讓 react-icons 的顏色跟按鈕文字顏色一樣，可以視情況取消註解 */
-  /* fill: currentColor; */  /* 如果是 SVG，這可以讓 SVG 內部顏色繼承文字顏色 */
+  /* fill: currentColor; */ /* 如果是 SVG，這可以讓 SVG 內部顏色繼承文字顏色 */
 }
 
 /* line png */
@@ -78,9 +81,9 @@
 }
 
 .methodButton.active {
+  font-size: $font-size-h3;
   background-color: #e8ebed; /* 選中時的背景色 */
-  color: #DF6C2D; /* 選中時的文字顏色 */
-  border: 1px solid #DF6C2D;
+  color: $color-accent; /* 選中時的文字顏色 */
   font-weight: bold;
   box-shadow: inset 0 0 5px rgba(0, 123, 255, 0.1); /* 選中時加一點內陰影 */
 }
@@ -89,16 +92,18 @@
   background-color: #f0f0f0; /* 滑鼠移到未選中的按鈕上 */
 }
 
-.icon { /* icon */
+.icon {
+  /* icon */
   width: 20px;
   height: 20px;
   margin-right: 8px;
 }
 /* END 付款方式選擇按鈕 */
 
-
 /* --- 信用卡表單 spezifische Styles --- */
-.creditCardForm h3, .linePaySection h3 { /* 給各區塊一個小標題 */
+.creditCardForm h3,
+.linePaySection h3 {
+  /* 給各區塊一個小標題 */
   margin-top: 0;
   margin-bottom: 20px;
   color: #333;
@@ -118,8 +123,8 @@
   color: #555;
 }
 
-.formGroup input[type="text"],
-.formGroup input[type="password"] {
+.formGroup input[type='text'],
+.formGroup input[type='password'] {
   width: 100%;
   padding: 12px 15px;
   border: 1px solid #ddd;
@@ -129,11 +134,11 @@
   transition: border-color 0.3s ease;
 }
 
-.formGroup input[type="text"]:focus,
-.formGroup input[type="password"]:focus {
+.formGroup input[type='text']:focus,
+.formGroup input[type='password']:focus {
   outline: none;
-  border-color: #007bff;
-  box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+  border-color: $color-accent;
+  box-shadow: 0 0 0 0.2rem rgba(255, 123, 0, 0.218);
 }
 
 .formRow {
@@ -147,13 +152,13 @@
 }
 
 .submitButton {
-  width: 100%; 
+  width: 100%;
   padding: 10px 10px;
   background-color: #e06c14;
   color: white;
   border: none;
   border-radius: 50px;
-  font-size: 18px;
+  font-size: $font-size-h2;
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s ease;
@@ -161,15 +166,15 @@
 }
 
 .submitButton:hover {
-  background-color: #423c3a;
+  background-color: $color-primary;
   transform: translateY(-1px);
 }
 
-.submitButton:active { /* 按下按鈕時的效果 */
+.submitButton:active {
+  /* 按下按鈕時的效果 */
   transform: translateY(0px);
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
-
 
 /* --- LINE Pay 區塊樣式 --- */
 .linePaySection {
@@ -202,3 +207,20 @@
 }
 /* END LINE Pay */
 
+.sticker1 {
+  z-index: -1;
+  width: 500px;
+  position: absolute;
+  left: 50px;
+  top: 215px;
+  /* transform: rotate(250deg); */
+}
+
+.sticker2 {
+  z-index: -1;
+  width: 300px;
+  position: absolute;
+  right: 150px;
+  top: 200px;
+  /* transform: rotate(250deg); */
+}
