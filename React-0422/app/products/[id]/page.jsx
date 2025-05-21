@@ -33,6 +33,7 @@ export default function ProductDetailPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [recommendedLoading, setRecommendedLoading] = useState(true)
   const [recommendedError, setRecommendedError] = useState(null)
+  const productId = params.id // 取得商品 ID
   const [productRating, setProductRating] = useState({
     averageRating: 0,
     totalReviews: 0,
@@ -204,6 +205,52 @@ export default function ProductDetailPage() {
       fetchRecommendedProducts()
     }
   }, [params.id])
+
+  useEffect(() => {
+    if (!productId) return
+
+    const fetchRatingData = async () => {
+      try {
+        const res = await fetch(
+          `http://localhost:3001/products-review/api/${productId}/ratings`
+        )
+
+        console.log('評分 API 回應狀態:', res.status)
+
+        if (!res.ok) {
+          throw new Error('無法取得評分資料')
+        }
+
+        const result = await res.json()
+        console.log('評分資料:', result)
+
+        if (result.success && result.data) {
+          // 確保數值轉換正確
+          const avgRating = parseFloat(result.data.averageRating) || 0
+          const totalReviews = parseInt(result.data.totalReviews) || 0
+
+          setProductRating({
+            averageRating: avgRating,
+            totalReviews: totalReviews,
+          })
+        } else {
+          console.warn('評分資料取得失敗', result.error)
+          setProductRating({
+            averageRating: 0,
+            totalReviews: 0,
+          })
+        }
+      } catch (error) {
+        console.error('取得評分資料時發生錯誤:', error)
+        setProductRating({
+          averageRating: 0,
+          totalReviews: 0,
+        })
+      }
+    }
+
+    fetchRatingData()
+  }, [productId])
 
   useEffect(() => {
     const fetchReviews = async () => {
@@ -427,13 +474,15 @@ export default function ProductDetailPage() {
           <h1 className={styles.productTitle}>{product.name}</h1>
           <div className={styles.ratingContainer}>
             <div className={styles.starsContainer}>
-              <StarRating rating={productRating.averageRating} />
+              <StarRating
+                rating={parseFloat(productRating.averageRating) || 0}
+              />
             </div>
             <p className={styles.ratingScore}>
-              ({productRating.averageRating.toFixed(1)})
+              ({(parseFloat(productRating.averageRating) || 0).toFixed(1)})
             </p>
             <p className={styles.reviewCount}>
-              {productRating.totalReviews} 則評價
+              {productRating.totalReviews || 0} 則評價
             </p>
           </div>
           {/* 把price更改成整數 */}

@@ -40,7 +40,7 @@ router.get('/api', async (req, res) => {
       res.status(500).json({ success: false, error: err.message })
     }
   })
-
+// http://localhost:3001/products-review/api/:id
   router.get('/api/:id', async (req, res) => {
     try {
       const productId = req.params.id; // 使用 product_id 作為查詢條件
@@ -77,5 +77,33 @@ router.get('/api', async (req, res) => {
       res.status(500).json({ success: false, error: error.message });
     }
   });
+  http://localhost:3001/products-review/api/1022/ratings
+// 新增商品評論總數
+  router.get('/api/:id/ratings', async (req, res) => {
+  try {
+    const productId = req.params.id;
+
+    const [rows] = await db.query(
+      `SELECT 
+         COUNT(*) AS totalReviews,
+         ROUND(AVG(rating), 1) AS averageRating
+       FROM (
+         SELECT DISTINCT user_id, product_id, rating 
+         FROM product_reviews 
+         WHERE product_id = ?
+       ) AS unique_reviews`,
+      [productId]
+    );
+
+    res.json({
+      success: true,
+      data: rows[0] || { totalReviews: 0, averageRating: 0 }
+    });
+
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 
 export default router
