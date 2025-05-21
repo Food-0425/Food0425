@@ -1,20 +1,16 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import '../style.css'
-import { useCart } from '@/hooks/use-cart'
+import React, { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import '../style.css' 
+import { useCart } from '@/hooks/use-cart';
+import { useAuth } from '@/hooks/auth-context'; // 獲取使用者資訊
 // import { parse } from 'path';
 
-// 如果 CartPage 的 style.css 是在 src/app/cart/style.css
-// 那這裡可能要用 import '@/app/cart/style.css' 或其他相對/絕對路徑
-// 為了簡單起見，先假設 style.css 可以被 ContactPage 存取到
-// import '../cart/style.css'; // 假設 CartPage.jsx 和 style.css 在 cart 資料夾內
-// 如果你的 style.css 在 public 資料夾，那你應該是在 <Head> 引入，這裡不用特別 import
-// 最好的方式是 ContactPage 也有自己的 CSS Module 或全域 CSS
-
 export default function ContactPage() {
-  const router = useRouter()
+  const authDataFromHook = useAuth(); // <--- 先不要解構！
+
+  const router = useRouter();
   // 取得購物車資料
   const searchParams = useSearchParams() // 專門用來讀取 URL query parameters
 
@@ -24,6 +20,7 @@ export default function ContactPage() {
     items: cartContextItems, // 從context 取得購物車商品列表
     totalAmount: cartContextSubtotal, // 從context 取得購物車小計 （未含運費折扣）
     totalQty: cartContextTotalQty, // 從context 取得購物車商品總數量
+    didMount: isCartReady,
   } = useCart()
 
   const [recipient, setRecipient] = useState({
@@ -33,26 +30,33 @@ export default function ContactPage() {
     city: '',
     district: '',
     address: '',
-  })
-  const [notes, setNotes] = useState('') // 訂單備註
-  const [formErrors, setFormErrors] = useState({}) // 儲存表單驗證錯誤訊息
+  });
+  const [notes, setNotes] = useState(''); // 訂單備註
+  const [formErrors, setFormErrors] = useState({}); // 儲存表單驗證錯誤訊息
+  
+  const [orderDetails, setOrderDetails] = useState(null); // 儲存訂單摘要
+  const [loading, setLoading] = useState(true); // 控制載入狀態
 
-  const [orderDetails, setOrderDetails] = useState(null) // 儲存訂單摘要
-  const [loading, setLoading] = useState(true) // 控制載入狀態
+  // const { auth } = useAuth();
+  // 後端api port
+  const API_BASE_URL = 'http://localhost:3001'
 
   useEffect(() => {
-    console.log(
-      '🕵️‍♂️ ContactPage useEffect 開始！目前網址是:',
-      window.location.href
-    )
+    console.log('ContactPage: authDataFromHook on mount/update:', authDataFromHook);
+  }, [authDataFromHook]); // 看看 authDataFromHook 一開始是什麼
 
-    setLoading(true) // 一開始先 loading
-
-    let finalGrandTotal = 0 // 先準備一個變數來裝最終的 grandTotal
-    let initialSubtotal = 0 // 其他你可能需要的初始值
-    let initialShipping = 3 // 你的預設運費
-    let initialDiscount = 5 // 你的預設折扣
-    let initialCartItems = []
+  useEffect(() => {
+    console.log('🕵️‍♂️ ContactPage useEffect 開始！目前網址是:', window.location.href);
+    console.log('🛒 此時的 cartContextItems (來自 useCart):', cartContextItems);
+    
+    setLoading(true); // 一開始先 loading
+  
+    let finalGrandTotal = 0; // 先準備一個變數來裝最終的 grandTotal
+    let initialSubtotal = 0; // 其他你可能需要的初始值
+    let initialShipping = 3; // 你的預設運費
+    let initialDiscount = 5; // 你的預設折扣
+    let initialCartItems = [];
+  
 
     // 1. 最優先處理從 URL 來的總金額
     const totalFromCartString = searchParams.get('totalAmount')
@@ -190,7 +194,7 @@ export default function ContactPage() {
     setOrderDetails(detailsToSet) // 設定訂單摘要
 
     setLoading(false)
-  }, [searchParams]) // 依賴記得放 searchParams!
+  }, [searchParams, isCartReady, cartContextItems]) // 依賴記得放
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
@@ -207,26 +211,29 @@ export default function ContactPage() {
 
   // 簡易表單驗證函式
   const validateForm = () => {
-    const errors = {}
-    if (!recipient.name.trim()) errors.name = '請告訴我你的大名～🥺'
-    if (!recipient.phone.trim()) errors.phone = '手機號碼忘了填喔！📞'
-    else if (!/^\d{10}$/.test(recipient.phone.trim()))
-      errors.phone = '手機號碼格式好像不太對，請輸入10個數字。'
-    if (!recipient.email.trim())
-      errors.email = 'Email 也要填一下啦，訂單通知要寄去哪？'
-    else if (!/\S+@\S+\.\S+/.test(recipient.email.trim()))
-      errors.email = '這個 Email 格式...嗯...再檢查一下？🧐'
-    if (!recipient.city.trim()) errors.city = '哪個縣市呢？'
-    if (!recipient.district.trim()) errors.district = '鄉鎮市區？'
-    if (!recipient.address.trim())
-      errors.address = '詳細地址才能把好東西送到你手上喔！'
+    const errors = {};
+    if (!recipient.name.trim()) errors.name = '請填寫您的大名';
+    if (!recipient.phone.trim()) errors.phone = '請填寫您的手機號碼';
+    else if (!/^\d{10}$/.test(recipient.phone.trim())) errors.phone = '手機號碼格式好像不太對，請輸入10個數字。';
+    if (!recipient.email.trim()) errors.email = '請填寫您的Email';
+    else if (!/\S+@\S+\.\S+/.test(recipient.email.trim())) errors.email = '請確認您的Email格式正確';
+    if (!recipient.city.trim()) errors.city = '請填寫您的縣市';
+    if (!recipient.district.trim()) errors.district = '請填寫您的鄉鎮市區';
+    if (!recipient.address.trim()) errors.address = '請填寫您的詳細地址';
 
     setFormErrors(errors)
     return Object.keys(errors).length === 0 // 如果沒有錯誤訊息，代表驗證通過
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault() // 防止表單預設的提交跳轉行為
+    e.preventDefault(); // 防止表單預設的提交跳轉行為
+
+    // ✨✨✨ 前端先檢查購物車是不是空的 ✨✨✨
+  if (!cartContextItems || cartContextItems.length === 0) {
+    alert('哎呀！您的購物車是空的，沒辦法提交訂單喔！快去挑選幾件好物吧～🛍️');
+    return; // 中斷提交，根本不要發 fetch
+  }
+
     if (!validateForm()) {
       alert('有些資料好像漏填或格式不太對喔，檢查一下紅字提示的地方吧！😉')
       return
@@ -234,9 +241,31 @@ export default function ContactPage() {
 
     // 確保 orderDetails (至少運費和折扣部分) 已載入
     if (!orderDetails) {
-      alert('訂單資訊 (運費/折扣) 尚未準備好，請稍候或重試。')
-      return
+      alert("訂單資訊 (運費/折扣) 尚未準備好，請稍候或重試。");
+      return;
     }
+
+    // ✨✨ 在要用 auth 之前，先檢查 ✨✨
+    if (!authDataFromHook || !authDataFromHook.auth || !authDataFromHook.auth.id) {
+      console.error('😭 handleSubmit: authDataFromHook or auth or auth.id is not available!', authDataFromHook);
+      alert('無法取得使用者資訊，可能您需要重新登入，或稍後再試。');
+      // setLoading(false); // 如果你有 setLoading
+      return; // 中斷提交
+    }
+
+    // ✨✨✨ 把 authDataFromHook.auth 解構或賦值出來 ✨✨✨
+  const auth = authDataFromHook.auth; // 現在 handleSubmit 裡面就有一個叫 auth 的變數了
+  // 或者如果你只需要 id: const { id: userId } = authDataFromHook.auth; (也要注意 authDataFromHook.auth 不能是 null)
+
+  if (!auth.id || auth.id === 0) { // 再檢查 id (因為 noAuth 的 id 是 0)
+    console.error('😭 handleSubmit: userId 無效!', 'Current auth:', auth);
+    alert('您似乎尚未登入有效的帳號，請先登入後再提交訂單喔！😉');
+    return;
+  }
+
+  // ✨✨✨ 如果能跑到這裡，代表 auth.id 是有效的！ ✨✨✨
+    const userId = auth.id;
+    console.log('✨ 準備送出的 userId:', userId);
 
     // 計算總金額
     const subtotalForSubmit =
@@ -251,49 +280,66 @@ export default function ContactPage() {
     console.log('訂單備註:', notes)
     console.log('訂單摘要:', orderDetails)
     // usecart 商品列表與小計
-    console.log('購物車商品:', cartContextItems)
-    console.log('購物車小計:', cartContextSubtotal)
-    // console.log('運費:', finalShippingFee)
-    // console.log('折扣:', finalDiscountAmount)
-    // console.log('最終總金額:', finalGrandTotal)
-    console.log('會員 ID:', orderDetails.userId) // 假設你有訂單 ID
+    console.log('購物車商品:', cartContextItems);
+    console.log('購物車小計:', cartContextSubtotal);
+    // console.log('運費:', finalShippingFee);
+    // console.log('折扣:', finalDiscountAmount);
+    // console.log('最終總金額:', finalGrandTotal);
+    console.log('會員 ID:', orderDetails.userId); // 假設你有訂單 ID
+    
+    
+    
 
     // --- 接下來是串接後端 API 的部分 ---
-    // setLoading(true);
-    // try {
-    //   const response = await fetch('/api/your-checkout-endpoint', { // 你的後端 API 端點
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify({
-    //       recipientInfo: recipient,
-    //       orderNotes: notes,
-    //       // 把 orderDetails 裡需要的資訊 (例如 cartItems, grandTotal, userId) 一起送出
-    //       cart: orderDetails.cartItems,
-    //       totalAmount: orderDetails.grandTotal,
-    //       userId: orderDetails.userId,
-    //       // 你可能還需要支付方式等其他資訊
-    //     }),
-    //   });
-    //   if (!response.ok) {
-    //     const errorData = await response.json();
-    //     throw new Error(errorData.message || '訂單提交失敗，請稍後再試');
-    //   }
-    //   const result = await response.json();
-    //   console.log('🎉 訂單成功提交！後端回應：', result);
-    //   localStorage.removeItem('currentOrderDetails'); // 成功後清除 localStorage
-    //   // router.push(`/thank-you-page?orderId=${result.orderId}`); // 跳轉到感謝頁面，並帶上訂單ID
-    alert(
-      '訂單資料看起來都OK！下一步就是把這些資料送去伺服器處理囉～（模擬成功）'
-    )
-    router.push('/cart/payment') // 暫時先跳回首頁
-    // } catch (error) {
-    //   console.error('😭 訂單提交時發生錯誤:', error);
-    //   alert(`訂單提交失敗：${error.message}，請檢查網路或稍後再試 Q_Q`);
-    // } finally {
-    //   setLoading(false);
-    // }
-    // alert('下一步：把這些資料送去後端處理！（這部分還沒串接喔～）'); //開發先註解 也可以打開
+    setLoading(true); // 點下先轉圈 正在處理中
+    try {
+    const response = await fetch(`${API_BASE_URL}/api/orders`, { // 後端 API 端點
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' }, // JSON 格式 
+    body: JSON.stringify({ //把送出的資料打包json字串
+    recipientInfo: recipient, // 收件人資料 (來自 recipient state)
+    orderNotes: notes, // 訂單備註 (來自 notes state)
+    // 把 orderDetails 裡需要的資訊 (例如 cartItems, grandTotal, userId) 一起送出
+    cartItems: cartContextItems, // 商品列表
+    totalAmount: orderDetails.grandTotal, // 總金額
+    userId: auth?.id, // 使用者id
+    // 你可能還需要支付方式等其他資訊
+    }),
+    });
+
+    if (!response.ok) { // ✨✨✨ 當後端回應不OK (例如 400, 500) ✨✨✨
+      let errorPayload = { message: `後端回應錯誤，狀態碼：${response.status}` };
+      try {
+        const potentialErrorData = await response.json(); // 嘗試解析後端回的 JSON 錯誤訊息
+        if (potentialErrorData && typeof potentialErrorData.message === 'string') {
+          errorPayload.message = potentialErrorData.message;
+        }
+        console.log('後端回傳的錯誤 JSON (如果有的話):', potentialErrorData);
+      } catch (jsonError) {
+        console.error('😭 response.json() 解析失敗 (可能後端回的不是JSON):', jsonError);
+        // 此時 errorPayload.message 仍然是 "後端回應錯誤，狀態碼：..."
+      }
+      throw new Error(errorPayload.message); // 把整理好的錯誤訊息丟出去，會被下面的 catch 接住
+    }
+
+    // ✨✨✨ 如果 response.ok 是 true (例如後端回 200 或 201) ✨✨✨
+    const result = await response.json(); // 解析後端成功的 JSON 回應
+    console.log('🎉 訂單成功提交！後端回應：', result);
+
+    alert('訂單已成功送出！感謝您的購買！'); // (或用 result.message)
+
+    // router.push(`/thank-you?orderId=${result.orderId}`);
+    router.push('/cart/payment'); // 你原本的跳轉
+
+  } catch (error) { // 外層的 catch，會接住上面 throw new Error 或 fetch 本身的網路錯誤
+    console.error('😭 handleSubmit CATCH BLOCK - Error Object:', error);
+    console.error('😭 handleSubmit CATCH BLOCK - Error Name:', error.name);
+    console.error('😭 handleSubmit CATCH BLOCK - Error Message:', error.message);
+    alert(`訂單提交失敗：${error.message} (詳細錯誤請看Console)。`);
+  } finally {
+    setLoading(false);
   }
+  };
 
   if (loading) {
     return (

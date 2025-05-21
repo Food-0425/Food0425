@@ -6,8 +6,11 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { useAuth } from '@/hooks/auth-context'
 import './style.css' // style.css 在同一資料夾或正確路徑
 import { useRouter } from 'next/navigation'
+import { useCart } from '@/hooks/use-cart';
 
 export default function CartPage() {
+  const { item:initialCartItemsFromHook } = useCart();
+  console.log('🛒 ContactPage 剛載入時，useCart() 的 items:',initialCartItemsFromHook);
   //--- 狀態 ---
   //箱子
   const [cartItems, setCartItems] = useState([])
@@ -580,7 +583,6 @@ export default function CartPage() {
                 )}
                 {cartItems.map((item) => (
                   //顯示出item的資料
-                  <>
                     <div
                       className="cart-item"
                       key={item.cartItemId || item.productId} // 優先使用 cartItemId
@@ -698,7 +700,6 @@ export default function CartPage() {
                         {/* 使用 Bootstrap Icon */}
                       </button>
                     </div>
-                  </>
                 ))}
                 {/*{cartItems.length > 0 && ( // 只有購物車有東西才顯示優惠券
                   <div className="coupon-code">
