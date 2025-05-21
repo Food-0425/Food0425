@@ -436,10 +436,13 @@ export default function ProductDetailPage() {
               {productRating.totalReviews} 則評價
             </p>
           </div>
-          <div className={styles.productPrice}>
-            <p>NT$ {product.original_price?.toLocaleString()}</p>
-            <h2>NT$ {product.price?.toLocaleString()}</h2>
-          </div>
+          {/* 把price更改成整數 */}
+          {product && (
+            <div className={styles.productPrice}>
+              <p>NT$ {Math.floor(product.original_price).toLocaleString()}</p>
+              <h2>NT$ {Math.floor(product.price).toLocaleString()}</h2>
+            </div>
+          )}
 
           {/* 新增數量控制區塊 */}
           <div className={styles.quantityContainer}>

@@ -84,8 +84,8 @@ export const ProductCard = ({
           <h3>{name}</h3>
         </div>
         <div>
-          <p>${original_price}</p>
-          <h2>${price}</h2>
+          <p>NT$ {Math.floor(original_price).toLocaleString()}</p>
+          <h2>NT$ {Math.floor(price).toLocaleString()}</h2>
         </div>
       </span>
       <button
