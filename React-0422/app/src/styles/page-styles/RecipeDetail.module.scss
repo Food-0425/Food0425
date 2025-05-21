@@ -766,8 +766,30 @@
 .ratingContainer {
   display: flex;
   align-items: center;
-  gap: 15px;
-  margin-bottom: 20px;
+  gap: 8px;
+  margin-bottom: 10px;
+
+  .stars {
+    display: flex;
+    gap: 2px;
+  }
+
+  .starFilled,
+  .starHalf {
+    color: #ffd700;
+    font-size: 18px;
+  }
+
+  .starEmpty {
+    color: #e4e5e9;
+    font-size: 18px;
+  }
+
+  .ratingScore {
+    color: #666;
+    font-size: 14px;
+    margin-left: 5px;
+  }
 }
 
 /* 價格 */

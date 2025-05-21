@@ -13,26 +13,8 @@ import { IoIosArrowBack, BiSolidBowlRice, BiLike } from '../../icons/icons' //�
 import ProductCard from '../../components/ProductCard' // 引入 ProductCard 組件
 import StarRating from '../../components/StarRating' // 引入 StarRating 組件
 import { useAuth } from '@/hooks/auth-context' // 引入 Auth hook
-
-// const CommentStarRating = ({ rating }) => {
-//   const stars = []
-//   const totalStars = 5
-
-//   for (let i = 0; i < totalStars; i++) {
-//     if (rating >= i + 1) {
-//       // 整星
-//       stars.push(<FaStar key={i} className={styles.starFilled} />)
-//     } else if (rating >= i + 0.5) {
-//       // 半星
-//       stars.push(<FaStarHalfAlt key={i} className={styles.starHalf} />)
-//     } else {
-//       // 空星
-//       stars.push(<AiOutlineStar key={i} className={styles.starEmpty} />)
-//     }
-//   }
-
-//   return <div className={styles.commentStars}>{stars}</div>
-// }
+import { FaStar, FaStarHalfAlt } from 'react-icons/fa'
+import { AiOutlineStar } from 'react-icons/ai'
 
 //使用API
 export default function ProductDetailPage() {
@@ -391,6 +373,26 @@ export default function ProductDetailPage() {
     )
   }
 
+  const CommentStarRating = ({ rating }) => {
+    const stars = []
+    const totalStars = 5
+
+    for (let i = 0; i < totalStars; i++) {
+      if (rating >= i + 1) {
+        // 整星
+        stars.push(<FaStar key={i} className={styles.starFilled} />)
+      } else if (rating >= i + 0.5) {
+        // 半星
+        stars.push(<FaStarHalfAlt key={i} className={styles.starHalf} />)
+      } else {
+        // 空星
+        stars.push(<AiOutlineStar key={i} className={styles.starEmpty} />)
+      }
+    }
+
+    return <div className={styles.stars}>{stars}</div>
+  }
+
   return (
     <div className={styles.productContainer}>
       {/* Toast 通知，放在頂層比較不會出錯 */}
@@ -576,9 +578,6 @@ export default function ProductDetailPage() {
                           }}
                         />
                         <div className={styles.userInfo}>
-                          <button className={styles.buttonBiLike01}>
-                            <BiLike />
-                          </button>
                           <h3>{comment.full_name || '匿名用戶'}</h3>
                           <p>
                             {new Date(comment.review_date).toLocaleDateString()}
@@ -587,8 +586,10 @@ export default function ProductDetailPage() {
                       </div>
                       <div className={styles.commentContent}>
                         <div className={styles.ratingContainer}>
-                          {/* <CommentStarRating rating={comment.rating} /> */}
-                          <span>({comment.rating})</span>
+                          <CommentStarRating rating={comment.rating} />
+                          <span className={styles.ratingScore}>
+                            ({comment.rating?.toFixed(1)})
+                          </span>
                         </div>
                         <p>{comment.review_text || '無評論內容'}</p>
                       </div>
