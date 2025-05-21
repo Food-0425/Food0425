@@ -98,9 +98,7 @@ export default function RegisterPage() {
         break
       case 'username':
         if (!value) errorMessage = '請輸入使用者名稱'
-        else if (value.length > 0 && value.length < 3)
-          errorMessage = '使用者名稱至少需要3個字元'
-        else if (value.length > 10) errorMessage = '使用者名稱不可超過10個字'
+        else if (value.length > 10) error = '使用者名稱不可超過10個字'
         break
       case 'birthday':
         if (!value) error = '請選擇生日'
@@ -173,8 +171,6 @@ export default function RegisterPage() {
           break
         case 'username':
           if (!value) errorMessage = '請輸入使用者名稱'
-          else if (value.length > 0 && value.length < 3)
-            errorMessage = '使用者名稱至少需要3個字元'
           else if (value.length > 10) errorMessage = '使用者名稱不可超過10個字'
           break
         case 'birthday':
@@ -228,8 +224,8 @@ export default function RegisterPage() {
         })
         setErrors({}) // 清除錯誤
         setTimeout(() => {
-          router.push('/login')
-        }, 5000) // 5秒後導向登入頁面
+          router.push('/register-success') // 導向註冊成功頁面
+        })
       } else {
         if (result.errors) {
           // 後端 Zod 驗證錯誤，通常是 email/username 重複，或是其他 Zod schema 驗證失敗

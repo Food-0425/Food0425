@@ -13,7 +13,7 @@ const registerSchema = z
   .object({
     username: z
       .string()
-      .min(3, { message: "使用者名稱至少需要 3 個字元" })
+      .min(1, { message: "使用者名稱至少需要1個字元" })
       .max(10, { message: "使用者名稱不可超過10個字" }),
     email: z.string().email({ message: "無效的 Email 格式" }),
     password: z

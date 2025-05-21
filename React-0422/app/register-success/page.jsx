@@ -1,11 +1,30 @@
-// register-success/page.jsx
 'use client'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import styles from './styles/RegisterSuccess.module.scss'
+
 export default function RegisterSuccessPage() {
+  const router = useRouter()
+  const [countdown, setCountdown] = useState(5)
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCountdown((prev) => prev - 1)
+    }, 1000)
+
+    const redirect = setTimeout(() => {
+      router.push('/login')
+    }, 5000)
+
+    return () => {
+      clearInterval(timer)
+      clearTimeout(redirect)
+    }
+  }, [router])
+
   return (
     <div className={styles.pageContainer}>
       <div className={styles.card}>
@@ -20,9 +39,12 @@ export default function RegisterSuccessPage() {
           />
         </div>
         <h1 className={styles.title}>會員註冊</h1>
-        <p className={styles.message}>您已成功完成註冊！現在可以進行登入</p>
+        <div className={styles.messageContainer}>
+          <p className={styles.message}>您已成功完成註冊！現在可以進行登入</p>
+          <p className={styles.message}>{countdown} 秒後自動跳轉至登入頁面</p>
+        </div>
         <Link href="/login" legacyBehavior>
-          <a className={styles.linkButton}>前往登入</a>
+          <a className={styles.linkButton}>立即登入</a>
         </Link>
       </div>
     </div>
