@@ -229,12 +229,12 @@ export default function FoodFeeBack({ onSubmitSuccess, recipeId, auth }) {
               display: 'flex',
             }}
           >
-            <input
+            {/* <input
               type="checkbox"
               checked={isLike === 1}
               onChange={(e) => setIsLike(e.target.checked ? 1 : 0)}
             />
-            <label>我喜歡這個食譜</label>
+            <label>我喜歡這個食譜</label> */}
           </div>
         </div>
         <button
