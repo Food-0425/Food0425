@@ -9,9 +9,10 @@ import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { FoodFeeBack } from '../../components/FoodFeeBack'
 import { LazyLoadImage } from 'react-lazy-load-image-component' //圖片懶加載
-import { LuStar } from 'react-icons/lu' //星星圖示
-import { IoIosArrowBack } from 'react-icons/io' //箭頭圖示
-import { BiSolidBowlRice, BiLike } from 'react-icons/bi' //評論圖示
+import { IoIosArrowBack, BiSolidBowlRice, BiLike } from '../../icons/icons' //箭頭圖示
+import ProductCard from '../../components/ProductCard' // 引入 ProductCard 組件
+import StarRating from '../../components/StarRating' // 引入 StarRating 組件
+
 //使用API
 export default function ProductDetailPage() {
   const params = useParams() // 取得路由參數
@@ -27,6 +28,12 @@ export default function ProductDetailPage() {
   const [isFavorite, setIsFavorite] = useState(false) //是否收藏
   const [currentPage, setCurrentPage] = useState(0)
   const [isLoading, setIsLoading] = useState(true)
+  const [recommendedLoading, setRecommendedLoading] = useState(true)
+  const [recommendedError, setRecommendedError] = useState(null)
+  const [productRating, setProductRating] = useState({
+    averageRating: 0,
+    totalReviews: 0,
+  }) // 評分相關狀態
 
   // 取得商品資料
   useEffect(() => {
@@ -70,6 +77,7 @@ export default function ProductDetailPage() {
         context:
           '商品品質很好，包裝也很完整。雖然價格比一般商店貴一些，但品質確實有差。建議可以找特價時再購買。',
         rating: 4,
+        review_id: 1,
       },
       {
         id: 2,
@@ -80,6 +88,7 @@ export default function ProductDetailPage() {
         context:
           '第二次購買了，品質依然維持水準。出貨速度快，包裝完整，而且客服態度很好，有問題都會立即回覆。',
         rating: 5,
+        review_id: 1,
       },
       {
         id: 3,
@@ -118,6 +127,107 @@ export default function ProductDetailPage() {
 
     if (params.id) {
       fetchProduct()
+    }
+  }, [params.id])
+
+  useEffect(() => {
+    const fetchRecommendedProducts = async () => {
+      try {
+        setRecommendedLoading(true)
+        setRecommendedError(null)
+
+        const response = await fetch(
+          `http://localhost:3001/products/api/products/${params.id}/recommendations?limit=3`
+        )
+
+        console.log('推薦商品 API 回應狀態:', response.status)
+
+        if (!response.ok) {
+          throw new Error('無法取得推薦商品')
+        }
+
+        const data = await response.json()
+        console.log('推薦商品資料:', data)
+
+        if (data.success) {
+          setRecommendedProducts(data.recommendations)
+        } else {
+          throw new Error(data.error || '取得推薦商品失敗')
+        }
+      } catch (err) {
+        console.error('取得推薦商品錯誤:', err)
+        setRecommendedError(err.message)
+        // 如果 API 失敗，使用預設推薦商品
+        const fallbackProducts = [
+          {
+            id: 101,
+            name: '有機高麗菜',
+            image: '/images/products/default.jpg',
+            price: 60,
+            original_price: 80,
+            brand: '台灣農場',
+          },
+          {
+            id: 102,
+            name: '特選豬肉',
+            image: '/images/products/default.jpg',
+            price: 180,
+            original_price: 200,
+            brand: '台灣牧場',
+          },
+          {
+            id: 103,
+            name: '新鮮海鮮',
+            image: '/images/products/default.jpg',
+            price: 250,
+            original_price: 300,
+            brand: '海洋水產',
+          },
+        ]
+        setRecommendedProducts(fallbackProducts)
+      } finally {
+        setRecommendedLoading(false)
+      }
+    }
+
+    if (params.id) {
+      fetchRecommendedProducts()
+    }
+  }, [params.id])
+
+  useEffect(() => {
+    const fetchProductRating = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:3001/product-review/api/${params.id}`
+        )
+
+        if (!response.ok) {
+          throw new Error('無法獲取評分資料')
+        }
+
+        const data = await response.json()
+
+        if (data.success && data.data.length > 0) {
+          // 計算平均評分
+          const totalRating = data.data.reduce(
+            (acc, review) => acc + review.rating,
+            0
+          )
+          const avgRating = totalRating / data.data.length
+
+          setProductRating({
+            averageRating: avgRating,
+            totalReviews: data.data.length,
+          })
+        }
+      } catch (err) {
+        console.error('獲取評分錯誤:', err)
+      }
+    }
+
+    if (params.id) {
+      fetchProductRating()
     }
   }, [params.id])
 
@@ -274,11 +384,14 @@ export default function ProductDetailPage() {
           <h1 className={styles.productTitle}>{product.name}</h1>
           <div className={styles.ratingContainer}>
             <div className={styles.starsContainer}>
-              {[...Array(5)].map((_, i) => (
-                <LuStar key={i} className={styles.star}></LuStar>
-              ))}
+              <StarRating rating={productRating.averageRating} />
             </div>
-            <p className={styles.reviewCount}>{product.reviewCount} 則評價</p>
+            <p className={styles.ratingScore}>
+              ({productRating.averageRating.toFixed(1)})
+            </p>
+            <p className={styles.reviewCount}>
+              {productRating.totalReviews} 則評價
+            </p>
           </div>
           <div className={styles.productPrice}>
             <p>NT$ {product.original_price?.toLocaleString()}</p>
@@ -363,30 +476,25 @@ export default function ProductDetailPage() {
       <div className={styles.recommendedSection}>
         <div className={styles.recommendedTitle}>推薦商品</div>
         <div className={styles.recommendedGrid}>
-          {recommendedProducts.map((product) => (
-            <Link href={`/products/${product.id}`} key={product.id}>
-              <div className={styles.productCard}>
-                <div className={styles.cardImageContainer}>
-                  <div className={styles.cardImagePlaceholder}></div>
-                </div>
-                <div className={styles.cardContent}>
-                  <div className={styles.cardTitle}>
-                    {product.title}
-                    <br />
-                    <span className={styles.cardDescription}>
-                      {product.description}
-                    </span>
-                  </div>
-                  <div className={styles.cardPrice}>${product.price}</div>
-                </div>
-                <img
-                  src="/images/favorite-outline.png"
-                  className={styles.favoriteIcon}
-                  alt="Add to favorites"
-                />
-              </div>
-            </Link>
-          ))}
+          {recommendedLoading ? (
+            <div>正在載入推薦商品...</div>
+          ) : recommendedError ? (
+            <div>載入推薦商品時發生錯誤</div>
+          ) : (
+            recommendedProducts.map((product) => (
+              <ProductCard
+                key={product.id}
+                id={product.id}
+                name={product.name}
+                image={product.image}
+                brand={product.brand}
+                price={product.price}
+                original_price={product.original_price}
+                description={product.description}
+                initialFavorite={false}
+              />
+            ))
+          )}
         </div>
       </div>
 

@@ -217,11 +217,11 @@ router.delete('/api/products/unfavorite', async (req, res) => {
   }
 });
 
-// 新增 API - 取得商品相關推薦 (隨機取得)
+// 取得商品相關推薦 (隨機取得)
 router.get('/api/products/:id/recommendations', async (req, res) => {
     try {
         const productId = parseInt(req.params.id);
-        const limit = parseInt(req.query.limit) || 4; // 預設取得4筆
+        const limit = parseInt(req.query.limit) || 3; // 預設取得4筆
         
         // 先取得目前商品的分類
         const [productRow] = await db.query(
