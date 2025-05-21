@@ -306,7 +306,7 @@ export default function ProductDetailPage() {
   // 處理購物車
   const handleAddToCart = async () => {
     if (!auth || !auth.token) {
-      alert('請先登入以添加食材至購物車！')
+      toast.warning('請先登入以添加食材至購物車！')
       return
     }
 
@@ -330,33 +330,40 @@ export default function ProductDetailPage() {
     }
   }
 
-  // 處理收藏
+  // 修改收藏按鈕處理函數
   const handleAddToWishlist = async () => {
+    if (!auth || !auth.token) {
+      toast.warning('請先登入才能加入收藏！')
+      return
+    }
+
     try {
       setIsFavorite((prev) => !prev)
 
       if (!isFavorite) {
-        // 加入收藏
         toast.success('已加入收藏')
         console.log('Added to wishlist:', product.id)
       } else {
-        // 取消收藏
         toast.info('已取消收藏')
         console.log('Removed from wishlist:', product.id)
       }
     } catch (err) {
       console.error('收藏操作失敗:', err)
-      setIsFavorite((prev) => !prev) // 發生錯誤時恢復原狀態
+      setIsFavorite((prev) => !prev)
       toast.error('操作失敗，請稍後再試')
     }
   }
 
-  // 新增直接購買函數
+  // 修改直接購買函數
   const handleBuyNow = async () => {
+    if (!auth || !auth.token) {
+      toast.warning('請先登入才能購買商品！')
+      return
+    }
+
     try {
       if (!product || quantity < 1) return
 
-      // 準備購物車項目
       const cartItem = {
         product_id: product.id,
         name: product.name,
@@ -365,10 +372,7 @@ export default function ProductDetailPage() {
         image: product.image,
       }
 
-      // 這裡可以加入儲存購物車項目的邏輯
       console.log('直接購買:', cartItem)
-
-      // 導向購物車頁面
       router.push('/cart')
     } catch (err) {
       console.error('購買失敗:', err)
