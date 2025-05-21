@@ -97,9 +97,10 @@ export default function RegisterPage() {
         else if (value.length > 50) error = '姓名不可超過50個字'
         break
       case 'username':
-        if (!value) error = '請輸入使用者名稱'
-        else if (value.length < 3) error = '使用者名稱至少需要 3 個字元'
-        else if (value.length > 10) error = '使用者名稱不可超過10個字'
+        if (!value) errorMessage = '請輸入使用者名稱'
+        else if (value.length > 0 && value.length < 3)
+          errorMessage = '使用者名稱至少需要3個字元'
+        else if (value.length > 10) errorMessage = '使用者名稱不可超過10個字'
         break
       case 'birthday':
         if (!value) error = '請選擇生日'
@@ -172,6 +173,8 @@ export default function RegisterPage() {
           break
         case 'username':
           if (!value) errorMessage = '請輸入使用者名稱'
+          else if (value.length > 0 && value.length < 3)
+            errorMessage = '使用者名稱至少需要3個字元'
           else if (value.length > 10) errorMessage = '使用者名稱不可超過10個字'
           break
         case 'birthday':
@@ -226,7 +229,7 @@ export default function RegisterPage() {
         setErrors({}) // 清除錯誤
         setTimeout(() => {
           router.push('/login')
-        }, 2000)
+        }, 5000) // 5秒後導向登入頁面
       } else {
         if (result.errors) {
           // 後端 Zod 驗證錯誤，通常是 email/username 重複，或是其他 Zod schema 驗證失敗
@@ -459,7 +462,7 @@ export default function RegisterPage() {
                 value={formData.gender}
                 onChange={handleChange}
               >
-                <option value="">請選擇</option>
+                <option value="">不提供</option>
                 <option value="male">男</option>
                 <option value="female">女</option>
                 <option value="other">其他</option>
