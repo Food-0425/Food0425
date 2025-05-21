@@ -44,6 +44,7 @@ router.get('/api/:userId', async (req, res) => {
       const [cartProductRows] = await db.query(
         `SELECT
           c.cart_id AS cart_item_id,   -- 購物車項目本身的 ID (假設 carts 表主鍵是 id)
+          c.is_selected,
           u.user_id,
           p.id AS product_id,
           p.name AS product_name,
@@ -67,6 +68,7 @@ router.get('/api/:userId', async (req, res) => {
         productId: item.product_id,
         name: item.product_name,
         price: parseFloat(item.product_price) || 0, // 轉成數字，並給預設值
+        isSelected: item.is_selected,
         imageUrl: item.product_image_url || '/images/default_product.png', // 預設圖片
         quantity: item.quantity,
       }));
@@ -338,6 +340,105 @@ router.delete('/api/:userId/clear', async (req, res) => {
             success: false,
             error: '糟糕！購物車的「一鍵清空」按鈕好像被小怪獸吃掉了～👾',
             details: process.env.NODE_ENV === 'development' ? error.message : undefined
+        });
+    }
+});
+
+// ------------------------------------------------------------------------------------
+// PUT - 更新購物車項目的勾選狀態
+// API 路徑: /cart/api/items/:cartItemId/select
+// ------------------------------------------------------------------------------------
+router.put('/api/items/:cartItemId/select', async (req, res) => {
+    try {
+        const cartItemId = parseInt(req.params.cartItemId, 10);
+        const { isSelected } = req.body;
+
+        // 驗證輸入
+        if (isNaN(cartItemId) || cartItemId <= 0) {
+            return res.status(400).json({
+                success: false,
+                message: '購物車項目 ID 必須是正整數'
+            });
+        }
+
+        if (typeof isSelected !== 'boolean') {
+            return res.status(400).json({
+                success: false,
+                message: 'isSelected 必須是布林值'
+            });
+        }
+
+        // 更新資料庫中的勾選狀態
+        const [result] = await db.query(
+            "UPDATE carts SET is_selected = ?, updated_at = NOW() WHERE cart_id = ?",
+            [isSelected, cartItemId]
+        );
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({
+                success: false,
+                message: '找不到指定的購物車項目'
+            });
+        }
+
+        res.json({
+            success: true,
+            message: `購物車項目 ${cartItemId} 的勾選狀態已更新`,
+            isSelected: isSelected
+        });
+
+    } catch (error) {
+        console.error('更新購物車項目勾選狀態時發生錯誤:', error);
+        res.status(500).json({
+            success: false,
+            message: '更新勾選狀態時發生錯誤',
+            error: process.env.NODE_ENV === 'development' ? error.message : undefined
+        });
+    }
+});
+
+// ------------------------------------------------------------------------------------
+// PUT - 更新使用者購物車所有項目的勾選狀態
+// API 路徑: /cart/api/items/select-all
+// ------------------------------------------------------------------------------------
+router.put('/api/items/select-all', async (req, res) => {
+    try {
+        // 從 JWT 取得使用者 ID
+        if (!req.my_jwt) {
+            return res.status(401).json({
+                success: false,
+                message: '未授權的訪問'
+            });
+        }
+        const userId = req.my_jwt.id;
+        const { isSelected } = req.body;
+
+        // 驗證輸入
+        if (typeof isSelected !== 'boolean') {
+            return res.status(400).json({
+                success: false,
+                message: 'isSelected 必須是布林值'
+            });
+        }
+
+        // 更新該使用者購物車中所有項目的勾選狀態
+        const [result] = await db.query(
+            "UPDATE carts SET is_selected = ?, updated_at = NOW() WHERE user_id = ?",
+            [isSelected, userId]
+        );
+
+        res.json({
+            success: true,
+            message: `已${isSelected ? '全選' : '取消全選'}購物車項目`,
+            affectedItems: result.affectedRows
+        });
+
+    } catch (error) {
+        console.error('更新購物車全選狀態時發生錯誤:', error);
+        res.status(500).json({
+            success: false,
+            message: '更新全選狀態時發生錯誤',
+            error: process.env.NODE_ENV === 'development' ? error.message : undefined
         });
     }
 });
