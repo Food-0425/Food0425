@@ -18,8 +18,6 @@
     flex-direction: column;
     h3 {
       color: #fff5ee;
-      font-size: $font-size-h3;
-      font-weight: $font-weight-title;
     }
 
     div {
@@ -55,6 +53,9 @@
       }
       h3 {
         @include button-text;
+        &:hover {
+          background-color: $color-bright;
+        }
       }
     }
     div:nth-of-type(2) {

@@ -42,10 +42,11 @@ router.get('/api/products', async (req, res) => {
 router.get('/api/products/filter', async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
-    const limit = Math.min(parseInt(req.query.limit) || 15, 100); // 最多一次查 100 筆
+    const limit = Math.min(parseInt(req.query.limit) || 15, 100); // 一次查 100 筆
+    const offset = (page - 1) * limit; 
 
     const {
-      category = '',
+      category= '',
       search = '',
       sort = '', // 可為 'price_asc' 或 'price_desc'
       minPrice = '',
@@ -56,12 +57,12 @@ router.get('/api/products/filter', async (req, res) => {
     let queryParams = [];
 
     if (search) {
-      whereClauses.push('product_name LIKE ?');
+      whereClauses.push('name LIKE ?');
       queryParams.push(`%${search}%`);
     }
 
     if (category) {
-      whereClauses.push('category = ?');
+      whereClauses.push('category = ?'); 
       queryParams.push(category);
     }
 
@@ -98,6 +99,7 @@ router.get('/api/products/filter', async (req, res) => {
       ${orderByClause}
       LIMIT ? OFFSET ?
     `;
+    console.log('最終 SQL:', finalSql);
 
     const [rows] = await db.query(finalSql, [...queryParams, limit, offset]);
 

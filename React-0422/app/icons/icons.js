@@ -8,6 +8,7 @@ import {
   FaEyeSlash,
   FaChevronDown,
   FaCalendarAlt,
+  FaLock,
 } from 'react-icons/fa'
 import {
   FaCakeCandles,
@@ -28,13 +29,12 @@ import {
   MdOutlineRamenDining,
 } from 'react-icons/md'
 import { BsBookmarkPlus, BsBookmarkStarFill } from 'react-icons/bs'
-
 import { GrPrevious } from 'react-icons/gr'
-
 import { GiKitchenScale } from 'react-icons/gi'
 import { PiJarLabelBold } from 'react-icons/pi'
-import { IoIosAddCircle, IoIosArrowBack } from 'react-icons/io'
-
+import { HiViewGridAdd, HiOutlineViewGridAdd } from 'react-icons/hi'
+import { IoIosAddCircle, IoIosListBox } from 'react-icons/io'
+import { IoIosArrowBack } from 'react-icons/io'
 
 export {
   GrPrevious,
@@ -71,4 +71,8 @@ export {
   FaEyeSlash,
   FaChevronDown,
   FaCalendarAlt,
+  FaLock,
+  IoIosListBox,
+  HiViewGridAdd,
+  HiOutlineViewGridAdd,
 }

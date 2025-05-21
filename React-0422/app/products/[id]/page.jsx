@@ -1,115 +1,95 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
-import styles from '../../styles/ProductDetail.module.css'
+import styles from '../../src/styles/page-styles/ProductContent.module.scss'
 import Link from 'next/link'
 
-// Mock product data - in a real app, this would come from an API
-const mockProduct = {
-  id: 1,
-  image: 'https://via.placeholder.com/620x516',
-  title: '嚴選推薦 | 中國M9骰子牛(200g)',
-  description:
-    '來自日本宮崎縣的 A5 等級頂級和牛，以油花細緻、肉質鮮嫩著稱。每片皆具備均勻霜降，入口即化，堪稱極致饗宴。適合煎、烤、火鍋等多樣料理方式，解凍後輕鬆料理即可享受日式高級肉品風味。150g 精緻份量，適合個人獨享或搭配其他食材組合。全程-18°C冷凍保鮮，品質穩定。數量有限，為高端饕客首選。來自日本宮崎縣的 A5 等級頂級和牛，以油花細��、肉質鮮嫩著稱。每片皆具備均勻霜降，入口即化，堪稱極致饗宴。適合煎、烤、火鍋等多樣料理方式，解凍後輕鬆料理即可享受日式高級肉品風味。150g 精緻份量，適合個人獨享或搭配其他食材組合。全程-18°C冷凍保鮮，品質穩定。數量有限，為高端饕客首選。來自日本宮崎縣的 A5 等級頂級和牛，以油花細緻、肉質鮮嫩著稱。每片皆具備均勻霜降，入口即化，堪稱極致饗宴。適合煎、烤、火鍋等多樣料理方式，解凍後輕鬆料理即可享受日式高級肉品風味。150g 精緻份量，適合個人獨享或搭配其他食材組合。全程-18°C冷凍保鮮，品質穩定。數量有限，為高端饕客首選。來自日本宮崎縣的 A5 等級頂級和牛，以油花細緻、肉質鮮嫩著稱。每片皆具備均勻霜降，入口即化，堪稱極致饗宴。適合煎、烤、火鍋等多樣料理方式，解凍後輕鬆料理即可享受日式高級肉品風味。150g 精緻份量，適合個人獨享或搭配其他食材組合。全程-18°C冷凍保鮮，品質穩定。數量有限，為高端饕客首選。來自日本宮崎縣的 A5 等級頂級和牛，以油花細緻、肉質鮮嫩著稱。每片皆具備均勻霜降，入口即化，堪稱極致饗宴。適合煎、烤、火鍋等多樣料理方式，解凍後輕鬆料理即可享受日式高級肉品風味。150g 精緻份量，適合個人獨享或搭配其他食材組合。全程-18°C冷凍保鮮，品質穩定。數量有限，為高端饕客首選。',
-  price: 120,
-  rating: 5,
-  reviewCount: 24,
-  isFavorite: false,
-}
-
-// Mock recommended products
-const recommendedProducts = [
-  {
-    id: 2,
-    image: 'https://via.placeholder.com/320x180',
-    title: '香蕉',
-    description: '好吃甜膩膩',
-    price: 85,
-    isFavorite: false,
-  },
-  {
-    id: 3,
-    image: 'https://via.placeholder.com/320x180',
-    title: '菲力牛排',
-    description: '肉滑滑嫩嫩',
-    price: 150,
-    isFavorite: false,
-  },
-  {
-    id: 4,
-    image: 'https://via.placeholder.com/320x180',
-    title: '板腱牛排',
-    description: '超級香噴噴',
-    price: 115,
-    isFavorite: false,
-  },
-]
-
-// Mock reviews
-const reviews = [
-  {
-    id: 1,
-    userName: '李淑芬',
-    userImage: 'https://via.placeholder.com/163x137',
-    rating: 5,
-    date: '2025-02-24 10:15',
-    title: '味道不錯，但食材稍微貴了一點~',
-    text: '我喜歡1分熟的，裡面油花分布很漂亮，已購買，小孩很愛吃',
-  },
-  {
-    id: 2,
-    userName: '陳志明',
-    userImage: 'https://via.placeholder.com/163x137',
-    rating: 5,
-    date: '2025-02-17 12:45',
-    title: '覺得還可以，已加購物車買來試試',
-    text: '全熟肉很好吃，好吃到說不出話，因為我還在咬',
-  },
-  {
-    id: 3,
-    userName: '陳春嬌',
-    userImage: 'https://via.placeholder.com/163x137',
-    rating: 5,
-    date: '2025-02-19 21:44',
-    title: '覺得還不錯，買回家自己煮煮看',
-    text: '料理完肉香超濃！外酥內嫩超下飯，回購100次都願意！',
-  },
-]
-
+// 移除 mock data, 改為使用 API
 export default function ProductDetailPage() {
   const params = useParams()
-  const productId = params.id
-  const [product, setProduct] = useState(mockProduct)
+  const [product, setProduct] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const [recommendedProducts, setRecommendedProducts] = useState([])
+  const [reviews, setReviews] = useState([])
 
-  // In a real app, you would fetch the product data based on the ID
-  // useEffect(() => {
-  //   const fetchProduct = async () => {
-  //     try {
-  //       const response = await fetch(`/api/products/${productId}`);
-  //       const data = await response.json();
-  //       setProduct(data);
-  //     } catch (error) {
-  //       console.error('Error fetching product:', error);
-  //     }
-  //   };
-  //
-  //   fetchProduct();
-  // }, [productId]);
+  // 取得商品資料
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        setLoading(true)
+        const response = await fetch(`/api/products/${params.id}`)
+        if (!response.ok) {
+          throw new Error('商品資料載入失敗')
+        }
+        const data = await response.json()
+        setProduct(data.data)
+      } catch (err) {
+        setError(err.message)
+      } finally {
+        setLoading(false)
+      }
+    }
 
-  const handleAddToCart = () => {
-    // Add to cart logic would go here
-    console.log('Added to cart:', product.id)
+    if (params.id) {
+      fetchProduct()
+    }
+  }, [params.id])
+
+  // 處理購物車
+  const handleAddToCart = async () => {
+    try {
+      // 實作購物車邏輯
+      console.log('Added to cart:', product.id)
+    } catch (err) {
+      console.error('加入購物車失敗:', err)
+    }
   }
 
-  const handleAddToWishlist = () => {
-    // Add to wishlist logic would go here
-    console.log('Added to wishlist:', product.id)
+  // 處理收藏
+  const handleAddToWishlist = async () => {
+    try {
+      // 實作收藏邏輯
+      console.log('Added to wishlist:', product.id)
+    } catch (err) {
+      console.error('加入收藏失敗:', err)
+    }
+  }
+
+  // 載入中狀態
+  if (loading) {
+    return (
+      <div className={styles.loadingContainer}>
+        <div className={styles.spinner}></div>
+        <p>載入商品資料中...</p>
+      </div>
+    )
+  }
+
+  // 錯誤狀態
+  if (error) {
+    return (
+      <div className={styles.errorContainer}>
+        <p>{error}</p>
+        <button onClick={() => window.location.reload()}>重新整理</button>
+      </div>
+    )
+  }
+
+  // 找不到商品
+  if (!product) {
+    return (
+      <div className={styles.errorContainer}>
+        <p>找不到該商品</p>
+        <Link href="/products">返回商品列表</Link>
+      </div>
+    )
   }
 
   return (
     <div className={styles.productContainer}>
-      {/* Product Main Section */}
+      {/* 主要商品資訊 */}
       <div className={styles.productWrapper}>
         <img
           src={product.image}
@@ -117,49 +97,47 @@ export default function ProductDetailPage() {
           alt={product.title}
         />
         <div className={styles.productInfoContainer}>
-          <div className={styles.productTitle}>{product.title}</div>
+          <h1 className={styles.productTitle}>{product.title}</h1>
           <div className={styles.ratingContainer}>
+            {/* 評分星星 */}
             <div className={styles.starsContainer}>
-              {[...Array(5)].map((_, index) => (
-                <div key={index}>
-                  <img
-                    key={index}
-                    src="/images/star.png"
-                    className={styles.starIcon}
-                    alt="Star rating"
-                  />
-                </div>
+              {[...Array(5)].map((_, i) => (
+                <img
+                  key={i}
+                  src="/images/star.png"
+                  className={styles.starIcon}
+                  alt={`${i + 1} star`}
+                />
               ))}
             </div>
-            <div className={styles.reviewCount}>
-              <p>{product.reviewCount} 則評價</p>
-            </div>
+            <p className={styles.reviewCount}>{product.reviewCount} 則評價</p>
           </div>
-          <div className={styles.productPrice}>${product.price}</div>
-          <button>
-            <img
-              src="/images/add-to-cart-button.png"
-              className={styles.actionButton}
-              alt="Add to cart"
+          <div className={styles.productPrice}>
+            NT$ {product.price.toLocaleString()}
+          </div>
+          {/* 操作按鈕 */}
+          <div className={styles.actionButtons}>
+            <button
               onClick={handleAddToCart}
-            />
-          </button>
-          <button>
-            <img
-              src="/images/add-to-wishlist-button.png"
-              className={styles.actionButton}
-              alt="Add to wishlist"
+              className={styles.addToCartButton}
+            >
+              加入購物車
+            </button>
+            <button
               onClick={handleAddToWishlist}
-            />
-          </button>
+              className={styles.wishlistButton}
+            >
+              加入收藏
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Product Description Section */}
-      <div className={styles.descriptionSection}>
-        <div className={styles.sectionTitle}>產品介紹</div>
-        <div className={styles.descriptionText}>{product.description}</div>
-      </div>
+      {/* 商品描述 */}
+      <section className={styles.descriptionSection}>
+        <h2 className={styles.sectionTitle}>商品介紹</h2>
+        <p className={styles.descriptionText}>{product.description}</p>
+      </section>
 
       {/* Recommended Products Section */}
       <div className={styles.recommendedSection}>

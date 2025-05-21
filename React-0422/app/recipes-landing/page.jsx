@@ -13,6 +13,8 @@ import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/auth-context'
 
 import {
+  HiViewGridAdd,
+  HiOutlineViewGridAdd,
   FaSearch,
   FaCakeCandles,
   FaFishFins,
@@ -140,6 +142,7 @@ export default function RecipesLandingPage() {
 
   // 分類的資料，分類名以及它的icon (要加新分類icon的話要在這邊寫)
   const categories = [
+    { name: '總覽', icon: <HiOutlineViewGridAdd /> },
     { name: '肉食', icon: <TbMeat /> },
     { name: '蔬食', icon: <LuSalad /> },
     { name: '甜點', icon: <LuDessert /> },
@@ -173,7 +176,13 @@ export default function RecipesLandingPage() {
                 <button
                   key={index}
                   className={styles.categoryIcon}
-                  onClick={() => handleCategory(category.name)}
+                  onClick={() => {
+                    if (category.name === '總覽') {
+                      router.push('/recipes-landing/list')
+                    } else {
+                      handleCategory(category.name)
+                    }
+                  }}
                 >
                   {category.icon}
                   {category.name}
@@ -205,7 +214,7 @@ export default function RecipesLandingPage() {
                   src="https://cdn.builder.io/api/v1/image/assets/TEMP/342df7d551f513a8966757cc07c7a877c1abf5eb?placeholderIfAbsent=true"
                   alt="Desserts background"
                 />
-                <h2 className={styles.categoryTitle}>麵食</h2>
+                <div className={styles.categoryTitle}>麵食</div>
                 <button
                   onClick={() => handleSearch('麵食')}
                   className={styles.viewMoreButton}
@@ -213,22 +222,24 @@ export default function RecipesLandingPage() {
                   <h2 className={styles.viewMoreText}>看更多</h2>
                 </button>
               </div>
-              <div className={styles.recipeCardsContainer}>
-                {data?.rows
-                  .filter((recipe) => recipe.categories?.includes('麵食'))
-                  .sort((a, b) => a.id - b.id) // 按ID穩定排序
-                  .slice(0, 6) // 過濾出分類為「麵食」的資料，取前6筆
-                  .map((recipe) => (
-                    <RecipeCard
-                      key={recipe.id}
-                      id={recipe.id}
-                      image={recipe.image}
-                      title={recipe.recipe_title}
-                      description={recipe.recipe_description}
-                      initialFavorite={favorites[recipe.id] || false}
-                      onFavoriteToggle={toggleFavorite}
-                    />
-                  ))}
+              <div className={styles.recipeCardsSection}>
+                <div className={styles.recipeCardsContainer}>
+                  {data?.rows
+                    .filter((recipe) => recipe.categories?.includes('麵食'))
+                    .sort((a, b) => a.id - b.id) // 按ID穩定排序
+                    .slice(0, 6) // 過濾出分類為「麵食」的資料，取前6筆
+                    .map((recipe) => (
+                      <RecipeCard
+                        key={recipe.id}
+                        id={recipe.id}
+                        image={recipe.image}
+                        title={recipe.recipe_title}
+                        description={recipe.recipe_description}
+                        initialFavorite={favorites[recipe.id] || false}
+                        onFavoriteToggle={toggleFavorite}
+                      />
+                    ))}
+                </div>
               </div>
             </div>
           </div>
@@ -313,7 +324,6 @@ export default function RecipesLandingPage() {
             </div>
           </div>
         )}
-
         {/* 甜點 */}
         {activeCategory === '甜點' && (
           <div className={styles.recipeSection}>

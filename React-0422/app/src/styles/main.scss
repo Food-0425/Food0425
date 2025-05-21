@@ -23,6 +23,7 @@ h2,
 h3 {
   margin-bottom: $margin-bottom-title;
   font-weight: $font-weight-title;
+  letter-spacing: $letter-spacing;
 }
 
 h1 {
@@ -38,9 +39,11 @@ h3 {
 p {
   font-size: $font-size-p;
   margin-bottom: $margin-bottom-p;
+  letter-spacing: $letter-spacing;
 }
 
 a {
+  letter-spacing: $letter-spacing;
   text-decoration: none;
   color: inherit; // 保持與周圍文字一致
 }

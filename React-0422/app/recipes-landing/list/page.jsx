@@ -7,8 +7,8 @@ import useSWR from 'swr'
 import { useSearchParams } from 'next/navigation'
 import { useAuth } from '@/hooks/auth-context'
 import RecipeCard from '@/app/components/RecipeCard'
-
 import { API_SERVER } from '../../../config/api-path'
+import { IoIosArrowBack } from '../../icons/icons'
 
 const RECIPES_PER_PAGE = 12
 
@@ -130,28 +130,7 @@ export default function RecipeListPage() {
   return (
     <div className={styles.container}>
       <div className={styles.content}>
-        {/* <div>{JSON.stringify(user)}</div> */}
-
-        {/* 版頭 */}
-        {/* <div className={styles.heroSection}>
-          <div className={styles.heroContent}>
-            <div className={styles.heroBackground}>
-              <img
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/25474f8c77fa37bdec47687719cc06595f43d1ba?placeholderIfAbsent=true"
-                className={styles.heroImage}
-                alt="Desserts and sweets background"
-              />
-            </div>
-            <div className={styles.heroTextContainer}>
-              <h1 className={styles.heroTitle}>糕點甜食</h1>
-              <p className={styles.heroSubtitle}>
-                每一口都是甜蜜的優雅相遇，讓我們邂逅彼此吧！
-              </p>
-            </div>
-          </div>
-        </div> */}
-
-        {/* Recipe Cards Section 列表頁的食物卡片區塊 */}
+        {/* Recipe Cards Section */}
         <div className={styles.recipeSection}>
           {isLoading && !favoritesLoaded ? ( // 確保 favorites 已加載
             <div className={styles.loading}>載入中...</div>
@@ -175,83 +154,44 @@ export default function RecipeListPage() {
         {/* Pagination */}
         <div className={styles.paginationSection}>
           <div className={styles.pagination}>
-            <img
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/b7621e318296d252a3602f5e493219e1ec6743cf?placeholderIfAbsent=true"
-              className={styles.paginationArrow}
-              alt="Previous"
+            <h2
               onClick={() => handlePageChange(currentPage - 1)}
               style={{ cursor: currentPage > 1 ? 'pointer' : 'not-allowed' }}
-            />
+            >
+              <IoIosArrowBack />
+            </h2>
             {renderPaginationButtons()}
-            <img
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/4f4fa8097701997cdf6e061da95678103b1c9705?placeholderIfAbsent=true"
-              className={styles.paginationArrow}
-              alt="Next"
+            <h2
               onClick={() => handlePageChange(currentPage + 1)}
               style={{
                 cursor: currentPage < totalPages ? 'pointer' : 'not-allowed',
               }}
-            />
+            >
+              <IoIosArrowBack />
+            </h2>
           </div>
         </div>
-
-        {/* Featured Recipes */}
-        <FeaturedRecipes />
       </div>
+      {/* Featured Recipes 你可能會喜歡 */}
+      <FeaturedRecipes />
     </div>
   )
 }
-
-// 改進的Recipe Card組件，添加了可交互功能
-// function RecipeCard({
-//   id,
-//   image,
-//   title,
-//   description,
-//   isFavorite,
-//   onFavoriteToggle,
-// }) {
-//   return (
-//     <div className={styles.recipeCard}>
-//       <Link key={id} href={`/recipes/${id}`} passHref>
-//         <div className={styles.recipeImageContainer}>
-//           <img src={`/${image}`} className={styles.recipeImage} alt={title} />
-//         </div>
-//         <div className={styles.recipeContent}>
-//           <h3 className={styles.recipeTitle}>{title}</h3>
-//           <p className={styles.recipeDescription}>{description}</p>
-//         </div>
-//       </Link>
-//       <img
-//         src={
-//           isFavorite
-//             ? '/images/like/like.png' // 收藏的圖示
-//             : '/images/like/unlike.png' // 未收藏的圖示
-//         }
-//         className={styles.favoriteIcon}
-//         alt={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-//         onClick={onFavoriteToggle}
-//         style={{ cursor: 'pointer' }}
-//       />
-//     </div>
-//   )
-// }
 
 // 改進的分頁按鈕，添加了點擊事件
 function PaginationButton({ number, active, onClick }) {
   return (
-    <div className={styles.paginationItem} onClick={onClick}>
-      <div
-        className={`${styles.paginationButton} ${active ? styles.paginationButtonActive : ''}`}
-        style={{ cursor: 'pointer' }}
-      >
-        {number}
-      </div>
-    </div>
+    <h3
+      onClick={onClick}
+      className={`${styles.paginationButton} ${active ? styles.paginationButtonActive : ''}`}
+      style={{ cursor: 'pointer' }}
+    >
+      {number}
+    </h3>
   )
 }
 
-// 特色菜譜組件，作為獨立組件抽出
+// 你可能會喜歡組件，作為獨立組件抽出
 function FeaturedRecipes() {
   const fetcher = (url) => fetch(url).then((res) => res.json())
 
@@ -303,29 +243,31 @@ function FeaturedRecipes() {
 
   return (
     <div className={styles.featuredSection}>
-      <h3>你可能會喜歡</h3>
-      <div className={styles.featuredGrid}>
-        {recipes
-          .sort(() => Math.random() - 0.5) // 隨機打亂陣列
-          .slice(0, 4) // 取出前 6 筆資料
-          .map((item) => (
-            <FeaturedRecipe
-              key={item.id}
-              image={item.image}
-              title={item.title}
-            />
-          ))}
+      <div>
+        <h2>你可能會喜歡</h2>
+        <div className={styles.featuredGrid}>
+          {recipes
+            .sort(() => Math.random() - 0.5) // 隨機打亂陣列
+            .slice(0, 4) // 取出前 6 筆資料
+            .map((item) => (
+              <FeaturedRecipe
+                key={item.id}
+                image={item.image}
+                title={item.title}
+              />
+            ))}
+        </div>
       </div>
     </div>
   )
-}
-
-// Featured Recipe Component
-function FeaturedRecipe({ image, title }) {
-  return (
-    <div className={styles.featuredCard}>
-      <img src={image} className={styles.featuredImage} alt={title} />
-      <div className={styles.featuredTitle}>{title}</div>
-    </div>
-  )
+  function FeaturedRecipe({ image, title }) {
+    return (
+      <div className={styles.featuredCard}>
+        <div className={styles.featuredCardImage}>
+          <img src={image} alt={title} />
+        </div>
+        <h3 className={styles.featuredTitle}>{title}</h3>
+      </div>
+    )
+  }
 }

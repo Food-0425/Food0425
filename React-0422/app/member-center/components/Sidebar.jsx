@@ -2,30 +2,34 @@
 
 import React from 'react'
 import styles from '../styles/member-center.module.scss'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+// 引入 React Icons
+import { MdFavorite } from 'react-icons/md'
+import { FaLock, FaUser } from 'react-icons/fa'
+import { IoIosListBox } from 'react-icons/io'
 
-const Sidebar = () => {
-  const pathname = usePathname()
-
+const Sidebar = ({ activeContent, setActiveContent }) => {
   const menuItems = [
     {
-      icon: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96c90fdb2fd7169341f851c57f561cb320cfb422?placeholderIfAbsent=true&apiKey=137a18afd6bf49c9985266999785670f',
+      key: 'profile',
+      icon: <FaUser />, // 使用 React Icon
       text: '會員資料',
-      path: '/member-center',
+      path: '/member-center/profile',
     },
     {
-      icon: 'https://cdn.builder.io/api/v1/image/assets/TEMP/353948e841845df2227924e2b292fdf6b9a8b780?placeholderIfAbsent=true&apiKey=137a18afd6bf49c9985266999785670f',
+      key: 'password',
+      icon: <FaLock />,
       text: '修改密碼',
       path: '/member-center/password',
     },
     {
-      icon: 'https://cdn.builder.io/api/v1/image/assets/TEMP/31d5363120db819d1f4786373704c09a3eb6b265?placeholderIfAbsent=true&apiKey=137a18afd6bf49c9985266999785670f',
+      key: 'favorites',
+      icon: <MdFavorite />,
       text: '我的收藏',
       path: '/member-center/favorites',
     },
     {
-      icon: 'https://cdn.builder.io/api/v1/image/assets/TEMP/b70e6ec339551bd239bee4827549d7554fef7b2d?placeholderIfAbsent=true&apiKey=137a18afd6bf49c9985266999785670f',
+      key: 'orders',
+      icon: <IoIosListBox />,
       text: '我的訂單',
       path: '/member-center/orders',
     },
@@ -34,18 +38,25 @@ const Sidebar = () => {
   return (
     <div className={styles.sidebar}>
       {menuItems.map((item, index) => (
-        <Link
-          key={index}
-          href={item.path}
+        <div
+          key={item.key}
           className={`${styles.sidebarButton} ${
-            pathname === item.path ? styles.active : ''
+            activeContent === item.key ? styles.active : ''
           }`}
+          onClick={() => setActiveContent(item.key)}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              setActiveContent(item.key)
+            }
+          }}
         >
           <div className={styles.buttonIcon}>
-            <img src={item.icon} alt={item.text} />
+            {item.icon} 
           </div>
           <div className={styles.buttonText}>{item.text}</div>
-        </Link>
+        </div>
       ))}
     </div>
   )

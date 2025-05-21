@@ -102,7 +102,7 @@ export default function RestaurantsPage() {
 
         <div className={styles.heroImageContainer}>
           <img
-            src="/images/restaurant/r01.jpg"
+            src="/images/restaurant/r01.webp"
             className={styles.heroImage}
             alt="餐廳美食"
           />
