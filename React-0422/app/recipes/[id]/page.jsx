@@ -5,6 +5,12 @@ import Link from 'next/link'
 import { Modal, Button } from 'react-bootstrap'
 // 彈出視窗的卡片
 import CartModal from '@/app/components/CartModal'
+import SweetModal from '@/app/components/SweetModal'
+import LoginModal from '@/app/components/LoginModal'
+import Swal from 'sweetalert2'
+import 'sweetalert2/dist/sweetalert2.min.css'
+import * as ReactDOM from 'react-dom/client'
+import { useSearchParams } from 'next/navigation'
 
 import styles from '../../src/styles/page-styles/RecipeDetail.module.scss'
 import {
@@ -45,19 +51,21 @@ export default function RecipeDetailPage() {
   }, [])
 
   const { auth } = useAuth() || {} // 使用 useAuth 鉤子獲取用戶信息
+
   // 這個狀態用來控制食材是否被選中
   const [selectedItems, setSelectedItems] = useState({})
   // 這個狀態用來控制調味料是否被選中
   const [selectedSeasonings, setSelectedSeasonings] = useState({})
   // 加入購物車的彈出視窗
   const [showCartModal, setShowCartModal] = useState(false)
+  const [SuccessModal, setSuccessModal] = useState(false)
   const [cartModalMessage, setCartModalMessage] = useState('')
 
   // 2. 在組件內部宣告 router
   const router = useRouter()
 
   const params = useParams()
-  const id = params.id
+  const id = params?.id
   const fetcher = (url) => fetch(url).then((res) => res.json())
 
   const { data, error } = useSWR(
@@ -80,6 +88,10 @@ export default function RecipeDetailPage() {
   const endIndex = startIndex + commentsPerPage
   const currentComments = comments.slice(startIndex, endIndex)
 
+  // 添加載入狀態檢查
+  if (!id) {
+    return <div>載入中...</div>
+  }
   // 處理翻頁
   const handleNextPage = () => {
     if (endIndex < comments.length) {
@@ -99,13 +111,42 @@ export default function RecipeDetailPage() {
   // 狀態：控制 FoodFeeBack 是否顯示
   const [isFeedbackVisible, setIsFeedbackVisible] = useState(false)
 
-  // 3. 修改原本的 handleShowFeedbackModal 函數
+  // 3. 修改原本的 handleShowFeedbackModal 函數(這邊是未登入時會跳的訊息)
   const handleShowFeedbackModal = () => {
     if (!auth || !auth.token) {
       handleShowLoginModal()
+      setCartModalMessage('請先登入才能留言喔！')
       return
     }
-    setIsFeedbackVisible(true)
+
+    // 使用 Sweetalert2 顯示表單
+    Swal.fire({
+      title: '撰寫食譜評論',
+      html: '<div id="feedback-form-container"></div>',
+      showCloseButton: true,
+      showConfirmButton: false,
+      width: '800px',
+      // 禁用背景滾動條補償
+      scrollbarPadding: false,
+      // 允許背景點擊關閉
+      allowOutsideClick: true,
+      didOpen: () => {
+        // 將 FoodFeeBack 組件渲染到指定容器
+        const container = document.getElementById('feedback-form-container')
+        const root = ReactDOM.createRoot(container)
+        root.render(
+          <FoodFeeBack
+            recipeId={id} // 改用已經從 useParams 獲取的 id
+            auth={auth}
+            onSubmitSuccess={() => {
+              Swal.close()
+              // 可以在這裡加入提交成功後的處理邏輯，例如重新載入評論
+              // 可以考慮加入: window.location.reload()
+            }}
+          />
+        )
+      },
+    })
   }
   const handleCloseFeedbackModal = () => setIsFeedbackVisible(false)
   // 跟未登入點選流言按鈕有關的狀態
@@ -225,7 +266,7 @@ export default function RecipeDetailPage() {
       // 如果所有請求都成功
       if (results.every((r) => r.success)) {
         setCartModalMessage('所有商品已成功加入購物車！')
-        setShowCartModal(true)
+        setSuccessModal(true)
       } else {
         const failedItems = results.filter((r) => !r.success)
         setCartModalMessage(
@@ -333,7 +374,7 @@ export default function RecipeDetailPage() {
               )}
             </div>
           </div>
-          
+
           <div className={styles.cardIcon}>
             <TbBowlSpoon />
           </div>
@@ -388,13 +429,22 @@ export default function RecipeDetailPage() {
               &nbsp;確認
             </h2>
           </button>
-          
-          {/* 加入 CartModal 組件 */}
-          <CartModal
+
+          {/* 加入 SweetModal 組件 */}
+          <SweetModal
             show={showCartModal}
             onHide={() => setShowCartModal(false)}
             title="購物車訊息"
             message={cartModalMessage}
+            icon="info"
+          />
+          {/* 加入 SweetModal 組件 (打勾的) */}
+          <SweetModal
+            show={SuccessModal}
+            onHide={() => setShowCartModal(false)}
+            title="購物車訊息"
+            message={cartModalMessage}
+            icon="success"
           />
           <div className={styles.cardIcon}>
             <PiJarLabelBold />
@@ -587,34 +637,9 @@ export default function RecipeDetailPage() {
 
           {/* 5. React Bootstrap Modal  這裡是食譜評論的彈出視窗
         。然後可以在SCSS當中自訂CSS樣式 。目前應該需調整*/}
-          <Modal
-            show={isFeedbackVisible}
-            onHide={handleCloseFeedbackModal}
-            centered
-            size="lg" // 可設定 'sm', 'lg', 'xl'
-          >
-            <Modal.Header closeButton>
-              <Modal.Title>撰寫食譜評論</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              {/* 6. 放入您的 FoodFeeBack 元件 */}
-
-              {/* 您可能需要傳遞一些 props 給 FoodFeeBack，例如關閉 modal 的函數 */}
-              <FoodFeeBack onFormSubmit={handleCloseFeedbackModal} />
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={handleCloseFeedbackModal}>
-                關閉
-              </Button>
-              {/* 如果 FoodFeeBack 內部有自己的提交按鈕，這裡可能不需要額外的儲存按鈕 */}
-              {/* <Button variant="primary" onClick={() => { /* 觸發表單提交邏輯 *\/; handleCloseFeedbackModal(); }}>
-            提交評論
-          </Button> */}
-            </Modal.Footer>
-          </Modal>
 
           {/* 登入提示 Modal */}
-          <Modal
+          {/* <Modal
             show={showLoginModal}
             onHide={handleCloseLoginModal}
             centered
@@ -634,7 +659,17 @@ export default function RecipeDetailPage() {
                 前往登入
               </Button>
             </Modal.Footer>
-          </Modal>
+          </Modal> */}
+          {/* 新的登入提示 */}
+          <LoginModal
+            show={showLoginModal}
+            onHide={() => setShowLoginModal(false)}
+            message={cartModalMessage}
+            onNavigateToLogin={() => {
+              setShowLoginModal(false)
+              router.push('/login')
+            }}
+          />
 
           <div>
             {/* 左箭頭按鈕 */}
