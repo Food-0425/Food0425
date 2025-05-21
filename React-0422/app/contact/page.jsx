@@ -74,20 +74,20 @@ const ContactPage = () => {
       </div>
       {/* 常見問題 */}
       <div className={styles.faqSection}>
-        <h2>常見問題</h2>
-        <p>以下是一些常見問題的分類</p>
+        {/* <h2>常見問題</h2>
+        <p>以下是一些常見問題的分類</p> */}
 
         <div className={styles.faqRow}>
           <div className={styles.faqItem}>
             <div className={styles.faqIcon}>
               <GrArticle />
             </div>
-            <div className={styles.faqContent}>
-              <h3 className={styles.faqItemTitle}>食譜相關</h3>
-              <p className={styles.faqItemSubtitle}>步驟詳解</p>
+            <div className={styles.faqItemTitle}>
+              <h2>食譜相關</h2>
+              <h3>步驟詳解</h3>
             </div>
-            <p className={styles.faqItemDescription}>
-              與食譜有關的問題與解答。
+            <p>
+              若您在閱讀或操作食譜時遇到困難，無論是步驟不清楚、用料分量不明確，還是影片教學無法播放，歡迎隨時與我們聯繫。我們樂意提供更清楚的解說與補充，確保您在烹飪過程中順利完成每一道料理。
             </p>
           </div>
 
@@ -95,12 +95,12 @@ const ContactPage = () => {
             <div className={styles.faqIcon}>
               <FaCartShopping />
             </div>
-            <div className={styles.faqContent}>
-              <h3 className={styles.faqItemTitle}>商城相關</h3>
-              <p className={styles.faqItemSubtitle}>買賣流程</p>
+            <div className={styles.faqItemTitle}>
+              <h2>商城相關</h2>
+              <h3>買賣流程</h3>
             </div>
-            <p className={styles.faqItemDescription}>
-              與商城有關的問題與解答。
+            <p>
+              若您對購買流程、付款方式、配送時間或商品資訊有任何疑問，請聯繫我們的商城客服團隊。我們將協助您順利完成選購、下單、付款到收貨的每一個步驟，提供安心便捷的購物體驗。
             </p>
           </div>
 
@@ -108,11 +108,13 @@ const ContactPage = () => {
             <div className={styles.faqIcon}>
               <RiCustomerService2Fill />
             </div>
-            <div className={styles.faqContent}>
-              <h3>退換貨與客服</h3>
-              <p>立即聯繫</p>
+            <div className={styles.faqItemTitle}>
+              <h2>退換貨與客服</h2>
+              <h3>立即聯繫</h3>
             </div>
-            <p>與退換貨、聯繫客服有關的問題與解答。</p>
+            <p>
+              若商品有瑕疵、錯誤出貨或不符合期待，請於收到商品後七日內聯繫我們申請退換貨。我們的客服團隊將依據退換貨政策，協助您快速處理問題，確保您的權益與滿意度。
+            </p>
           </div>
         </div>
       </div>
@@ -121,79 +123,65 @@ const ContactPage = () => {
         <div className={styles.formWrapper}>
           <div className={styles.formContainer}>
             <h1>聯繫我們</h1>
-            <h3>有任何疑問或建議？歡迎留言給我們！</h3>
+            <h2>有任何疑問或建議？歡迎留言給我們！</h2>
           </div>
 
           <form className={styles.formFields} onSubmit={handleSubmit}>
-            <div className={styles.formRow}>
-              <div className={styles.inputGroup}>
-                <label className={styles.inputLabel}>姓名</label>
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  className={styles.textField}
-                  placeholder="請輸入您的姓名"
-                  required
-                />
-              </div>
+            <div className={styles.inputGroup}>
+              <h3>姓名</h3>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="請輸入您的姓名"
+                required
+              />
             </div>
 
-            <div className={styles.formRow}>
-              <div className={styles.inputGroup}>
-                <label className={styles.inputLabel}>郵件</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className={styles.textField}
-                  placeholder="請輸入您的郵件"
-                  required
-                />
-              </div>
+            <div className={styles.inputGroup}>
+              <h3>郵件</h3>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="請輸入您的郵件"
+                required
+              />
             </div>
 
-            <div className={styles.formRow}>
-              <div className={styles.inputGroup}>
-                <label className={styles.inputLabel}>主旨分類</label>
-                <select
-                  name="subject"
-                  value={formData.subject}
-                  onChange={handleChange}
-                  className={styles.textField}
-                  required
-                >
-                  <option value="">請選擇主旨類型</option>
-                  <option value="recipe">食譜相關</option>
-                  <option value="shop">商城相關</option>
-                  <option value="return">退換貨與客服</option>
-                  <option value="other">其他問題</option>
-                </select>
-              </div>
+            <div className={styles.inputGroup}>
+              <h3>主旨分類</h3>
+              <select
+                name="subject"
+                value={formData.subject}
+                onChange={handleChange}
+                required
+              >
+                <option value="">請選擇主旨類型</option>
+                <option value="recipe">食譜相關</option>
+                <option value="shop">商城相關</option>
+                <option value="return">退換貨與客服</option>
+                <option value="other">其他問題</option>
+              </select>
             </div>
 
-            <div className={styles.formRow}>
-              <div className={styles.inputGroup}>
-                <label className={styles.inputLabel}>留言內容</label>
-                <textarea
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  className={`${styles.textField} ${styles.textArea}`}
-                  placeholder="請輸入留言內容"
-                  rows="5"
-                  required
-                ></textarea>
-              </div>
+            <div className={styles.inputGroup}>
+              <h3>留言內容</h3>
+              <textarea
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
+                placeholder="請輸入留言內容"
+                rows="5"
+                required
+              ></textarea>
             </div>
 
-            <div className={styles.buttonContainer}>
-              <button type="submit" className={styles.submitButton}>
-                送出
-              </button>
-            </div>
+            <button type="submit" className={styles.submitButton}>
+              <h2> 送出</h2>
+            </button>
           </form>
         </div>
       </div>

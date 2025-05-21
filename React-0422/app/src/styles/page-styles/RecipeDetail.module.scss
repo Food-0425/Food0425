@@ -127,9 +127,9 @@
 .cardCheck {
   z-index: 999;
   position: absolute;
-  right: 50%;
+  right: 13%;
   transform: translate(50%, 0);
-  top: 180px;
+  top: 135px;
   background-color: $color-primary;
   color: #fff;
   border-radius: 9rem;
@@ -663,7 +663,7 @@
     margin-bottom: 20px;
   }
   .cardCheck {
-    right: 10%;
+    right: 11%;
     top: 140px;
   }
   .stepsContainer {
@@ -717,9 +717,6 @@
     width: auto;
   }
 }
-
-
-
 
 // --商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁
 // --商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁
@@ -813,8 +810,8 @@
 }
 
 .addToCartButton,
-.wishlistButton,.buyNowButton
- {
+.wishlistButton,
+.buyNowButton {
   padding: 12px 24px;
   border-radius: 8px;
   font-size: 16px;
@@ -873,8 +870,6 @@
   }
 }
 
-
-
 /* 載入與錯誤狀態 */
 .loadingContainer,
 .errorContainer {
@@ -895,11 +890,11 @@
   .productImage {
     width: 100%;
   }
-  
+
   .productTitle {
     font-size: 24px;
   }
-  
+
   .productPrice {
     font-size: 28px;
   }
@@ -910,18 +905,18 @@
   align-items: center;
   gap: 20px;
   margin: 20px 0;
-  
+
   .quantityLabel {
     font-size: 18px;
     font-weight: 500;
     color: #423c3a;
   }
-  
+
   .quantityControls {
     display: flex;
     align-items: center;
     gap: 10px;
-    
+
     .quantityButton {
       width: 36px;
       height: 36px;
@@ -935,19 +930,19 @@
       justify-content: center;
       cursor: pointer;
       transition: all 0.3s;
-      
+
       &:hover:not(:disabled) {
         background: #ff5a00;
         color: white;
       }
-      
+
       &:disabled {
         border-color: #ccc;
         color: #ccc;
         cursor: not-allowed;
       }
     }
-    
+
     .quantityValue {
       min-width: 40px;
       text-align: center;
@@ -1044,39 +1039,38 @@
   align-items: center;
   gap: 10px;
   margin: 15px 0;
-  
+
   .starsContainer {
     display: flex;
     gap: 2px;
-    
+
     .star {
       font-size: 20px;
-      
+
       &-filled {
         color: #ffd700;
       }
-      
+
       &-half {
         color: #ffd700;
       }
-      
+
       &-empty {
         color: #e4e5e9;
       }
     }
   }
-  
+
   .ratingScore {
     color: #666;
     font-size: 16px;
   }
-  
+
   .reviewCount {
     color: #666;
     font-size: 14px;
   }
 }
-
 
 .productPrice {
   color: #ff5a00;

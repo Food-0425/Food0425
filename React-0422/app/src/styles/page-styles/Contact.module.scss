@@ -26,6 +26,7 @@
   width: 100%;
   max-width: 1280px;
   text-align: center;
+  gap: 20px;
 }
 
 .rightDecoration {
@@ -61,14 +62,14 @@
   margin-bottom: 50px;
   p {
     font-size: $font-size-p1;
-    margin-bottom: 50px;
+    text-align: start;
   }
 }
 
 .faqRow {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  justify-content: space-between;
+  gap: 100px;
 }
 
 .faqItem {
@@ -76,6 +77,11 @@
   flex-direction: column;
   gap: 20px;
   align-items: center;
+  div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
 }
 
 .faqIcon {
@@ -89,97 +95,69 @@
   font-size: $font-size-icon;
   color: #fff;
 }
-
-.faqContent {
-  flex-direction: column;
+.faqItemTitle {
+  gap: 10px;
 }
 
 .form {
   display: flex;
   width: 100%;
-  background-color: $color-light;
-  justify-content: center;
-  gap: 50px;
+  background-color: $color-accent;
   padding: 50px 0;
 }
 
 .formWrapper {
+  margin: 0 auto;
   display: flex;
   width: 100%;
   max-width: 1280px;
-  margin: 0 auto;
-  gap: 3.125rem;
+  align-items: stretch; // 讓內容上下撐滿
+  // gap: 40px;
 }
 
 .formContainer {
-  margin: auto 0;
-  color: $color-primary;
+  color: #fff;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center; // 內容置中
+  justify-content: center;
+  h1 {
+    margin-bottom: 20px;
+  }
 }
 
 .formFields {
-  align-self: stretch;
-  display: flex;
-  min-width: 240px;
-  margin: auto 0;
-  flex-direction: column;
-  align-items: stretch;
-  font-family:
-    'Inter',
-    -apple-system,
-    Roboto,
-    Helvetica,
-    sans-serif;
-  font-size: 14px;
-  font-weight: 400;
-  justify-content: center;
-  flex: 1;
-  flex-shrink: 1;
-  flex-basis: 0%;
-}
-
-.formRow {
-  display: flex;
   width: 100%;
-  align-items: flex-start;
-  gap: 40px 80px;
-  letter-spacing: 0.42px;
-  justify-content: start;
-}
-
-.formRow + .formRow {
-  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
 }
 
 .inputGroup {
   display: flex;
-  min-width: 240px;
-  width: 520px;
-  flex-direction: column;
-  overflow: hidden;
-  align-items: stretch;
-  justify-content: center;
-}
-
-.inputLabel {
-  color: #000;
-}
-
-.textField {
-  text-overflow: ellipsis;
-  align-self: stretch;
-  flex: 1;
-  flex-shrink: 1;
-  flex-basis: 0%;
-  border-radius: 6px;
-  background-color: rgba(255, 255, 255, 1);
-  border-color: rgba(0, 0, 0, 0.1);
-  border-style: solid;
-  border-width: 1px;
-  margin-top: 4px;
   width: 100%;
-  padding: 8px 12px;
-  gap: 4px;
-  color: #000000;
+  flex-direction: column;
+  color: $color-primary;
+  margin-bottom: 20px;
+  input,
+  select,
+  textarea {
+    font-size: $font-size-p1;
+    color: $color-accent;
+    border: none;
+    border-radius: 30px;
+    border-width: 1px;
+    margin-top: 10px;
+    width: 100%;
+    padding: 10px 20px;
+    &:focus {
+      outline: none;
+      border: 3px solid $color-primary;
+    }
+  }
+  select > option {
+    color: $color-accent;
+  }
 }
 
 .textArea {
@@ -187,60 +165,39 @@
   resize: vertical;
 }
 
-.buttonContainer {
-  margin-top: 40px;
-  width: 240px;
-  max-width: 100%;
-  overflow: hidden;
-  font-family:
-    'Roboto',
-    -apple-system,
-    Roboto,
-    Helvetica,
-    sans-serif;
-  font-size: 16px;
-  color: rgba(255, 255, 255, 1);
-  font-weight: 500;
-}
-
 .submitButton {
-  border-radius: 8px;
-  background-color: #df6c2d;
-  width: 100%;
+  margin-top: 20px;
+  border-radius: 30px;
+  background-color: $color-primary;
   padding: 12px;
-  border: none;
-  cursor: pointer;
-  color: white;
-  font-weight: 500;
+  color: #fff;
   transition: background-color 0.3s;
 }
 
 .submitButton:hover {
-  background-color: #c45a22;
-}
-
-.leftImage {
-  aspect-ratio: 1.47;
-  object-fit: contain;
-  object-position: center;
-  width: 542px;
-  position: absolute;
-  z-index: 0;
-  min-width: 240px;
-  left: -115px;
-  top: 0px;
-  height: 542px;
+  background-color: $color-background;
+  color: $color-primary;
 }
 
 @media (max-width: 991px) {
+  .faqRow{
+    gap: 50px;
+  }
+  .formWrapper{
+    padding: 0 20px;
+    flex-direction: column;
+    align-items: center;
+    gap: 50px;
+  }
+  .faqSection{
+    padding: 0 20px;
+  }
+  .rightDecoration,
+  .leftDecoration {
+    display: none;
+  }
   .faqIcon {
     font-size: 40px;
-    white-space: initial;
-  }
-
-
-  .formContainer {
-    max-width: 100%;
     white-space: initial;
   }
 
@@ -249,25 +206,8 @@
     white-space: initial;
   }
 
-  .formRow {
-    max-width: 100%;
-    white-space: initial;
-  }
-
-  .inputGroup {
-    white-space: initial;
-  }
-
-  .inputLabel {
-    max-width: 100%;
-  }
-
   .textField {
     max-width: 100%;
-    white-space: initial;
-  }
-
-  .buttonContainer {
     white-space: initial;
   }
 
