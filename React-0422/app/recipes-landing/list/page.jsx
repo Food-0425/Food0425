@@ -79,6 +79,7 @@ export default function RecipeListPage() {
       const params = new URLSearchParams(searchParams)
       params.set('page', newPage)
       window.history.pushState({}, '', `?${params.toString()}`)
+      window.scrollTo({ top: 0, behavior: 'smooth' })
     }
   }
 
