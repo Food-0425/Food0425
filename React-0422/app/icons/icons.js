@@ -30,14 +30,17 @@ import {
   MdOutlineRamenDining,
 } from 'react-icons/md'
 import { BsBookmarkPlus, BsBookmarkStarFill } from 'react-icons/bs'
-import { GrPrevious } from 'react-icons/gr'
+import { GrPrevious, GrArticle } from 'react-icons/gr'
 import { GiKitchenScale } from 'react-icons/gi'
 import { PiJarLabelBold, PiHandTapBold } from 'react-icons/pi'
 import { HiViewGridAdd, HiOutlineViewGridAdd } from 'react-icons/hi'
 import { IoIosAddCircle, IoIosListBox } from 'react-icons/io'
 import { IoIosArrowBack } from 'react-icons/io'
+import { RiCustomerService2Fill } from 'react-icons/ri'
 
 export {
+  GrArticle,
+  RiCustomerService2Fill,
   GrPrevious,
   FaSearch,
   FaCakeCandles,
