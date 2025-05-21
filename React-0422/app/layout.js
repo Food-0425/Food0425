@@ -28,11 +28,9 @@ export default function RootLayout({ children }) {
         <Script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" />
         <Providers>
           <Header />
-          <PageTransition>
-            {/* <main> */}
-            {children}
-            {/* </main> */}
-          </PageTransition>
+          {/* <PageTransition> */}
+          <main>{children}</main>
+          {/* </PageTransition> */}
           <Footer />
         </Providers>
       </body>

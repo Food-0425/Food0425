@@ -333,12 +333,7 @@ export default function RecipeDetailPage() {
               )}
             </div>
           </div>
-          <button className={styles.cardCheck}>
-            <h2>
-              <TbHandFinger />
-              &nbsp;確認
-            </h2>
-          </button>
+          
           <div className={styles.cardIcon}>
             <TbBowlSpoon />
           </div>
@@ -393,6 +388,7 @@ export default function RecipeDetailPage() {
               &nbsp;確認
             </h2>
           </button>
+          
           {/* 加入 CartModal 組件 */}
           <CartModal
             show={showCartModal}
