@@ -153,7 +153,7 @@ router.get('/api/:id', async (req, res) => {
 
       // 查這個食譜對應的所有調味料
       const [condimentsRows] = await db.query(
-        'SELECT condiment_id, name, quantity, unit FROM condiments WHERE recipe_id = ? ORDER BY condiment_id ASC',
+        'SELECT condiment_id, name, quantity, unit,product_id FROM condiments WHERE recipe_id = ? ORDER BY condiment_id ASC',
         [recipeId]
       )
       
