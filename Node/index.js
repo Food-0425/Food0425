@@ -26,6 +26,8 @@ import restaurantsRouter from "./routes/restaurants.js";
 import cartRouter from "./routes/cart.js";
 // 設定到聯絡我們的路由
 import contactRouter from "./routes/contact.js";
+// 設定到訂單頁面的路由
+import orderRouter from "./routes/order.js";
 
 const MySQLStore = mysql_session(session);
 const sessionStore = new MySQLStore({}, db);
@@ -101,8 +103,8 @@ if (auth && auth.indexOf("Bearer ") === 0) {
 
 
 // Top-level middlewares
-app.use(express.urlencoded({ extended: true }));
 app.use(express.json());  // <-- 處理 JSON 請求 body
+app.use(express.urlencoded({ extended: true }));
 // 連到食譜
 app.use('/recipes', recipesRouter);
 app.use('/products', productsRouter);
@@ -116,6 +118,8 @@ app.use('/restaurants', restaurantsRouter);
 app.use('/cart', cartRouter);
 // 連到聯絡我們的
 app.use('/contact', contactRouter);
+// 連到訂單頁面
+app.use('/api/orders', orderRouter);
 
 // 路由定義, 兩個條件: 1. 拜訪的 HTTP 方法, 2. 路徑
 app.get("/", (req, res) => {
@@ -411,7 +415,7 @@ app.use((req, res) => {
     res.status(404).send(`<h1>您走錯路了</h1>`);
 });
 
-const port = process.env.WEB_PORT || 3002;
+const port = process.env.WEB_PORT || 3001;
 
 app.listen(port, () => {
     console.log(`Express Server 啟動: ${port}`);

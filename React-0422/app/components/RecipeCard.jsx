@@ -42,7 +42,7 @@ export default function RecipeCard({
   const handleFavoriteClick = (e) => {
     e.stopPropagation() // 防止點擊收藏圖標時觸發卡片點擊
 
-    if (!auth.isAuth) {
+    if (!auth || !auth.token) {
       // 如果沒有登入，顯示提示視窗
       setShowLoginModal(true)
       return
@@ -81,6 +81,7 @@ export default function RecipeCard({
           {isFavorite ? <BsBookmarkStarFill /> : <BsBookmarkPlus />}
         </button>
       </div>
+
       <LoginModal
         show={showLoginModal}
         onHide={() => setShowLoginModal(false)}

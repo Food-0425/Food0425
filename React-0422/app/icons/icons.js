@@ -9,6 +9,7 @@ import {
   FaChevronDown,
   FaCalendarAlt,
   FaLock,
+  FaStarHalfAlt,
   FaRegHandPointUp,
 } from 'react-icons/fa'
 import {
@@ -19,6 +20,7 @@ import {
   FaCartPlus,
   FaUser,
   FaXTwitter,
+  FaStar,
 } from 'react-icons/fa6'
 import { BiSolidBowlRice, BiLike } from 'react-icons/bi'
 import { LuDessert, LuSalad } from 'react-icons/lu'
@@ -37,10 +39,14 @@ import { HiViewGridAdd, HiOutlineViewGridAdd } from 'react-icons/hi'
 import { IoIosAddCircle, IoIosListBox } from 'react-icons/io'
 import { IoIosArrowBack } from 'react-icons/io'
 import { RiCustomerService2Fill } from 'react-icons/ri'
-
+import { LuStar } from 'react-icons/lu'
+import { AiOutlineStar } from 'react-icons/ai'
 export {
   GrArticle,
   RiCustomerService2Fill,
+  AiOutlineStar,
+  FaStar,
+  FaStarHalfAlt,
   GrPrevious,
   FaSearch,
   FaCakeCandles,
@@ -81,4 +87,5 @@ export {
   IoIosListBox,
   HiViewGridAdd,
   HiOutlineViewGridAdd,
+  LuStar,
 }
