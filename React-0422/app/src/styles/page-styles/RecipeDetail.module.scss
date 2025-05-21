@@ -723,8 +723,13 @@
   }
 }
 
-// 商品詳細頁
 
+
+
+// --商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁
+// --商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁--商品詳細頁
+
+/* 商品詳細頁樣式 */
 /* 調整整體容器 */
 .productContainer {
   padding: 40px 20px;
@@ -771,13 +776,41 @@
 }
 
 /* 價格 */
+
 .productPrice {
+  margin: 20px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
   font-size: 36px;
   font-weight: 700;
   color: #ff5a00;
   margin: 20px 0;
-}
 
+  p {
+    color: $color-content;
+    font-size: $font-size-p;
+    text-decoration: line-through;
+    margin: 0;
+  }
+
+  h2 {
+    font-size: 32px;
+    font-weight: $font-weight-title;
+    color: $color-accent;
+    margin: 0;
+  }
+
+  @media (max-width: 991px) {
+    h2 {
+      font-size: 28px;
+    }
+    p {
+      font-size: 16px;
+    }
+  }
+}
 /* 操作按鈕 */
 .actionButtons {
   display: flex;
@@ -1490,3 +1523,82 @@
   margin-top: 25px;
 }
 
+//新增樣式
+
+.brandSection {
+  margin-bottom: 15px;
+  padding: 8px 15px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  display: inline-block;
+
+  .brandName {
+    color: #666;
+    font-size: 16px;
+    font-weight: 500;
+  }
+}
+
+.productDetailSection {
+  max-width: 1280px;
+  margin: 40px auto;
+  padding: 0 20px;
+
+  .descriptionBlock,
+  .specificationsBlock {
+    margin-bottom: 30px;
+    background-color: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+    .blockTitle {
+      font-size: 24px;
+      color: #333;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #ff5a00;
+    }
+
+    .blockContent {
+      font-size: 16px;
+      line-height: 1.6;
+      color: #666;
+
+      p {
+        margin: 0;
+        white-space: pre-line;
+      }
+    }
+
+    .noContent {
+      color: #999;
+      font-style: italic;
+    }
+  }
+
+  .specificationsBlock {
+    background-color: #fafafa;
+  }
+}
+
+@media (max-width: 768px) {
+  .productDetailSection {
+    margin: 20px auto;
+    padding: 0 15px;
+
+    .descriptionBlock,
+    .specificationsBlock {
+      padding: 15px;
+
+      .blockTitle {
+        font-size: 20px;
+        margin-bottom: 15px;
+      }
+
+      .blockContent {
+        font-size: 14px;
+      }
+    }
+  }
+}

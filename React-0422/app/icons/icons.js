@@ -35,7 +35,7 @@ import { PiJarLabelBold } from 'react-icons/pi'
 import { HiViewGridAdd, HiOutlineViewGridAdd } from 'react-icons/hi'
 import { IoIosAddCircle, IoIosListBox } from 'react-icons/io'
 import { IoIosArrowBack } from 'react-icons/io'
-
+import { LuStar } from 'react-icons/lu'
 export {
   GrPrevious,
   FaSearch,
@@ -75,4 +75,5 @@ export {
   IoIosListBox,
   HiViewGridAdd,
   HiOutlineViewGridAdd,
+  LuStar,
 }

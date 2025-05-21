@@ -7,7 +7,11 @@ import styles from '../../src/styles/page-styles/RecipeDetail.module.scss'
 import Link from 'next/link'
 import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-
+import { FoodFeeBack } from '../../components/FoodFeeBack'
+import { LazyLoadImage } from 'react-lazy-load-image-component' //圖片懶加載
+import { LuStar } from 'react-icons/lu' //星星圖示
+import { IoIosArrowBack } from 'react-icons/io' //箭頭圖示
+import { BiSolidBowlRice, BiLike } from 'react-icons/bi' //評論圖示
 //使用API
 export default function ProductDetailPage() {
   const params = useParams() // 取得路由參數
@@ -21,6 +25,8 @@ export default function ProductDetailPage() {
   const [recommendedProducts, setRecommendedProducts] = useState([]) //推薦商品
   const [reviews, setReviews] = useState([]) //評論
   const [isFavorite, setIsFavorite] = useState(false) //是否收藏
+  const [currentPage, setCurrentPage] = useState(0)
+  const [isLoading, setIsLoading] = useState(true)
 
   // 取得商品資料
   useEffect(() => {
@@ -52,6 +58,63 @@ export default function ProductDetailPage() {
         setLoading(false)
       }
     }
+
+    // 設置假評論資料
+    const mockReviews = [
+      {
+        id: 1,
+        username: '李淑芬',
+        userAvatar: '/images/recipes/user1.png',
+        created_at: '2025-02-24 10:15',
+        title: '味道不錯，但價格稍貴',
+        context:
+          '商品品質很好，包裝也很完整。雖然價格比一般商店貴一些，但品質確實有差。建議可以找特價時再購買。',
+        rating: 4,
+      },
+      {
+        id: 2,
+        username: '陳志明',
+        userAvatar: '/images/recipes/user2.png',
+        created_at: '2025-02-17 12:45',
+        title: '超值推薦！',
+        context:
+          '第二次購買了，品質依然維持水準。出貨速度快，包裝完整，而且客服態度很好，有問題都會立即回覆。',
+        rating: 5,
+      },
+      {
+        id: 3,
+        username: '王小明',
+        userAvatar: '/images/recipes/user1.png',
+        created_at: '2025-02-15 15:30',
+        title: '還不錯的選擇',
+        context:
+          '商品符合描述，食材新鮮。配送過程中有些小問題，但客服處理得很好。整體來說是不錯的購物體驗。',
+        rating: 4,
+      },
+      {
+        id: 4,
+        username: '張美玲',
+        userAvatar: '/images/recipes/user2.png',
+        created_at: '2025-02-10 09:20',
+        title: '物超所值',
+        context:
+          '商品新鮮度很好，包裝也很完整。價格雖然不是最便宜的，但品質真的很不錯。會再回購！',
+        rating: 5,
+      },
+      {
+        id: 5,
+        username: '林大寶',
+        userAvatar: '/images/recipes/user1.png',
+        created_at: '2025-02-05 14:50',
+        title: '好吃推薦',
+        context:
+          '食材品質很棒，而且份量也很實在。建議可以多進一些不同的品項，這樣選擇性會更多。',
+        rating: 4,
+      },
+    ]
+
+    setReviews(mockReviews)
+    setIsLoading(false)
 
     if (params.id) {
       fetchProduct()
@@ -135,6 +198,21 @@ export default function ProductDetailPage() {
     }
   }
 
+  const handlePrevPage = () => {
+    setCurrentPage((prev) => Math.max(0, prev - 1))
+  }
+
+  const handleNextPage = () => {
+    setCurrentPage((prev) => Math.min(prev + 1, Math.floor(reviews.length / 3)))
+  }
+
+  // 計算目前頁面應該顯示的評論
+  const itemsPerPage = 3
+  const startIndex = currentPage * itemsPerPage
+  const endIndex = startIndex + itemsPerPage
+  const currentComments = reviews.slice(startIndex, endIndex)
+
+  //讀取載入狀態
   if (loading) {
     return (
       <div className={styles.loadingContainer}>
@@ -187,22 +265,24 @@ export default function ProductDetailPage() {
           alt={product.title}
         />
         <div className={styles.productInfoContainer}>
+          {/* 品牌資訊 */}
+          {product.brand && (
+            <div className={styles.brandSection}>
+              <h3 className={styles.brandName}>{product.brand}</h3>
+            </div>
+          )}
           <h1 className={styles.productTitle}>{product.name}</h1>
           <div className={styles.ratingContainer}>
             <div className={styles.starsContainer}>
               {[...Array(5)].map((_, i) => (
-                <img
-                  key={i}
-                  src="/images/star.png"
-                  className={styles.starIcon}
-                  alt={`${i + 1} star`}
-                />
+                <LuStar key={i} className={styles.star}></LuStar>
               ))}
             </div>
             <p className={styles.reviewCount}>{product.reviewCount} 則評價</p>
           </div>
           <div className={styles.productPrice}>
-            NT$ {product.price.toLocaleString()}
+            <p>NT$ {product.original_price?.toLocaleString()}</p>
+            <h2>NT$ {product.price?.toLocaleString()}</h2>
           </div>
 
           {/* 新增數量控制區塊 */}
@@ -225,7 +305,7 @@ export default function ProductDetailPage() {
               </button>
             </div>
           </div>
-
+          {/* 新增直接購買按鈕 */}
           <div className={styles.actionButtons}>
             <button onClick={handleBuyNow} className={styles.buyNowButton}>
               立即購買
@@ -251,6 +331,33 @@ export default function ProductDetailPage() {
         <h2 className={styles.sectionTitle}>商品介紹</h2>
         <p className={styles.descriptionText}>{product.description}</p>
       </section>
+
+      {/* 商品詳細資訊區塊 */}
+      <div className={styles.productDetailSection}>
+        {/* 商品介紹 */}
+        <div className={styles.descriptionBlock}>
+          <h2 className={styles.blockTitle}>商品介紹</h2>
+          <div className={styles.blockContent}>
+            {product.description ? (
+              <p>{product.description}</p>
+            ) : (
+              <p className={styles.noContent}>暫無商品介紹</p>
+            )}
+          </div>
+        </div>
+
+        {/* 商品規格 */}
+        <div className={styles.specificationsBlock}>
+          <h2 className={styles.blockTitle}>商品規格</h2>
+          <div className={styles.blockContent}>
+            {product.specifications ? (
+              <p>{product.specifications}</p>
+            ) : (
+              <p className={styles.noContent}>暫無規格資訊</p>
+            )}
+          </div>
+        </div>
+      </div>
 
       {/* 推薦商品區塊 */}
       <div className={styles.recommendedSection}>
@@ -283,38 +390,85 @@ export default function ProductDetailPage() {
         </div>
       </div>
 
-      {/* 評論區 */}
+      {/* 評論區主圖題 */}
       <div className={styles.reviewsSection}>
         <div className={styles.reviewsTitle}>精選留言</div>
-        <div className={styles.reviewsGrid}>
-          {reviews.map((review) => (
-            <div className={styles.reviewCard} key={review.id}>
-              <div className={styles.reviewUser}>
-                <div className={styles.userImageContainer}>
-                  <img
-                    src={review.userImage}
-                    className={styles.userImage}
-                    alt={review.userName}
-                  />
-                </div>
-                <div className={styles.userInfo}>
-                  <img
-                    src="/images/five-stars.png"
-                    className={styles.userRating}
-                    alt="5 star rating"
-                  />
-                  <div className={styles.userDetails}>
-                    <div className={styles.userName}>{review.userName}</div>
-                    <div className={styles.reviewDate}>{review.date}</div>
+      </div>
+      {/* 評論區塊 */}
+      <div className={styles.commentsSection}>
+        <div className={styles.commentsContainer}>
+          <div>
+            <div className={styles.commentsList01}>
+              <button
+                className={styles.arrowButton}
+                onClick={handlePrevPage}
+                disabled={currentPage === 0}
+              >
+                <IoIosArrowBack />
+              </button>
+
+              <div className={styles.commentsList}>
+                {isLoading ? (
+                  <div>正在載入評論...</div>
+                ) : error ? (
+                  <div>載入評論時發生錯誤</div>
+                ) : currentComments && currentComments.length > 0 ? (
+                  currentComments.map((comment, index) => (
+                    <div className={styles.commentCard} key={index}>
+                      <div>
+                        <img
+                          src={comment.userAvatar || `/images/user/default.jpg`}
+                          alt="User avatar"
+                          onError={(e) => {
+                            if (!e.target.dataset.fallback) {
+                              e.target.dataset.fallback = true
+                              e.target.src = `/images/recipes/user${(index % 2) + 1}.png`
+                            }
+                          }}
+                        />
+                        <div className={styles.userInfo}>
+                          <button className={styles.buttonBiLike01}>
+                            <BiLike />
+                          </button>
+                          <h3>{comment.username || '匿名用戶'}</h3>
+                          <p>{comment.created_at || '未知日期'}</p>
+                        </div>
+                      </div>
+                      <div className={styles.commentContent}>
+                        <h2>{comment.title || '無標題'}</h2>
+                        <p>{comment.context || comment.text || '無評論內容'}</p>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className={styles.commentCard}>
+                    <div className={styles.commentUser}>
+                      <div className={styles.userInfo}>
+                        <div className={styles.userContent}>
+                          <div className={styles.userName}>
+                            <h2>{'目前這個商品尚未有人留言'}</h2>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className={styles.commentContent}>
+                      <div className={styles.commentText}>
+                        {'目前這個商品尚未有人留言'}
+                      </div>
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
-              <div className={styles.reviewContent}>
-                <div className={styles.reviewTitle}>{review.title}</div>
-                <div className={styles.reviewText}>{review.text}</div>
-              </div>
+
+              <button
+                className={styles.arrowButton}
+                onClick={handleNextPage}
+                disabled={endIndex >= reviews.length}
+              >
+                <IoIosArrowBack />
+              </button>
             </div>
-          ))}
+          </div>
         </div>
       </div>
     </div>
