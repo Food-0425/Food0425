@@ -11,7 +11,10 @@ import Swal from 'sweetalert2'
 import 'sweetalert2/dist/sweetalert2.min.css'
 import * as ReactDOM from 'react-dom/client'
 import { useSearchParams } from 'next/navigation'
+import { BsBookmarkStarFill, BsBookmarkPlus } from '../../icons/icons'
 import Bread from '@/app/components/Bread'
+import FavoriteButton from '@/app/components/FavoriteButton'
+import { API_SERVER } from '@/config/api-path'
 
 import styles from '../../src/styles/page-styles/RecipeDetail.module.scss'
 import {
@@ -61,7 +64,12 @@ export default function RecipeDetailPage() {
   const [showCartModal, setShowCartModal] = useState(false)
   const [SuccessModal, setSuccessModal] = useState(false)
   const [cartModalMessage, setCartModalMessage] = useState('')
+  // 用來控制收藏的狀態
+  const [isFavorite, setIsFavorite] = useState(false)
+  const [favorites, setFavorites] = useState({})
+  const [favoritesLoaded, setFavoritesLoaded] = useState(false)
 
+  const [favoriteCount, setFavoriteCount] = useState(0) // 先設定初始值為 0
   // 2. 在組件內部宣告 router
   const router = useRouter()
 
@@ -85,7 +93,7 @@ export default function RecipeDetailPage() {
   const comments = recipe.comments || []
 
   // 取的多少人收藏
-  const favorites = recipe.favorites || []
+  const fav = recipe.favorites || []
 
   // 計算當前頁的評論
   const startIndex = currentPage * commentsPerPage
@@ -171,6 +179,82 @@ export default function RecipeDetailPage() {
   const handleCloseLoginModal = () => setShowLoginModal(false)
   const handleGoToLogin = () => {
     router.push('/login') // 使用 router.push 進行導航
+  }
+
+  useEffect(() => {
+    console.log('Updated Favorites State:', favorites) // 確認 favorites 狀態
+  }, [favorites])
+
+  // 取得收藏狀態
+  useEffect(() => {
+    // console.log('Authorization Token:', auth.token) // 檢查 token 是否正確
+
+    const fetchFavorites = async () => {
+      try {
+        const response = await fetch(`${API_SERVER}/recipes/api/favorite/get`, {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        })
+        const data = await response.json()
+        console.log('Fetched Favorites:', data.favorites)
+
+        setFavorites(data.favorites || {})
+        setIsFavorite(data.favorites?.[id] || false) // 加入這行，設置當前食譜的收藏狀態
+        setFavoritesLoaded(true)
+      } catch (error) {
+        console.error('載入收藏狀態失敗:', error)
+      }
+    }
+
+    if (auth?.token) {
+      fetchFavorites()
+    }
+  }, [auth])
+
+  // 在 useEffect 中初始化收藏人數
+  useEffect(() => {
+    if (recipe?.favorites?.count !== undefined) {
+      setFavoriteCount(recipe.favorites.count)
+    }
+  }, [recipe?.favorites?.count])
+
+  // 處理收藏切換
+  const toggleFavorite = (recipeId) => {
+    const newFavoriteStatus = !favorites[recipeId]
+
+    setFavorites((prev) => ({
+      ...prev,
+      [recipeId]: newFavoriteStatus,
+    }))
+    setIsFavorite(newFavoriteStatus)
+
+    // 更新收藏數
+    setFavoriteCount((prev) => (newFavoriteStatus ? prev + 1 : prev - 1))
+
+    try {
+      fetch(`${API_SERVER}/recipes/api/favorite`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${auth.token}`,
+        },
+        body: JSON.stringify({
+          userId: auth.id,
+          recipeId,
+          isFavorite: newFavoriteStatus,
+        }),
+      })
+    } catch (error) {
+      console.error('更新收藏狀態失敗:', error)
+      // 如果 API 呼叫失敗，回復原狀
+      setFavorites((prev) => ({
+        ...prev,
+        [recipeId]: !newFavoriteStatus,
+      }))
+      setIsFavorite(!newFavoriteStatus)
+      setFavoriteCount((prev) => (newFavoriteStatus ? prev - 1 : prev + 1))
+    }
   }
 
   // 點擊按鈕添加食材至購物車
@@ -335,7 +419,26 @@ export default function RecipeDetailPage() {
           { text: '食譜頁面' },
         ]}
       />
-      <div>{`已有${favorites.count}人收藏!!`}</div>
+      <div>{`已有${favoriteCount}人收藏!!`}</div>
+      {isLoading && !favoritesLoaded ? ( // 確保 favorites 已加載
+        <div className={styles.loading}>載入中...</div>
+      ) : (
+        <div style={{ backgroundColor: 'tomato', width: '100px' }}>
+          <FavoriteButton
+            recipeId={id}
+            initialFavorite={favorites[id]} // 修改這裡，使用 favorites[id] 而不是 isFavorite
+            onFavoriteToggle={toggleFavorite}
+            className={styles.recipeFavoriteButton}
+          />
+        </div>
+      )}
+      {/* <button
+        alt={isFavorite ? '已收藏' : '加入收藏'}
+        onClick={handleFavoriteClick}
+        style={{ cursor: 'pointer' }}
+      >
+        {isFavorite ? <BsBookmarkStarFill /> : <BsBookmarkPlus />}
+      </button> */}
 
       {/* 材料選單 Start */}
       <div className={styles.ingredientsSection}>
