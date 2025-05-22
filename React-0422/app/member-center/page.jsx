@@ -1,35 +1,43 @@
+// member-center/page.jsx
 'use client'
 
 import React, { useState, useEffect } from 'react' // 引入 useState
 import styles from './styles/member-center.module.scss'
 import Sidebar from './components/Sidebar'
 import ProfileContent from './components/ProfileContent'
-import PasswordContent from './components/PasswordContent';
+import PasswordContent from './components/PasswordContent'
 // import FavoritesContent from './components/FavoritesContent';
 // import OrdersContent from './components/OrdersContent';
 import { useAuth } from '@/hooks/auth-context'
 import { useRouter } from 'next/navigation'
 
 export default function MemberCenter() {
-  const { auth } = useAuth()
+  const { auth, authInit } = useAuth() // 從 Auth Context 取得登入狀態與初始化狀態
   const router = useRouter()
 
   // useState Hook 來管理目前要顯示的內容，預設顯示 'profile'
-  const [activeContent, setActiveContent] = useState('profile') // <--- 新增這一行
+  const [activeContent, setActiveContent] = useState('profile')
 
   useEffect(() => {
-    // 如果沒有登入，導向到登入頁面
-    if (!auth) {
-      router.push('/login')
+    // 等待 auth 初始化完成後才進行檢查
+    if (authInit) {
+      // 如果未登入 (auth.user_id 不存在或無效)，則導向到登入頁面
+      if (!auth.user_id) {
+        router.push('/login')
+      }
     }
-  }, [auth, router])
+  }, [auth, authInit, router])
 
-  // 如果還在載入中或尚未登入
-  if (!auth) {
-    return <div>Loading...</div> // 或者更友善的載入提示
+  // 如果 Auth Context 尚未初始化或使用者未登入，顯示提示訊息或載入狀態
+  if (!authInit || !auth.user_id) {
+    return (
+      <div className={styles.pageContent}>
+        <p className={styles.detailContent}>檢查登入狀態或跳轉至登入頁面...</p>
+      </div>
+    )
   }
 
-  // 函數用來根據 activeContent 的值渲染對應的元件
+  // 根據 activeContent 的值渲染對應的元件
   const renderContent = () => {
     switch (activeContent) {
       case 'profile':
@@ -45,21 +53,16 @@ export default function MemberCenter() {
     }
   }
 
-  // 如果已經登入，顯示會員中心的內容
   return (
     <>
       <div className={styles.pageContent}>
-        {/* 將 activeContent 和 setActiveContent 傳遞給 Sidebar */}
+        {/* 側邊欄，傳遞目前選中的內容和設定選中內容的方法 */}
         <Sidebar
           activeContent={activeContent}
           setActiveContent={setActiveContent}
         />
-        {/* 呼叫 renderContent 來顯示對應的內容 */}
-        <div className={styles.contentArea}>
-          {' '}
-          {/* 建議為右側內容區域加上一個 class，方便管理樣式 */}
-          {renderContent()}
-        </div>
+        {/* 內容區域，根據 renderContent 的結果顯示 */}
+        <div className={styles.contentArea}>{renderContent()}</div>
       </div>
     </>
   )
