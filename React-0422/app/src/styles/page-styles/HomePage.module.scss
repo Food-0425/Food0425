@@ -330,7 +330,8 @@
 
 .topProductsShopCard {
   width: 100%;
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   flex-direction: row;
   gap: 15px;
   @media (max-width: 991px) {
