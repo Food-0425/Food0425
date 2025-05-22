@@ -15,7 +15,7 @@ import jwt from "jsonwebtoken";
 import recipesRouter from "./routes/recipes.js";
 // 設定連到商城的路由
 import productsRouter from "./routes/products.js";
-// 設定連到使用者的路由 
+// 設定連到使用者的路由
 import usersRouter from "./routes/users.js";
 // 設定連到評價的路由
 import reviewRouter from "./routes/products-review.js";
@@ -103,7 +103,7 @@ app.use(express.json()); // <-- 處理 JSON 請求 body
 // 連到食譜
 app.use("/recipes", recipesRouter);
 app.use("/products", productsRouter);
-// 連到use這個路由
+// 連到users
 app.use("/users", usersRouter);
 // 連到評價的
 app.use("/products-review", reviewRouter);

@@ -18,6 +18,13 @@ export default function MemberCenter() {
   // useState Hook 來管理目前要顯示的內容，預設顯示 'profile'
   const [activeContent, setActiveContent] = useState('profile')
 
+  // --- 偵錯用 ---
+  useEffect(() => {
+    console.log('[MemberCenter] Auth State:', auth)
+    console.log('[MemberCenter] Auth Init:', authInit)
+  }, [auth, authInit])
+  // --- 偵錯用結束 ---
+
   useEffect(() => {
     // 等待 auth 初始化完成後才進行檢查
     if (authInit) {

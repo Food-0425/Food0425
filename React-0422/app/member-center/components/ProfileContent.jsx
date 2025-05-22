@@ -10,6 +10,14 @@ const ProfileContent = () => {
   const { auth, getAuthHeader, authInit } = useAuth()
   const router = useRouter()
 
+  // --- 偵錯用 ---
+  useEffect(() => {
+    console.log('[ProfileContent] Auth State:', auth)
+    console.log('[ProfileContent] Auth Init:', authInit)
+    console.log('[ProfileContent] User ID for fetch:', auth?.user_id)
+  }, [auth, authInit])
+  // --- 偵錯用結束 ---
+
   useEffect(() => {
     // 確認 Auth context 初始化完成，若未登入則導向登入頁
     if (authInit && !auth?.user_id) {
@@ -20,6 +28,10 @@ const ProfileContent = () => {
   // 抓取資料的函數 (fetcher)
   const fetcher = async (url) => {
     try {
+      // 除錯用
+      console.log('Fetching URL:', url)
+      console.log('Auth headers:', getAuthHeader())
+
       const response = await fetch(url, {
         headers: {
           'Content-Type': 'application/json',
@@ -27,16 +39,21 @@ const ProfileContent = () => {
         },
       })
 
+      // 檢查回應狀態
+      console.log('Response status:', response.status)
+      // 檢查回應內容類型
+      const contentType = response.headers.get('content-type')
+      console.log('Content-Type:', contentType)
+
       if (!response.ok) {
-        const errorData = await response
-          .json()
-          .catch(() => ({ error: `HTTP error! status: ${response.status}` }))
-        throw new Error(
-          errorData.error || `HTTP error! status: ${response.status}`
-        )
+        const text = await response.text()
+        console.error('Error response body:', text)
+        throw new Error(`HTTP error! status: ${response.status}`)
       }
 
       const data = await response.json()
+
+      console.log('Response data:', data)
 
       if (!data.success) {
         throw new Error(data.error || '無法取得資料')
@@ -50,11 +67,11 @@ const ProfileContent = () => {
   }
 
   // 確保 auth.user_id 存在才發送 API 請求
-  const shouldFetch = authInit && auth?.id
+  const shouldFetch = authInit && auth?.token // 用 token 判斷
   const { data, error: swrError } = useSWR(
     // 從環境變數讀取後端 API 的 URL，並帶上 user_id
     shouldFetch
-      ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/api/${auth.user_id}`
+      ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/${auth.user_id}`
       : null,
     fetcher // 使用上面定義的 fetcher
   )

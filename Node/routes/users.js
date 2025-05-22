@@ -46,7 +46,7 @@ router.get("/api", async (req, res) => {
 });
 
 // 取得單一會員資料
-router.get("/api/:id", async (req, res) => {
+router.get("/api/:id", async (req, res) => {  
   // 加入 JWT 驗證，確保只有已登入且為本人的使用者才能存取
   // --- JWT 驗證開始 ---
   const authHeader = req.get("Authorization");
@@ -80,7 +80,7 @@ router.get("/api/:id", async (req, res) => {
         DATE_FORMAT(birthday, '%Y-%m-%d') AS birthday, 
         gender, 
         address, 
-        username, 
+        username
       FROM users 
       WHERE user_id=?
     `;
