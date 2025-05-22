@@ -209,6 +209,32 @@ router.get('/api/:id', async (req, res) => {
   
       // 將時間格式化之後的資料加進 recipe 裡面
       recipe.comments = commentsWithFormattedDate;
+
+      // 在其他查詢後面加入查詢收藏數據
+const [favoriteRows] = await db.query(
+  `SELECT 
+    COUNT(*) as favorite_count,
+    GROUP_CONCAT(u.username) as favorited_by
+  FROM favorites f
+  JOIN users u ON f.user_id = u.user_id
+  WHERE f.recipe_id = ?`,
+  [recipeId]
+);
+
+// 加進 recipe 裡面
+recipe.favorites = {
+  count: favoriteRows[0].favorite_count,
+  users: favoriteRows[0].favorited_by ? favoriteRows[0].favorited_by.split(',') : []
+};
+
+// 如果有登入用戶，也可以查詢當前用戶是否收藏過
+if (req.my_jwt) {
+  const [userFavorite] = await db.query(
+    'SELECT id FROM favorites WHERE user_id = ? AND recipe_id = ?',
+    [req.my_jwt.id, recipeId]
+  );
+  recipe.is_favorited = userFavorite.length > 0;
+}
   
       res.json({ success: true, data: recipe });
   

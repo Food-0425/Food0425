@@ -11,6 +11,7 @@ import Swal from 'sweetalert2'
 import 'sweetalert2/dist/sweetalert2.min.css'
 import * as ReactDOM from 'react-dom/client'
 import { useSearchParams } from 'next/navigation'
+import Bread from '@/app/components/Bread'
 
 import styles from '../../src/styles/page-styles/RecipeDetail.module.scss'
 import {
@@ -82,6 +83,9 @@ export default function RecipeDetailPage() {
 
   // 取得評論數據
   const comments = recipe.comments || []
+
+  // 取的多少人收藏
+  const favorites = recipe.favorites || []
 
   // 計算當前頁的評論
   const startIndex = currentPage * commentsPerPage
@@ -323,6 +327,15 @@ export default function RecipeDetailPage() {
         />
       </div>
       {/* 版頭 End */}
+      <Bread
+        items={[
+          { text: '首頁', href: '/' },
+          { text: '食譜搜尋', href: '/recipes-landing' },
+          { text: '食譜列表', href: '/recipes-landing/list' },
+          { text: '食譜頁面' },
+        ]}
+      />
+      <div>{`已有${favorites.count}人收藏!!`}</div>
 
       {/* 材料選單 Start */}
       <div className={styles.ingredientsSection}>
