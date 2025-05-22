@@ -18,7 +18,7 @@ body {
   font-family: $font-family-default;
 }
 
-hr{
+hr {
   margin: 0;
   color: $color-accent;
 }
@@ -50,10 +50,21 @@ a {
   letter-spacing: $letter-spacing;
   text-decoration: none;
   color: inherit; // 保持與周圍文字一致
+  transition: all 0.3s;
+  &:hover {
+    transform: scale(1.02); // 放大卡片
+  }
+  &:active {
+    transform: scale(0.98);
+  }
 }
 button {
   border: none !important;
   background: none;
+  transition: all 0.3s;
+  &:active {
+    transform: scale(0.9);
+  }
 }
 
 // 確保 Modal 開啟時頁面不會偏移

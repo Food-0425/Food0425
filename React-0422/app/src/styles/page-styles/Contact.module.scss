@@ -172,11 +172,10 @@
   padding: 12px;
   color: #fff;
   transition: background-color 0.3s;
-}
-
-.submitButton:hover {
-  background-color: $color-background;
-  color: $color-primary;
+  .submitButton:hover {
+    background-color: $color-background;
+    color: $color-primary;
+  }
 }
 
 @media (max-width: 991px) {

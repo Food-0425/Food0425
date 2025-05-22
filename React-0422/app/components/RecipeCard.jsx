@@ -4,7 +4,12 @@ import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import styles from '../src/styles/RecipeCard.module.scss' // 使用相對路徑
 
-import { BsBookmarkStarFill, BsBookmarkPlus } from '../icons/icons'
+import {
+  BsBookmarkStarFill,
+  BsBookmarkPlus,
+  MdFavorite,
+  MdFavoriteBorder,
+} from '../icons/icons'
 import useSWR from 'swr'
 import { useSearchParams } from 'next/navigation'
 import { useAuth } from '@/hooks/auth-context'
@@ -76,9 +81,9 @@ export default function RecipeCard({
         <button
           alt={isFavorite ? '已收藏' : '加入收藏'}
           onClick={handleFavoriteClick}
-          style={{ cursor: 'pointer' }}
+          className={`${styles.wishlistButton} ${isFavorite ? styles.active : ''}`}
         >
-          {isFavorite ? <BsBookmarkStarFill /> : <BsBookmarkPlus />}
+          {isFavorite ? <MdFavorite /> : <MdFavoriteBorder />}
         </button>
       </div>
 

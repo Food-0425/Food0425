@@ -78,7 +78,7 @@
       width: 100%;
     }
   }
-  button {
+  .wishlistButton {
     color: #fff;
     background: $color-accent;
     border-radius: 9rem;
@@ -91,5 +91,16 @@
     top: 14px;
     height: 55px;
     width: 55px;
+    transition: all 0.3s ease;
+    &:hover {
+      background-color: $color-hover;
+    }
+    &:active {
+      transform: scale(0.5);
+    }
+    &.active {
+      background-color: $color-background;
+      color: $color-accent;
+    }
   }
 }

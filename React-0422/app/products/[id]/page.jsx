@@ -6,10 +6,17 @@ import { useRouter } from 'next/navigation'
 import styles from '../../src/styles/page-styles/RecipeDetail.module.scss'
 import Link from 'next/link'
 import { toast, ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
+// import 'react-toastify/dist/ReactToastify.css'
 import { FoodFeeBack } from '../../components/FoodFeeBack'
-import { LazyLoadImage } from 'react-lazy-load-image-component' //圖片懶加載
-import { IoIosArrowBack, BiSolidBowlRice, BiLike } from '../../icons/icons' //箭頭圖示
+import { LazyLoadImage } from 'react-lazy-load-image-component'
+import {
+  IoIosArrowBack,
+  IoIosArrowForward,
+  BiSolidBowlRice,
+  BiLike,
+  MdFavorite,
+  MdFavoriteBorder,
+} from '../../icons/icons' //箭頭圖示
 import ProductCard from '../../components/ProductCard' // 引入 ProductCard 組件
 import StarRating from '../../components/StarRating' // 引入 StarRating 組件
 
@@ -34,6 +41,20 @@ export default function ProductDetailPage() {
     averageRating: 0,
     totalReviews: 0,
   }) // 評分相關狀態
+  const [itemsPerPage, setItemsPerPage] = useState(3)
+
+  useEffect(() => {
+    function handleResize() {
+      if (window.innerWidth <= 991) {
+        setItemsPerPage(1)
+      } else {
+        setItemsPerPage(3)
+      }
+    }
+    handleResize() // 初始化時執行一次
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   // 取得商品資料
   useEffect(() => {
@@ -137,7 +158,7 @@ export default function ProductDetailPage() {
         setRecommendedError(null)
 
         const response = await fetch(
-          `http://localhost:3001/products/api/products/${params.id}/recommendations?limit=3`
+          `http://localhost:3001/products/api/products/${params.id}/recommendations?limit=4`
         )
 
         console.log('推薦商品 API 回應狀態:', response.status)
@@ -313,11 +334,12 @@ export default function ProductDetailPage() {
   }
 
   const handleNextPage = () => {
-    setCurrentPage((prev) => Math.min(prev + 1, Math.floor(reviews.length / 3)))
+    setCurrentPage((prev) =>
+      Math.min(prev + 1, Math.floor(reviews.length / itemsPerPage))
+    )
   }
 
   // 計算目前頁面應該顯示的評論
-  const itemsPerPage = 3
   const startIndex = currentPage * itemsPerPage
   const endIndex = startIndex + itemsPerPage
   const currentComments = reviews.slice(startIndex, endIndex)
@@ -353,7 +375,7 @@ export default function ProductDetailPage() {
   return (
     <div className={styles.productContainer}>
       {/* Toast 通知，放在頂層比較不會出錯 */}
-      <ToastContainer
+      {/* <ToastContainer
         position="top-right"
         autoClose={2500}
         hideProgressBar={false}
@@ -365,7 +387,7 @@ export default function ProductDetailPage() {
         pauseOnHover
         theme="light"
         style={{ zIndex: 9999 }} // 確保 Toast 在最上層
-      />
+      /> */}
 
       {/* 主要商品資訊 */}
       <div className={styles.productWrapper}>
@@ -378,44 +400,42 @@ export default function ProductDetailPage() {
           {/* 品牌資訊 */}
           {product.brand && (
             <div className={styles.brandSection}>
-              <h3 className={styles.brandName}>{product.brand}</h3>
+              <h3>{product.brand}</h3>
             </div>
           )}
           <h1 className={styles.productTitle}>{product.name}</h1>
           <div className={styles.ratingContainer}>
-            <div className={styles.starsContainer}>
-              <StarRating rating={productRating.averageRating} />
+            <div className={styles.ratingSection}>
+              <h2>
+                <StarRating rating={productRating.averageRating} />
+              </h2>
+              <h3>({productRating.averageRating.toFixed(1)})</h3>
             </div>
-            <p className={styles.ratingScore}>
-              ({productRating.averageRating.toFixed(1)})
-            </p>
-            <p className={styles.reviewCount}>
+            <h3 className={styles.reviewCount}>
               {productRating.totalReviews} 則評價
-            </p>
+            </h3>
           </div>
-          <div className={styles.productPrice}>
-            <p>NT$ {product.original_price?.toLocaleString()}</p>
-            <h2>NT$ {product.price?.toLocaleString()}</h2>
-          </div>
+          <div className={styles.productPriceQuantity}>
+            <div className={styles.productPrice}>
+              <p>NT$ {product.original_price?.toLocaleString()}</p>
+              <h2>NT$ {product.price?.toLocaleString()}</h2>
+            </div>
 
-          {/* 新增數量控制區塊 */}
-          <div className={styles.quantityContainer}>
-            <span className={styles.quantityLabel}>數量</span>
-            <div className={styles.quantityControls}>
-              <button
-                className={styles.quantityButton}
-                onClick={() => handleQuantityChange('decrease')}
-                disabled={quantity <= 1}
-              >
-                -
-              </button>
-              <span className={styles.quantityValue}>{quantity}</span>
-              <button
-                className={styles.quantityButton}
-                onClick={() => handleQuantityChange('increase')}
-              >
-                +
-              </button>
+            {/* 新增數量控制區塊 */}
+            <div className={styles.quantityContainer}>
+              <h2>數量</h2>
+              <div className={styles.quantityControls}>
+                <button
+                  onClick={() => handleQuantityChange('decrease')}
+                  disabled={quantity <= 1}
+                >
+                  -
+                </button>
+                <span className={styles.quantityValue}>{quantity}</span>
+                <button onClick={() => handleQuantityChange('increase')}>
+                  +
+                </button>
+              </div>
             </div>
           </div>
           {/* 新增直接購買按鈕 */}
@@ -433,18 +453,11 @@ export default function ProductDetailPage() {
               onClick={handleAddToWishlist}
               className={`${styles.wishlistButton} ${isFavorite ? styles.active : ''}`}
             >
-              {isFavorite ? '取消收藏' : '加入收藏'}
+              {isFavorite ? <MdFavorite /> : <MdFavoriteBorder />}
             </button>
           </div>
         </div>
       </div>
-
-      {/* 商品描述 */}
-      <section className={styles.descriptionSection}>
-        <h2 className={styles.sectionTitle}>商品介紹</h2>
-        <p className={styles.descriptionText}>{product.description}</p>
-      </section>
-
       {/* 商品詳細資訊區塊 */}
       <div className={styles.productDetailSection}>
         {/* 商品介紹 */}
@@ -454,56 +467,29 @@ export default function ProductDetailPage() {
             {product.description ? (
               <p>{product.description}</p>
             ) : (
-              <p className={styles.noContent}>暫無商品介紹</p>
+              <p>暫無商品介紹</p>
             )}
           </div>
         </div>
 
         {/* 商品規格 */}
-        <div className={styles.specificationsBlock}>
+        <div className={styles.descriptionBlock}>
           <h2 className={styles.blockTitle}>商品規格</h2>
           <div className={styles.blockContent}>
             {product.specifications ? (
               <p>{product.specifications}</p>
             ) : (
-              <p className={styles.noContent}>暫無規格資訊</p>
+              <p>暫無規格資訊</p>
             )}
           </div>
         </div>
       </div>
 
-      {/* 推薦商品區塊 */}
-      <div className={styles.recommendedSection}>
-        <div className={styles.recommendedTitle}>推薦商品</div>
-        <div className={styles.recommendedGrid}>
-          {recommendedLoading ? (
-            <div>正在載入推薦商品...</div>
-          ) : recommendedError ? (
-            <div>載入推薦商品時發生錯誤</div>
-          ) : (
-            recommendedProducts.map((product) => (
-              <ProductCard
-                key={product.id}
-                id={product.id}
-                name={product.name}
-                image={product.image}
-                brand={product.brand}
-                price={product.price}
-                original_price={product.original_price}
-                description={product.description}
-                initialFavorite={false}
-              />
-            ))
-          )}
-        </div>
-      </div>
-
-      {/* 評論區主圖題 */}
-      <div className={styles.reviewsSection}>
-        <div className={styles.reviewsTitle}>精選留言</div>
-      </div>
       {/* 評論區塊 */}
       <div className={styles.commentsSection}>
+        <div className={styles.reviewsSection}>
+          <h2 className={styles.reviewsTitle}>商品評價</h2>
+        </div>
         <div className={styles.commentsContainer}>
           <div>
             <div className={styles.commentsList01}>
@@ -573,9 +559,39 @@ export default function ProductDetailPage() {
                 onClick={handleNextPage}
                 disabled={endIndex >= reviews.length}
               >
-                <IoIosArrowBack />
+                <IoIosArrowForward />
               </button>
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 你可能會喜歡 */}
+      <div className={styles.recommendedSection}>
+        <div>
+          <h2 className={styles.recommendedTitle}>你可能會喜歡</h2>
+          <div className={styles.recommendedGrid}>
+            {recommendedLoading ? (
+              <div>正在載入推薦商品...</div>
+            ) : recommendedError ? (
+              <div>載入推薦商品時發生錯誤</div>
+            ) : (
+              recommendedProducts.map((product) => (
+                <div className={styles.recommendedProductCard}>
+                  <ProductCard
+                    key={product.id}
+                    id={product.id}
+                    name={product.name}
+                    image={product.image}
+                    brand={product.brand}
+                    price={product.price}
+                    original_price={product.original_price}
+                    description={product.description}
+                    initialFavorite={false}
+                  />
+                </div>
+              ))
+            )}
           </div>
         </div>
       </div>

@@ -36,8 +36,12 @@ import { GrPrevious, GrArticle } from 'react-icons/gr'
 import { GiKitchenScale } from 'react-icons/gi'
 import { PiJarLabelBold, PiHandTapBold } from 'react-icons/pi'
 import { HiViewGridAdd, HiOutlineViewGridAdd } from 'react-icons/hi'
-import { IoIosAddCircle, IoIosListBox } from 'react-icons/io'
-import { IoIosArrowBack } from 'react-icons/io'
+import {
+  IoIosAddCircle,
+  IoIosListBox,
+  IoIosArrowForward,
+  IoIosArrowBack,
+} from 'react-icons/io'
 import { RiCustomerService2Fill } from 'react-icons/ri'
 import { LuStar } from 'react-icons/lu'
 import { AiOutlineStar } from 'react-icons/ai'
@@ -74,6 +78,7 @@ export {
   BiLike,
   TbBowlSpoon,
   IoIosAddCircle,
+  IoIosArrowForward,
   TbHandFinger,
   FaRegHandPointUp,
   PiHandTapBold,

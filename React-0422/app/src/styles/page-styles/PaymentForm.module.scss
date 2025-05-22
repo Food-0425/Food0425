@@ -224,3 +224,13 @@
   top: 200px;
   /* transform: rotate(250deg); */
 }
+
+@media (max-width: 991px) {
+  .paymentFormContainer {
+    margin: 0 20px;
+  }
+  .sticker1,
+  .sticker2 {
+    display: none;
+  }
+}

@@ -14,6 +14,7 @@ import {
   FaCartPlus,
   BiLike,
   IoIosAddCircle,
+  IoIosArrowForward,
   TbHandFinger,
   IoIosArrowBack,
 } from '../../icons/icons'
@@ -715,56 +716,6 @@ export default function RecipeDetailPage() {
                         </div>
                       </div>
                     </div>
-                    {/* 下面是原本的預設食譜評論卡片樣式 */}
-                    {/* <div className={styles.commentCard}>
-                <div className={styles.commentUser}>
-                  <img
-                    src="/images/recipes/user1.png"
-                    className={styles.userAvatar}
-                    alt="User avatar"
-                  />
-                  <div className={styles.userInfo}>
-                    
-                    <div className={styles.userContent}>
-                      <div className={styles.userName}>李淑芬</div>
-                      <div className={styles.commentDate}>2025-02-24 10:15</div>
-                    </div>
-                  </div>
-                </div>
-                <div className={styles.commentContent}>
-                  <div className={styles.commentTitle}>
-                    味道不錯，但食材稍微貴了一點~
-                  </div>
-                  <div className={styles.commentText}>
-                    我的驕傲被爹媽看出來了，我沒在收假最後一天才寫完作業，我知道，這是我的我驕傲，也是其他小友的恨。
-                  </div>
-                </div>
-              </div>
-
-              <div className={styles.commentCard}>
-                <div className={styles.commentUser}>
-                  <img
-                    src="/images/recipes/user2.png"
-                    className={styles.userAvatar}
-                    alt="User avatar"
-                  />
-                  <div className={styles.userInfo}>
-                    
-                    <div className={styles.userContent}>
-                      <div className={styles.userName}>陳志明</div>
-                      <div className={styles.commentDate}>2025-02-17 12:45</div>
-                    </div>
-                  </div>
-                </div>
-                <div className={styles.commentContent}>
-                  <div className={styles.commentTitle}>
-                    覺得還可以，已加購物車買來試試
-                  </div>
-                  <div className={styles.commentText}>
-                    一個不成熟男子的標誌是他願意為某種事業英勇地死去，一個成熟男子的標誌是他願意為某種事業卑賤地活著。
-                  </div>
-                </div>
-              </div> */}
                   </>
                 )}
               </div>
@@ -774,7 +725,7 @@ export default function RecipeDetailPage() {
                 onClick={handleNextPage}
                 disabled={endIndex >= comments.length} // 最後一頁禁用
               >
-                <IoIosArrowBack />
+                <IoIosArrowForward />
               </button>
               {/* 這邊是原本預計要放的右箭頭，也先註解掉用別的替代 */}
               {/* <img
