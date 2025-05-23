@@ -537,14 +537,14 @@ export default function RecipesLandingPage() {
               .sort(() => Math.random() - 0.5) // 隨機打亂陣列
               .slice(0, 5) // 取出前 6 筆資料
               .map((recipe) => (
-                <a key={recipe.id} className={styles.featuredCard}>
+                <div key={recipe.id} className={styles.featuredCard}>
                   <Link key={recipe.id} href={`/recipes/${recipe.id}`} passHref>
                     <div className={styles.featuredCardImage}>
                       <img src={recipe.image} alt="Featured recipe" />
                     </div>
                     <h2>{recipe.recipe_title}</h2>
                   </Link>
-                </a>
+                </div>
               ))}
           </div>
         </div>

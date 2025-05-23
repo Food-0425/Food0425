@@ -5,6 +5,7 @@ import { useAuth } from '@/hooks/auth-context'
 import LoginModal from './LoginModal'
 import { useRouter } from 'next/navigation'
 import styles from '../src/styles/RecipeCard.module.scss'
+import { MdFavorite, MdFavoriteBorder } from '../icons/icons'
 
 export default function FavoriteButton({
   recipeId,
@@ -40,12 +41,12 @@ export default function FavoriteButton({
   return (
     <>
       <button
-        className={`${styles.favoriteButton} ${className}`}
+        className={`${styles.wishlistButton} ${isFavorite ? styles.active : ''}`}
         onClick={handleFavoriteClick}
         style={{ cursor: 'pointer' }}
         aria-label={isFavorite ? '已收藏' : '加入收藏'}
       >
-        {isFavorite ? <BsBookmarkStarFill /> : <BsBookmarkPlus />}
+        {isFavorite ? <MdFavorite /> : <MdFavoriteBorder />}
       </button>
 
       <LoginModal
