@@ -1,8 +1,11 @@
 {
   "workbench.colorCustomizations": {
-    "activityBar.background": "#822b03",
-    "titleBar.activeBackground": "#047322",
-    "titleBar.activeForeground": "#FBFAFA"
+    "activityBar.background": "#045273", //側邊欄的背景
+    "activityBar.activeBackground": "#083a50", //側邊欄的背景（正在選取的）
+    "activityBar.activeBorder": "#1c98ce", //側邊欄邊框（正在選取的）
+    "titleBar.activeBackground": "#045273", //標題列的背景
+    "titleBar.inactiveBackground": "#045273", //標題列的背景（未選取）
+    "statusBar.background": "#045273" //狀態列的背景
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[javascript]": {
