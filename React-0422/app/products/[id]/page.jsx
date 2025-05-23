@@ -481,7 +481,7 @@ export default function ProductDetailPage() {
       {/* 主要商品資訊 */}
       <div className={styles.productWrapper}>
         <img
-          src={product.image}
+          src={product.image_url}
           className={styles.productImage}
           alt={product.title}
         />

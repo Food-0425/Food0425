@@ -309,7 +309,7 @@ export default function ProductListPage() {
                 key={product.id}
                 id={product.id}
                 name={product.name}
-                image={product.image || '/placeholder.jpg'}
+                image={product.image_url || '/placeholder.jpg'}
                 brand={product.brand}
                 price={product.price}
                 original_price={product.original_price}
