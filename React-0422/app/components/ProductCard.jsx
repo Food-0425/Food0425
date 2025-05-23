@@ -43,7 +43,7 @@ export const ProductCard = ({
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          user_id: auth.id, // ✅ 使用登入者 ID
+          user_id: auth.id, //  使用登入者 ID
           product_id: id,
         }),
       })
@@ -84,8 +84,8 @@ export const ProductCard = ({
           <h3>{name}</h3>
         </div>
         <div>
-          <p>${original_price}</p>
-          <h2>${price}</h2>
+          <p>NT$ {Math.floor(original_price).toLocaleString()}</p>
+          <h2>NT$ {Math.floor(price).toLocaleString()}</h2>
         </div>
       </span>
       <button
