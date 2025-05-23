@@ -231,22 +231,22 @@ export default function RecipeDetailPage() {
 
   // 與讚有關的useEffect
   useEffect(() => {
-    const fetchLikes = async () => {
-      if (!auth?.token) return
+    if (!auth?.token || !recipe) return
 
+    const fetchLikes = async () => {
       try {
-        // 獲取使用者的按讚狀態
         const response = await fetch(`${API_SERVER}/recipes/api/likes/${id}`, {
           headers: {
             Authorization: `Bearer ${auth.token}`,
           },
         })
         const data = await response.json()
+        console.log('按讚資料:', data) // 檢查回傳的資料
 
-        // 設置按讚狀態和數量
         if (data.success) {
-          setIsLiked(data.isLiked)
-          setLikeCount(data.likeCount)
+          // 根據後端回傳的資料設置狀態
+          setIsLiked(data.userLiked) // 使用 userLiked 而不是 isLiked
+          setLikeCount(recipe.like_count || 0)
         }
         setLikesLoaded(true)
       } catch (error) {
@@ -254,10 +254,8 @@ export default function RecipeDetailPage() {
       }
     }
 
-    if (auth?.token) {
-      fetchLikes()
-    }
-  }, [auth, id])
+    fetchLikes()
+  }, [auth, id, recipe])
 
   // 初始化按讚數
   useEffect(() => {
@@ -557,8 +555,8 @@ export default function RecipeDetailPage() {
           </div>
         )}
 
-        <div>{`已有${like}人按讚!!`}</div>
-        {/* <div>{likeCount}</div> */}
+        {/* <div>{`已有${like}人按讚!!`}</div> */}
+        <div>{`已有${likeCount}人按讚!!`}</div>
         {isLoading && !likesLoaded ? (
           <div className={styles.loading}>載入中...</div>
         ) : (
