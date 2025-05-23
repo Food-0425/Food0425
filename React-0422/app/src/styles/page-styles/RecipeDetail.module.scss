@@ -75,6 +75,24 @@
     }
   }
 }
+// 05/22加的，與按讚有關的樣式
+.likeButton {
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #666;
+
+  &:hover {
+    color: #1da1f2;
+    transform: scale(1.1);
+  }
+
+  &.liked {
+    color: #1da1f2;
+  }
+}
 
 // 材料選單 Start
 .ingredientsSection {

@@ -94,9 +94,11 @@ const Header = () => {
             )}
           </div>
           <button alt="Cart">
-            <div>
-              <FaCartShopping />
-            </div>
+            <Link href="/cart">
+              <div>
+                <FaCartShopping />
+              </div>
+            </Link>
           </button>
         </div>
       </span>

@@ -70,6 +70,11 @@ export default function RecipeDetailPage() {
   const [favoritesLoaded, setFavoritesLoaded] = useState(false)
 
   const [favoriteCount, setFavoriteCount] = useState(0) // 先設定初始值為 0
+  // 按讚相關
+  const [likeCount, setLikeCount] = useState(0)
+  const [isLiked, setIsLiked] = useState(false)
+  const [likes, setLikes] = useState({})
+  const [likesLoaded, setLikesLoaded] = useState(false)
   // 2. 在組件內部宣告 router
   const router = useRouter()
 
@@ -94,6 +99,9 @@ export default function RecipeDetailPage() {
 
   // 取的多少人收藏
   const fav = recipe.favorites || []
+
+  // 取的多少人按讚
+  const like = recipe.like_count || []
 
   // 計算當前頁的評論
   const startIndex = currentPage * commentsPerPage
@@ -214,10 +222,48 @@ export default function RecipeDetailPage() {
 
   // 在 useEffect 中初始化收藏人數
   useEffect(() => {
-    if (recipe?.favorites?.count !== undefined) {
+    console.log('recipe:', recipe)
+    if (recipe?.like_count !== undefined) {
       setFavoriteCount(recipe.favorites.count)
     }
-  }, [recipe?.favorites?.count])
+  }, [recipe?.like_count])
+
+  // 與讚有關的useEffect
+  useEffect(() => {
+    const fetchLikes = async () => {
+      if (!auth?.token) return
+
+      try {
+        // 獲取使用者的按讚狀態
+        const response = await fetch(`${API_SERVER}/recipes/api/likes/${id}`, {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        })
+        const data = await response.json()
+
+        // 設置按讚狀態和數量
+        if (data.success) {
+          setIsLiked(data.isLiked)
+          setLikeCount(data.likeCount)
+        }
+        setLikesLoaded(true)
+      } catch (error) {
+        console.error('載入按讚狀態失敗:', error)
+      }
+    }
+
+    if (auth?.token) {
+      fetchLikes()
+    }
+  }, [auth, id])
+
+  // 初始化按讚數
+  useEffect(() => {
+    if (recipe?.likes?.count !== undefined) {
+      setLikeCount(recipe.like_count)
+    }
+  }, [recipe?.likes?.count])
 
   // 處理收藏切換
   const toggleFavorite = (recipeId) => {
@@ -254,6 +300,81 @@ export default function RecipeDetailPage() {
       }))
       setIsFavorite(!newFavoriteStatus)
       setFavoriteCount((prev) => (newFavoriteStatus ? prev - 1 : prev + 1))
+    }
+  }
+  // 處理按讚的函數
+  // const toggleLike = async (recipeId) => {
+  //   if (!auth || !auth.token) {
+  //     setShowLoginModal(true)
+  //     return
+  //   }
+
+  //   try {
+  //     const response = await fetch(`${API_SERVER}/recipes/api/likes/${id}`, {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         Authorization: `Bearer ${auth.token}`,
+  //       },
+  //       body: JSON.stringify({
+  //         userId: auth.id,
+  //         recipeId,
+  //       }),
+  //     })
+
+  //     if (!response.ok) {
+  //       throw new Error('按讚失敗')
+  //     }
+
+  //     // 解析後端回傳的資料
+  //     const result = await response.json()
+
+  //     if (result.success) {
+  //       // 使用後端回傳的讚數更新狀態
+  //       setLikeCount(result.likeCount)
+  //       setLikes((prev) => ({
+  //         ...prev,
+  //         [recipeId]: !prev[recipeId],
+  //       }))
+  //       setIsLiked(!isLiked)
+  //     } else {
+  //       throw new Error(result.message)
+  //     }
+  //   } catch (error) {
+  //     console.error('更新按讚狀態失敗:', error)
+  //     // 可以加入錯誤提示
+  //     // setCartModalMessage(error.message)
+  //     // setShowCartModal(true)
+  //   }
+  // }
+
+  // 按讚
+  const toggleLike = async (id) => {
+    if (!auth || !auth.token) {
+      setShowLoginModal(true)
+      return
+    }
+
+    try {
+      const response = await fetch(`${API_SERVER}/recipes/api/likes/id`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${auth.token}`,
+        },
+        body: JSON.stringify({
+          isLike: !isLiked, // 根據目前狀態切換
+        }),
+      })
+      const data = await response.json()
+
+      if (data.success) {
+        // 更新讚數和按讚狀態
+        setLikeCount(data.likeCount)
+        setIsLiked(!isLiked)
+      }
+    } catch (error) {
+      console.error('按讚失敗:', error)
     }
   }
 
@@ -419,19 +540,35 @@ export default function RecipeDetailPage() {
           { text: '食譜頁面' },
         ]}
       />
-      <div>{`已有${favoriteCount}人收藏!!`}</div>
-      {isLoading && !favoritesLoaded ? ( // 確保 favorites 已加載
-        <div className={styles.loading}>載入中...</div>
-      ) : (
-        <div style={{ backgroundColor: 'tomato', width: '100px' }}>
-          <FavoriteButton
-            recipeId={id}
-            initialFavorite={favorites[id]} // 修改這裡，使用 favorites[id] 而不是 isFavorite
-            onFavoriteToggle={toggleFavorite}
-            className={styles.recipeFavoriteButton}
-          />
-        </div>
-      )}
+
+      <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+        <div>{`已有${favoriteCount}人收藏!!`}</div>
+        {isLoading && !favoritesLoaded ? (
+          <div className={styles.loading}>載入中...</div>
+        ) : (
+          <div style={{ backgroundColor: 'tomato', width: '100px' }}>
+            <FavoriteButton
+              recipeId={id}
+              initialFavorite={favorites[id]}
+              onFavoriteToggle={toggleFavorite}
+              className={styles.recipeFavoriteButton}
+            />
+          </div>
+        )}
+
+        <div>{`已有${like}人按讚!!`}</div>
+        {/* <div>{likeCount}</div> */}
+        {isLoading && !likesLoaded ? (
+          <div className={styles.loading}>載入中...</div>
+        ) : (
+          <button
+            onClick={() => toggleLike(id)}
+            className={`${styles.likeButton} ${isLiked ? styles.liked : ''}`}
+          >
+            <BiLike size={24} />
+          </button>
+        )}
+      </div>
       {/* <button
         alt={isFavorite ? '已收藏' : '加入收藏'}
         onClick={handleFavoriteClick}
