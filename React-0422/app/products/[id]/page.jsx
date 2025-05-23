@@ -388,7 +388,7 @@ export default function ProductDetailPage() {
     setCurrentPage((prev) => Math.min(prev + 1, Math.floor(reviews.length / 3)))
   }
 
-  // 計算目前頁面應該顯示的評論
+  // 計算目前頁面應該顯示的評論，測試推送是否正確ＫＫ
   const itemsPerPage = 3
   const startIndex = currentPage * itemsPerPage
   const endIndex = startIndex + itemsPerPage
