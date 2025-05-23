@@ -196,7 +196,7 @@ export default function RecipeDetailPage() {
 
   // 取得收藏狀態
   useEffect(() => {
-    // console.log('Authorization Token:', auth.token) // 檢查 token 是否正確
+    console.log('Authorization Token:', auth.token) // 檢查 token 是否正確
 
     const fetchFavorites = async () => {
       try {
@@ -287,7 +287,7 @@ export default function RecipeDetailPage() {
           Authorization: `Bearer ${auth.token}`,
         },
         body: JSON.stringify({
-          userId: auth.id,
+          userId: auth.user_id,
           recipeId,
           isFavorite: newFavoriteStatus,
         }),

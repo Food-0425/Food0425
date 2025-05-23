@@ -72,10 +72,10 @@ export default function RecipesLandingPage() {
 
   // 從後端獲取收藏狀態
   useEffect(() => {
-    // console.log('Authorization Token:', auth.token) // 檢查 token 是否正確
+    console.log('Authorization Token:', auth) // 檢查 token 是否正確
 
     const fetchFavorites = async () => {
-      // console.log('Authorization Token:', auth.token)
+      console.log('Authorization Token:', auth.token)
       try {
         const response = await fetch(`${API_SERVER}/recipes/api/favorite/get`, {
           headers: {
@@ -116,7 +116,7 @@ export default function RecipesLandingPage() {
         Authorization: `Bearer ${auth.token}`,
       },
       body: JSON.stringify({
-        userId: auth.id,
+        userId: auth.user_id,
         recipeId,
         isFavorite: newFavoriteStatus,
       }),

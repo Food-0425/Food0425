@@ -6,11 +6,14 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { useAuth } from '@/hooks/auth-context'
 import './style.css' // style.css 在同一資料夾或正確路徑
 import { useRouter } from 'next/navigation'
-import { useCart } from '@/hooks/use-cart';
+import { useCart } from '@/hooks/use-cart'
 
 export default function CartPage() {
-  const { item:initialCartItemsFromHook } = useCart();
-  console.log('🛒 ContactPage 剛載入時，useCart() 的 items:',initialCartItemsFromHook);
+  const { item: initialCartItemsFromHook } = useCart()
+  console.log(
+    '🛒 ContactPage 剛載入時，useCart() 的 items:',
+    initialCartItemsFromHook
+  )
   //--- 狀態 ---
   //箱子
   const [cartItems, setCartItems] = useState([])
@@ -41,7 +44,7 @@ export default function CartPage() {
   // 使用router頁面跳轉
   const router = useRouter()
   const { auth } = useAuth()
-  const currentUserId = auth?.id
+  const currentUserId = auth?.user_id
   // 後端api port
   const API_BASE_URL = 'http://localhost:3001'
 
@@ -583,123 +586,123 @@ export default function CartPage() {
                 )}
                 {cartItems.map((item) => (
                   //顯示出item的資料
-                    <div
-                      className="cart-item"
-                      key={item.cartItemId || item.productId} // 優先使用 cartItemId
-                      style={{
-                        opacity: loading ? 0.7 : 1,
-                        display: 'flex',
-                        alignItems: 'center',
-                        padding: '10px 0',
-                        borderBottom: '1px solid #f0f0f0',
-                      }}
-                    >
-                      {/* ✨✨✨ 新增10: 單一商品 Checkbox ✨✨✨ */}
+                  <div
+                    className="cart-item"
+                    key={item.cartItemId || item.productId} // 優先使用 cartItemId
+                    style={{
+                      opacity: loading ? 0.7 : 1,
+                      display: 'flex',
+                      alignItems: 'center',
+                      padding: '10px 0',
+                      borderBottom: '1px solid #f0f0f0',
+                    }}
+                  >
+                    {/* ✨✨✨ 新增10: 單一商品 Checkbox ✨✨✨ */}
 
-                      <input
-                        type="checkbox"
-                        className="cart-item__checkbox"
-                        checked={item.isSelected ?? false} // 使用空值合併運算子，確保永遠有布林值
-                        onChange={(e) => handleSelectItem(item.cartItemId, e)}
-                        disabled={loading}
-                        style={{
-                          marginRight: '15px',
-                          transform: 'scale(1.2)',
-                          cursor: 'pointer',
-                        }}
-                      />
-                      <img
-                        src={item.imageUrl || '/images/default_product.png'}
-                        alt={item.name}
-                        style={{
-                          width: '80px',
-                          height: '80px',
-                          objectFit: 'cover',
-                          marginRight: '15px',
-                          borderRadius: '4px',
-                          border: '1px solid #eee',
-                        }}
-                      />
-                      <div className="item-details">
-                        <p style={{ fontWeight: 'bold', marginBottom: '5px' }}>
-                          {item.name}
-                        </p>
-                        <p style={{ fontSize: '0.9em', color: '#777' }}>
-                          商品ID: {item.productId}
-                        </p>
-                      </div>
-                      <div className="item-quantity">
-                        <button
-                          onClick={() =>
-                            handleUpdateQuantity(
-                              item.cartItemId,
-                              item.quantity,
-                              -1
-                            )
-                          }
-                          disabled={loading}
-                        >
-                          -
-                        </button>
-                        <input
-                          type="text"
-                          value={item.quantity}
-                          readOnly
-                          style={{
-                            width: '40px',
-                            textAlign: 'center',
-                            margin: '0 5px',
-                            padding: '5px',
-                            border: '1px solid #ccc',
-                            borderRadius: '4px',
-                          }}
-                        />
-                        <button
-                          onClick={() =>
-                            handleUpdateQuantity(
-                              item.cartItemId,
-                              item.quantity,
-                              1
-                            )
-                          }
-                          disabled={loading}
-                        >
-                          +
-                        </button>
-                      </div>
-                      <div
-                        className="item-price"
-                        style={{
-                          minWidth: '80px',
-                          textAlign: 'right',
-                          fontWeight: 'bold',
-                        }}
-                      >
-                        $
-                        {item.price
-                          ? (item.price * item.quantity).toFixed(2)
-                          : 'N/A'}{' '}
-                        {/* 顯示該項目總價 */}
-                      </div>
+                    <input
+                      type="checkbox"
+                      className="cart-item__checkbox"
+                      checked={item.isSelected ?? false} // 使用空值合併運算子，確保永遠有布林值
+                      onChange={(e) => handleSelectItem(item.cartItemId, e)}
+                      disabled={loading}
+                      style={{
+                        marginRight: '15px',
+                        transform: 'scale(1.2)',
+                        cursor: 'pointer',
+                      }}
+                    />
+                    <img
+                      src={item.imageUrl || '/images/default_product.png'}
+                      alt={item.name}
+                      style={{
+                        width: '80px',
+                        height: '80px',
+                        objectFit: 'cover',
+                        marginRight: '15px',
+                        borderRadius: '4px',
+                        border: '1px solid #eee',
+                      }}
+                    />
+                    <div className="item-details">
+                      <p style={{ fontWeight: 'bold', marginBottom: '5px' }}>
+                        {item.name}
+                      </p>
+                      <p style={{ fontSize: '0.9em', color: '#777' }}>
+                        商品ID: {item.productId}
+                      </p>
+                    </div>
+                    <div className="item-quantity">
                       <button
                         onClick={() =>
-                          handleDeleteClick(item.cartItemId, item.name)
+                          handleUpdateQuantity(
+                            item.cartItemId,
+                            item.quantity,
+                            -1
+                          )
                         }
                         disabled={loading}
-                        title="移除商品"
-                        style={{
-                          marginLeft: '15px',
-                          background: 'transparent',
-                          border: 'none',
-                          color: '#e74c3c',
-                          cursor: 'pointer',
-                          fontSize: '1.2em',
-                        }}
                       >
-                        <i className="bi bi-trash3-fill"></i>{' '}
-                        {/* 使用 Bootstrap Icon */}
+                        -
+                      </button>
+                      <input
+                        type="text"
+                        value={item.quantity}
+                        readOnly
+                        style={{
+                          width: '40px',
+                          textAlign: 'center',
+                          margin: '0 5px',
+                          padding: '5px',
+                          border: '1px solid #ccc',
+                          borderRadius: '4px',
+                        }}
+                      />
+                      <button
+                        onClick={() =>
+                          handleUpdateQuantity(
+                            item.cartItemId,
+                            item.quantity,
+                            1
+                          )
+                        }
+                        disabled={loading}
+                      >
+                        +
                       </button>
                     </div>
+                    <div
+                      className="item-price"
+                      style={{
+                        minWidth: '80px',
+                        textAlign: 'right',
+                        fontWeight: 'bold',
+                      }}
+                    >
+                      $
+                      {item.price
+                        ? (item.price * item.quantity).toFixed(2)
+                        : 'N/A'}{' '}
+                      {/* 顯示該項目總價 */}
+                    </div>
+                    <button
+                      onClick={() =>
+                        handleDeleteClick(item.cartItemId, item.name)
+                      }
+                      disabled={loading}
+                      title="移除商品"
+                      style={{
+                        marginLeft: '15px',
+                        background: 'transparent',
+                        border: 'none',
+                        color: '#e74c3c',
+                        cursor: 'pointer',
+                        fontSize: '1.2em',
+                      }}
+                    >
+                      <i className="bi bi-trash3-fill"></i>{' '}
+                      {/* 使用 Bootstrap Icon */}
+                    </button>
+                  </div>
                 ))}
                 {/*{cartItems.length > 0 && ( // 只有購物車有東西才顯示優惠券
                   <div className="coupon-code">

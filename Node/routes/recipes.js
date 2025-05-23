@@ -231,7 +231,7 @@ recipe.favorites = {
 if (req.my_jwt) {
   const [userFavorite] = await db.query(
     'SELECT id FROM favorites WHERE user_id = ? AND recipe_id = ?',
-    [req.my_jwt.id, recipeId]
+    [req.my_jwt.user_id, recipeId]
   );
   recipe.is_favorited = userFavorite.length > 0;
 }
@@ -274,7 +274,7 @@ router.get('/api/favorite/get', async (req, res) => {
         return res.status(401).json({ success: false, error: "Unauthorized: Missing or invalid token" });
     }
 
-    const userId = req.my_jwt.id; // 從解碼的 token 中取得 userId
+    const userId = req.my_jwt.user_id; // 從解碼的 token 中取得 userId
 
     try {
         // 查詢會員的所有收藏
@@ -307,7 +307,7 @@ router.post('/api/favorite', async (req, res) => {
       return res.status(401).json({ success: false, error: "Unauthorized: Missing or invalid token" });
     }
     
-    const userId = req.my_jwt.id; // 從解碼的 token 中取得 userId
+    const userId = req.my_jwt.user_id; // 從解碼的 token 中取得 userId
     // 驗證輸入
     if (!recipeId) {
         return res.status(400).json({ success: false, error: "UserId and RecipeId are required" });
@@ -350,7 +350,7 @@ router.post('/api/add', async (req, res) => {
         return res.status(401).json({ success: false, error: "Unauthorized: Missing or invalid token" });
     }
 
-    const userId = req.my_jwt.id; // 從解碼的 token 中取得 userId
+    const userId = req.my_jwt.user_id; // 從解碼的 token 中取得 userId
     const { ingredients  } = req.body; // 從請求中取得食材資料
 
     if (
@@ -430,7 +430,7 @@ router.get('/api/likes/:id', async (req, res) => {
         if (req.my_jwt) {
             const [userLike] = await db.query(
                 'SELECT is_like FROM user_feedbacks WHERE recipes_id = ? AND user_id = ?',
-                [recipeId, req.my_jwt.id]
+                [recipeId, req.my_jwt.user_id]
             );
             userLikeStatus = userLike.length > 0 ? userLike[0].is_like === 1 : false;
         }
@@ -459,7 +459,7 @@ router.post('/api/likes/id', async (req, res) => {
         }
 
         const recipeId = req.params.id;
-        const userId = req.my_jwt.id;
+        const userId = req.my_jwt.user_id;
         const { isLike } = req.body;
 
          // 開始資料庫交易

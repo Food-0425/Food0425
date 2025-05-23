@@ -113,7 +113,7 @@ router.post('/api/items', async (req, res) => {
         return res.status(401).json({ success: false, error: "Unauthorized: Missing or invalid token" });
     }
 
-    const uId = req.my_jwt.id; // 從解碼的 token 中取得 userId
+    const uId = req.my_jwt.user_id; // 從解碼的 token 中取得 userId
     const userId = parseInt(uId, 10);
 
       // ✨✨✨ 把 quantity 重新命名成 quantityToAdd 更清楚 ✨✨✨
@@ -410,7 +410,7 @@ router.put('/api/items/select-all', async (req, res) => {
                 message: '未授權的訪問'
             });
         }
-        const userId = req.my_jwt.id;
+        const userId = req.my_jwt.user_id;
         const { isSelected } = req.body;
 
         // 驗證輸入

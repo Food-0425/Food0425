@@ -59,7 +59,7 @@ const Header = () => {
             {isDropdownOpen && (
               <ul className={styles.dropdownMenu}>
                 <li>
-                  {auth.id ? (
+                  {auth.user_id ? (
                     <div>{auth.username}</div>
                   ) : (
                     <Link href="/login">

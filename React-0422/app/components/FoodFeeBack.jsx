@@ -49,11 +49,11 @@ export default function FoodFeeBack({ onSubmitSuccess, recipeId, auth }) {
   const [isLike, setIsLike] = useState(0) // 預設為按讚
   console.log('auth:', auth) // 確認 auth 是否正確獲取
   console.log('recipeId:', recipeId) // 確認 recipeId 是否正確獲取
-  console.log('auth:', auth.id) // 確認 auth 是否正確獲取
+  console.log('auth:', auth.user_id) // 確認 auth 是否正確獲取
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!id) {
+    if (!recipeId) {
       Swal.fire({
         title: '錯誤',
         text: '無法獲取食譜 ID',
@@ -72,7 +72,7 @@ export default function FoodFeeBack({ onSubmitSuccess, recipeId, auth }) {
           },
           body: JSON.stringify({
             recipeId: recipeId,
-            userId: auth.id,
+            userId: auth.user_id,
             title: title.trim(),
             context: context.trim(),
             is_like: isLike, // 確保 isLike 會是 0 或 1
