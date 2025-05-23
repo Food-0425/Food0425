@@ -211,8 +211,8 @@ export default function RecipesLandingPage() {
             <div className={styles.recipeBlock}>
               <div className={styles.recipeCategory}>
                 <img
-                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/342df7d551f513a8966757cc07c7a877c1abf5eb?placeholderIfAbsent=true"
-                  alt="Desserts background"
+                  src="/images/recipes-img/recipes_landing-noodle.webp"
+                  alt="Noodle background"
                 />
                 <div className={styles.categoryTitle}>麵食</div>
                 <button
@@ -537,14 +537,14 @@ export default function RecipesLandingPage() {
               .sort(() => Math.random() - 0.5) // 隨機打亂陣列
               .slice(0, 5) // 取出前 6 筆資料
               .map((recipe) => (
-                <div key={recipe.id} className={styles.featuredCard}>
+                <a key={recipe.id} className={styles.featuredCard}>
                   <Link key={recipe.id} href={`/recipes/${recipe.id}`} passHref>
                     <div className={styles.featuredCardImage}>
                       <img src={recipe.image} alt="Featured recipe" />
                     </div>
                     <h2>{recipe.recipe_title}</h2>
                   </Link>
-                </div>
+                </a>
               ))}
           </div>
         </div>

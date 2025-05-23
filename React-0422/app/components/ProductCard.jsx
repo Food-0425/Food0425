@@ -91,7 +91,7 @@ export const ProductCard = ({
       <button
         alt={isFavorite ? '已收藏' : '加入收藏'}
         onClick={handleFavoriteClick}
-        style={{ cursor: 'pointer' }}
+        className={`${styles.wishlistButton} ${isFavorite ? styles.active : ''}`}
       >
         {isFavorite ? <MdFavorite /> : <MdFavoriteBorder />}
       </button>
