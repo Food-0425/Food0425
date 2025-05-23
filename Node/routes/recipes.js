@@ -421,7 +421,7 @@ router.get('/api/likes/:id', async (req, res) => {
 
         // 獲取總按讚數
         const [likeCount] = await db.query(
-            'SELECT COUNT(*) as total_likes FROM user_feedbacks WHERE recipes_id = ? AND is_like = 1',
+            'SELECT like_count FROM recipes WHERE id = ?',
             [recipeId]
         );
 
@@ -447,8 +447,8 @@ router.get('/api/likes/:id', async (req, res) => {
     }
 });
 
-// 更新食譜按讚狀態
-router.post('/api/likes/id', async (req, res) => {
+// 更新食譜按讚狀態 - 修改路由參數和處理邏輯
+router.post('/api/likes/:id', async (req, res) => {  // 修改路由格式
     try {
         // 驗證登入狀態
         if (!req.my_jwt) {
@@ -458,16 +458,16 @@ router.post('/api/likes/id', async (req, res) => {
             });
         }
 
-        const recipeId = req.params.id;
+        const recipeId = req.params.id;  // 從 URL 參數獲取 recipeId
         const userId = req.my_jwt.user_id;
         const { isLike } = req.body;
 
-         // 開始資料庫交易
+        // 開始資料庫交易
         const connection = await db.getConnection();
         await connection.beginTransaction();
 
         try {
-            // 檢查是否已有評論記錄
+            // 檢查是否已有按讚記錄
             const [existingFeedback] = await connection.query(
                 'SELECT id, is_like FROM user_feedbacks WHERE recipes_id = ? AND user_id = ?',
                 [recipeId, userId]
@@ -483,7 +483,7 @@ router.post('/api/likes/id', async (req, res) => {
                 // 如果是從不喜歡變成喜歡，或從喜歡變成不喜歡，需要更新 recipes 表的 like_count
                 if (existingFeedback[0].is_like !== (isLike ? 1 : 0)) {
                     await connection.query(
-                        'UPDATE recipes SET like_count = like_count + ? WHERE id = ?',
+                        'UPDATE recipes SET like_count = GREATEST(like_count + ?, 0) WHERE id = ?',
                         [isLike ? 1 : -1, recipeId]
                     );
                 }
@@ -507,23 +507,21 @@ router.post('/api/likes/id', async (req, res) => {
             await connection.commit();
 
             // 重新計算按讚總數
-            const [likeCount] = await db.query(
-                'SELECT like_count FROM recipes WHERE id = ?',
+            const [updatedCount] = await db.query(
+                'SELECT COALESCE(like_count, 0) as like_count FROM recipes WHERE id = ?',
                 [recipeId]
             );
 
             res.json({
                 success: true,
                 message: isLike ? "已按讚" : "已取消讚",
-                likeCount: likeCount[0].like_count
+                likeCount: updatedCount[0]?.like_count || 0
             });
 
         } catch (error) {
-            // 如果出錯，回滾交易
             await connection.rollback();
             throw error;
         } finally {
-            // 釋放連接
             connection.release();
         }
 
@@ -532,6 +530,7 @@ router.post('/api/likes/id', async (req, res) => {
         res.status(500).json({ success: false, error: error.message });
     }
 });
+
 // 新增食譜
 router.post('/api',async(req,res)=>{
     const { title, description, cook_time, servings, user_id } = req.body;

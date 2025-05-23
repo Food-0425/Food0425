@@ -357,7 +357,7 @@ export default function RecipeDetailPage() {
     }
 
     try {
-      const response = await fetch(`${API_SERVER}/recipes/api/likes/id`, {
+      const response = await fetch(`${API_SERVER}/recipes/api/likes/${id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
