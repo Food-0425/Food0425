@@ -43,7 +43,7 @@ export const ProductCard = ({
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          user_id: auth.id, // ✅ 使用登入者 ID
+          user_id: auth.id, //  使用登入者 ID
           product_id: id,
         }),
       })
