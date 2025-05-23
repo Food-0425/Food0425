@@ -700,7 +700,7 @@ export default function ProductDetailPage() {
                     key={product.id}
                     id={product.id}
                     name={product.name}
-                    image={product.image}
+                    image={product.image_url}
                     brand={product.brand}
                     price={product.price}
                     original_price={product.original_price}
