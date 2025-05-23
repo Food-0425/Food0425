@@ -9,6 +9,7 @@ import { useAuth } from '@/hooks/auth-context'
 import RecipeCard from '@/app/components/RecipeCard'
 import { API_SERVER } from '../../../config/api-path'
 import { IoIosArrowBack } from '../../icons/icons'
+import Bread from '@/app/components/Bread'
 
 const RECIPES_PER_PAGE = 12
 
@@ -130,6 +131,13 @@ export default function RecipeListPage() {
 
   return (
     <div className={styles.container}>
+      <Bread
+        items={[
+          { text: '首頁', href: '/' },
+          { text: '食譜搜尋', href: '/recipes-landing' },
+          { text: '食譜列表', href: '/recipes-landing/list' },
+        ]}
+      />
       <div className={styles.content}>
         {/* Recipe Cards Section */}
         <div className={styles.recipeSection}>

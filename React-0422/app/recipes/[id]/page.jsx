@@ -5,6 +5,16 @@ import Link from 'next/link'
 import { Modal, Button } from 'react-bootstrap'
 // 彈出視窗的卡片
 import CartModal from '@/app/components/CartModal'
+import SweetModal from '@/app/components/SweetModal'
+import LoginModal from '@/app/components/LoginModal'
+import Swal from 'sweetalert2'
+import 'sweetalert2/dist/sweetalert2.min.css'
+import * as ReactDOM from 'react-dom/client'
+import { useSearchParams } from 'next/navigation'
+import { BsBookmarkStarFill, BsBookmarkPlus } from '../../icons/icons'
+import Bread from '@/app/components/Bread'
+import FavoriteButton from '@/app/components/FavoriteButton'
+import { API_SERVER } from '@/config/api-path'
 
 import styles from '../../src/styles/page-styles/RecipeDetail.module.scss'
 import {
@@ -45,19 +55,31 @@ export default function RecipeDetailPage() {
   }, [])
 
   const { auth } = useAuth() || {} // 使用 useAuth 鉤子獲取用戶信息
+
   // 這個狀態用來控制食材是否被選中
   const [selectedItems, setSelectedItems] = useState({})
   // 這個狀態用來控制調味料是否被選中
   const [selectedSeasonings, setSelectedSeasonings] = useState({})
   // 加入購物車的彈出視窗
   const [showCartModal, setShowCartModal] = useState(false)
+  const [SuccessModal, setSuccessModal] = useState(false)
   const [cartModalMessage, setCartModalMessage] = useState('')
+  // 用來控制收藏的狀態
+  const [isFavorite, setIsFavorite] = useState(false)
+  const [favorites, setFavorites] = useState({})
+  const [favoritesLoaded, setFavoritesLoaded] = useState(false)
 
+  const [favoriteCount, setFavoriteCount] = useState(0) // 先設定初始值為 0
+  // 按讚相關
+  const [likeCount, setLikeCount] = useState(0)
+  const [isLiked, setIsLiked] = useState(false)
+  const [likes, setLikes] = useState({})
+  const [likesLoaded, setLikesLoaded] = useState(false)
   // 2. 在組件內部宣告 router
   const router = useRouter()
 
   const params = useParams()
-  const id = params.id
+  const id = params?.id
   const fetcher = (url) => fetch(url).then((res) => res.json())
 
   const { data, error } = useSWR(
@@ -75,11 +97,21 @@ export default function RecipeDetailPage() {
   // 取得評論數據
   const comments = recipe.comments || []
 
+  // 取的多少人收藏
+  const fav = recipe.favorites || []
+
+  // 取的多少人按讚
+  const like = recipe.like_count || []
+
   // 計算當前頁的評論
   const startIndex = currentPage * commentsPerPage
   const endIndex = startIndex + commentsPerPage
   const currentComments = comments.slice(startIndex, endIndex)
 
+  // 添加載入狀態檢查
+  if (!id) {
+    return <div>載入中...</div>
+  }
   // 處理翻頁
   const handleNextPage = () => {
     if (endIndex < comments.length) {
@@ -99,13 +131,42 @@ export default function RecipeDetailPage() {
   // 狀態：控制 FoodFeeBack 是否顯示
   const [isFeedbackVisible, setIsFeedbackVisible] = useState(false)
 
-  // 3. 修改原本的 handleShowFeedbackModal 函數
+  // 3. 修改原本的 handleShowFeedbackModal 函數(這邊是未登入時會跳的訊息)
   const handleShowFeedbackModal = () => {
     if (!auth || !auth.token) {
       handleShowLoginModal()
+      setCartModalMessage('請先登入才能留言喔！')
       return
     }
-    setIsFeedbackVisible(true)
+
+    // 使用 Sweetalert2 顯示表單
+    Swal.fire({
+      title: '撰寫食譜評論',
+      html: '<div id="feedback-form-container"></div>',
+      showCloseButton: true,
+      showConfirmButton: false,
+      width: '800px',
+      // 禁用背景滾動條補償
+      scrollbarPadding: false,
+      // 允許背景點擊關閉
+      allowOutsideClick: true,
+      didOpen: () => {
+        // 將 FoodFeeBack 組件渲染到指定容器
+        const container = document.getElementById('feedback-form-container')
+        const root = ReactDOM.createRoot(container)
+        root.render(
+          <FoodFeeBack
+            recipeId={id} // 改用已經從 useParams 獲取的 id
+            auth={auth}
+            onSubmitSuccess={() => {
+              Swal.close()
+              // 可以在這裡加入提交成功後的處理邏輯，例如重新載入評論
+              // 可以考慮加入: window.location.reload()
+            }}
+          />
+        )
+      },
+    })
   }
   const handleCloseFeedbackModal = () => setIsFeedbackVisible(false)
   // 跟未登入點選流言按鈕有關的狀態
@@ -126,6 +187,195 @@ export default function RecipeDetailPage() {
   const handleCloseLoginModal = () => setShowLoginModal(false)
   const handleGoToLogin = () => {
     router.push('/login') // 使用 router.push 進行導航
+  }
+
+  useEffect(() => {
+    console.log('Updated Favorites State:', favorites) // 確認 favorites 狀態
+  }, [favorites])
+
+  // 取得收藏狀態
+  useEffect(() => {
+    // console.log('Authorization Token:', auth.token) // 檢查 token 是否正確
+
+    const fetchFavorites = async () => {
+      try {
+        const response = await fetch(`${API_SERVER}/recipes/api/favorite/get`, {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        })
+        const data = await response.json()
+        console.log('Fetched Favorites:', data.favorites)
+
+        setFavorites(data.favorites || {})
+        setIsFavorite(data.favorites?.[id] || false) // 加入這行，設置當前食譜的收藏狀態
+        setFavoritesLoaded(true)
+      } catch (error) {
+        console.error('載入收藏狀態失敗:', error)
+      }
+    }
+
+    if (auth?.token) {
+      fetchFavorites()
+    }
+  }, [auth])
+
+  // 在 useEffect 中初始化收藏人數
+  useEffect(() => {
+    console.log('recipe:', recipe)
+    if (recipe?.like_count !== undefined) {
+      setFavoriteCount(recipe.favorites.count)
+    }
+  }, [recipe?.like_count])
+
+  // 與讚有關的useEffect
+  useEffect(() => {
+    const fetchLikes = async () => {
+      if (!auth?.token) return
+
+      try {
+        // 獲取使用者的按讚狀態
+        const response = await fetch(`${API_SERVER}/recipes/api/likes/${id}`, {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        })
+        const data = await response.json()
+
+        // 設置按讚狀態和數量
+        if (data.success) {
+          setIsLiked(data.isLiked)
+          setLikeCount(data.likeCount)
+        }
+        setLikesLoaded(true)
+      } catch (error) {
+        console.error('載入按讚狀態失敗:', error)
+      }
+    }
+
+    if (auth?.token) {
+      fetchLikes()
+    }
+  }, [auth, id])
+
+  // 初始化按讚數
+  useEffect(() => {
+    if (recipe?.likes?.count !== undefined) {
+      setLikeCount(recipe.like_count)
+    }
+  }, [recipe?.likes?.count])
+
+  // 處理收藏切換
+  const toggleFavorite = (recipeId) => {
+    const newFavoriteStatus = !favorites[recipeId]
+
+    setFavorites((prev) => ({
+      ...prev,
+      [recipeId]: newFavoriteStatus,
+    }))
+    setIsFavorite(newFavoriteStatus)
+
+    // 更新收藏數
+    setFavoriteCount((prev) => (newFavoriteStatus ? prev + 1 : prev - 1))
+
+    try {
+      fetch(`${API_SERVER}/recipes/api/favorite`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${auth.token}`,
+        },
+        body: JSON.stringify({
+          userId: auth.id,
+          recipeId,
+          isFavorite: newFavoriteStatus,
+        }),
+      })
+    } catch (error) {
+      console.error('更新收藏狀態失敗:', error)
+      // 如果 API 呼叫失敗，回復原狀
+      setFavorites((prev) => ({
+        ...prev,
+        [recipeId]: !newFavoriteStatus,
+      }))
+      setIsFavorite(!newFavoriteStatus)
+      setFavoriteCount((prev) => (newFavoriteStatus ? prev - 1 : prev + 1))
+    }
+  }
+  // 處理按讚的函數
+  // const toggleLike = async (recipeId) => {
+  //   if (!auth || !auth.token) {
+  //     setShowLoginModal(true)
+  //     return
+  //   }
+
+  //   try {
+  //     const response = await fetch(`${API_SERVER}/recipes/api/likes/${id}`, {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         Authorization: `Bearer ${auth.token}`,
+  //       },
+  //       body: JSON.stringify({
+  //         userId: auth.id,
+  //         recipeId,
+  //       }),
+  //     })
+
+  //     if (!response.ok) {
+  //       throw new Error('按讚失敗')
+  //     }
+
+  //     // 解析後端回傳的資料
+  //     const result = await response.json()
+
+  //     if (result.success) {
+  //       // 使用後端回傳的讚數更新狀態
+  //       setLikeCount(result.likeCount)
+  //       setLikes((prev) => ({
+  //         ...prev,
+  //         [recipeId]: !prev[recipeId],
+  //       }))
+  //       setIsLiked(!isLiked)
+  //     } else {
+  //       throw new Error(result.message)
+  //     }
+  //   } catch (error) {
+  //     console.error('更新按讚狀態失敗:', error)
+  //     // 可以加入錯誤提示
+  //     // setCartModalMessage(error.message)
+  //     // setShowCartModal(true)
+  //   }
+  // }
+
+  // 按讚
+  const toggleLike = async (id) => {
+    if (!auth || !auth.token) {
+      setShowLoginModal(true)
+      return
+    }
+
+    try {
+      const response = await fetch(`${API_SERVER}/recipes/api/likes/id`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${auth.token}`,
+        },
+        body: JSON.stringify({
+          isLike: !isLiked, // 根據目前狀態切換
+        }),
+      })
+      const data = await response.json()
+
+      if (data.success) {
+        // 更新讚數和按讚狀態
+        setLikeCount(data.likeCount)
+        setIsLiked(!isLiked)
+      }
+    } catch (error) {
+      console.error('按讚失敗:', error)
+    }
   }
 
   // 點擊按鈕添加食材至購物車
@@ -225,7 +475,7 @@ export default function RecipeDetailPage() {
       // 如果所有請求都成功
       if (results.every((r) => r.success)) {
         setCartModalMessage('所有商品已成功加入購物車！')
-        setShowCartModal(true)
+        setSuccessModal(true)
       } else {
         const failedItems = results.filter((r) => !r.success)
         setCartModalMessage(
@@ -282,6 +532,50 @@ export default function RecipeDetailPage() {
         />
       </div>
       {/* 版頭 End */}
+      <Bread
+        items={[
+          { text: '首頁', href: '/' },
+          { text: '食譜搜尋', href: '/recipes-landing' },
+          { text: '食譜列表', href: '/recipes-landing/list' },
+          { text: '食譜頁面' },
+        ]}
+      />
+
+      <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+        <div>{`已有${favoriteCount}人收藏!!`}</div>
+        {isLoading && !favoritesLoaded ? (
+          <div className={styles.loading}>載入中...</div>
+        ) : (
+          <div style={{ backgroundColor: 'tomato', width: '100px' }}>
+            <FavoriteButton
+              recipeId={id}
+              initialFavorite={favorites[id]}
+              onFavoriteToggle={toggleFavorite}
+              className={styles.recipeFavoriteButton}
+            />
+          </div>
+        )}
+
+        <div>{`已有${like}人按讚!!`}</div>
+        {/* <div>{likeCount}</div> */}
+        {isLoading && !likesLoaded ? (
+          <div className={styles.loading}>載入中...</div>
+        ) : (
+          <button
+            onClick={() => toggleLike(id)}
+            className={`${styles.likeButton} ${isLiked ? styles.liked : ''}`}
+          >
+            <BiLike size={24} />
+          </button>
+        )}
+      </div>
+      {/* <button
+        alt={isFavorite ? '已收藏' : '加入收藏'}
+        onClick={handleFavoriteClick}
+        style={{ cursor: 'pointer' }}
+      >
+        {isFavorite ? <BsBookmarkStarFill /> : <BsBookmarkPlus />}
+      </button> */}
 
       {/* 材料選單 Start */}
       <div className={styles.ingredientsSection}>
@@ -333,7 +627,7 @@ export default function RecipeDetailPage() {
               )}
             </div>
           </div>
-          
+
           <div className={styles.cardIcon}>
             <TbBowlSpoon />
           </div>
@@ -388,13 +682,22 @@ export default function RecipeDetailPage() {
               &nbsp;確認
             </h2>
           </button>
-          
-          {/* 加入 CartModal 組件 */}
-          <CartModal
+
+          {/* 加入 SweetModal 組件 */}
+          <SweetModal
             show={showCartModal}
             onHide={() => setShowCartModal(false)}
             title="購物車訊息"
             message={cartModalMessage}
+            icon="info"
+          />
+          {/* 加入 SweetModal 組件 (打勾的) */}
+          <SweetModal
+            show={SuccessModal}
+            onHide={() => setShowCartModal(false)}
+            title="購物車訊息"
+            message={cartModalMessage}
+            icon="success"
           />
           <div className={styles.cardIcon}>
             <PiJarLabelBold />
@@ -587,34 +890,9 @@ export default function RecipeDetailPage() {
 
           {/* 5. React Bootstrap Modal  這裡是食譜評論的彈出視窗
         。然後可以在SCSS當中自訂CSS樣式 。目前應該需調整*/}
-          <Modal
-            show={isFeedbackVisible}
-            onHide={handleCloseFeedbackModal}
-            centered
-            size="lg" // 可設定 'sm', 'lg', 'xl'
-          >
-            <Modal.Header closeButton>
-              <Modal.Title>撰寫食譜評論</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              {/* 6. 放入您的 FoodFeeBack 元件 */}
-
-              {/* 您可能需要傳遞一些 props 給 FoodFeeBack，例如關閉 modal 的函數 */}
-              <FoodFeeBack onFormSubmit={handleCloseFeedbackModal} />
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={handleCloseFeedbackModal}>
-                關閉
-              </Button>
-              {/* 如果 FoodFeeBack 內部有自己的提交按鈕，這裡可能不需要額外的儲存按鈕 */}
-              {/* <Button variant="primary" onClick={() => { /* 觸發表單提交邏輯 *\/; handleCloseFeedbackModal(); }}>
-            提交評論
-          </Button> */}
-            </Modal.Footer>
-          </Modal>
 
           {/* 登入提示 Modal */}
-          <Modal
+          {/* <Modal
             show={showLoginModal}
             onHide={handleCloseLoginModal}
             centered
@@ -634,7 +912,17 @@ export default function RecipeDetailPage() {
                 前往登入
               </Button>
             </Modal.Footer>
-          </Modal>
+          </Modal> */}
+          {/* 新的登入提示 */}
+          <LoginModal
+            show={showLoginModal}
+            onHide={() => setShowLoginModal(false)}
+            message={cartModalMessage}
+            onNavigateToLogin={() => {
+              setShowLoginModal(false)
+              router.push('/login')
+            }}
+          />
 
           <div>
             {/* 左箭頭按鈕 */}
