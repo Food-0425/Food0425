@@ -304,11 +304,14 @@ export default function ProductDetailPage() {
   // const pro = redata?.data || {}
 
   // 新增數量控制函數
-  const handleQuantityChange = (action) => {
+  const handleQuantityChange = (action, value) => {
     if (action === 'increase') {
-      setQuantity((prev) => prev + 1)
+      setQuantity((prev) => Math.min(prev + 1, 20))
     } else if (action === 'decrease' && quantity > 1) {
       setQuantity((prev) => prev - 1)
+    } else if (action === 'input') {
+      const newValue = Math.max(1, Math.min(20, parseInt(value)))
+      setQuantity(isNaN(newValue) ? 1 : newValue)
     }
   }
 
@@ -355,7 +358,7 @@ export default function ProductDetailPage() {
         toast.success('已加入收藏')
         console.log('Added to wishlist:', product.id)
       } else {
-        toast.info('已取消收藏')
+        toast.error('已取消收藏')
         console.log('Removed from wishlist:', product.id)
       }
     } catch (err) {
@@ -513,7 +516,10 @@ export default function ProductDetailPage() {
 
           {/* 新增數量控制區塊 */}
           <div className={styles.quantityContainer}>
-            <h2>數量</h2>
+            <div className={styles.quantityHeader}>
+              <h2>數量</h2>
+              <span className={styles.quantityLimit}>最多購買 20 件</span>
+            </div>
             <div className={styles.quantityControls}>
               <button
                 onClick={() => handleQuantityChange('decrease')}
@@ -521,8 +527,18 @@ export default function ProductDetailPage() {
               >
                 -
               </button>
-              <span className={styles.quantityValue}>{quantity}</span>
-              <button onClick={() => handleQuantityChange('increase')}>
+              <input
+                type="number"
+                className={styles.quantityInput}
+                value={quantity}
+                onChange={(e) => handleQuantityChange('input', e.target.value)}
+                min="1"
+                max="20"
+              />
+              <button
+                onClick={() => handleQuantityChange('increase')}
+                disabled={quantity >= 20}
+              >
                 +
               </button>
             </div>
