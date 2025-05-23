@@ -395,8 +395,10 @@ app.get("/cate3", async (req, res) => {
   res.json(rows.filter((v) => !v.parent_id));
 });
 
-// 導入到React的前端區塊
+// 導入到 React 的前端區塊
 app.use(express.static("build"));
+
+// 當前端的 React App 沒有找到對應的 API 路由時，會導向這個全域的路由
 app.get("*", (req, res) => {
   res.send(
     `<!doctype html><html lang="zh"><head><meta charset="utf-8"/><link rel="icon" href="/favicon.ico"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="theme-color" content="#000000"/><meta name="description" content="Shinder react hooks"/><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"/><title>Shinder react hooks</title><script defer="defer" src="/static/js/main.6a205622.js"></script></head><body><noscript>You need to enable JavaScript to run this app.</noscript><div id="root"></div></body></html>`

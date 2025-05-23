@@ -71,7 +71,7 @@ const ProfileContent = () => {
   const { data, error: swrError } = useSWR(
     // 從環境變數讀取後端 API 的 URL，並帶上 user_id
     shouldFetch
-      ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/${auth.user_id}`
+      ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/api/${auth.user_id}`
       : null,
     fetcher // 使用上面定義的 fetcher
   )

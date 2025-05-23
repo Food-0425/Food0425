@@ -1,5 +1,6 @@
 import express from "express";
 import db from "../utils/connect-mysql.js";
+import jwt from "jsonwebtoken";
 
 const router = express.Router();
 
@@ -46,12 +47,16 @@ router.get("/api", async (req, res) => {
 });
 
 // 取得單一會員資料
-router.get("/api/:id", async (req, res) => {  
+router.get("/api/:id", async (req, res) => {
   // 加入 JWT 驗證，確保只有已登入且為本人的使用者才能存取
   // --- JWT 驗證開始 ---
   const authHeader = req.get("Authorization");
+  console.log("Auth Header:", authHeader); // 除錯，印出 Authorization 標頭的內容
+
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res.status(401).json({ success: false, error: "未經授權：缺少 Token" });
+    return res
+      .status(401)
+      .json({ success: false, error: "未經授權：缺少 Token", debug: { authHeader } });
   }
   const token = authHeader.slice(7);
   let decodedToken;
